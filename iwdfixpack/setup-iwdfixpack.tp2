@@ -1,0 +1,4590 @@
+BACKUP ~iwdfixpack/backup~ // location to store files for
+AUTHOR ~camagna@gmail.com~ // email address displayed if install fails
+
+VERSION ~v6~
+
+README ~iwdfixpack/readme-iwdfixpack.html~
+
+AUTO_TRA ~iwdfixpack/languages/%s~
+
+LANGUAGE
+  ~English~                                                     
+  ~english~
+  ~iwdfixpack/languages/english/setup.tra~
+LANGUAGE
+  ~Czech (Razfallow and Vlasák)~
+  ~czech~   
+  ~iwdfixpack/languages/english/setup.tra~
+  ~iwdfixpack/languages/czech/setup.tra~
+LANGUAGE
+  ~Francais (Anomaly, Elgaern the Dragon Slayer, Isaya, elminster)~
+  ~french~
+  ~iwdfixpack/languages/english/setup.tra~
+  ~iwdfixpack/languages/french/setup.tra~
+LANGUAGE
+  ~Deutsche (Leonardo Watson, Caswallon, jester, Mike)~
+  ~german~
+  ~iwdfixpack/languages/english/setup.tra~
+  ~iwdfixpack/languages/german/setup.tra~
+LANGUAGE
+  ~Italiano (Andrea Colombo, Antonio Favata)~
+  ~italian~
+  ~iwdfixpack/languages/english/setup.tra~
+  ~iwdfixpack/languages/italian/setup.tra~
+LANGUAGE
+  ~Korean (web2air)~
+  ~korean~
+  ~iwdfixpack/languages/english/setup.tra~
+  ~iwdfixpack/languages/korean/setup.tra~
+LANGUAGE
+  ~Polski (yarpen, Artanis, dragionian, Evendur, Grjgori, Neminus)~
+  ~polish~
+  ~iwdfixpack/languages/english/setup.tra~
+  ~iwdfixpack/languages/polish/setup.tra~
+LANGUAGE
+  ~Russian (Kulyok, Creepin, Domi, Serdrick, aerie.ru)~
+  ~russian~
+  ~iwdfixpack/languages/english/setup.tra~
+  ~iwdfixpack/languages/russian/setup.tra~
+LANGUAGE
+  ~Espanol (Clan DLAN)~
+  ~spanish~ 
+  ~iwdfixpack/languages/english/setup.tra~
+  ~iwdfixpack/languages/spanish/setup.tra~
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Assorted Fixes                                   \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+BEGIN @100
+REQUIRE_PREDICATE ((GAME_IS ~iwd how totlm~) AND (NOT FILE_EXISTS_IN_GAME ~cdi00001.g3~)) @113
+
+// this file does nothing, it just allows other mods to detect this component
+COPY_EXISTING ~sw1h01.itm~ ~override/cdi00001.g3~
+  
+// patch functions
+INCLUDE ~iwdfixpack/lib/functions.tpa~
+
+/////                                                  \\\\\
+///// misc file fixes                                  \\\\\
+/////                                                  \\\\\
+
+// only in english, russian for now
+ACTION_IF (("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) OR
+           ("%LANGUAGE%" STRING_COMPARE_CASE "german" = 0) OR
+           ("%LANGUAGE%" STRING_COMPARE_CASE "russian" = 0)) THEN BEGIN
+
+  STRING_SET  6394 @106394 // DECASTAVE DRAINING
+              9764 @109764 // thac0/damage bonus for hammer
+             12174 @112174 // four turns > rounds for chromatic orb
+
+  // description not even close to accurate
+  COPY_EXISTING ~potn34.itm~ ~override~
+    SAY 0x0c @115
+    SAY 0x54 @116
+    BUT_ONLY
+
+END
+
+// entrance point for wyrm's tooth from wmp
+COPY_EXISTING ~worldmap.wmp~ ~override~
+  READ_LONG 0x0c "mos_off"
+  READ_LONG ("%mos_off%" + 0x20) "area_num"
+  READ_LONG ("%mos_off%" + 0x24) "area_off"
+  READ_LONG ("%mos_off%" + 0x28) "link_off"
+  FOR (index = 0 ; index < area_num ; index = index + 1) BEGIN
+    READ_ASCII ("%area_off%" + 0x08 + ("%index%" * 0xf0)) "area"
+    PATCH_IF ("%area%" STRING_COMPARE_CASE "ar7000" = 0) BEGIN // wyrm's tooth
+      SET "wt" = "%index%"
+      SET "index" = "%area_num%" // kills loop
+    END
+  END
+  // read links
+  FOR (index = 0 ; index < area_num ; index = index + 1) BEGIN
+    FOR (index2 = 0 ; index2 < 4 ; index2 = index2 + 1) BEGIN
+      READ_LONG ("%area_off%" + 0x50 + ("%index2%" * 0x08) + ("%index%" * 0xf0)) "link_idx"
+      READ_LONG ("%area_off%" + 0x54 + ("%index2%" * 0x08) + ("%index%" * 0xf0)) "link_num"
+      FOR (index3 = 0 ; index3 < link_num ; index3 = index3 + 1) BEGIN
+        READ_LONG ("%link_off%" +        (("%link_idx%" + "%index3%") * 0xd8)) "target"
+        PATCH_IF ("%target%" = "%wt%") BEGIN
+          WRITE_ASCII ("%link_off%" + 0x04 + (("%link_idx%" + "%index3%") * 0xd8)) ~FRWMap~ #32
+        END
+      END
+    END
+  END
+  BUT_ONLY
+
+// in case 1pp has been installed before us, don't f*&^ up their paperdolls
+ACTION_IF NOT MOD_IS_INSTALLED ~1pp/1pp.tp2~ ~101~ BEGIN
+
+  ACTION_FOR_EACH pdoll IN chfc1inv chfc2inv chfc3inv chfc4inv chft1inv chft2inv chfw1inv chfw2inv chfw3inv chfw4inv BEGIN
+
+    // paperdoll fixes for human female clerics, thieves, and mages
+    COPY ~iwdfixpack/bam/%pdoll%.bam~ ~override~
+
+  END
+
+END
+
+/////                                                  \\\\\
+///// ids fixes                                        \\\\\
+/////                                                  \\\\\
+
+// new state needed for fixing Dead(object) triggers
+APPEND ~state.ids~ ~0x00000fc0 STATE_REALLY_DEAD~ UNLESS ~0x00000fc0 STATE_REALLY_DEAD~
+
+// fix to not reference non-existent alignment.ids
+COPY_EXISTING ~trigger.ids~ ~override~
+  REPLACE_TEXTUALLY EXACT_MATCH ~Alignment(O:Object*,I:Alignment*Alignment)~ ~Alignment(O:Object*,I:Alignment*Align)~
+  BUT_ONLY
+
+ACTION_IF GAME_IS ~how totlm~ THEN BEGIN // fixes for how & totlm
+
+  // add totlm actions to how
+  APPEND ~action.ids~ ~276 PlayBardSong(I:BardSong*bardsong)~           UNLESS ~^276~
+  APPEND ~action.ids~ ~277 TurnAMT(I:Amount*)~                          UNLESS ~^277~
+  APPEND ~action.ids~ ~278 DropInventoryEXExclude(S:ResRef*,O:Object*)~ UNLESS ~^278~
+
+  // in case some mod overwrites this (looking at you, AB)
+  APPEND ~class.ids~ ~202 MAGE_ALL~    UNLESS ~202 MAGE_ALL~
+  APPEND ~class.ids~ ~203 FIGHTER_ALL~ UNLESS ~203 FIGHTER_ALL~
+  APPEND ~class.ids~ ~204 CLERIC_ALL~  UNLESS ~204 CLERIC_ALL~
+  APPEND ~class.ids~ ~205 THIEF_ALL~   UNLESS ~205 THIEF_ALL~
+  APPEND ~class.ids~ ~206 BARD_ALL~    UNLESS ~206 BARD_ALL~
+  APPEND ~class.ids~ ~207 PALADIN_ALL~ UNLESS ~207 PALADIN_ALL~
+  APPEND ~class.ids~ ~208 DRUID_ALL~   UNLESS ~208 DRUID_ALL~
+  APPEND ~class.ids~ ~209 RANGER_ALL~  UNLESS ~209 RANGER_ALL~
+
+  // missing ids files
+  ACTION_FOR_EACH file IN diffmode difflevl BEGIN
+  
+    ACTION_IF (NOT FILE_EXISTS_IN_GAME ~%file%.ids~) THEN BEGIN
+
+      COPY ~iwdfixpack/ids/%file%.ids~ ~override~
+
+    END
+
+  END
+
+  // fix how ids reference (not actually used)
+  COPY_EXISTING ~spell.ids~ ~override~
+    REPLACE_TEXTUALLY ~2423 CLERIC_WALL_OF_MOONLIGHT~ ~1423 CLERIC_WALL_OF_MOONLIGHT~
+    BUT_ONLY
+
+END
+
+/////                                                  \\\\\
+///// misc 2da fixes                                   \\\\\
+/////                                                  \\\\\
+
+// magic armor can be worn with magic jewelry/cloaks
+ACTION_FOR_EACH item IN leat06 mourner ogien plat04 BEGIN
+
+  ACTION_IF FILE_EXISTS_IN_GAME ~%item%.itm~ BEGIN
+
+    APPEND ~itemexcl.2da~ ~%item%  1~ UNLESS ~%item%~
+
+  END
+
+END
+
+// should be 3 lore for 15 win/int
+COPY_EXISTING ~lorebon.2da~ ~override~
+  SET_2DA_ENTRY 15 1 2 ~3~
+  BUT_ONLY_IF_IT_CHANGES
+
+// remove bad references from rndtreas.2da
+COPY_EXISTING ~rndtres.2da~ ~override~
+  REPLACE_TEXTUALLY ~\bZZZ3BC\b~  ~ZZZ6BC~
+  REPLACE_TEXTUALLY ~\bshswd\b~   ~~                // remove null reference...
+  REPLACE_TEXTUALLY ~\bSH_sswd\b~ ~SH_sswd Shsswrd~ // ... and then add it back. this also adds it new to HoW, where bad ref was removed outright
+  REPLACE_TEXTUALLY ~\bLongCle\b~ ~LongClev~
+//  REPLACE_TEXTUALLY ~\bs1-10~     ~~ // how, totlm
+  BUT_ONLY
+
+// thieving penalties for low dex
+COPY_EXISTING ~skilldex.2da~ ~override~
+  INSERT_2DA_ROW 0 5 "1 -15 -10 -10 -20"
+  INSERT_2DA_ROW 1 5 "2 -15 -10 -10 -20"
+  INSERT_2DA_ROW 2 5 "3 -15 -10 -10 -20"
+  INSERT_2DA_ROW 3 5 "4 -15 -10 -10 -20"
+  INSERT_2DA_ROW 4 5 "5 -15 -10 -10 -20"
+  INSERT_2DA_ROW 5 5 "6 -15 -10 -10 -20"
+  INSERT_2DA_ROW 6 5 "7 -15 -10 -10 -20"
+  INSERT_2DA_ROW 7 5 "8 -15 -10 -10 -20"
+
+// second level ranger stealth score
+COPY_EXISTING ~skillrng.2da~ ~override~
+  SET_2DA_ENTRY 2 1 2 ~21~
+  BUT_ONLY_IF_IT_CHANGES
+
+// add tooltips for multi-ability items
+ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_tooltips BEGIN
+  amaunat => "-1     2664 -1"
+  auril   => "-1    12066 -1"
+  beltbon => "21422 12113 -1"
+  bloodgf => "-1    21422 -1"
+  cynicis => "-1     8945 12131"
+  fistgf  => "-1    21422 -1"
+  gullwyn => "-1    22177 -1"
+  handgf  => "-1    21422 -1"
+  kissgf  => "-1    21422 -1"
+  lucky   => "-1    12048 -1"
+  power   => "-1     2938 -1"
+  quost   => "-1    15211  2693"
+  stafbes => "-1    12026 16963"
+  storm   => "-1    21422 -1"
+  talongf => "-1    21422 -1"
+  tonggf  => "-1    21422 -1"
+END
+
+ACTION_PHP_EACH cd_tooltips AS item => string BEGIN
+
+  ACTION_IF FILE_EXISTS_IN_GAME "%item%.itm" BEGIN
+  
+    APPEND ~tooltip.2da~ ~%item% %string%~
+
+  END
+
+END
+
+// remove throwing daggers since they don't have a melee abil
+COPY_EXISTING ~tooltip.2da~ ~override~
+  REPLACE_TEXTUALLY ~^DAGG05 +.+$~ ~moradin -1 27265 -1~
+
+CLEAR_IDS_MAP
+
+/////                                                  \\\\\
+///// dialogue fixes                                   \\\\\
+/////                                                  \\\\\
+
+// fixes for all variants
+COMPILE ~iwdfixpack/dlg/all-fixes.d~
+
+ACTION_IF GAME_IS ~iwd~ THEN BEGIN // fixes for iwd without how & totlm
+
+  COMPILE ~iwdfixpack/dlg/base-fixes.d~
+          ~iwdfixpack/dlg/valesti.d~
+
+END ELSE BEGIN // fixes for how & totlm games
+
+  COMPILE ~iwdfixpack/dlg/how-fixes.d~
+
+  ACTION_IF GAME_IS ~totlm~ THEN BEGIN // totlm fixes
+
+    COMPILE ~iwdfixpack/dlg/totlm-fixes.d~
+
+  END
+
+END
+
+/////                                                  \\\\\
+///// scripting fixes                                  \\\\\
+/////                                                  \\\\\
+
+// corrections to player scripts - have to go through scrpdesc as they apparently have different
+// file names in non-English versions of IWD
+COPY_EXISTING ~scrpdesc.2da~ ~override~
+  COUNT_2DA_ROWS ~3~ "rows"
+  FOR (index = 1 ; index < rows ; index = index + 1 ) BEGIN
+    READ_2DA_ENTRY "%index%" 1 3 "title"
+    PATCH_IF (("%title%" = 17598) OR     // mage1
+              ("%title%" = 17600) OR     // mage2
+              ("%title%" = 17604) OR     // mage4
+              ("%title%" = 17606)) BEGIN // cleric1
+      READ_2DA_ENTRY "%index%" 0 3 "file"
+      SET "exists" = 0
+      INNER_PATCH_FILE ~scripts/%file%.bs~ BEGIN // check to make sure script exists
+
+        PATCH_IF (SOURCE_SIZE > 0) BEGIN
+          SET "exists" = 1
+        END
+
+      END
+      PATCH_IF ("%exists%" = 1) BEGIN
+        PATCH_IF ("%title%" = 17606) BEGIN
+          INNER_ACTION BEGIN
+
+            // cleric1.bs - used to be a magic stone reference; just false it
+            COPY_EXISTING ~scripts/%file%.bs~ ~scripts~
+              DECOMPILE_AND_PATCH BEGIN
+                REPLACE_TEXTUALLY ~HaveSpell(0)~                    ~HaveSpell(CLERIC_MAGICAL_STONE)~
+                REPLACE_TEXTUALLY ~Spell(NearestEnemyOf(Myself),0)~ ~Spell(NearestEnemyOf(Myself),CLERIC_MAGICAL_STONE)~
+              END
+              BUT_ONLY
+
+          END
+        END ELSE BEGIN
+          INNER_ACTION BEGIN
+
+            // missing spell ref; confirmed from BG
+            COPY_EXISTING ~scripts/%file%.bs~ ~scripts~
+              DECOMPILE_AND_PATCH BEGIN
+                REPLACE_TEXTUALLY ~HaveSpell(0)~                    ~HaveSpell(WIZARD_LARLOCHS_MINOR_DRAIN)~
+                REPLACE_TEXTUALLY ~Spell(NearestEnemyOf(Myself),0)~ ~Spell(NearestEnemyOf(Myself),WIZARD_LARLOCHS_MINOR_DRAIN)~
+              END
+              BUT_ONLY
+
+          END
+        END
+      END
+    END
+  END
+  BUT_ONLY
+
+// broken dead(object) triggers
+ACTION_FOR_EACH file IN 2004chef 2100mirk 4001lk 4001ls1 4001v9 4003blst 4003udlt bamebd bcatkgob bcatkskl bchjol0 bchjol0
+  bcjorn cajshah1 cajshah3 cajshah4 cajshah5 d2talon3 d2talon3 d2talon4 d2talon4 d4alb d4cleric d4fight1 d4hirit d4hisum
+  d5girl d5hibap d5hitort d5yxung duhero3 duhero5 dummtalk eeeverar eeevetpl eepomsen efbstskl efdlgc efdlgcc efdlgf efdlgfc
+  efdlgm efdlgmc efdlgpc efdlgpcc efdlgpf efdlgpfc efdlgpm efdlgpmc eftrolg eftwnchk ehaccali ehdamien eheverar ehhero1
+  ehhroth idpbsprt iljorn iljornhl ilsahep1 ilsahhp1 ilsahp1 ilsahp2 ilsahup1 ilxactil keraksha kphermit ktmytos kuarund
+  kuarund1 kuarundd ldbeorn lddrowcm ldfeng2 ldfgntg ldguell2 ldhark ldilmad ldmalvon ldmarkth ldperd ldpoque1 ldrebsal
+  ldseth ldshik ldsimmal ldtarnel lwemmrh lwhjolo lwquin lwshar1 lwshar2 lwshar3 lwwarew nelurmst nwlurmst scseer secrie13
+  secrie2 selurmst shelfc1 shelfc2 shelfcs1 shelfps1 shorcsh1 shsevhl1 shshdsd1 shshdwz1 shshdwz2 shshdwz3 shshthl1
+  swlurmst tgacold tgverbd udnorlin udorogse vslysan vstherik wtguard wtkontik
+BEGIN
+
+  ACTION_IF (FILE_EXISTS_IN_GAME ~%file%.bcs~) THEN BEGIN
+
+    COPY_EXISTING ~%file%.bcs~ ~override~
+      DECOMPILE_AND_PATCH BEGIN
+        REPLACE_TEXTUALLY ~Dead("[Yy][Ss][Ee][Ll][Ff])")~ ~StateCheck(Myself,STATE_REALLY_DEAD)~
+        REPLACE_TEXTUALLY ~Dead("astSeenBy(Myself))")~    ~StateCheck(LastSeenBy(Myself),STATE_REALLY_DEAD)~
+        REPLACE_TEXTUALLY ~Dead("0\.0\.\([A-Z]+\)\])")~   ~StateCheck([0.0.\1],STATE_REALLY_DEAD)~
+        REPLACE_TEXTUALLY ~Dead("layer\([1-6]\))")~       ~StateCheck(Player\1,STATE_REALLY_DEAD)~
+        REPLACE_TEXTUALLY ~Dead("ENEMY\])")~              ~StateCheck([ENEMY],STATE_REALLY_DEAD)~
+      END
+      BUT_ONLY
+  
+  END
+
+END
+
+// corrupted scripts
+ACTION_FOR_EACH file IN 4001v8 5001v1 ar1102 ar2006 BEGIN
+
+  ACTION_IF (FILE_EXISTS_IN_GAME ~%file%.bcs~) THEN BEGIN
+  
+    COPY_EXISTING ~%file%.bcs~ ~override~
+      DECOMPILE_AND_PATCH BEGIN END
+  
+  END
+
+END
+
+// villagers not leaving after liz king dead
+EXTEND_TOP ~4001vil.bcs~ ~iwdfixpack/baf/4001vil.baf~
+
+// cast spell if available
+COPY_EXISTING ~5001ls1.bcs~ ~override~
+              ~5001ls2.bcs~ ~override~
+  DECOMPILE_AND_PATCH BEGIN
+    REPLACE_TEXTUALLY ~HaveSpell(0)~ ~HaveSpell(CLERIC_HOLD_PERSON)~
+    REPLACE_TEXTUALLY ~Spell(\[ENEMY\.0\.0\.\([A-Z_]+\)\],0)~ ~Spell([ENEMY.0.0.\1],CLERIC_HOLD_PERSON)~
+  END
+  BUT_ONLY
+
+// keep egenia safe
+COPY_EXISTING ~ar4001.bcs~ ~override~
+  DECOMPILE_AND_PATCH BEGIN
+    REPLACE_TEXTUALLY ~Global("EGANIA_MOVE","GLOBAL",0)~ ~False()~
+  END
+  BUT_ONLY
+
+// bandoth fixes
+COPY_EXISTING ~ar6003.bcs~ ~override~
+  DECOMPILE_AND_PATCH BEGIN
+    REPLACE_TEXTUALLY ~SetGlobal("BANDOTH_QUEST","GLOBAL",2)~ ~SetGlobal("BANDOTH_QUEST","GLOBAL",3)~
+    REPLACE_TEXTUALLY ~PartyHasItem("KALABAC")~ ~PartyHasItem("KALABAC") Global("BANDOTH_QUEST","GLOBAL",0)~
+  END
+  BUT_ONLY
+
+// stop cockblocking the script - no or() without how
+COPY_EXISTING ~ar6010.bcs~ ~override~
+  DECOMPILE_AND_PATCH BEGIN
+    PATCH_IF (GAME_IS ~iwd~) BEGIN
+      REPLACE_TEXTUALLY ~True()~ ~False()~
+      APPEND_FILE ~iwdfixpack/baf/ar6010.baf~
+    END ELSE BEGIN
+      REPLACE_TEXTUALLY ~True()~
+        ~OR(3) !Global("AR6010_PLAY_SOUND","GLOBAL",0) !Global("PUZZLE_B_DISABLED","GLOBAL",0) !Global("PUZZLE_A_DISABLED","GLOBAL",0)~
+    END
+  END
+  BUT_ONLY
+
+// extra check to keep marchon and party together, enemy-ally-wise
+EXTEND_TOP ~d4maratk.bcs~ ~iwdfixpack/baf/d4maratk.baf~
+
+// yxunomei's priests not doing anything 1/3 (see also d5yuanp3.bcs, yuantip.cre)
+COPY_EXISTING ~d5yuanp2.bcs~ ~override~
+  DECOMPILE_AND_PATCH BEGIN
+    REPLACE_TEXTUALLY ~\(!Global("YXUN_ATTACK","MYAREA",0)[ %TAB%%MNL%%LNL%%WNL%]+THEN[ %TAB%%MNL%%LNL%%WNL%]+RESPONSE #100[ %TAB%%MNL%%LNL%%WNL%]+\)Spell(LastSeenBy(Myself),CLERIC_DISPEL_MAGIC)~
+                      ~Global("CDDispelOnce","LOCALS",0) \1 SetGlobal("CDDispelOnce","LOCALS",1) SpellNoDec(LastSeenBy(Myself),CLERIC_DISPEL_MAGIC)~
+
+  END
+  BUT_ONLY
+
+// yxunomei's priests not doing anything 2/3 (see also d5yuanp2.bcs, yuantip.cre)
+COPY_EXISTING ~d5yuanp3.bcs~ ~override~
+  DECOMPILE_AND_PATCH BEGIN
+    REPLACE_TEXTUALLY ~\(!Global("YXUN_ATTACK","MYAREA",0)[ %TAB%%MNL%%LNL%%WNL%]+THEN[ %TAB%%MNL%%LNL%%WNL%]+RESPONSE #100[ %TAB%%MNL%%LNL%%WNL%]+\)Spell("YXUNOMEI",\([^)]+\))~
+                      ~HaveSpell(\2) Global("CD\2","LOCALS",0) \1 SetGlobal("CD\2","LOCALS",1) Spell(Myself,\2)~
+
+  END
+  BUT_ONLY
+
+// yxonemei casting cloudkill on herself
+COPY_EXISTING ~d5yxun.bcs~ ~override~
+  DECOMPILE_AND_PATCH BEGIN
+    REPLACE_TEXTUALLY ~Spell(Myself,WIZARD_CLOUDKILL)~ ~Spell(NearestEnemyOf(Myself),WIZARD_CLOUDKILL)~
+  END
+  BUT_ONLY
+
+// broken DV reference in a trap for the Snowdrift Inn
+COPY_EXISTING ~ehdwfbox.bcs~ ~override~
+  DECOMPILE_AND_PATCH BEGIN
+    REPLACE_TEXTUALLY ~HideCreature("EHBEDD1",TRUE)~ ~HideCreature("EHINVDWF",TRUE)~
+  END
+  BUT_ONLY
+
+// bel's iron golems go hostile
+COPY_EXISTING ~eepoqcng.bcs~ ~override~
+  DECOMPILE_AND_PATCH BEGIN
+    REPLACE_TEXTUALLY ~\(ForceSpell(Myself,INNATE_FLASH_DESTROY_SUMMON_BELHIFET)\)~
+                      ~\1 ActionOverride("Iron_Golem_1",Enemy()) ActionOverride("Iron_Golem_2",Enemy())~
+  END
+  BUT_ONLY
+
+// townperson can now open doors
+COPY_EXISTING ~kutown2.bcs~ ~override~
+  DECOMPILE_AND_PATCH BEGIN
+    REPLACE_TEXTUALLY ~OpenDoor("1811\.0863")~ ~OpenDoor("AR2100Door7")~
+    REPLACE_TEXTUALLY ~OpenDoor("1155\.0574")~ ~OpenDoor("AR2100Door2")~
+  END
+  BUT_ONLY
+
+// blind & unconscous gnomes should leave after malavon's death
+COPY_EXISTING ~lddgnom3.bcs~ ~override~
+              ~lddgnom4.bcs~ ~override~
+  DECOMPILE_AND_PATCH BEGIN
+    REPLACE_TEXTUALLY ~Global("MALVON_DEAD","GLOBAL",0)~ ~Global("MALAVON_DEAD","GLOBAL",0)~
+  END
+  BUT_ONLY
+
+// beorn quest fix; see ar8005.bcs
+// clear out guello once party re-enters shikata's area to prevent dupe guellos (use same destroy as other gnomes in area)
+EXTEND_TOP    ~ldguell2.bcs~ ~iwdfixpack/baf/ldguell2.baf~
+
+// llew purges materials for item upgrades  
+COPY_EXISTING ~ldllew.bcs~ ~override~
+  DECOMPILE_BCS_TO_BAF
+    APPEND_FILE ~iwdfixpack/baf/ldllew.baf~
+    REPLACE_TEXTUALLY ~CDITEM~ ~HideUmb~
+    APPEND_FILE ~iwdfixpack/baf/ldllew.baf~
+    REPLACE_TEXTUALLY ~CDITEM~ ~HideBee~
+  COMPILE_BAF_TO_BCS
+
+// marketh now uses invisibility potion
+COPY_EXISTING ~ldmarkth.bcs~ ~override~
+  DECOMPILE_AND_PATCH BEGIN
+    REPLACE_TEXTUALLY ~("YSELF,?","POTN10")~ ~("POTN10",Myself)~
+  END
+  BUT_ONLY
+
+// nym purges materials for item upgrades
+COPY_EXISTING ~ldnym.bcs~ ~override~
+  DECOMPILE_BCS_TO_BAF
+    APPEND_FILE ~iwdfixpack/baf/ldllew.baf~
+    REPLACE_TEXTUALLY ~CDITEM~ ~beetshld~
+  COMPILE_BAF_TO_BCS
+
+// severed hand folks healing party
+COPY_EXISTING ~shelfc1.bcs~  ~override~
+              ~shelfc2.bcs~  ~override~
+              ~shorcsh1.bcs~ ~override~
+              ~shshdsd1.bcs~ ~override~
+              ~shshdwz1.bcs~ ~override~
+              ~shshdwz2.bcs~ ~override~
+              ~shshdwz3.bcs~ ~override~
+  DECOMPILE_AND_PATCH BEGIN
+    REPLACE_TEXTUALLY ~\(See([A-Za-z]*NearestEnemyOf(NearestEnemyOf(Myself)))\)~ ~\1 Allegiance(LastSeenBy(Myself),ENEMY)~
+    REPLACE_TEXTUALLY ~See(\[ENEMY\])~ ~False()~
+  END
+  BUT_ONLY
+
+ACTION_IF GAME_IS ~iwd~ THEN BEGIN // fixes for iwd without how & totlm
+
+  // lizardmen not going neutral
+  COPY_EXISTING ~4001lkl.bcs~ ~override~
+    DECOMPILE_BCS_TO_BAF
+      REPLACE_TEXTUALLY ~ChangeEnemyAlly(Myself,0)~ ~ChangeEnemyAlly(Myself,NEUTRAL)~
+    COMPILE_BAF_TO_BCS
+    BUT_ONLY
+
+  // get aspel's wuff to leave peacably if charmed, just like HoW games
+  EXTEND_BOTTOM ~ar1010.bcs~ ~iwdfixpack/baf/ar1010.baf~
+
+END ELSE BEGIN // how, totlm fixes
+
+  // more robust opening cutscene (not needed for IWD w/o HoW)
+  COPY_EXISTING ~ar1006.bcs~ ~override~
+    DECOMPILE_AND_PATCH BEGIN
+      REPLACE_TEXTUALLY ~IncrementChapter("CHPTXT1")[ %TAB%%LNL%%MNL%%WNL%]+MultiPlayerSync()[ %TAB%%LNL%%MNL%%WNL%]+StartCutSceneMode()[ %TAB%%LNL%%MNL%%WNL%]+ClearAllActions()[ %TAB%%LNL%%MNL%%WNL%]+MultiPlayerSync()[ %TAB%%LNL%%MNL%%WNL%]+StartCutScene("EHHROTHT")~
+        ~IncrementChapter("CHPTXT1")~
+    END
+    BUT_ONLY
+  EXTEND_TOP ~ar1006.bcs~ ~iwdfixpack/baf/ar1006.baf~
+
+  // high torturer not doing anything 1/2 (see hightort.cre) (HoW removes proper HaveSpell checks)
+  COPY_EXISTING ~d5hitort.bcs~ ~override~
+    DECOMPILE_AND_PATCH BEGIN
+      REPLACE_TEXTUALLY ~\(THEN[ %TAB%%MNL%%LNL%%WNL%]+RESPONSE #100[ %TAB%%MNL%%LNL%%WNL%]+Spell(LastSeenBy(Myself),CLERIC_SYMBOL_OF_PAIN)\)~
+                        ~HaveSpell(CLERIC_SYMBOL_OF_PAIN) \1~
+
+    END
+    BUT_ONLY
+
+  // bad changescript reference
+  COPY_EXISTING ~efatksa.bcs~ ~override~
+    DECOMPILE_AND_PATCH BEGIN
+      REPLACE_TEXTUALLY ~"EFATKA"~ ~"EFATKC"~
+    END
+    BUT_ONLY
+
+  // using movetoobject with coordinates
+  COPY_EXISTING ~ilgemeff.bcs~ ~override~
+    DECOMPILE_AND_PATCH BEGIN
+      REPLACE_TEXTUALLY ~MoveViewObject(~ ~MoveViewPoint(~
+    END
+    BUT_ONLY
+
+  // broken variable name
+  COPY_EXISTING ~lddgnom4.bcs~ ~override~
+                ~ldilair.bcs~  ~override~
+    DECOMPILE_AND_PATCH BEGIN
+      REPLACE_TEXTUALLY ~Global("Y_TEAM_HOSTILE","LOCALM",0)~ ~Global("MY_TEAM_HOSTILE","LOCALS",0)~
+    END
+    BUT_ONLY
+
+  // wrong group ID
+  COPY_EXISTING ~ldseth.bcs~  ~override~
+                ~ldthief.bcs~ ~override~
+    DECOMPILE_AND_PATCH BEGIN
+      REPLACE_TEXTUALLY ~"MAP_GROUP_HOSTILE2"~ ~"MAP_GROUP_HOSTILE10"~
+    END
+    BUT_ONLY
+
+  // bad changescript reference
+  COPY_EXISTING ~lwalpw1.bcs~ ~override~
+                ~lwalpw2.bcs~ ~override~
+                ~lwalpw3.bcs~ ~override~
+                ~lwalpwg.bcs~ ~override~
+    DECOMPILE_AND_PATCH BEGIN
+      REPLACE_TEXTUALLY ~"LWAALPW\([0-9]\)"~ ~"LWALPW\1"~
+    END
+    BUT_ONLY
+  
+  // bad dv reference
+  COPY_EXISTING ~lwkieran.bcs~ ~override~
+    DECOMPILE_AND_PATCH BEGIN
+      REPLACE_TEXTUALLY ~See("LWMURD")~ ~See("Murdaugh")~
+    END
+    BUT_ONLY
+  
+  // stop dead purvis from continually trying to hide
+  COPY_EXISTING ~lwprvatk.bcs~ ~override~
+    DECOMPILE_AND_PATCH BEGIN
+      REPLACE_TEXTUALLY ~\(Allegiance(Myself,ENEMY)[ %TAB%%LNL%%MNL%%WNL]+!StateCheck(Myself,STATE_INVISIBLE)[ %TAB%%LNL%%MNL%%WNL]+!LOS([PC],25)\)~
+        ~StateCheck(Myself,STATE_REALLY_DEAD) \1~
+    END
+    BUT_ONLY
+
+  // broken DV check in cutscene
+  COPY_EXISTING ~lwprvfce.bcs~ ~override~
+    DECOMPILE_AND_PATCH BEGIN
+      REPLACE_TEXTUALLY ~"PURVIS5"~ ~"PURVIS_5"~
+    END
+    BUT_ONLY
+
+  // broken variable check
+  COPY_EXISTING ~lwpurv6.bcs~ ~override~
+    DECOMPILE_AND_PATCH BEGIN
+      REPLACE_TEXTUALLY ~SetGlobal("W_MURDER","THURLO",0)~ ~SetGlobal("THURLOW_MURDER","GLOBAL",0)~
+    END
+    BUT_ONLY
+
+  ACTION_IF GAME_IS ~totlm~ THEN BEGIN
+
+    // beorn quest fix; see ar8005.bcs, ldguell2.bcs
+    // set b_q to 3 once you leave shikata's area, like other two exit areas
+    EXTEND_BOTTOM ~ar8005.bcs~   ~iwdfixpack/baf/ar8005.baf~
+
+    // totlm portal in jackal cavern is flaky; see also cahideo.bcs
+    COPY_EXISTING ~cahided.bcs~ ~override~
+      DECOMPILE_AND_PATCH BEGIN
+        REPLACE_TEXTUALLY ~SetGlobal("OPENED_HIDE","MYAREA",1)[%TAB% %LNL%%MNL%%WNL%]+OpenDoor(Myself)~ ~~
+      END
+      BUT_ONLY
+
+    // totlm portal in jackal cavern is flaky; see also cahided.bcs
+    COPY_EXISTING ~cahideo.bcs~ ~override~
+      DECOMPILE_AND_PATCH BEGIN
+        REPLACE_TEXTUALLY ~CutSceneId(Myself)~ ~CutSceneId(Player1)~
+        REPLACE_TEXTUALLY ~EndCutSceneMode()~ ~SetGlobal("OPENED_HIDE","MYAREA",1) OpenDoor("AR9800_Hide1") EndCutSceneMode()~
+      END
+      BUT_ONLY
+
+    // revenant regen item fix (see ar9714.are, revnant.cre, rndrevn.cre x2)
+    COPY_EXISTING ~eftrolg.bcs~ ~override/cdtrolg.bcs~
+      DECOMPILE_AND_PATCH BEGIN
+        REPLACE_TEXTUALLY ~REG1HP2~ ~CIREVE~
+      END
+      BUT_ONLY
+
+    // broken dv reference
+    COPY_EXISTING ~secrie13.bcs~ ~override~
+      DECOMPILE_AND_PATCH BEGIN
+        REPLACE_TEXTUALLY ~"SHELHAI\."~ ~"SHELHAI"~
+      END
+      BUT_ONLY
+  
+    // perseverance test; monsters don't spawn fast enough so lm goes directly into 'way to go' dialogue
+    COPY_EXISTING ~selurmst.bcs~ ~override~
+      DECOMPILE_AND_PATCH BEGIN
+        REPLACE_TEXTUALLY ~\(CreatureHidden(Myself)\)~ ~\1 !Global("CYSHAMB_DEAD","GLOBAL",0)~
+      END
+      BUT_ONLY
+  
+  END
+
+END
+
+/////                                                  \\\\\
+///// area fixes                                       \\\\\
+/////                                                  \\\\\
+
+// areas with existing area scripts, but not assigned
+ACTION_FOR_EACH file IN ar1101 ar1102 ar1104 ar1106 ar1109 ar1200 ar1201 ar2001 ar2002 ar2003 ar2005
+  ar2006 ar3001 ar3101 ar3201 ar3301 ar3401 ar3501 ar3502 ar3503 ar3600 ar3601 ar3602 ar3603 ar4002
+  ar4004 ar5001 ar5002 ar5003 ar5102 ar5201 ar5202 ar5203 ar5204 ar5301 ar5302 ar5303 ar5401 ar5402
+  ar5403 ar5404 ar5502 ar6001 ar6007 ar6009 ar6011 ar6014 ar7000 ar7002 ar8002 ar8014 ar8015
+  ar8016 ar9103 ar9301 ar9501 ar9601 ar9800 ar9801
+BEGIN
+
+  ACTION_IF ((FILE_EXISTS_IN_GAME ~%file%.are~) AND (FILE_EXISTS_IN_GAME ~%file%.bcs~)) THEN BEGIN
+
+    COPY_EXISTING ~%file%.are~ ~override~
+      WRITE_ASCIIE 0x94 ~%SOURCE_RES%~ #8
+      BUT_ONLY
+
+  END
+
+END
+
+// trapped but detected containers, ar3501 fixed by HoW
+ACTION_FOR_EACH file IN ar3501 ar3502 ar4005 ar6005 ar6006 ar9400 ar9714 BEGIN
+
+  ACTION_IF (FILE_EXISTS_IN_GAME ~%file%.are~) THEN BEGIN
+
+    COPY_EXISTING ~%file%.are~ ~override~
+      // trapped containers
+      READ_LONG  0x70 "cont_off"
+      READ_SHORT 0x74 "cont_num"
+      FOR (index = 0 ; index < cont_num ; index = index + 1) BEGIN
+        READ_SHORT ("%cont_off%" + 0x30 + ("%index%" * 0xc0)) "trapped"
+        READ_SHORT ("%cont_off%" + 0x32 + ("%index%" * 0xc0)) "detected"
+        PATCH_IF (("%trapped%" = 1) AND ("%detected%" = 1)) BEGIN
+          WRITE_SHORT ("%cont_off%" + 0x32 + ("%index%" * 0xc0)) 0
+        END
+      END
+      // floor traps
+      READ_SHORT 0x5a "info_num"
+      READ_LONG  0x5c "info_off"
+      FOR (index = 0 ; index < info_num ; index = index + 1) BEGIN
+        READ_SHORT ("%info_off%" + 0x6c + ("%index%" * 0xc4)) "trapped"
+        READ_SHORT ("%info_off%" + 0x6e + ("%index%" * 0xc4)) "detected"
+        PATCH_IF (("%trapped%" = 1) AND ("%detected%" = 1)) BEGIN
+          WRITE_SHORT ("%info_off%" + 0x6e + ("%index%" * 0xc4)) 0
+        END
+      END
+      BUT_ONLY
+
+  END
+
+END
+
+// song fixes
+COPY_EXISTING ~ar1105.are~ ~override~
+  READ_LONG 0xbc song_off
+  WRITE_LONG (song_off + 0x08) 40
+  WRITE_LONG (song_off + 0x0c) 40
+  WRITE_LONG (song_off + 0x10) 40
+
+// cursor fix
+COPY_EXISTING ~ar1201.are~ ~override~
+  LPF AREA_ALTER_REGION INT_VAR cursor = 30 STR_VAR trig_name = "To1200" END
+  BUT_ONLY
+
+// cursor fix
+COPY_EXISTING ~ar2000.are~ ~override~
+              ~ar2002.are~ ~override~
+  LPF AREA_ALTER_REGION INT_VAR cursor = 30 STR_VAR trig_name = "To2001" END
+  BUT_ONLY
+
+// cursor fix
+COPY_EXISTING ~ar2001.are~ ~override~
+  LPF AREA_ALTER_REGION INT_VAR cursor = 30 STR_VAR trig_name = "To2000" END
+  LPF AREA_ALTER_REGION INT_VAR cursor = 30 STR_VAR trig_name = "To2002" END
+  BUT_ONLY
+
+// add party required flag
+COPY_EXISTING ~ar2100.are~ ~override~
+  LPF AREA_ALTER_REGION INT_VAR flag_party_required = 1 STR_VAR trig_name = "To2109" END
+  BUT_ONLY
+
+// extra scripts give barkeep, patrons something to do if they go hostile
+COPY_EXISTING ~ar2111.are~ ~override~
+  FOR (index = 1 ; index < 10 ; ++index) BEGIN
+    LPF AREA_ALTER_ACTOR STR_VAR actor_name = EVAL "Townsperson %index%" script_default = "kutowng" END
+  END
+  LPF AREA_ALTER_ACTOR STR_VAR actor_name = "Whitcomb" script_default = "kuconlse" END
+  BUT_ONLY
+
+// wrong icon
+COPY_EXISTING ~ar2115.are~ ~override~
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 12 STR_VAR cont_name = "Locked Crate" END
+  BUT_ONLY
+
+// container icon
+COPY_EXISTING ~ar3101.are~ ~override~
+              ~ar3201.are~ ~override~
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon =  7 STR_VAR cont_name = "Sarcophagus 1" END
+  BUT_ONLY
+
+// container icon
+COPY_EXISTING ~ar3301.are~ ~override~
+              ~ar3501.are~ ~override~
+              ~ar3502.are~ ~override~
+              ~ar3503.are~ ~override~
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon =  7 STR_VAR cont_name = "Sarcophagus" END
+  BUT_ONLY
+
+// container icon
+COPY_EXISTING ~ar3501.are~ ~override~
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon =  7 STR_VAR cont_name = "Trap Sarcophagus" END
+  BUT_ONLY
+
+// door cursir
+COPY_EXISTING ~ar3502.are~ ~override~
+  LPF AREA_ALTER_DOOR INT_VAR door_icon = 8 STR_VAR door_name = "AR3502Switch1" END
+  BUT_ONLY
+
+// lizard king, minions keep together EA-wise
+COPY_EXISTING ~ar4001.are~ ~override~
+  LPF AREA_ALTER_ACTOR STR_VAR script_race = "4001lkl" actor_name = "Lizard_King" END
+  BUT_ONLY
+
+// container icon, removal of time-traveling book
+COPY_EXISTING ~ar4004.are~ ~override~
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon =  8 STR_VAR cont_name = "Cushions" END
+  LPF DELETE_AREA_ITEM STR_VAR item_to_delete = book45 END // references future events
+  BUT_ONLY
+
+// container icons, missing generic dialogue for creatures
+COPY_EXISTING ~ar4005.are~ ~override~
+  LPF AREA_ALTER_ACTOR STR_VAR dlg_file = "dgenmond" actor_name = "Yuan-Ti Champion 1" END
+  LPF AREA_ALTER_ACTOR STR_VAR dlg_file = "dgenmond" actor_name = "Yuan-Ti Champion 2" END
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 5 STR_VAR cont_name = "Desk 2" END
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Pillow 1" END
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Pillow 2" END
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Pillow 3" END
+  BUT_ONLY
+
+COPY_EXISTING ~ar5000.are~ ~override~
+  LPF AREA_ALTER_REGION INT_VAR cursor = 28 STR_VAR trig_name = "To5001" END
+  BUT_ONLY
+
+// container icons
+COPY_EXISTING ~ar5001.are~ ~override~
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Container 4" END
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Container 6" END
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Container 7" END
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Container 8" END
+  BUT_ONLY
+
+// container icons, goblin has no script so does nothing
+COPY_EXISTING ~ar5002.are~ ~override~
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Container 3" END
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Container 4" END
+  READ_LONG  0x54 cre_off
+  READ_SHORT 0x58 cre_num
+  FOR (index = 0 ; index < cre_num ; ++index) BEGIN
+    READ_SHORT (cre_off + 0x20 + (0x110 * index)) x_coord
+    READ_SHORT (cre_off + 0x22 + (0x110 * index)) y_coord
+    PATCH_IF ((x_coord = 494) AND (y_coord = 1495)) BEGIN
+      WRITE_ASCII (cre_off + 0x58 + (0x110 * index)) ~shgaflt~ #8
+      WRITE_ASCII (cre_off + 0x70 + (0x110 * index)) ~gnmmgsg~ #8
+    END
+  END
+  BUT_ONLY
+
+// container icons
+COPY_EXISTING ~ar5003.are~ ~override~
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Container 1" END
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Container 2" END
+  BUT_ONLY
+
+// container icon
+COPY_EXISTING ~ar5004.are~ ~override~
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 5 STR_VAR cont_name = "Container 2" END
+  BUT_ONLY
+
+// travel cursor
+COPY_EXISTING ~ar5101.are~ ~override~
+  LPF AREA_ALTER_REGION INT_VAR cursor = 28 STR_VAR trig_name = "To5004" END
+  BUT_ONLY
+
+// wrong orientation when entering
+COPY_EXISTING ~ar5102.are~ ~override~
+  LPF AREA_ALTER_ENTRANCE INT_VAR orient = 12 STR_VAR entry_name = "FR5104" END
+  BUT_ONLY
+
+// container icon
+COPY_EXISTING ~ar5301.are~ ~override~
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Container 1" END
+  BUT_ONLY
+
+// container icon
+COPY_EXISTING ~ar5302.are~ ~override~
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 5 STR_VAR cont_name = "Container 2" END
+  BUT_ONLY
+
+// container icon
+COPY_EXISTING ~ar5401.are~ ~override~
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Container 1" END
+  BUT_ONLY
+
+// found by mystery mike over at SHS
+// monument can't disply info due to missing vertices & bounding box
+COPY_EXISTING ~ar6001.are~ ~override~
+  SET "new_vert" = 0
+  READ_SHORT 0x5a trig_num
+  READ_LONG  0x5c trig_off
+  READ_LONG  0x7c vert_off
+  READ_SHORT 0x80 vert_num
+  FOR (index = 0 ; index < trig_num ; ++index) BEGIN
+    READ_SHORT (trig_off + 0x2a + (index * 0xc4)) trig_vert_num
+    WRITE_LONG (trig_off + 0x2c + (index * 0xc4)) (THIS + new_vert)
+    READ_LONG  (trig_off + 0x2c + (index * 0xc4)) trig_vert_idx
+    READ_LONG  (trig_off + 0x64 + (index * 0xc4)) string
+    PATCH_IF ((trig_vert_num = 0) AND (string = 2326)) BEGIN // if monument and no vertices already present
+      WRITE_SHORT (trig_off + 0x22 + (index * 0xc4)) 1470 // bounding box
+      WRITE_SHORT (trig_off + 0x24 + (index * 0xc4)) 1126 // bounding box
+      WRITE_SHORT (trig_off + 0x26 + (index * 0xc4)) 1931 // bounding box
+      WRITE_SHORT (trig_off + 0x28 + (index * 0xc4)) 1564 // bounding box
+      WRITE_SHORT (trig_off + 0x2a + (index * 0xc4)) 13   // vertices
+      SET new_vert += 13
+      INSERT_BYTES  (vert_off +        (0x04 * trig_vert_idx)) 0x34
+        WRITE_SHORT (vert_off + 0x00 + (0x04 * trig_vert_idx)) 1488 // vertex 0 X
+        WRITE_SHORT (vert_off + 0x02 + (0x04 * trig_vert_idx)) 1517 // vertex 0 Y
+        WRITE_SHORT (vert_off + 0x04 + (0x04 * trig_vert_idx)) 1470 // vertex 1 X
+        WRITE_SHORT (vert_off + 0x06 + (0x04 * trig_vert_idx)) 1365 // vertex 1 Y
+        WRITE_SHORT (vert_off + 0x08 + (0x04 * trig_vert_idx)) 1508 // vertex 2 X
+        WRITE_SHORT (vert_off + 0x0a + (0x04 * trig_vert_idx)) 1334 // vertex 2 Y
+        WRITE_SHORT (vert_off + 0x0c + (0x04 * trig_vert_idx)) 1528 // vertex 3 X
+        WRITE_SHORT (vert_off + 0x0e + (0x04 * trig_vert_idx)) 1210 // vertex 3 Y
+        WRITE_SHORT (vert_off + 0x10 + (0x04 * trig_vert_idx)) 1688 // vertex 4 X
+        WRITE_SHORT (vert_off + 0x12 + (0x04 * trig_vert_idx)) 1126 // vertex 4 Y
+        WRITE_SHORT (vert_off + 0x14 + (0x04 * trig_vert_idx)) 1781 // vertex 5 X
+        WRITE_SHORT (vert_off + 0x16 + (0x04 * trig_vert_idx)) 1150 // vertex 5 Y
+        WRITE_SHORT (vert_off + 0x18 + (0x04 * trig_vert_idx)) 1837 // vertex 6 X
+        WRITE_SHORT (vert_off + 0x1a + (0x04 * trig_vert_idx)) 1195 // vertex 6 Y
+        WRITE_SHORT (vert_off + 0x1c + (0x04 * trig_vert_idx)) 1895 // vertex 7 X
+        WRITE_SHORT (vert_off + 0x1e + (0x04 * trig_vert_idx)) 1247 // vertex 7 Y
+        WRITE_SHORT (vert_off + 0x20 + (0x04 * trig_vert_idx)) 1891 // vertex 8 X
+        WRITE_SHORT (vert_off + 0x22 + (0x04 * trig_vert_idx)) 1298 // vertex 8 Y
+        WRITE_SHORT (vert_off + 0x24 + (0x04 * trig_vert_idx)) 1931 // vertex 9 X
+        WRITE_SHORT (vert_off + 0x26 + (0x04 * trig_vert_idx)) 1349 // vertex 9 Y
+        WRITE_SHORT (vert_off + 0x28 + (0x04 * trig_vert_idx)) 1908 // vertex 10 X
+        WRITE_SHORT (vert_off + 0x2a + (0x04 * trig_vert_idx)) 1456 // vertex 10 Y
+        WRITE_SHORT (vert_off + 0x2c + (0x04 * trig_vert_idx)) 1798 // vertex 11 X
+        WRITE_SHORT (vert_off + 0x2e + (0x04 * trig_vert_idx)) 1538 // vertex 11 Y
+        WRITE_SHORT (vert_off + 0x30 + (0x04 * trig_vert_idx)) 1664 // vertex 12 X
+        WRITE_SHORT (vert_off + 0x32 + (0x04 * trig_vert_idx)) 1564 // vertex 12 Y
+    END
+  END
+  WRITE_SHORT 0x80 (vert_num + new_vert)
+  // adjust other offsets
+  PATCH_FOR_EACH offset IN 0x54 0x5c 0x60 0x68 0x70 0x78 /* 0x7c */ 0x84 0x88 0x90 0xa0 0xa8 0xb0 0xb8 0xbc 0xc0 BEGIN
+    READ_LONG offset val_off
+    PATCH_IF (val_off > vert_off) BEGIN
+      WRITE_LONG offset (val_off + (new_vert * 0x04))
+    END
+  END
+  BUT_ONLY
+
+// two creatures at same coordinates, remove dupe caged souls, generic dlg for spider, door cursor
+COPY_EXISTING ~ar6002.are~ ~override~
+  LPF AREA_ALTER_ACTOR INT_VAR x_coord = 2194 y_coord = 1264 STR_VAR actor_name = "Neo Orog 8" END
+  LPF AREA_ALTER_ACTOR STR_VAR dlg_file = "dgenmond" actor_name = "Phase Spider" END
+  LPF AREA_ALTER_DOOR INT_VAR door_icon = 8 STR_VAR door_name = "AR6002PuzzleDoorTrigger" END
+  LPF REPLACE_AREA_ITEM STR_VAR old_item = "zzu6cs" new_item = "u1hax4b" END
+  BUT_ONLY
+
+// container icons
+COPY_EXISTING ~ar6005.are~ ~override~
+  FOR (index = 1 ; index < 26 ; ++index) BEGIN
+    LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 7 STR_VAR cont_name = EVAL "Container %index%"  END
+  END
+  BUT_ONLY
+
+// container icons, made key required
+COPY_EXISTING ~ar6006.are~ ~override~
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 7 STR_VAR cont_name = "Container 1"  END
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 7 STR_VAR cont_name = "Container 9"  END
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 7 STR_VAR cont_name = "Container 11" END
+  LPF AREA_ALTER_DOOR INT_VAR lock_diff = 100 STR_VAR door_name = "AR6006Door11" END
+  BUT_ONLY
+
+// container icon, door cursor, travel cursor
+COPY_EXISTING ~ar6013.are~ ~override~
+  LPF AREA_ALTER_REGION INT_VAR flag_party_required = 1 STR_VAR trig_name = "To6011" END
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Receptable" END
+  LPF AREA_ALTER_DOOR INT_VAR door_icon = 2 STR_VAR door_name = "AR6013Forge1" END
+  BUT_ONLY
+
+// container icon, charges for blur deck
+COPY_EXISTING ~ar7004.are~ ~override~
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Hut 2"  END
+  LPF REPLACE_AREA_ITEM INT_VAR charges1 = 3 STR_VAR old_item = blrdeck new_item = blrdeck END
+  BUT_ONLY
+
+// move thieves so they can move, travel cursor, party-required flag
+// bad team assignments in how; also see ldthief.bcs
+COPY_EXISTING ~ar8001.are~ ~override~
+  LPF AREA_ALTER_REGION INT_VAR cursor = 34 STR_VAR trig_name = "To8003" END
+  LPF AREA_ALTER_REGION INT_VAR flag_party_required = 1 STR_VAR trig_name = "To8005" END
+  // team assignment corrections
+  LPF AREA_ALTER_ACTOR STR_VAR actor_name = "Salamander 105"     script_specifics = "gnteam9m" END
+  LPF AREA_ALTER_ACTOR STR_VAR actor_name = "Salamander 110"     script_specifics = "gnteam2m" END
+  LPF AREA_ALTER_ACTOR STR_VAR actor_name = "Salamander 111"     script_specifics = "gnteam2m" END
+  LPF AREA_ALTER_ACTOR STR_VAR actor_name = "Tarnished Sentry 3" script_specifics = "gnteam2m" END
+  LPF AREA_ALTER_ACTOR STR_VAR actor_name = "Tarnished Sentry 4" script_specifics = "gnteam2m" END
+  // thieves spawning on top of each other
+  LPF AREA_ALTER_ACTOR INT_VAR x_coord = 1527 y_coord = 357 STR_VAR actor_name = "Thief_12" END
+  LPF AREA_ALTER_ACTOR INT_VAR x_coord = 1555 y_coord = 367 STR_VAR actor_name = "Thief_13" END
+  LPF AREA_ALTER_ACTOR INT_VAR x_coord = 1924 y_coord = 413 STR_VAR actor_name = "Thief_14" END
+  LPF AREA_ALTER_ACTOR INT_VAR x_coord = 2160 y_coord = 369 STR_VAR actor_name = "Thief_15" END
+  LPF AREA_ALTER_ACTOR INT_VAR x_coord = 2363 y_coord = 330 STR_VAR actor_name = "Thief_16" END
+  LPF AREA_ALTER_ACTOR INT_VAR x_coord = 2532 y_coord = 444 STR_VAR actor_name = "Thief_17" END
+  LPF AREA_ALTER_ACTOR INT_VAR x_coord = 2617 y_coord = 405 STR_VAR actor_name = "Thief_18" END
+  LPF AREA_ALTER_ACTOR INT_VAR x_coord = 2688 y_coord = 369 STR_VAR actor_name = "Thief_19" END
+  BUT_ONLY
+
+// travel cursor
+COPY_EXISTING ~ar8003.are~ ~override~
+  LPF AREA_ALTER_REGION INT_VAR cursor = 34 STR_VAR trig_name = "To8001" END
+  BUT_ONLY
+
+// container icon
+COPY_EXISTING ~ar8006.are~ ~override~
+  LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 3 STR_VAR cont_name = "Dresser 1"  END
+  BUT_ONLY
+
+// travel cursor
+COPY_EXISTING ~ar8007.are~ ~override~
+  LPF AREA_ALTER_REGION INT_VAR cursor = 28 STR_VAR trig_name = "To8006" END
+  BUT_ONLY
+
+// dialogue for gnomes, charges for oil of null effect
+COPY_EXISTING ~ar8010.are~ ~override~
+  LPF REPLACE_AREA_ITEM INT_VAR charges1 = 1 STR_VAR old_item = pnull new_item = pnull END
+  FOR (index = 13 ; index < 23 ; ++index) BEGIN
+    LPF AREA_ALTER_ACTOR STR_VAR dlg_file = "dgnomebl" actor_name = EVAL "Blind Svirfneblin %index%" END
+  END
+  BUT_ONLY
+
+// remove brother harken's left over voice floatmessage script
+COPY_EXISTING ~ar8012.are~ ~override~
+  LPF AREA_ALTER_ACTOR STR_VAR script_general = "" actor_name = "Brother Harken" END
+  BUT_ONLY
+
+ACTION_IF GAME_IS ~iwd~ THEN BEGIN // iwd w/o how or totlm
+
+  // flag added in HoW; matching ar2100 flag added above
+  COPY_EXISTING ~ar2109.are~ ~override~
+    LPF AREA_ALTER_REGION INT_VAR flag_party_required = 1 STR_VAR trig_name = "To2100" END
+    BUT_ONLY
+
+  // skellies trapped in wall (fixed in how)
+  COPY_EXISTING ~ar3201.are~ ~override~
+    LPF AREA_ALTER_ACTOR INT_VAR x_coord = 858 y_coord = 806 STR_VAR actor_name = "Skeleton 1" END
+    LPF AREA_ALTER_ACTOR INT_VAR x_coord = 920 y_coord = 795 STR_VAR actor_name = "Skeleton 2" END
+    BUT_ONLY
+
+END ELSE BEGIN // how, totlm fixes
+
+  // container icon, ID'd item
+  COPY_EXISTING ~ar9102.are~ ~override~
+    LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Container 5"  END
+    LPF REPLACE_AREA_ITEM INT_VAR charges1 = 1 STR_VAR old_item = clck13 new_item = clck13 END // un-IDs item
+    BUT_ONLY
+
+  // remove dupe random item drops (extres4 also available in ar9601)
+  COPY_EXISTING ~ar9200.are~ ~override~
+    READ_LONG  0x70 cont_off
+    READ_SHORT 0x74 cont_num
+    READ_LONG  0x78 item_off
+    FOR (index = 0 ; index < cont_num ; ++index) BEGIN
+      READ_LONG (cont_off + 0x40 + (index * 0xc0)) item_idx
+      READ_LONG (cont_off + 0x44 + (index * 0xc0)) item_num
+      FOR (index2 = 0 ; index2 < item_num ; ++index2) BEGIN
+        READ_ASCII (item_off +        ((index2 + item_idx) * 0x14)) item
+        PATCH_IF ("%item%" STRING_COMPARE_CASE "EXTRES4" = 0) BEGIN // extres4 also available in ar9601
+          WRITE_ASCII (item_off +        ((index2 + item_idx) * 0x14)) ~EXTRES1~ #8
+          SET index2 = item_num
+          SET index = cont_num // kill both loops
+        END
+      END
+    END
+    BUT_ONLY
+  
+  // container icon, key required
+  COPY_EXISTING ~ar9600.are~ ~override~
+    LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Container 1"  END
+    LPF AREA_ALTER_DOOR INT_VAR lock_diff = 100 STR_VAR door_name = "AR9600_Door1" END
+    BUT_ONLY
+
+  // container icon
+  COPY_EXISTING ~ar9602.are~ ~override~
+    LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 10 STR_VAR cont_name = "Container 4" END
+    BUT_ONLY
+  
+  // container icon, charges for items
+  COPY_EXISTING ~ar9603.are~ ~override~
+    LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Container 8" END
+    LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Container 9" END
+    LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Container 10" END
+    LPF REPLACE_AREA_ITEM INT_VAR charges2 = 3 STR_VAR old_item = power new_item = power END
+    LPF REPLACE_AREA_ITEM INT_VAR charges1 = 1 STR_VAR old_item = harp new_item = harp END
+    BUT_ONLY
+
+  ACTION_IF GAME_IS ~totlm~ THEN BEGIN // totlm fixes
+
+    // container icon
+    COPY_EXISTING ~ar9711.are~ ~override~
+      LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 7 STR_VAR cont_name = "Throne" END
+      BUT_ONLY
+
+    // container icon, creatures facing the wrong way
+    COPY_EXISTING ~ar9712.are~ ~override~
+      LPF AREA_ALTER_ACTOR INT_VAR orient = 8 STR_VAR actor_name = "Spectral Courtier M2" END
+      LPF AREA_ALTER_ACTOR INT_VAR orient = 0 STR_VAR actor_name = "Spectral Courtier F2" END
+      LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 6 STR_VAR cont_name = "Container 1" END
+      BUT_ONLY
+
+    // container icon, party orientation when entering
+    // revenant regen item fix (see cdtrolfg.bcs, revnant.cre, rndrevn.cre x2)
+    COPY_EXISTING ~ar9714.are~ ~override~
+      FOR (index = 1 ; index < 25 ; ++index) BEGIN
+        LPF AREA_ALTER_ACTOR STR_VAR script_class = "cdtrolg" actor_name = EVAL "Revenant %index%" END
+      END
+      LPF AREA_ALTER_ENTRANCE INT_VAR orient = 10 STR_VAR entry_name = "fr9713" END
+      LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 7 STR_VAR cont_name = "Erris's Sarcophogus" END
+      LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 7 STR_VAR cont_name = "Geddian's Sarcophogus" END
+      LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 7 STR_VAR cont_name = "Zierki's Sarcophogus" END
+      LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 7 STR_VAR cont_name = "Giles's Sarcophogus" END
+      LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 7 STR_VAR cont_name = "Plat Key Sarcophogus" END
+      LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 7 STR_VAR cont_name = "Gold Key Sarcophogus" END
+      LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 7 STR_VAR cont_name = "Elec Key Sarcophogus" END
+      LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 7 STR_VAR cont_name = "Silv Key Sarcophogus" END
+      LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 7 STR_VAR cont_name = "Cop Key Sarcophogus" END
+      LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 7 STR_VAR cont_name = "Bronze Key Sarcophogus" END
+      LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 7 STR_VAR cont_name = "Treasure Sarcophogus" END
+      LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 10 STR_VAR cont_name = "Corpse Shelf" END
+      BUT_ONLY
+  
+    // travel cursor
+    COPY_EXISTING ~ar9716.are~ ~override~
+      LPF AREA_ALTER_REGION INT_VAR cursor = 28 STR_VAR trig_name = "To9717" END
+      BUT_ONLY
+    
+    // travel cursor
+    COPY_EXISTING ~ar9717.are~ ~override~
+      LPF AREA_ALTER_REGION INT_VAR cursor = 28 STR_VAR trig_name = "To9718" END
+      BUT_ONLY
+    
+    // container icon, charges
+    COPY_EXISTING ~ar9800.are~ ~override~
+      LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Rack 1" END
+      LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Rack 2" END
+      LPF AREA_ALTER_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Book" END
+      LPF REPLACE_AREA_ITEM INT_VAR charges1 = 10 STR_VAR old_item = ring03 new_item = ring03 END
+      BUT_ONLY
+
+    // minotaur trapped by door, unable to replicate but fixed anyway
+    COPY ~iwdfixpack/bmp/ar9717sr.bmp~ ~override~
+  
+  END
+
+END
+
+/////                                                  \\\\\
+///// creature field fixes                             \\\\\
+/////                                                  \\\\\
+
+// gender, sex, alignment, general, race, class fixes
+COPY ~iwdfixpack/2da/creature.2da~ ~iwdfixpack/2da/creature.2da~
+  COUNT_2DA_ROWS 7 "rows"
+  FOR (index = 1 ; index < rows ; ++index) BEGIN
+    READ_2DA_ENTRY index 0 7 "file"
+    READ_2DA_ENTRY index 1 7 "gender"
+    READ_2DA_ENTRY index 2 7 "sex"
+    READ_2DA_ENTRY index 3 7 "align"
+    READ_2DA_ENTRY index 4 7 "general"
+    READ_2DA_ENTRY index 5 7 "race"
+    READ_2DA_ENTRY index 6 7 "class"
+    INNER_ACTION BEGIN
+
+      ACTION_IF FILE_EXISTS_IN_GAME ~%file%.cre~ THEN BEGIN
+
+        COPY_EXISTING ~%file%.cre~ ~override~
+          PATCH_IF ("%sex%"    < 256)  BEGIN WRITE_BYTE 0x237 "%sex%"     END
+          PATCH_IF ("%gender%" < 256)  BEGIN WRITE_BYTE 0x2dd "%gender%"  END
+          PATCH_IF ("%align%" < 256)   BEGIN WRITE_BYTE 0x2e3 "%align%"   END
+          PATCH_IF ("%general%" < 256) BEGIN WRITE_BYTE 0x2d9 "%general%" END
+          PATCH_IF ("%race%" < 256)    BEGIN WRITE_BYTE 0x2da "%race%"    END
+          PATCH_IF ("%class%" < 256)   BEGIN WRITE_BYTE 0x2db "%class%"   END
+          BUT_ONLY
+
+      END
+
+    END
+  END
+  BUT_ONLY
+
+/////                                                  \\\\\
+///// soundset fixes                                   \\\\\
+/////                                                  \\\\\
+
+// soundset fixes
+COPY_EXISTING ~ad1sklm.cre~ ~override~
+              ~ad2sklm.cre~ ~override~
+              ~ad2sklr.cre~ ~override~
+              ~ad3sklm.cre~ ~override~
+              ~ad3sklr.cre~ ~override~
+              ~ad4sklr.cre~ ~override~
+  WRITE_LONG 0x0ac `0
+  WRITE_LONG 0x0b0 `0
+  WRITE_LONG 0x0e0 `0
+  WRITE_LONG 0x0e4 `0
+  WRITE_LONG 0x128 `0
+  WRITE_LONG 0x134 `0
+  WRITE_LONG 0x144 `0
+  WRITE_LONG 0x148 `0
+  BUT_ONLY
+
+// soundset fixes
+COPY_EXISTING ~ms3hspi.cre~ ~override~
+  WRITE_LONG 0x0ac 5903
+  WRITE_LONG 0x0b0 5904
+  WRITE_LONG 0x0c8 `0
+  WRITE_LONG 0x0cc `0
+  WRITE_LONG 0x0dc `0
+  WRITE_LONG 0x0e0 5901
+  WRITE_LONG 0x0e4 5902
+  WRITE_LONG 0x0ec `0
+  WRITE_LONG 0x0f0 `0
+  WRITE_LONG 0x10c `0
+  WRITE_LONG 0x110 `0
+  WRITE_LONG 0x128 5908
+  WRITE_LONG 0x134 5909
+  WRITE_LONG 0x144 5905
+  WRITE_LONG 0x148 5906
+  BUT_ONLY
+
+// soundset fixes
+COPY_EXISTING ~msmcrwl.cre~ ~override~
+  WRITE_LONG 0x0ac 5874
+  WRITE_LONG 0x0b0 5875
+  WRITE_LONG 0x0e0 5872
+  WRITE_LONG 0x0e4 5873
+  WRITE_LONG 0x128 5879
+  WRITE_LONG 0x134 5880
+  WRITE_LONG 0x144 5876
+  WRITE_LONG 0x148 5877
+  BUT_ONLY
+
+// soundset fixes
+COPY_EXISTING ~msmpspi.cre~ ~override~
+  WRITE_LONG 0x0ac 5912
+  WRITE_LONG 0x0b0 5913
+  WRITE_LONG 0x0c8 `0
+  WRITE_LONG 0x0cc `0
+  WRITE_LONG 0x0dc `0
+  WRITE_LONG 0x0e0 5910
+  WRITE_LONG 0x0e4 5911
+  WRITE_LONG 0x0ec `0
+  WRITE_LONG 0x0f0 `0
+  WRITE_LONG 0x10c `0
+  WRITE_LONG 0x110 `0
+  WRITE_LONG 0x128 5917
+  WRITE_LONG 0x134 5918
+  WRITE_LONG 0x144 5914
+  WRITE_LONG 0x148 5915
+  BUT_ONLY
+
+// soundset fixes
+COPY_EXISTING ~rdespiw.cre~ ~override~
+  WRITE_LONG 0x0ac 5929
+  WRITE_LONG 0x0b0 5930
+  WRITE_LONG 0x0c8 `0
+  WRITE_LONG 0x0cc `0
+  WRITE_LONG 0x0dc `0
+  WRITE_LONG 0x0e0 5928
+  WRITE_LONG 0x0ec `0
+  WRITE_LONG 0x0f0 `0
+  WRITE_LONG 0x10c `0
+  WRITE_LONG 0x128 5934
+  WRITE_LONG 0x130 `0
+  WRITE_LONG 0x134 5935
+  WRITE_LONG 0x144 5931
+  WRITE_LONG 0x148 5932
+  BUT_ONLY
+
+ACTION_IF GAME_IS ~how totlm~ THEN BEGIN // how, totlm fixes
+
+  // soundset fixes
+  COPY_EXISTING ~dlbonec.cre~ ~override~
+    WRITE_LONG 0x0ac `0
+    WRITE_LONG 0x0b0 `0
+    WRITE_LONG 0x0e0 `0
+    WRITE_LONG 0x0e4 `0
+    WRITE_LONG 0x128 `0
+    WRITE_LONG 0x134 `0
+    WRITE_LONG 0x144 `0
+    WRITE_LONG 0x148 `0
+    WRITE_LONG 0x12c `0
+    WRITE_LONG 0x138 `0
+    WRITE_LONG 0x14c `0
+    BUT_ONLY
+
+  ACTION_IF GAME_IS ~totlm~ THEN BEGIN // totlm fixes
+  
+    // soundset fixes
+    COPY_EXISTING ~direb.cre~ ~override~
+      WRITE_LONG 0x0ac 5627
+      WRITE_LONG 0x0b0 5628
+      WRITE_LONG 0x0e0 5625
+      WRITE_LONG 0x0e4 5626
+      WRITE_LONG 0x128 5632
+      WRITE_LONG 0x134 5633
+      WRITE_LONG 0x144 5629
+      WRITE_LONG 0x148 5630
+      BUT_ONLY
+  
+    // soundset fixes
+    COPY_EXISTING ~jkldog.cre~ ~override~
+      WRITE_LONG 0x0ac 5521
+      WRITE_LONG 0x0b0 5522
+      WRITE_LONG 0x0e0 5519
+      WRITE_LONG 0x0e4 5520
+      WRITE_LONG 0x128 5526
+      WRITE_LONG 0x134 5527
+      WRITE_LONG 0x144 5523
+      WRITE_LONG 0x148 5524
+      BUT_ONLY
+  
+    // soundset fixes
+    COPY_EXISTING ~musjelly.cre~ ~override~
+      WRITE_LONG 0x0ac 5956
+      WRITE_LONG 0x0b0 5957
+      WRITE_LONG 0x0e0 5954 // 0x1742
+      WRITE_LONG 0x0e4 5955
+      WRITE_LONG 0x128 5962
+      WRITE_LONG 0x134 5964
+      WRITE_LONG 0x144 5958
+      WRITE_LONG 0x148 5959
+      BUT_ONLY
+  
+    // soundset fixes
+    COPY_EXISTING ~ochjelly.cre~ ~override~
+      WRITE_LONG 0x0ac 5966
+      WRITE_LONG 0x0b0 5967
+      WRITE_LONG 0x0e0 5963
+      WRITE_LONG 0x0e4 5965
+      WRITE_LONG 0x128 5971
+      WRITE_LONG 0x134 5972
+      WRITE_LONG 0x144 5968
+      WRITE_LONG 0x148 5969
+      BUT_ONLY
+  
+    // soundset fixes
+    COPY_EXISTING ~olvslime.cre~ ~override~
+                  ~rndoslm.cre~  ~override~
+      WRITE_LONG 0x0ac 5947
+      WRITE_LONG 0x0b0 5948
+      WRITE_LONG 0x0e0 5945
+      WRITE_LONG 0x0e4 5946
+      WRITE_LONG 0x128 5952
+      WRITE_LONG 0x134 5953
+      WRITE_LONG 0x144 5949
+      WRITE_LONG 0x148 5950
+      BUT_ONLY
+
+  END
+
+END
+
+/////                                                  \\\\\
+///// creature spellbook fixes                         \\\\\
+/////                                                  \\\\\
+
+// known spells have wrong level, type set
+ACTION_FOR_EACH crefile IN
+  albion eldathyf eldathyn higharch ms6yuan msmyuan rdeyuane sevsoul shadsoul shatsoul 
+  yuaewax yuaewbl yuaewbo yuaewsw yuanwax yuanwbi yuanwsw yuaxdin yubldin yuchamp yuswdin
+BEGIN
+
+  ACTION_IF FILE_EXISTS_IN_GAME ~%crefile%.cre~ BEGIN
+
+    COPY_EXISTING ~%crefile%.cre~ ~override~
+      READ_LONG  0x308 "known_off"
+      READ_LONG  0x30c "known_num"
+      FOR (index = 0 ; index < known_num ; index = index + 1) BEGIN
+        READ_ASCII ("%known_off%" +        ("%index%" * 0x0c)) "resref"
+        PATCH_IF ("%resref%" STRING_COMPARE_REGEXP "spin99[789]" = 0) BEGIN
+          WRITE_SHORT ("%known_off%" + 0x08 + ("%index%" * 0x0c)) 0 // level
+          WRITE_SHORT ("%known_off%" + 0x0a + ("%index%" * 0x0c)) 2 // innate
+        END
+      END
+      BUT_ONLY
+
+  END
+  
+END
+
+// known spells have wrong level set
+COPY_EXISTING ~bandoth.cre~  ~override~
+              ~wightimb.cre~ ~override~
+  READ_LONG  0x308 "known_off"
+  READ_LONG  0x30c "known_num"
+  FOR (index = 0 ; index < known_num ; index = index + 1) BEGIN
+    READ_ASCII ("%known_off%" +        ("%index%" * 0x0c)) "resref"
+    PATCH_IF ("%resref%" STRING_COMPARE_REGEXP "SPWI1[0-9][0-9]" = 0) BEGIN
+      WRITE_SHORT ("%known_off%" + 0x08 + ("%index%" * 0x0c)) 0 // level
+    END ELSE
+    PATCH_IF ("%resref%" STRING_COMPARE_REGEXP "SPWI5[0-9][0-9]" = 0) BEGIN
+      WRITE_SHORT ("%known_off%" + 0x08 + ("%index%" * 0x0c)) 4 // level
+    END ELSE
+    PATCH_IF ("%resref%" STRING_COMPARE_REGEXP "SPWI6[0-9][0-9]" = 0) BEGIN
+      WRITE_SHORT ("%known_off%" + 0x08 + ("%index%" * 0x0c)) 5 // level
+    END
+  END
+  BUT_ONLY
+
+// known spells have incorrect arcane/divine flags
+COPY_EXISTING ~drowsor.cre~ ~override~
+              ~drowspe.cre~ ~override~
+              ~oswald.cre~  ~override~
+              ~udsorc.cre~  ~override~
+              ~udspell.cre~ ~override~
+  READ_LONG  0x308 "known_off"
+  READ_LONG  0x30c "known_num"
+  FOR (index = 0 ; index < known_num ; index = index + 1) BEGIN
+    READ_ASCII ("%known_off%" +        ("%index%" * 0x0c)) "resref"
+    PATCH_IF ("%resref%" STRING_COMPARE_REGEXP "SPWI[1-9][0-9][0-9]" = 0) BEGIN
+      WRITE_SHORT ("%known_off%" + 0x0a + ("%index%" * 0x0c)) 1 // arcane
+    END ELSE
+    PATCH_IF ("%resref%" STRING_COMPARE_REGEXP "SPPR[1-9][0-9][0-9]" = 0) BEGIN
+      WRITE_SHORT ("%known_off%" + 0x0a + ("%index%" * 0x0c)) 0 // divine
+    END
+  END
+  BUT_ONLY
+
+// high torturer not doing anything 2/2 (see d5hitort.bcs)
+COPY_EXISTING ~hightort.cre~ ~override~
+  ADD_KNOWN_SPELL     ~sppr714~ #6 ~priest~
+  ADD_MEMORIZED_SPELL ~sppr714~ #6 ~priest~
+  BUT_ONLY
+  
+// have spell flagged as already cast
+COPY_EXISTING ~larrel.cre~   ~override~
+              ~skelblaz.cre~ ~override~
+  READ_LONG 0x318 "mem_off"
+  READ_LONG 0x31c "mem_num"
+  FOR (index = 0 ; index < mem_num ; ++index) BEGIN
+    WRITE_SHORT (mem_off + 0x08 + (index * 0xc)) 1 // spell memorized not already cast
+  END
+  BUT_ONLY
+
+// presio's AS1 should be dimension door
+COPY_EXISTING ~presio.cre~ ~override~
+  PATCH_FOR_EACH roffset IN 0x308 0x318 BEGIN
+    READ_LONG (roffset       ) offset
+    READ_LONG (roffset + 0x04) number
+    FOR (index = 0 ; index < number ; ++index) BEGIN
+      READ_ASCII (offset +        (index * 0x0c)) "resref"
+      PATCH_IF ("%resref%" STRING_COMPARE_CASE "sppr402" = 0) BEGIN
+        WRITE_ASCII (offset +        (index * 0x0c)) "spwi402"
+      END
+    END
+  END
+  BUT_ONLY
+
+// yxunomei's priests not doing anything 3/3 (see also d5yuanp2.bcs, d5yuanp3.bcs)
+COPY_EXISTING ~yuantip.cre~ ~override~
+  ADD_KNOWN_SPELL     ~sppr313~ #2 ~priest~
+  ADD_KNOWN_SPELL     ~sppr414~ #3 ~priest~
+  ADD_MEMORIZED_SPELL ~sppr313~ #2 ~priest~
+  ADD_MEMORIZED_SPELL ~sppr414~ #3 ~priest~
+  BUT_ONLY
+
+// creatures with errors in their mem tables
+// just nuke the tables, rebuild below (dlfznbne in totl block)
+ACTION_FOR_EACH crefile IN bandoth dlfznbne drowsor drowspe oswald yuanwax yuaxdin BEGIN
+
+  ACTION_IF FILE_EXISTS_IN_GAME ~%crefile%.cre~ BEGIN
+
+    COPY_EXISTING ~%crefile%.cre~ ~override~
+      READ_LONG  0x310 mem_off
+      READ_LONG  0x314 mem_num
+      READ_LONG  0x318 known_off
+      READ_LONG  0x31c known_num
+      FOR (index = 0 ; index < mem_num ; ++index) BEGIN
+        WRITE_SHORT (mem_off + 0x02 + (index * 0x10)) 0 // num spells memorizable
+        WRITE_SHORT (mem_off + 0x04 + (index * 0x10)) 0 // num spells currently memorizable
+        WRITE_LONG  (mem_off + 0x08 + (index * 0x10)) 0 // table idx
+        WRITE_LONG  (mem_off + 0x0c + (index * 0x10)) 0 // number of spells
+      END
+      DELETE_BYTES known_off (known_num * 0x0c)
+      // fix offsets after inserted effects
+      PATCH_FOR_EACH offset IN 0x320 0x324 0x32c BEGIN
+        READ_LONG offset offset_val
+        PATCH_IF (known_off < offset_val) BEGIN
+          WRITE_LONG offset (offset_val - (known_num * 0x0c))
+        END
+      END
+      BUT_ONLY
+
+  END
+  
+END
+
+// rebuild mem table
+COPY_EXISTING ~bandoth.cre~  ~override~
+  ADD_MEMORIZED_SPELL SPWI112 #0 WIZARD #5
+  ADD_MEMORIZED_SPELL SPWI118 #0 WIZARD #5
+  ADD_MEMORIZED_SPELL SPWI205 #1 WIZARD #1
+  ADD_MEMORIZED_SPELL SPWI304 #2 WIZARD #1
+  ADD_MEMORIZED_SPELL SPWI402 #3 WIZARD #1
+  ADD_MEMORIZED_SPELL SPWI504 #4 WIZARD #4
+  ADD_MEMORIZED_SPELL SPWI599 #4 WIZARD #1
+  ADD_MEMORIZED_SPELL SPWI608 #5 WIZARD #2
+  BUT_ONLY
+
+// rebuild mem table
+COPY_EXISTING ~drowsor.cre~  ~override~
+  ADD_MEMORIZED_SPELL SPWI112 #0 WIZARD #4
+  ADD_MEMORIZED_SPELL SPWI114 #0 WIZARD #1
+  ADD_MEMORIZED_SPELL SPWI212 #1 WIZARD #1
+  ADD_MEMORIZED_SPELL SPWI305 #2 WIZARD #1
+  ADD_MEMORIZED_SPELL SPWI308 #2 WIZARD #1
+  ADD_MEMORIZED_SPELL SPWI404 #3 WIZARD #1
+  ADD_MEMORIZED_SPELL SPWI406 #3 WIZARD #1
+  ADD_MEMORIZED_SPELL SPWI413 #3 WIZARD #1
+  ADD_MEMORIZED_SPELL SPWI417 #3 WIZARD #1
+  ADD_MEMORIZED_SPELL SPWI511 #4 WIZARD #1
+  BUT_ONLY
+
+// rebuild mem table
+COPY_EXISTING ~drowspe.cre~  ~override~
+  ADD_MEMORIZED_SPELL SPWI112 #0 WIZARD #3
+  ADD_MEMORIZED_SPELL SPWI211 #1 WIZARD #2
+  ADD_MEMORIZED_SPELL SPWI212 #1 WIZARD #1
+  ADD_MEMORIZED_SPELL SPWI214 #1 WIZARD #1
+  ADD_MEMORIZED_SPELL SPWI305 #2 WIZARD #1
+  ADD_MEMORIZED_SPELL SPWI317 #2 WIZARD #1
+  ADD_MEMORIZED_SPELL SPWI408 #3 WIZARD #1
+  BUT_ONLY
+
+// rebuild mem table
+COPY_EXISTING ~oswald.cre~  ~override~
+  ADD_MEMORIZED_SPELL SPWI101 #0 WIZARD #1
+  ADD_MEMORIZED_SPELL SPWI105 #0 WIZARD #1
+  ADD_MEMORIZED_SPELL SPWI115 #0 WIZARD #1
+  ADD_MEMORIZED_SPELL SPWI118 #0 WIZARD #1
+  ADD_MEMORIZED_SPELL SPWI201 #1 WIZARD #1
+  ADD_MEMORIZED_SPELL SPWI206 #1 WIZARD #1
+  ADD_MEMORIZED_SPELL SPWI217 #1 WIZARD #1
+  ADD_MEMORIZED_SPELL SPWI302 #2 WIZARD #1
+  ADD_MEMORIZED_SPELL SPWI304 #2 WIZARD #2
+  ADD_MEMORIZED_SPELL SPWI417 #3 WIZARD #2
+  ADD_MEMORIZED_SPELL SPWI511 #4 WIZARD #1
+  BUT_ONLY
+
+// rebuild mem table
+COPY_EXISTING ~yuanwax.cre~  ~override~
+              ~yuaxdin.cre~  ~override~
+  ADD_MEMORIZED_SPELL SPIN998 #0 INNATE #1
+  ADD_MEMORIZED_SPELL SPIN999 #0 INNATE #1
+  BUT_ONLY
+
+ACTION_IF GAME_IS ~how totlm~ THEN BEGIN // how, totlm fixes
+
+  // have spell flagged as already cast
+  COPY_EXISTING ~drowpm.cre~   ~override~
+    READ_LONG 0x318 "mem_off"
+    READ_LONG 0x31c "mem_num"
+    FOR (index = 0 ; index < mem_num ; ++index) BEGIN
+      WRITE_SHORT (mem_off + 0x08 + (index * 0xc)) 1 // spell memorized not already cast
+    END
+    BUT_ONLY
+  
+  // rebuild mem table
+  COPY_EXISTING ~dlfznbne.cre~  ~override~
+    ADD_MEMORIZED_SPELL SPWI220 #1 WIZARD #1
+    ADD_MEMORIZED_SPELL SPWI318 #2 WIZARD #1
+    ADD_MEMORIZED_SPELL SPWI404 #3 WIZARD #1
+    BUT_ONLY
+
+END
+
+/////                                                  \\\\\
+///// creature inventory fixes                         \\\\\
+/////                                                  \\\\\
+
+// expiring items
+ACTION_FOR_EACH crefile IN kaylessa rshorcb sdgobbw1 sdgobbw2 sdorcbw1 sdorcbw2 skelbow BEGIN
+
+  ACTION_IF FILE_EXISTS_IN_GAME ~%crefile%.cre~ BEGIN
+
+    COPY_EXISTING ~%crefile%.cre~ ~override~
+      READ_LONG 0x324 item_off
+      READ_LONG 0x328 item_num
+      FOR (index = 0 ; index < item_num ; ++index) BEGIN
+        WRITE_SHORT (item_off + 0x08 + (index * 0x14)) 0 // no expiry
+      END
+      BUT_ONLY
+
+  END
+
+END
+
+// weapons exist but not equipped
+ACTION_FOR_EACH crefile IN bearcav belhif digby dolan doogal gaspar hjollder hjolldrh hrpinf jemel karrl kieran msmcrwl
+  orrick pomab purvis purvish quinn rawleigh roald tiernon towniem1 towniem2 towniem3 towniem4 towniem5 whitcomb xactile
+  BEGIN
+
+  ACTION_IF FILE_EXISTS_IN_GAME ~%crefile%.cre~ BEGIN
+
+    // equip weapon
+    COPY_EXISTING ~%crefile%.cre~ ~override~
+      READ_LONG 0x320 slot_off
+      READ_SHORT (slot_off + 0x4c) equipped
+      PATCH_IF (equipped = 0xffff) BEGIN // if no weapon selected
+        FOR (index = 0 ; index < 4 ; ++index) BEGIN
+          READ_SHORT (slot_off + 0x12 + (index * 0x02)) item
+          PATCH_IF (item != 0xffff) BEGIN // if legit item
+            WRITE_SHORT (slot_off + 0x4c) index
+            SET index = 4
+          END
+        END
+      END
+      BUT_ONLY
+
+  END
+
+END
+
+// have incorrect equipped weapon reference
+COPY_EXISTING ~aldwin.cre~   ~override~
+  REPLACE_CRE_ITEM ~sw1h08~ #0 #0 #0 ~NONE~ ~WEAPON1~ EQUIP // replaces undroppable sw1h14
+  BUT_ONLY
+
+// rings/amulets
+COPY_EXISTING ~ghost.cre~   ~override~
+  REMOVE_CRE_ITEM ~ghost~                                       // removes from weapons
+  ADD_CRE_ITEM    ~ghost~  #0 #0 #0 ~NONE~ ~AMULET RRING LRING~ // add ghost.itm back to amulet/ring
+  BUT_ONLY
+
+// no weapons
+COPY_EXISTING ~ghost.cre~    ~override~
+              ~highbapt.cre~ ~override~
+              ~highritu.cre~ ~override~
+              ~highsumm.cre~ ~override~
+              ~hightort.cre~ ~override~
+              ~yuantip.cre~  ~override~
+  ADD_CRE_ITEM ~b1-6~ #0 #0 #0 ~NONE~ ~WEAPON1~ EQUIP
+  BUT_ONLY
+
+// assign ring95 item
+COPY_EXISTING ~histach.cre~  ~override~
+              ~shadowb.cre~  ~override~
+  REMOVE_CRE_ITEM ~ring95~                                      // removes from creature
+  ADD_CRE_ITEM    ~ring95~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as ring/amulet
+  BUT_ONLY
+
+// no weapon
+COPY_EXISTING ~kubear.cre~   ~override~
+  REMOVE_CRE_ITEM ~s1-10~                              // removes
+  ADD_CRE_ITEM ~s1-10~ #0 #0 #0 ~NONE~ ~WEAPON1~ EQUIP // add and equip
+  BUT_ONLY
+
+// have ring in quickslot/inventory
+COPY_EXISTING ~malavon.cre~  ~override~
+  REMOVE_CRE_ITEM ~ringmal~                                      // removes from quickslot
+  ADD_CRE_ITEM    ~ringmal~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as ring/amulet
+  BUT_ONLY
+
+// has armor in cloak/quickslots/inventory
+COPY_EXISTING ~orrick.cre~  ~override~
+  REMOVE_CRE_ITEM ~clck16~                         // removes from cloak slot
+  ADD_CRE_ITEM    ~clck16~ #0 #0 #0 ~NONE~ ~ARMOR~ // add back as armor
+  REMOVE_CRE_ITEM ~wand04~                         // remove
+  ADD_CRE_ITEM    ~wand04~ #10 #0 #0 ~NONE~ ~QITEM1 QITEM2 QITEM3~ // add back with charges
+  BUT_ONLY
+
+// add charges
+COPY_EXISTING ~oswald.cre~ ~override~
+  REMOVE_CRE_ITEM ~amul01~                                        // removes
+  ADD_CRE_ITEM    ~amul01~ #5 #0 #0 ~NONE~ ~AMULET~ // add back with charges
+  BUT_ONLY
+
+// equip sword
+COPY_EXISTING ~shadow.cre~ ~override~
+  REPLACE_CRE_ITEM ~shadow1~ #0 #0 #0 ~NONE~ ~WEAPON1~ EQUIP
+  REMOVE_CRE_ITEM ~immune1~                                      // removes from quickslot
+  ADD_CRE_ITEM    ~immune1~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as ring/amulet
+  BUT_ONLY
+
+// add transparency to buff shadows
+COPY_EXISTING ~shadowb.cre~ ~override~
+  ADD_CRE_ITEM ~trans~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as ring/amulet
+  BUT_ONLY
+
+// assign fsalring item
+COPY_EXISTING ~shikata.cre~  ~override~
+  REMOVE_CRE_ITEM ~fsalring~                                      // removes from creature
+  ADD_CRE_ITEM    ~fsalring~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as ring/amulet
+  BUT_ONLY
+
+// add, equip undead item
+COPY_EXISTING ~skarmsw.cre~ ~override~
+  ADD_CRE_ITEM ~ring95~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add  as equipped jewelry
+  BUT_ONLY
+
+// assign potn14 item
+COPY_EXISTING ~tanarri.cre~  ~override~
+  REMOVE_CRE_ITEM ~potn14~                                        // removes from creature
+  ADD_CRE_ITEM    ~potn14~ #0 #0 #0 ~NONE~ ~QITEM1 QITEM2 QITEM3~ // add back as quickslot
+  BUT_ONLY
+
+ACTION_IF GAME_IS ~how totlm~ THEN BEGIN
+
+  // has armor in cloak/quickslots/inventory
+  COPY_EXISTING ~alpheus.cre~  ~override~
+                ~alpheusd.cre~ ~override~
+                ~presapp.cre~  ~override~
+    REMOVE_CRE_ITEM ~clck10~                         // removes from cloak slot
+    ADD_CRE_ITEM    ~clck10~ #0 #0 #0 ~NONE~ ~ARMOR~ // add back as armor
+    BUT_ONLY
+
+  // have ring in quickslot/inventory
+  COPY_EXISTING ~alpheusd.cre~  ~override~
+    REMOVE_CRE_ITEM ~lwring~                                      // removes from quickslot
+    ADD_CRE_ITEM    ~lwring~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as ring/amulet
+    BUT_ONLY
+
+  // has shield in armor slot, armor not assigned
+  COPY_EXISTING ~angaar.cre~  ~override~
+                ~beornen.cre~ ~override~
+    REMOVE_CRE_ITEM ~shld03~                          // removes from armor slot
+    REMOVE_CRE_ITEM ~chan01~                          // removes from creature
+    ADD_CRE_ITEM    ~chan01~ #0 #0 #0 ~NONE~ ~ARMOR~  // add back as armor
+    ADD_CRE_ITEM    ~shld03~ #0 #0 #0 ~NONE~ ~SHIELD~ // add back as shield
+    BUT_ONLY
+
+  // have ring in quickslot/inventory
+  COPY_EXISTING ~dlsgem.cre~  ~override~
+    REMOVE_CRE_ITEM ~ring91~                                      // removes from quickslot
+    ADD_CRE_ITEM    ~ring91~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as ring/amulet
+    BUT_ONLY
+
+  // move and equip sword
+  COPY_EXISTING ~murdaugh.cre~ ~override~
+    REMOVE_CRE_ITEM  ~ulswd3d~
+    REPLACE_CRE_ITEM ~ulswd3d~ #0 #0 #0 ~NONE~ ~WEAPON1~ EQUIP
+    BUT_ONLY
+
+  // has armor in cloak/quickslots/inventory
+  COPY_EXISTING ~saeguard.cre~ ~override~
+    REMOVE_CRE_ITEM ~shark~                         // removes from cloak slot
+    ADD_CRE_ITEM    ~shark~ #0 #0 #0 ~NONE~ ~ARMOR~ // add back as armor
+    BUT_ONLY
+
+  // has armor in cloak/quickslots/inventory
+  COPY_EXISTING ~sagrdm.cre~   ~override~ // equippable items in inventory: shark2.itm
+                ~sarguard.cre~ ~override~ // Equippable items in inventory: shark2.itm
+    REMOVE_CRE_ITEM ~shark2~                         // removes from cloak slot
+    ADD_CRE_ITEM    ~shark2~ #0 #0 #0 ~NONE~ ~ARMOR~ // add back as armor
+    BUT_ONLY
+
+  // have incorrect equipped weapon reference
+  COPY_EXISTING ~sawar.cre~   ~override~
+    REMOVE_CRE_ITEM ~s1-4~                                 // removes from creature
+    ADD_CRE_ITEM    ~s1-4~ #0 #0 #0 ~NONE~ ~WEAPON2~ EQUIP // add back as equipped weapon
+    BUT_ONLY
+
+  // add charges
+  COPY_EXISTING ~seercut.cre~ ~override~
+    REMOVE_CRE_ITEM ~aport~                                        // removes
+    ADD_CRE_ITEM    ~aport~ #1 #0 #0 ~NONE~ ~QITEM1 QITEM2 QITEM3~ // add back with charges
+    REMOVE_CRE_ITEM ~adis~                                         // removes
+    ADD_CRE_ITEM    ~adis~  #1 #0 #0 ~NONE~ ~QITEM1 QITEM2 QITEM3~ // add back with charges
+    BUT_ONLY
+  
+  // add charges
+  COPY_EXISTING ~tiernon.cre~ ~override~
+    REMOVE_CRE_ITEM ~tiernon~                                      // removes (inv)
+    ADD_CRE_ITEM    ~tiernon~ #1 #1 #3 ~NONE~ ~INV7~ // add back with charges
+    BUT_ONLY
+
+  // has armor in cloak/quickslots/inventory
+  COPY_EXISTING ~vaarglan.cre~ ~override~
+                ~vaarglnd.cre~ ~override~
+    REMOVE_CRE_ITEM ~clck16~                         // removes from cloak slot
+    ADD_CRE_ITEM    ~clck16~ #0 #0 #0 ~NONE~ ~ARMOR~ // add back as armor
+    BUT_ONLY
+  
+  // have ring in quickslot/inventory
+  COPY_EXISTING ~vexing.cre~ ~override~
+    REMOVE_CRE_ITEM ~immune2~                                      // removes from quickslot
+    ADD_CRE_ITEM    ~immune2~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET BOOTS GLOVES~ // add back as ring/amulet
+    BUT_ONLY
+  
+  // have ring in quickslot/inventory
+  COPY_EXISTING ~werewlf.cre~ ~override~
+    REMOVE_CRE_ITEM ~immune1~                                      // removes from quickslot
+    ADD_CRE_ITEM    ~immune1~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as ring/amulet
+    BUT_ONLY
+
+  // has armor in cloak/quickslots/inventory
+  COPY_EXISTING ~xactile.cre~  ~override~ // Equippable items in inventory: SHARK3.itm
+    REMOVE_CRE_ITEM ~shark3~                         // removes from cloak slot
+    ADD_CRE_ITEM    ~shark3~ #0 #0 #0 ~NONE~ ~ARMOR~ // add back as armor
+    BUT_ONLY
+
+  ACTION_IF GAME_IS ~totlm~ THEN BEGIN // totlm fixes
+  
+    // equip item
+    COPY_EXISTING ~corcat.cre~ ~override~
+      REMOVE_CRE_ITEM ~spawn~                                        // removes (unassigned)
+      ADD_CRE_ITEM    ~spawn~ #0 #0 #0 ~NONE~ ~QITEM1 QITEM2 QITEM3~ // add back as quick item
+      BUT_ONLY
+      
+    // have ring in quickslot/inventory
+    COPY_EXISTING ~deddog.cre~  ~override~
+                  ~hrpinf.cre~  ~override~ //: equippable items in inventory: immune2.itm
+                  ~hrpmat.cre~  ~override~ //: equippable items in inventory: immune2.itm
+                  ~jkldog.cre~  ~override~ //: equippable items in inventory: immune2.itm
+                  ~jklgtr.cre~  ~override~ //: equippable items in inventory: immune2.itm
+                  ~rikasha.cre~ ~override~ //: equippable items in inventory: immune2.itm
+      REMOVE_CRE_ITEM ~immune2~                                      // removes from quickslot
+      ADD_CRE_ITEM    ~immune2~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as ring/amulet
+      BUT_ONLY
+    
+    // add item referenced in scripting
+    COPY_EXISTING ~gbard.cre~ ~override~
+      REPLACE_CRE_ITEM ~spawn~ #0 #0 #0 ~NONE~ ~QITEM1~ // replace unused ciigen with spawn (used in scripts)
+      BUT_ONLY
+  
+    // xbow but no bolts
+    COPY_EXISTING ~hobart.cre~  ~override~
+                  ~hobart2.cre~ ~override~
+                  ~hobarth.cre~ ~override~
+                  ~hoggle.cre~  ~override~
+      ADD_CRE_ITEM ~bolt01~ #20 #0 #0 ~NONE~ ~QUIVER1 QUIVER2 QUIVER3~
+    
+    // equip item
+    COPY_EXISTING ~hobartf.cre~  ~override~
+                  ~lordm.cre~    ~override~
+                  ~rakshasa.cre~ ~override~
+                  ~rakshinv.cre~ ~override~
+      REMOVE_CRE_ITEM ~ciraksh~                                      // removes (inv)
+      ADD_CRE_ITEM    ~ciraksh~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET BELT~ // add back as equipped jewelry
+      BUT_ONLY
+  
+    // have ring in quickslot/inventory
+    COPY_EXISTING ~hrpfnd.cre~ ~override~ //: equippable items in inventory: immune1.itm
+                  ~jklwar.cre~ ~override~ //: equippable items in inventory: immune1.itm
+      REMOVE_CRE_ITEM ~immune1~                                      // removes from quickslot
+      ADD_CRE_ITEM    ~immune1~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as ring/amulet
+      BUT_ONLY
+    
+    // have ring in quickslot/inventory
+    COPY_EXISTING ~jklldr.cre~ ~override~ //: equippable items in inventory: immune3.itm
+      REMOVE_CRE_ITEM ~immune3~                                      // removes from quickslot
+      ADD_CRE_ITEM    ~immune3~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as ring/amulet
+      BUT_ONLY
+
+    // equip item
+    COPY_EXISTING ~olvslime.cre~ ~override~
+                  ~rndoslm.cre~  ~override~
+      REMOVE_CRE_ITEM ~ciigen~                                      // removes (inv)
+      ADD_CRE_ITEM    ~ciigen~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as equipped jewelry
+      BUT_ONLY
+
+    // equip item (see also ar9714.are, rndrevn.cre, cdtrolg.bcs)
+    COPY_EXISTING ~revnant.cre~ ~override~
+                  ~rndrevn.cre~ ~override~
+      REMOVE_CRE_ITEM ~cireve~                                      // removes (inv)
+      ADD_CRE_ITEM    ~cireve~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as equipped jewelry
+      BUT_ONLY
+  
+    // rings/amulets
+    COPY_EXISTING ~rndghos.cre~ ~override~
+      REMOVE_CRE_ITEM ~ghost~                                       // removes from weapons
+      ADD_CRE_ITEM    ~ghost~  #0 #0 #0 ~NONE~ ~AMULET RRING LRING~ // add ghost.itm back to amulet/ring
+      ADD_CRE_ITEM    ~b1-6~ #0 #0 #0 ~NONE~ ~WEAPON1~ EQUIP
+      BUT_ONLY
+
+    // equip items
+    COPY_EXISTING ~trgbard.cre~  ~override~
+      REMOVE_CRE_ITEM ~ciigen~                          // removes (inv)
+      ADD_CRE_ITEM    ~ciigen~ #0 #0 #0 ~NONE~ ~GLOVES~ // add back
+      REMOVE_CRE_ITEM ~seeall~                          // removes (inv)
+      ADD_CRE_ITEM    ~seeall~ #0 #0 #0 ~NONE~ ~BOOTS~  // add back
+      BUT_ONLY
+  
+  END
+
+END
+
+/////                                                  \\\\\
+///// misc creature fixes                              \\\\\
+/////                                                  \\\\\
+
+// mismatched ACs; map natural onto effective
+ACTION_FOR_EACH file IN
+  aldwin alpheus angaar beornen conlan digby dolan doogal emmerich emmrchh hjollder hjolldrh ilmadia iquinva jemel karrl kieran
+  mercthf mercwar1 mercwar2 murdaugh orrick pshar purvis purvish quinn rawleigh roald skelserr vaarglan vexing whitcomb
+  BEGIN
+
+  ACTION_IF FILE_EXISTS_IN_GAME "%file%.cre" BEGIN
+
+    COPY_EXISTING ~%file%.cre~  ~override~
+      READ_SHORT  0x46 ac // natural ac
+      WRITE_SHORT 0x48 ac // effective ac
+      BUT_ONLY
+  END
+
+END
+
+// remove gold
+COPY_EXISTING ~biknight.cre~ ~override~
+              ~pomimg.cre~   ~override~
+  WRITE_LONG 0x1C 0 // gold
+  BUT_ONLY
+
+// allegiance fix
+COPY_EXISTING ~dver.cre~ ~override~
+  WRITE_BYTE 0x2d8 128 // allegiance
+  BUT_ONLY
+
+// coloring changes
+COPY_EXISTING ~ecogre.cre~ ~override~
+              ~ghereg.cre~ ~override~
+              ~ms4ogr.cre~ ~override~
+              ~ogre.cre~   ~override~
+  WRITE_BYTE 0x2f 16 // skin color
+  BUT_ONLY
+
+// generic dlg file if non-hostile
+COPY_EXISTING ~giantfi2.cre~ ~override~
+              ~giantfir.cre~ ~override~
+              ~orc2004.cre~  ~override~
+              ~orca2004.cre~ ~override~
+              ~uhlk8010.cre~ ~override~
+  WRITE_ASCII 0x334 ~DGENMOND~ // dialogue
+  BUT_ONLY
+
+// coloring changes
+COPY_EXISTING ~iquinva.cre~ ~override~
+  WRITE_BYTE 0x2e 66 // major color
+
+// allegiance, invalid XP
+COPY_EXISTING ~kalabac.cre~ ~override~
+  WRITE_LONG 0x014   0 // orig XP was -10
+  WRITE_BYTE 0x2d8 128 // allegiance
+  BUT_ONLY
+
+// coloring changes
+COPY_EXISTING ~kaylessa.cre~ ~override~
+  WRITE_BYTE 0x2c 27 // metal color
+
+// wrong avatar
+COPY_EXISTING ~ktgst1.cre~ ~override~
+  WRITE_SHORT 0x28 58136 // animation
+
+// coloring changes
+COPY_EXISTING ~lehland.cre~  ~override~
+              ~sdelfwz1.cre~ ~override~
+              ~sdogre.cre~   ~override~
+              ~shdelfpt.cre~ ~override~
+  WRITE_BYTE 0x2f 105 // skin color
+  BUT_ONLY
+
+// add perm corpse flag so party sees bodies
+COPY_EXISTING ~lizdead.cre~  ~override~
+              ~talodead.cre~ ~override~
+  WRITE_BYTE 0x10 THIS | 4
+  BUT_ONLY
+
+// coloring changes
+COPY_EXISTING ~lysanbar.cre~ ~override~
+  WRITE_BYTE 0x2D 37
+  BUT_ONLY
+
+// coloring changes
+COPY_EXISTING ~malavons.cre~ ~override~
+  WRITE_BYTE 0x2E 40
+  BUT_ONLY
+  
+// frost salamanders missing fire vulnerability
+COPY_EXISTING ~ms6salc.cre~ ~override~
+              ~msmsalc.cre~ ~override~
+              ~sal8013.cre~ ~override~
+  WRITE_BYTE 0x59 "-50"
+  WRITE_BYTE 0x5e "-50"
+  BUT_ONLY
+
+// another resistance fix
+COPY_EXISTING ~msmsalc.cre~ ~override~
+  WRITE_BYTE 0x5a 100 // cold reistance for frost sala
+  BUT_ONLY
+
+// neo orog generals shouldn't set chief_dead var; interferes with saablic tan
+COPY_EXISTING ~neoorogg.cre~ ~override~
+  WRITE_ASCII 0x27e ~~ #32
+  BUT_ONLY
+
+// missing name
+COPY_EXISTING ~wbishop.cre~ ~override~
+  WRITE_LONG 0x08 17753
+  BUT_ONLY
+
+ACTION_IF GAME_IS ~how totlm~ THEN BEGIN // how, totlm fixes
+ 
+  // no gold
+  COPY_EXISTING ~tiernon.cre~  ~override~
+    WRITE_LONG 0x1C 0 // gold
+    BUT_ONLY
+
+  ACTION_IF GAME_IS ~totlm~ THEN BEGIN // totlm fixes
+
+    // equip item (see also ar9714.are, rndrevn.cre, revnant.cre, cdtrolg.bcs)
+    COPY_EXISTING ~rndrevn.cre~ ~override~
+      WRITE_ASCII 0x250 ~cdtrolg~ #8
+      BUT_ONLY
+  
+    // all spectral X shouldn't have corpses
+    COPY_EXISTING ~spcook.cre~   ~override~
+                  ~spcourtf.cre~ ~override~
+                  ~spcourtm.cre~ ~override~
+      WRITE_BYTE 0x10 THIS | 2
+      BUT_ONLY
+    
+    // no gold
+    COPY_EXISTING ~stnnui.cre~   ~override~
+      WRITE_LONG 0x1C 0 // no gold
+      BUT_ONLY
+  
+  END
+
+END
+
+/////                                                  \\\\\
+///// mass item fixes                                  \\\\\
+/////                                                  \\\\\
+
+// lookup table for magical, enchantment, speed, weight, price, type fixes
+COPY ~iwdfixpack/2da/items.2da~ ~iwdfixpack/2da/items.2da~
+  COUNT_2DA_ROWS 7 "rows"
+  FOR (index = 1 ; index < rows ; ++index) BEGIN
+    READ_2DA_ENTRY index 0 7 "file"
+    READ_2DA_ENTRY index 1 7 "magical"
+    READ_2DA_ENTRY index 2 7 "enchant"
+    READ_2DA_ENTRY index 3 7 "weight"
+    READ_2DA_ENTRY index 4 7 "price"
+    READ_2DA_ENTRY index 5 7 "mspeed"
+    READ_2DA_ENTRY index 6 7 "prof"
+    INNER_ACTION BEGIN
+
+      ACTION_IF FILE_EXISTS_IN_GAME ~%file%.itm~ THEN BEGIN
+
+        COPY_EXISTING ~%file%.itm~ ~override~
+          PATCH_IF (magical = 0)   BEGIN WRITE_BYTE 0x18 THIS & `BIT6 END
+          PATCH_IF (magical = 1)   BEGIN WRITE_BYTE 0x18 THIS | BIT6  END
+          PATCH_IF (enchant < 256) BEGIN WRITE_LONG 0x60 enchant      END
+          PATCH_IF (weight < 256)  BEGIN WRITE_LONG 0x4c weight       END
+          PATCH_IF (price < 256)   BEGIN WRITE_LONG 0x34 price        END
+          PATCH_IF (mspeed < 256)  BEGIN LPF ITEM_ALTER_HEADER INT_VAR type = 1 speed = mspeed END END
+          PATCH_IF (prof < 256)    BEGIN WRITE_SHORT 0x1c prof        END
+          BUT_ONLY
+
+      END
+
+    END
+  END
+  BUT_ONLY
+
+// global item effects not being applied due to incorrect timing mode
+// all of these are for cosmetic effects, except:
+// aldeth (immunity to effect and string)
+// ciigen (imunity to panic)
+// immagmsl (immunity to magic missile)
+// ring95 & stupid (immunity to petrification)
+// ubswd5b (fire resistance)
+// xbow02 (attacks per round)
+ACTION_FOR_EACH file IN
+  aldeth ax1h04 ax1h05 ax1h06 axlizman axyuanti bclaw bess bloodgf blun01 blun04 blun06 blyuanti bow02
+  bow05 bow06 bow08 bow09 bow99 bownon bring cattac1 cibosst cifade ciigen clown corny csalring dagg04
+  dagg05 daggshit dazer debian fayr fistgf fsalring gasp ghost ghost2 gsleep halb01 halbrd01 hamm01
+  handgf helm03 helm04 helm07 hq2hswd hqhalb hqhxbow hqmace hqmstar hqsbow iax1h01 iblun04 ibow03
+  ihamm01 immagmsl immune1 immune2 immune3 kresssw labelt lalizman lucky maul mslizman nalizman
+  nomagic peaceke pikeman polizman ranclub ring05 ring09 ring91 ring95 sash sbowebu sceptre shade
+  shadows shcomlb2 stone stupid sw1h08 sw1h14 sw1h99 sw2h01 sw2h01b sw2h02 sw2h05 swyuanti telizman
+  tongue u2ham2a u2ham3a u2ham4a u2ham4b u2ham5a ubswd5b uhxbw2a usswd2a usswd2b usswd3a usswd3b
+  usswd3c usswd4a usswd4b usswd5a usswd5b utswd1a utswd2a utswd2b utswd2c utswd3a utswd3b utswd4a
+  utswd4b utswd5a utswd5b wclub wolfwi2 xbow01 xbow02 xbow03 xclub xu2ham3 xusswd3 zzs6sc
+BEGIN
+
+  ACTION_IF (FILE_EXISTS_IN_GAME ~%file%.itm~) THEN BEGIN
+
+    COPY_EXISTING ~%file%.itm~ ~override~
+      LPF ITEM_ALTER_EFFECT INT_VAR equipped = 1 timing = 2 power = 0 END
+      BUT_ONLY
+
+  END
+
+END
+
+// global effects can be disspelled
+ACTION_FOR_EACH file IN aldeth bclaw labelt lucky misc72 shadows tongue BEGIN
+
+  ACTION_IF (FILE_EXISTS_IN_GAME ~%file%.itm~) THEN BEGIN
+
+    COPY_EXISTING ~%file%.itm~ ~override~
+      LPF ITEM_ALTER_EFFECT INT_VAR equipped = 1 resist_dispel = 0 END
+      BUT_ONLY
+
+  END
+
+END
+
+// set regular item effects to 0 power
+ACTION_FOR_EACH file IN
+  arow06 arow08 arow09 arow15 ax1h06 behwep bolt03 bolt05 clck07 clck08 cynicis dart03 dart04 dbolt
+  dntshd2 dobone fbolt gasp hamm03 jhoswd3 poq2-16 potn13 potn26 potn27 revent1 ring20 schlum1
+  scrl03 scrl04 scrl05 scrl06 scrl08 scrl09 scrl15 scrl16 shadless shamme1 shamme2 shamme3 shille
+  shillel sirine sw1h06 sw1h11 tiernon ubull4a vampire wisp wolfwi1
+BEGIN
+
+  ACTION_IF (FILE_EXISTS_IN_GAME ~%file%.itm~) THEN BEGIN
+
+    COPY_EXISTING ~%file%.itm~ ~override~
+      READ_LONG   0x64 "abil_off"
+      READ_SHORT  0x68 "abil_num"
+      READ_LONG   0x6a "fx_off"
+      FOR (index = 0 ; index < abil_num ; index = index + 1) BEGIN // looks through headers
+        READ_BYTE  ("%abil_off%" + 0x0c + ("%index%" * 0x38)) "target1"
+        PATCH_IF (("%target1%" != 5) AND ("%target1%" != 7)) BEGIN
+          READ_SHORT ("%abil_off%" + 0x1e + ("%index%" * 0x38)) "abil_fx_num"
+          READ_SHORT ("%abil_off%" + 0x20 + ("%index%" * 0x38)) "abil_fx_idx"
+          FOR (index2 = 0 ; index2 < abil_fx_num ; index2 = index2 + 1) BEGIN // cycle through effects
+            READ_BYTE ("%fx_off%" + 0x02 + (("%abil_fx_idx%" + "%index2%") * 0x30)) "target2"
+            PATCH_IF ("%target2%" != 1) BEGIN
+              WRITE_BYTE ("%fx_off%" + 0x03 + (("%abil_fx_idx%" + "%index2%") * 0x30)) 0 // power
+            END
+          END
+        END
+      END
+      BUT_ONLY
+
+  END
+
+END
+
+// remove durations from permanent effects
+ACTION_FOR_EACH file IN
+  acidooz4 bknight cwreve extheal gberry goodber ipotn08 jellgr1 potn08 potn13 potn33 umstr2a
+  umstr3a umstr3c umstr4b umstr5a vexed2 wand05 wand4ca zz05we zzj6sp
+BEGIN
+
+  ACTION_IF (FILE_EXISTS_IN_GAME ~%file%.itm~) THEN BEGIN
+
+    COPY_EXISTING ~%file%.itm~ ~override~
+      READ_LONG   0x64 "abil_off"
+      READ_SHORT  0x68 "abil_num"
+      READ_LONG   0x6a "fx_off"
+      FOR (index = 0 ; index < abil_num ; index = index + 1) BEGIN // looks through headers
+        READ_SHORT ("%abil_off%" + 0x1e + ("%index%" * 0x38)) "abil_fx_num"
+        READ_SHORT ("%abil_off%" + 0x20 + ("%index%" * 0x38)) "abil_fx_idx"
+        FOR (index2 = 0 ; index2 < abil_fx_num ; index2 = index2 + 1) BEGIN // cycle through effects
+          READ_BYTE ("%fx_off%" + 0x0c + (("%abil_fx_idx%" + "%index2%") * 0x30)) "timing"
+          PATCH_IF (("%timing%" = 1) OR ("%timing%" = 9)) BEGIN
+            WRITE_LONG ("%fx_off%" + 0x0e + (("%abil_fx_idx%" + "%index2%") * 0x30)) 0 // duration
+          END
+        END
+      END
+      BUT_ONLY
+
+  END
+
+END
+
+// identify prior to use
+ACTION_FOR_EACH file IN
+  amulbra beltbon bishop bknight blrdeck boneam bootman braceip cone helmsh holding jasper labelt mantlecs
+  mirror2 moonbow ogien revenan ring03 rogue sring stomper vexed2 vexed3 virgin xain
+BEGIN
+
+  ACTION_IF (FILE_EXISTS_IN_GAME ~%file%.itm~) THEN BEGIN
+
+    COPY_EXISTING ~%file%.itm~ ~override~
+      LPF ITEM_ALTER_HEADER INT_VAR identify = 1 type = 3 END
+      BUT_ONLY
+  END
+
+END
+
+// items using bg timing (round = 6) instead of iwd (round = 7)
+ACTION_FOR_EACH file IN
+  amul15 dazer potn02 potn03 potn04 potn05 potn06 potn07 potn09 potn11 potn12 potn14 potn18 potn19 potn21
+  potn22 potn23 potn24 potn28 potn29 potn30 potn31 potn33 potn35 potn38 potn41 potn42 potn44 potn45
+  potn46 potn48 revent1 ring03 scrl07 shadow1 sirine sirine1 spidhu1 spidwr1 u1hax4a u2hax5a ulswd3b 
+  ulswd5b umstr2a umstr4b usswd3a utswd3a vampire wand04 wand08 wand10 wolfva1 xclub
+BEGIN
+
+  ACTION_IF (FILE_EXISTS_IN_GAME ~%file%.itm~) THEN BEGIN
+
+    COPY_EXISTING ~%file%.itm~ ~override~
+      LPF CONVERT_BG_IWD_DURATION END
+      BUT_ONLY
+  END
+ 
+END
+
+// extraneous unknown (0) headers
+ACTION_FOR_EACH potion IN potn27 potn28 potn29 potn30 potn31 potn32 potn33 potn34 potn35 potn36 potn37 potn38 potn39
+  potn40 potn41 potn42 potn43 potn44 potn45 potn46 ption2k ption2l ption2m ption2n ption41 uspot1a uspot2a uspot2b
+  uspot3a uspot3b uspot3c uspot4a uspot4b uspot4b uspot4c uspot5a uspot5b BEGIN
+
+  ACTION_IF FILE_EXISTS_IN_GAME ~%potion%.itm~ BEGIN
+    
+    COPY_EXISTING ~%potion%.itm~ ~override~
+      LPF ITEM_DELETE_HEADER END
+      BUT_ONLY
+
+  END
+
+END
+
+// adding portrait icons
+ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_item_icons BEGIN
+  auril   =>  35 // cursed, breath of auril
+  biteme  =>  16 // fire resistance, Spear of Kerish
+  boot03  =>  25 // cold resistance, boots of north
+  boot05  =>  17 // electrical resistance, boots of grounding
+  brac06  =>  21 // strength, guantlets of ogre strength
+  bwtalis =>  25 // cold resistance, black wolf talisman
+  clck09  =>  25 // cold resistance, robe of cold resistance
+  clck10  =>  16 // fire resistance, robe of fire resistance
+  clck11  =>  17 // electrical resistance, robe of electrical resistance
+  dragarm =>  24 // acid resistance, black dragon scale
+  elfboot =>  25 // cold resistance, elven sewn boots
+  elfclck =>  25 // cold resistance, elven sewn cloak
+  elfglov =>  25 // cold resistance, elven sewn gloves
+  erevain =>  24 // acid resistance, erevain's broad sword
+  kresssw =>  25 // cold resistance, kresselack's sword
+  kreswrd =>  25 // cold resistance, kresselack's sword
+  mourner =>  35 // cursed, mourner's armor
+  nymshld =>  16 // fire resistance, nym's rhino beetle shield
+  ogi     =>  21 // strength, ogi-luc's great robe
+  ring04  =>  35 // cursed, ring of clumsiness
+  sbowebu =>  25 // cold resistance, short bow of ebullience
+  tongue  =>  16 // fire resistance, salamander's tongue
+  u2ham5a =>  16 // fire resistance, demon's breath
+  ubswd4c =>  16 // fire resistance, conflagaration
+  ubswd5b =>  16 // fire resistance, incinerator
+  udagg4b =>  16 // fire resistance, mage dagger +3
+  ulswd3a =>  16 // fire resistance, flaming long sword +2
+  uring3a =>  16 // fire resistance, ring of resistance
+  ushld3a =>  16 // fire resistance, reinforced large shield +2
+  vexed   =>  25 // cursed, vexed
+  zzc8fb  =>  16 // fire resistance, hell's bane
+END
+
+ACTION_PHP_EACH cd_item_icons AS item => icon BEGIN
+
+  ACTION_IF FILE_EXISTS_IN_GAME "%item%.itm" BEGIN
+
+    COPY_EXISTING "%item%.itm" override
+      LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 142 target = 1 parameter2 = icon timing = 2 END
+      BUT_ONLY
+
+  END
+
+END
+
+// stuff needs fire & cold portrait icons
+ACTION_FOR_EACH item IN bloodgf fanggf fistgf handgf king kissgf tonggf zzf6al BEGIN
+
+  ACTION_IF FILE_EXISTS_IN_GAME "%item%.itm" BEGIN
+
+    COPY_EXISTING "%item%.itm" override
+      PATCH_FOR_EACH icon IN 25 16 BEGIN
+        LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 142 target = 1 parameter2 = icon timing = 2 END
+      END
+      BUT_ONLY
+
+  END
+
+END
+
+/////                                                  \\\\\
+///// usability fixes                                  \\\\\
+/////                                                  \\\\\
+
+// cleric-only spell scrolls
+ACTION_FOR_EACH item IN
+  scrl58 scrl59 scrl62 scrl63 sppr112x sppr201c sppr203c sppr208c sppr211c sppr212c sppr218x
+  sppr303c sppr304c sppr307c sppr308c sppr313c sppr314c sppr315x sppr316x sppr319x sppr324x
+  sppr325x sppr404c sppr415x sppr416x sppr417x sppr418x sppr419x sppr504c sppr513x sppr514x
+  sppr515x sppr516x sppr518x sppr610x sppr611x sppr612x sppr712c sppr714c sppr718x sppr721x 
+  sppr722x
+BEGIN
+
+  ACTION_IF FILE_EXISTS_IN_GAME "%item%.itm" BEGIN
+
+    COPY_EXISTING "%item%.itm" override
+      WRITE_BYTE 0x1e THIS | BIT6       // unusable by bard
+      WRITE_BYTE 0x1e THIS & `BIT7      // usable by cleric
+      WRITE_BYTE 0x1f 0b00111000        // usable by cm, ct, cr, fc, fmc; unusable by f, fd, fm
+      WRITE_BYTE 0x20 THIS | 0b01111111 // leave elf alone, otherwise unusable
+      WRITE_BYTE 0x21 THIS | BIT6       // unusable by druid
+      BUT_ONLY
+
+  END
+
+END
+
+// druid-only spell scrolls
+ACTION_FOR_EACH item IN
+  sppr105c sppr113x sppr216x sppr217x sppr318x sppr320x sppr321x sppr322x sppr323x sppr412c
+  sppr420x sppr421x sppr422x sppr423x sppr510c sppr512c sppr517x sppr606c sppr608c sppr613x
+  sppr704c sppr705c sppr707c sppr719x sppr720x
+BEGIN
+
+  ACTION_IF FILE_EXISTS_IN_GAME "%item%.itm" BEGIN
+
+    COPY_EXISTING "%item%.itm" override
+      WRITE_BYTE 0x1e THIS | 0b11000000 // unusable by bard, cleric
+      WRITE_BYTE 0x1f 0b11101011        // usable by d, fd; unusable by cm, ct, f, fm, fc, fmc
+      WRITE_BYTE 0x20 THIS | 0b01111111 // leave elf alone, otherwise unusable
+      WRITE_BYTE 0x21 THIS & `BIT6      // usable by druid
+      BUT_ONLY
+
+  END
+
+END
+  
+COPY_EXISTING ~u1ham4b.itm~ ~override~
+  WRITE_BYTE 0x20 (THIS | BIT0) // add fmt flag
+  BUT_ONLY
+
+COPY_EXISTING ~zza7ch.itm~ ~override~
+  WRITE_BYTE 0x1f THIS | 0x10 // adds f/d flag (consistent w/ other hammers)
+  BUT_ONLY
+
+// divine spell restrictions by alignment implemented only in HoW/TotLM
+ACTION_IF GAME_IS ~how totlm~ THEN BEGIN // how, totlm fixes
+
+  // should be usable by trueclass clerics
+  COPY_EXISTING ~sppr717x.itm~ ~override~ // destruction
+    WRITE_BYTE 0x1e THIS & `BIT7
+    BUT_ONLY
+
+  // spells not castable by evil characters
+  COPY_EXISTING ~scrl61.itm~   ~override~ // cure critical wounds
+                ~sppr324x.itm~ ~override~ // holy smite
+                ~sppr504c.itm~ ~override~ // raise dead
+                ~sppr607c.itm~ ~override~ // heal
+                ~sppr712c.itm~ ~override~ // resurrection
+    WRITE_BYTE 0x1e THIS | BIT1
+    BUT_ONLY
+  
+  // spells not castable by good characters
+  COPY_EXISTING ~sppr112x.itm~ ~override~ // cause light wounds
+                ~sppr218x.itm~ ~override~ // cause moderate wounds
+                ~sppr315x.itm~ ~override~ // cause disease
+                ~sppr325x.itm~ ~override~ // unholy blight
+                ~sppr416x.itm~ ~override~ // cause serious wounds
+                ~sppr417x.itm~ ~override~ // cloud of pestilence
+                ~sppr418x.itm~ ~override~ // poison
+                ~sppr513x.itm~ ~override~ // cause critical wounds
+                ~sppr515x.itm~ ~override~ // slay living
+                ~sppr717x.itm~ ~override~ // destruction
+    WRITE_BYTE 0x1e THIS | BIT2
+    BUT_ONLY
+  
+  // spells not castable by neutral (good/evil) characters
+  COPY_EXISTING ~sppr417x.itm~ ~override~ // cloud of pestilence
+                ~sppr418x.itm~ ~override~ // poison
+                ~sppr513x.itm~ ~override~ // cause critical wounds
+                ~sppr712c.itm~ ~override~ // resurrection
+                ~sppr717x.itm~ ~override~ // destruction
+    WRITE_BYTE 0x1e THIS | BIT3
+    BUT_ONLY
+  
+  // spells not castable by lawful characters
+  COPY_EXISTING ~sppr415x.itm~ ~override~ // blood rage
+    WRITE_BYTE 0x1e THIS | BIT4
+    BUT_ONLY
+
+END
+
+/////                                                  \\\\\
+///// scrolls/items that cast spells                   \\\\\
+/////                                                  \\\\\
+
+// cast spell opcodes should have zero power; let actual spells handle power
+ACTION_FOR_EACH file IN
+  amaunat amulbar beltbon blast bloodgf blrdeck boneam braceip cloakin cone cynicis dntshd2 fanggf
+  fistgf gullwyn handgf harp helmsh jasper jhoswd3 kinetic kissgf lucky mantlecs mantlehf mhorn 
+  mirror2 nature ogien power quost revenan rogue scarab sceptre scrl1g scrl56 scrl58 scrl59 scrl61 
+  scrl62 scrl63 sppr112x sppr113x sppr216x sppr217x sppr218x sppr315x sppr316x sppr318x sppr319x 
+  sppr320x sppr321x sppr322x sppr323x sppr324x sppr325x sppr415x sppr416x sppr417x sppr418x sppr419x 
+  sppr420x sppr421x sppr422x sppr423x sppr513x sppr514x sppr515x sppr516x sppr517x sppr518x sppr519x 
+  sppr610x sppr611x sppr612x sppr613x sppr717x sppr718x sppr719x sppr720x sppr721x sppr722x spwi223a 
+  spwi319x spwi422x spwi423x spwi424x spwi517x spwi518x spwi519x spwi618x spwi619x spwi620x spwi710x 
+  spwi711x spwi805x spwi806x spwi807x spwi808x stafbes staffbes stafhmg stomper storm talongf
+  tiernon tonggf ulring vexed3 virgin wandarm wandtrp xstafhmg zz36dgd
+BEGIN
+
+  ACTION_IF (FILE_EXISTS_IN_GAME ~%file%.itm~) THEN BEGIN
+
+    COPY_EXISTING ~%file%.itm~ ~override~
+      LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 146 power = 0 END
+      LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 148 power = 0 END
+      BUT_ONLY
+
+  END
+
+END
+
+// scroll range fixes
+ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_scroll_ranges BEGIN
+  scprism =>  25 // prismatic spray
+  scrl03  =>  30 // protection from acid
+  scrl04  =>  30 // protection from cold
+  scrl05  =>  30 // protection from electricity
+  scrl06  =>  30 // protection from fire
+  scrl07  =>  30 // protection from magic
+  scrl08  =>  30 // protection from poison
+  scrl09  =>  30 // protection from undead
+  scrl15  =>  30 // protection from petrification
+  scrl1h  => 100 // haste
+  scrl2d  =>  50 // animate dead
+  scshds  =>  50 // shades
+  scshro  => 100 // shroud of flame
+END
+
+ACTION_PHP_EACH cd_scroll_ranges AS item => scroll_range BEGIN
+
+  ACTION_IF FILE_EXISTS_IN_GAME "%item%.itm" BEGIN
+
+    COPY_EXISTING "%item%.itm" override
+      LPF ITEM_ALTER_HEADER INT_VAR header = 1 range = %scroll_range% END
+      BUT_ONLY
+
+  END
+
+END
+
+// change unID'd name to match other pro scrolls
+COPY_EXISTING ~scrl05.itm~ ~override~
+  WRITE_LONG 0x08 18094
+  BUT_ONLY
+
+// should last 12 hours
+COPY_EXISTING ~scrl09.itm~ ~override~
+              ~scrl15.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 duration_high = 3600 END
+  BUT_ONLY
+
+// ghoul touch cast from scroll paralyzes caster
+COPY_EXISTING ~scrl1c.itm~ ~override~
+  LPF ITEM_ALTER_HEADER INT_VAR header = 1 target = 1 END
+  BUT_ONLY
+
+// ghost armor should be castable on others
+COPY_EXISTING ~scrl1t.itm~ ~override~
+    LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 146 target = 2 END
+  BUT_ONLY
+
+// can't learn vocalize due to errors in file
+COPY_EXISTING ~scrl3g.itm~ ~override~
+  READ_ASCII  0x3a "item_icon"
+  LPF ITEM_ALTER_HEADER INT_VAR location = 3 STR_VAR icon = EVAL "%item_icon%" END
+  BUT_ONLY
+
+// wrong target for prayer from scroll
+COPY_EXISTING ~sppr313c.itm~ ~override~
+  LPF ITEM_ALTER_HEADER INT_VAR target = 5 END
+  BUT_ONLY
+
+ACTION_IF GAME_IS ~how totlm~ THEN BEGIN
+
+  // referring to non-existent spell
+  COPY_EXISTING ~sppr113x.itm~ ~override~
+    LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 146 STR_VAR resource = "sppr113" END
+    BUT_ONLY
+
+END
+
+/////                                                  \\\\\
+///// weapon animations                                \\\\\
+/////                                                  \\\\\
+
+COPY_EXISTING ~2haxe.itm~   ~override~
+              ~j2haxe.itm~  ~override~
+              ~lonesom.itm~ ~override~
+              ~u2hax1a.itm~ ~override~
+              ~u2hax2a.itm~ ~override~
+              ~u2hax3a.itm~ ~override~
+              ~u2hax3b.itm~ ~override~
+              ~u2hax4a.itm~ ~override~
+  LPF ITEM_ALTER_HEADER INT_VAR type = 1 anim_overhead = 65 anim_backhand = 35 anim_thrust = 0 END
+  BUT_ONLY
+
+COPY_EXISTING ~axlizman.itm~ ~override~
+              ~axyuanti.itm~ ~override~
+              ~blyuanti.itm~ ~override~
+              ~lalizman.itm~ ~override~
+              ~mslizman.itm~ ~override~
+              ~nalizman.itm~ ~override~
+              ~polizman.itm~ ~override~
+              ~swyuanti.itm~ ~override~
+              ~telizman.itm~ ~override~
+  LPF ITEM_ALTER_HEADER INT_VAR type = 1 anim_overhead = 34 anim_backhand = 33 anim_thrust = 33 END
+  BUT_ONLY
+
+COPY_EXISTING ~dagg04.itm~ ~override~
+  LPF ITEM_ALTER_HEADER INT_VAR type = 1 anim_overhead = 10 anim_backhand = 25 anim_thrust = 65 END
+  LPF ITEM_ALTER_HEADER INT_VAR range = 1 END
+  BUT_ONLY
+
+COPY_EXISTING ~hamm03.itm~ ~override~
+  LPF ITEM_ALTER_HEADER INT_VAR type = 1 anim_overhead = 50 anim_backhand = 50 anim_thrust = 0 END
+  BUT_ONLY
+
+COPY_EXISTING ~presdag.itm~ ~override~
+  LPF ITEM_ALTER_HEADER INT_VAR type = 1 anim_overhead = 0 anim_backhand = 20 anim_thrust = 80 END
+  BUT_ONLY
+
+COPY_EXISTING ~sper02.itm~ ~override~
+              ~sper03.itm~ ~override~
+              ~whtash.itm~ ~override~
+  LPF ITEM_ALTER_HEADER INT_VAR type = 1 anim_overhead = 0 anim_backhand = 0 anim_thrust = 100 END
+  BUT_ONLY
+
+/////                                                  \\\\\
+///// other item fixes                                 \\\\\
+/////                                                  \\\\\
+
+// power, dispel issues
+COPY_EXISTING ~adisease.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 174 power = 0 resist_dispel = 0 END
+  BUT_ONLY
+
+// power, dispel issues
+COPY_EXISTING ~amul01.itm~   ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 174 power = 0 resist_dispel = 0 END
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 206 power = 0 resist_dispel = 2 END
+  BUT_ONLY
+
+// targeting fixes for cast spell
+COPY_EXISTING ~amulbra.itm~ ~override~
+  LPF ITEM_ALTER_HEADER INT_VAR target = 4 END
+  BUT_ONLY
+
+// power levels on equipped effects
+COPY_EXISTING ~antimag.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR equipped = 1 power = 0 END
+  BUT_ONLY
+
+// icon changes
+COPY_EXISTING ~arhand.itm~ ~override~
+  WRITE_ASCII 0x3a ~iarow11~ #8
+  WRITE_ASCII 0x58 ~carow11~ #8
+  LPF ITEM_ALTER_HEADER STR_VAR icon = "iarow11" END
+  BUT_ONLY
+
+// remove strength bonus
+COPY_EXISTING ~arow05.itm~ ~override~
+  LPF ITEM_ALTER_HEADER INT_VAR flag_strength = 0 END
+  BUT_ONLY
+
+// remove damage, thac0 bonus
+COPY_EXISTING ~arow08.itm~ ~override~
+  LPF ITEM_ALTER_HEADER INT_VAR thac0_bonus = 0 damage_bonus = 0 END
+  BUT_ONLY
+
+// belhifet's weapon not doing poison effect due to bad timing; strings are wrong; extend range
+COPY_EXISTING ~behwep.itm~ ~override~
+  LPF ITEM_ALTER_HEADER INT_VAR range = 2 END
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 25 timing = 1 END
+  LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 139 END // delete string opcodes
+  FOR (index = 0 ; index < 2 ; ++index) BEGIN
+    LPF ADD_ITEM_EFFECT INT_VAR type = 1 opcode = 139 target = 2 timing = 1 resist_dispel = 2
+      probability1 = (49 + (index * 51))      // 49, 100
+      probability2 = ( 0 + (index * 50))      // 0, 50
+      parameter1   = (4389 + (index * 10273)) // diseased, poisoned
+    END
+  END
+  BUT_ONLY
+
+// sound file wrong
+COPY_EXISTING ~bolt03.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 174 STR_VAR resource = "eff_m22a" END
+  BUT_ONLY
+
+// remove haste icon for movement speed increases
+COPY_EXISTING ~bootfox.itm~ ~override~
+  LPF DELETE_ITEM_EQEFFECT INT_VAR opcode_to_delete = 142 END
+  BUT_ONLY
+
+// icon corrections
+COPY_EXISTING ~bow01.itm~ ~override~             
+              ~bow03.itm~ ~override~
+  WRITE_ASCIIE 0x3a ~i%SOURCE_RES%~ #8
+  LPF ITEM_ALTER_HEADER STR_VAR icon = EVAL ~i%SOURCE_RES%~ END
+  BUT_ONLY
+
+// extraneous ApR effect on attack ability, other than bow08 should have this as equipped effect
+COPY_EXISTING ~bow08.itm~   ~override~
+              ~bow09.itm~   ~override~ // ApR
+              ~bownon.itm~  ~override~ // ApR
+              ~idart01.itm~ ~override~ // ApR
+  LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 1 END
+  BUT_ONLY
+
+// add back ApR as equipped effect
+COPY_EXISTING ~bow09.itm~   ~override~ // ApR
+              ~bownon.itm~  ~override~ // ApR
+  LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 1 target = 1 parameter1 = 2 parameter2 = 1 timing = 2 END
+  BUT_ONLY
+
+// undroppable items should be undroppable
+COPY_EXISTING ~bring.itm~ ~override~
+  WRITE_BYTE 0x18 THIS & `BIT2
+  BUT_ONLY
+
+// min level interfering with hp bonus?
+COPY_EXISTING ~bwtalis.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR equipped = 1 dicesize = 0 END
+  BUT_ONLY
+
+// sound, visual bypassing MR
+COPY_EXISTING ~carrio1.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 resist_dispel = 1 END
+  BUT_ONLY
+
+// mithril chain allows thieving, wonky spellcasting disable
+COPY_EXISTING ~chan06.itm~ ~override~
+  LPF DELETE_ITEM_EQEFFECT INT_VAR opcode_to_delete = 60 END
+  FOR (index = 0 ; index < 2 ; ++index) BEGIN
+    LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 144 target = 1 parameter2 = index timing = 2 END
+  END
+  LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 145 target = 1 timing = 2 END
+  BUT_ONLY
+
+// robe of electrical resistance not providing electrical resistance
+COPY_EXISTING ~clck11.itm~ ~override~
+  LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 29 target = 1 parameter1 = 20 timing = 2 END
+  BUT_ONLY
+
+// effects bypassing save
+COPY_EXISTING ~ctouch.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 savingthrow = 1 END
+  BUT_ONLY
+
+// portrait can be dispelled
+COPY_EXISTING ~dart04.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 142  resist_dispel = 0 END
+  BUT_ONLY
+
+// slow sould have power level
+COPY_EXISTING ~days.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 40 power = 3 END
+  BUT_ONLY
+
+// visual power is wrong
+COPY_EXISTING ~decasta.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 power = 2 END
+  BUT_ONLY
+
+// play sound can be dispelled
+COPY_EXISTING ~elfwine.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 174 resist_dispel = 0 END
+  BUT_ONLY
+
+// damage shouldn't bypass resistance
+COPY_EXISTING ~fblade.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 12 resist_dispel = 1 END
+  BUT_ONLY
+
+// string bypasses MR
+COPY_EXISTING ~fkiller.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 139 resist_dispel = 1 END
+  BUT_ONLY
+
+// remove power checks from cursed effects
+COPY_EXISTING ~gauntid.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR equipped = 1 power = 0 END
+  BUT_ONLY
+
+// ghast attack missing strength bonus, some effects not dispellable/bypassing MR
+COPY_EXISTING ~ghast1.itm~ ~override~
+  LPF ITEM_ALTER_HEADER INT_VAR flag_strength = 1 END
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 resist_dispel = 1 END
+  BUT_ONLY
+
+// unparalyzed sound too late, no str bonus, stuff bypassing MR/not dispelling, half-elves not getting paralyzation resistance
+COPY_EXISTING ~ghoul1.itm~ ~override~
+  READ_LONG   0x64 abil_off
+  READ_SHORT  0x68 abil_num
+  READ_LONG   0x6a fx_off
+  FOR (index = 0 ; index < abil_num ; index = index + 1) BEGIN // looks through headers
+    READ_SHORT (abil_off + 0x1e + (index * 0x38)) abil_fx_num
+    READ_SHORT (abil_off + 0x20 + (index * 0x38)) abil_fx_idx
+    WRITE_BYTE (abil_off + 0x26 + (index * 0x38)) THIS | BIT0 // add strength bonus
+    FOR (index2 = 0 ; index2 < abil_fx_num ; index2 = index2 + 1) BEGIN // searches through fx for slay effect
+      READ_SHORT (fx_off +        ((abil_fx_idx + index2) * 0x30)) opcode
+      READ_LONG  (fx_off + 0x04 + ((abil_fx_idx + index2) * 0x30)) parameter1
+      READ_BYTE  (fx_off + 0x0c + ((abil_fx_idx + index2) * 0x30)) timing
+      PATCH_IF (opcode != 206) BEGIN // all opcodes except protection from spell
+        WRITE_BYTE  (fx_off + 0x0d + ((abil_fx_idx + index2) * 0x30)) 1 // dispel, not bypass MR
+      END
+      PATCH_IF ((opcode = 174) AND (timing = 4)) BEGIN // delayed play sound effect
+        WRITE_LONG  (fx_off + 0x0e + ((abil_fx_idx + index2) * 0x30)) 30
+      END ELSE
+      PATCH_IF ((opcode = 109) AND (parameter1 = 3)) BEGIN // half-elves not getting their paralyzation resistance
+        WRITE_BYTE  (fx_off + 0x12 + ((abil_fx_idx + index2) * 0x30)) 70
+      END
+    END
+  END
+  BUT_ONLY
+
+// hp bonus should have 0 power
+COPY_EXISTING ~giving.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 17 power = 0 END
+  BUT_ONLY
+
+// range, thac0 bonus incorrect
+COPY_EXISTING ~gsleep.itm~ ~override~
+  LPF ITEM_ALTER_HEADER INT_VAR range = 1 thac0_bonus = 3 END
+  BUT_ONLY
+
+// needs electricity, fire, cold portrait icons
+COPY_EXISTING ~helm04.itm~ ~override~
+  PATCH_FOR_EACH icon IN 25 17 16 BEGIN
+    LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 142 target = 1 parameter2 = icon timing = 2 END
+  END
+  BUT_ONLY
+
+// power levels for holdfast's entangle
+COPY_EXISTING ~holdfst.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 154 power = 1 END
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 126 power = 1 END
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 174 power = 1 END
+
+// jester bag produces 20 oils of speed
+COPY_EXISTING ~holding.itm~ ~override~
+  READ_LONG   0x64 abil_off
+  READ_SHORT  0x68 abil_num
+  READ_LONG   0x6a fx_off
+  FOR (index = 0 ; index < abil_num ; ++index) BEGIN // looks through headers
+    READ_SHORT (abil_off + 0x1e + (index * 0x38)) abil_fx_num
+    READ_SHORT (abil_off + 0x20 + (index * 0x38)) abil_fx_idx
+    FOR (index2 = 0 ; index2 < abil_fx_num ; ++index2) BEGIN
+      READ_SHORT (fx_off +        ((abil_fx_idx + index2) * 0x30)) opcode
+      READ_ASCII (fx_off + 0x14 + ((abil_fx_idx + index2) * 0x30)) item
+      PATCH_IF ((opcode = 122) AND ("%item%" STRING_COMPARE_CASE "potn23" = 0)) BEGIN // create item: oil of speed
+        WRITE_LONG (fx_off + 0x04 + ((abil_fx_idx + index2) * 0x30)) 1 // quantity
+      END
+    END
+  END
+  BUT_ONLY
+
+// add back ApR as equipped effect
+COPY_EXISTING ~idart01.itm~ ~override~ // ApR
+  LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 1 target = 1 parameter1 = 3 parameter2 = 1 timing = 2 END
+  BUT_ONLY
+
+// move cold resistance to equipped effect
+COPY_EXISTING ~kresssw.itm~ ~override~ // cold resistance
+  LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 28 END
+  LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 28 target = 1 parameter1 = 10 timing = 2 END
+  BUT_ONLY
+
+// string always occurs, instead of on 20% of hits
+COPY_EXISTING ~kris.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 139 probability1 = 20 END
+  BUT_ONLY
+
+// remove charm, stun immunity from free action; have to remove all 261s and then re-add
+COPY_EXISTING ~labelt.itm~  ~override~
+              ~ring09.itm~  ~override~
+  LPF DELETE_ITEM_EQEFFECT INT_VAR opcode_to_delete = 261 END
+  PATCH_FOR_EACH addme IN 175 158 157 154 126 109 40 BEGIN
+    LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 261 target = 1 timing = 2 parameter2 = "%addme%" END
+  END
+  BUT_ONLY
+
+// haste should bypass spell protections
+COPY_EXISTING ~mage06.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR equipped = 1 opcode = 16 power = 0 resist_dispel = 0 END
+  BUT_ONLY
+
+// icon corrections
+COPY_EXISTING ~misc75.itm~ ~override~
+  WRITE_ASCIIE 0x3a ~i%SOURCE_RES%~ #8
+  LPF ITEM_ALTER_HEADER STR_VAR icon = EVAL ~i%SOURCE_RES%~ END
+  BUT_ONLY
+
+// remove min level from cast spell
+COPY_EXISTING ~moonbow.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 146 dicesize = 0 END
+  BUT_ONLY
+
+// remove power, MR checks from sound effect
+COPY_EXISTING ~philter.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 174 power = 0 resist_dispel = 0 END
+  BUT_ONLY
+
+// full plate +1 doesn't disable thieving button
+COPY_EXISTING ~plat05.itm~ ~override~
+  LPF DELETE_ITEM_EQEFFECT INT_VAR opcode_to_delete = 144 END
+  LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 144 target = 1 parameter2 = 0 timing = 2 END
+  LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 144 target = 1 parameter2 = 1 timing = 2 END
+  BUT_ONLY
+
+// wrong damage, displays 'gulp' when thrown, power/dispel for sound effect
+COPY_EXISTING ~potn13.itm~ ~override~
+  LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 12 END
+  LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 139 END
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 174 power = 0 resist_dispel = 0 timing = 1 END
+  LPF ADD_ITEM_EFFECT INT_VAR opcode = 12 target = 2 parameter2 = 0x00080000 timing = 1 resist_dispel = 1 dicenumber = 2 dicesize = 6 END
+  LPF ADD_ITEM_EFFECT INT_VAR opcode = 12 target = 2 parameter2 = 0x00080000 timing = 1 resist_dispel = 1 dicenumber = 3 dicesize = 6 savingthrow = BIT1 END
+  BUT_ONLY
+
+// effect with wrong dispel, power wrong
+COPY_EXISTING ~potn20.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 169 power = 4 resist_dispel = 1 END
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 141 power = 4 END
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 233 power = 4 END
+  BUT_ONLY
+
+// extraneous header, power/MR for sound
+COPY_EXISTING ~potn27.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 174 power = 0 resist_dispel = 0 END
+  BUT_ONLY
+
+// blocking levels 1-9 instead of 1-5; also tweak descript in GTU for dispel
+COPY_EXISTING ~potn33.itm~ ~override~
+  LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 102 END
+  FOR (index = 1 ; index < 6 ; ++index) BEGIN
+    LPF ADD_ITEM_EFFECT INT_VAR opcode = 102 target = 1 parameter1 = index resist_dispel = 1 duration = 35 END
+  END
+  BUT_ONLY
+
+// extraneous header, power for immunities; description not even close to accurate, add some cosmetic/auditory cues
+COPY_EXISTING ~potn34.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 power = 0 duration_high = 70 END
+  LPF ADD_ITEM_EFFECT INT_VAR opcode = 141 target = 1 parameter2 = 14 timing = 4 duration = 1 resist_dispel = 1 END
+  LPF ADD_ITEM_EFFECT INT_VAR opcode = 233 target = 1 parameter2 = 6 timing = 4 duration = 1 resist_dispel = 1 END
+  LPF ADD_ITEM_EFFECT INT_VAR opcode = 174 target = 1 timing = 4 duration = 1  resist_dispel = 1 STR_VAR resource = eff_m02 END
+  LPF ADD_ITEM_EFFECT INT_VAR opcode = 174 target = 1 timing = 4 duration = 70 resist_dispel = 1 STR_VAR resource = eff_e04 END
+  BUT_ONLY
+
+// extraneous header, power for immunities
+COPY_EXISTING ~potn38.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 206 power = 4 resist_dispel = 1 END
+  BUT_ONLY
+
+// extraneous header, no save for sound effect
+COPY_EXISTING ~potn40.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 174 savingthrow = BIT4 END
+  BUT_ONLY
+
+// extraneous header; portrait icon duration wrong, remove charm & stun immunity from free action
+COPY_EXISTING ~potn45.itm~ ~override~
+  LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 261 END
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 142 duration = 700 END
+  PATCH_FOR_EACH addme IN 175 158 157 154 126 109 40 BEGIN
+    LPF ADD_ITEM_EFFECT INT_VAR opcode = 261 target = 1 power = 4 resist_dispel = 1 duration = 700 parameter2 = "%addme%" END
+  END
+  BUT_ONLY
+
+// range, enchantment, min str
+COPY_EXISTING ~presdag.itm~ ~override~
+  WRITE_SHORT 0x26 3 // min str
+  LPF ITEM_ALTER_HEADER INT_VAR range = 0 END
+  BUT_ONLY
+
+// icon
+COPY_EXISTING ~presrob.itm~ ~override~
+  WRITE_ASCII 0x3a ~iclck15~ #8
+  BUT_ONLY
+
+// dispelling one spell twice, one spell wrong
+COPY_EXISTING ~redemt.itm~ ~override~
+  LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 254 END
+  PATCH_FOR_EACH addme IN spin108 sppr204 sppr405 spwi104 spwi316 spwi507 BEGIN
+    LPF ADD_ITEM_EFFECT INT_VAR type = 1 opcode = 254 target = 2 parameter2 = 2 STR_VAR resource = EVAL "%addme%" END
+  END
+  BUT_ONLY
+
+// missing saves for sound, visual
+COPY_EXISTING ~ring03.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 savingthrow = BIT3 power = 2 END
+  BUT_ONLY
+
+// wrong power for equipped fx
+COPY_EXISTING ~ringmal.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR equipped = 1 power = 0 END
+  BUT_ONLY
+
+// timing modes for effects, add round of putting on oil
+COPY_EXISTING ~serpsca.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 174 timing = 1 duration = 0 END
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 141 timing = 1 duration = 0 END
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 233 timing = 1 duration = 0 END
+  LPF ADD_ITEM_EFFECT INT_VAR insert_point = 0 opcode = 165 target = 1 duration = 7 END
+  BUT_ONLY
+
+// missing its +3 damage bonus
+COPY_EXISTING ~serrate.itm~ ~override~
+  LPF ITEM_ALTER_HEADER INT_VAR damage_bonus = 3 END
+  BUT_ONLY
+  
+// limited effect has permanent timing
+COPY_EXISTING ~shadless.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 233 timing = 0 END
+  BUT_ONLY
+
+// wrong prof for shillelagh (IWD only), wrong thac0 bonus (all)
+COPY_EXISTING ~shillel.itm~ ~override~
+  WRITE_SHORT 0x26 0 // min str
+  PATCH_IF (GAME_IS ~iwd~) BEGIN
+    WRITE_SHORT 0x1c 26 // type as staff to pick up staff prof, per IWD description
+  END
+  LPF ITEM_ALTER_HEADER INT_VAR thac0_bonus = 1 END
+  BUT_ONLY
+
+// wrong min strength
+COPY_EXISTING ~shld09.itm~ ~override~
+  WRITE_SHORT 0x26 0
+  BUT_ONLY
+
+// wrong min strength, penalizes missile AC
+COPY_EXISTING ~shldbch.itm~ ~override~
+  WRITE_SHORT 0x26 12
+  LPF DELETE_ITEM_EQEFFECT INT_VAR opcode_to_delete = 0 END
+  LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 0 target = 1 parameter1 = 3 timing = 2 END
+  BUT_ONLY
+
+// add immunity to second projectile
+COPY_EXISTING ~shldrng.itm~ ~override~
+  LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 83 target = 1 parameter2 = 313 timing = 2 resist_dispel = 2 END
+  BUT_ONLY
+
+// sound can be blocked
+COPY_EXISTING ~spirit.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 174 power = 0 END
+  BUT_ONLY
+
+// needs acid, electricity, fire, cold
+COPY_EXISTING ~swanarm.itm~ ~override~
+  PATCH_FOR_EACH icon IN 25 24 17 16 BEGIN
+    LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 142 target = 1 parameter2 = icon timing = 2 END
+  END
+  BUT_ONLY
+
+// no save for one sound effect
+COPY_EXISTING ~trnbolt.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 174 savingthrow = BIT0 END
+  BUT_ONLY
+
+// remove min level on stun effect
+COPY_EXISTING ~u1hax2a.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 45 dicesize = 0 END
+  BUT_ONLY
+
+// hammer range
+COPY_EXISTING ~u2ham3a.itm~ ~override~
+              ~u2ham4a.itm~ ~override~
+  LPF ITEM_ALTER_HEADER INT_VAR range = 1 END
+  BUT_ONLY
+
+// probabilities overlap
+COPY_EXISTING ~u2hax4a.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 12 probability2 = 16 END
+  BUT_ONLY
+
+// remove min level on stun effect
+COPY_EXISTING ~uarow3b.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 45 dicesize = 0 END
+  BUT_ONLY
+
+// remove min level on visuals
+COPY_EXISTING ~uhalb3c.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 233 dicesize = 0 END
+  BUT_ONLY
+
+COPY_EXISTING ~ulbow2b.itm~ ~override~
+  WRITE_SHORT 0x26 12 // min strength
+  BUT_ONLY
+
+// add save on visuals
+COPY_EXISTING ~ulswd4a.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 233 savingthrow = BIT0 END
+  BUT_ONLY
+
+// remove min level on slow effect
+COPY_EXISTING ~umstr4b.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 40 dicesize = 0 END
+  BUT_ONLY
+
+// remove min level on stun effect
+COPY_EXISTING ~umstr5a.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 45 dicesize = 0 END
+  BUT_ONLY
+
+// needs fire, electrcity icons
+COPY_EXISTING ~usltr4a.itm~ ~override~
+              ~usltr5a.itm~ ~override~
+  PATCH_FOR_EACH icon IN 17 16 BEGIN
+    LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 142 target = 1 parameter2 = icon timing = 2 END
+  END
+  BUT_ONLY
+
+// extraneous header, power on sound
+COPY_EXISTING ~uspot1a.itm~ ~override~
+              ~uspot2a.itm~ ~override~
+              ~uspot2b.itm~ ~override~
+              ~uspot3a.itm~ ~override~
+              ~uspot3b.itm~ ~override~
+              ~uspot3c.itm~ ~override~
+              ~uspot4a.itm~ ~override~
+              ~uspot4b.itm~ ~override~
+              ~uspot4c.itm~ ~override~
+              ~uspot5a.itm~ ~override~
+              ~uspot5b.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 174 power = 0 resist_dispel = 2 END
+  BUT_ONLY
+
+// one more effect for 4b
+COPY_EXISTING ~uspot4b.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 233 power = 0 resist_dispel = 2 END
+  BUT_ONLY
+
+// inconsistent saves, power
+COPY_EXISTING ~wand02.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 power = 4 savingthrow = BIT0 savebonus = 2 END
+  BUT_ONLY
+
+// inconsistent saves, power; wrong icon
+COPY_EXISTING ~wand04.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 174 power = 4 savingthrow = BIT3 savebonus = `3 END
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 233 power = 4 savingthrow = BIT3 savebonus = `3 END
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 142 parameter2 = 44 END
+  BUT_ONLY
+
+// misordering prevents evasion (how, totlm); add lore; claim 6d8 damage, actually does 6d6
+COPY_EXISTING ~wand11.itm~ ~override~
+  WRITE_SHORT 0x42 50
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 12 dicesize = 8 END
+  PATCH_IF (GAME_IS ~how totlm~) BEGIN
+    LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 206 END
+    LPF ADD_ITEM_EFFECT INT_VAR insert_point = 0 opcode = 206 target = 2 parameter2 = 63 resist_dispel = 2 STR_VAR resource = "wand11" END
+  END
+  BUT_ONLY
+
+// wrong type of damage for mag missiles
+COPY_EXISTING ~wandmis.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 12 parameter2 = 0x00400000 END
+  BUT_ONLY
+
+// match power to lightning bolt spell
+COPY_EXISTING ~wandrea.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 power = 3 END
+  BUT_ONLY
+
+// power levels; don't throw in mass patch since it should be disspellable
+COPY_EXISTING ~wandtrp.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 146 power = 0 resist_dispel = 3 END
+  BUT_ONLY
+
+// dagger range
+COPY_EXISTING ~withery.itm~ ~override~
+  LPF ITEM_ALTER_HEADER INT_VAR range = 0 END
+  BUT_ONLY
+
+// power level for curse effects
+COPY_EXISTING ~zz05we.itm~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 23 power = 1 END
+  BUT_ONLY
+
+// pale justice has its own icon
+COPY_EXISTING ~zz57pj.itm~ ~override~
+  WRITE_ASCII 0x3a ~izz57pj~ #8
+  LPF ITEM_ALTER_HEADER STR_VAR icon = "izz57pj" END
+  BUT_ONLY
+
+// misery's herald not causing horror on hit
+COPY_EXISTING ~zzm5mh.itm~ ~override~
+  WRITE_BYTE 0x19 THIS | BIT1 // add cold-iron flag
+  LPF ADD_ITEM_EFFECT INT_VAR type = 1 target = 2 probability1 = 10 opcode = 290 parameter2 = 1 STR_VAR resource = "zzm5mh" END // undead immunity
+  LPF ADD_ITEM_EFFECT INT_VAR type = 1 target = 2 power = 2 resist_dispel = 1 duration = 28 probability1 = 10 savingthrow = BIT0
+    opcode = 24 END // panic
+  LPF ADD_ITEM_EFFECT INT_VAR type = 1 target = 2 power = 2 resist_dispel = 1 duration = 28 probability1 = 10 savingthrow = BIT0
+    opcode = 142 parameter2 = 36 END // panic portrait icon
+  LPF ADD_ITEM_EFFECT INT_VAR type = 1 target = 2 power = 2 resist_dispel = 1 duration =  0 probability1 = 10 savingthrow = BIT0
+    opcode = 139 parameter1 = 14007 timing = 1 END // display panic string
+  LPF ADD_ITEM_EFFECT INT_VAR type = 1 target = 2 power = 2 resist_dispel = 1 duration =  0 probability1 = 10 savingthrow = BIT0
+    opcode = 174 timing = 1 STR_VAR resource = "eff_m07" END
+  LPF ADD_ITEM_EFFECT INT_VAR type = 1 target = 2 power = 2 resist_dispel = 1 duration =  0 probability1 = 10 savingthrow = BIT0
+    opcode = 233 timing = 1 parameter2 = 4 END // play visual
+  BUT_ONLY
+
+ACTION_IF GAME_IS ~iwd~ THEN BEGIN // iwd w/o how or totlm
+
+  // fix for Girdle of Beatification (fixed in HoW)
+  COPY_EXISTING ~beltbea.itm~   ~override~
+    LPF ITEM_ALTER_EFFECT INT_VAR equipped = 1 opcode = 130 parameter1 = 1 END
+    BUT_ONLY
+
+END ELSE BEGIN // how, totlm fixes
+  
+  // save vs. spell for sound, min strength
+  COPY_EXISTING ~amaunat.itm~ ~override~
+    WRITE_SHORT 0x26 11 // min strength
+    LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 174 savingthrow = 0 END
+    BUT_ONLY
+  
+  // probability fixes
+  COPY_EXISTING ~bess.itm~ ~override~
+    LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 232 probability1 = 10 END
+    BUT_ONLY
+  
+  // probability fixes
+  COPY_EXISTING ~bflaoil.itm~ ~override~
+    LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 206 STR_VAR resource = bflaoil END
+    BUT_ONLY
+  
+  // strings not bypassing MR, add round of putting on oil
+  COPY_EXISTING ~chance.itm~ ~override~
+    LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 139 resist_dispel = 3 END
+    LPF ADD_ITEM_EFFECT INT_VAR insert_point = 0 opcode = 165 target = 1 duration = 7 END
+    LPF ADD_ITEM_EFFECT INT_VAR opcode = 206 target = 1 power = 2 resist_dispel = 3 duration = 21 STR_VAR resource = spwi209 END
+    LPF ADD_ITEM_EFFECT INT_VAR opcode = 206 target = 1 power = 2 resist_dispel = 3 duration = 21 STR_VAR resource = lucky END
+    LPF ADD_ITEM_EFFECT INT_VAR opcode = 238 target = 1 power = 2 resist_dispel = 3 duration = 21 parameter1 = 1 END // +1 saves
+    PATCH_FOR_EACH op IN 59 90 91 92 BEGIN
+      LPF ADD_ITEM_EFFECT INT_VAR opcode = op target = 1 power = 2 resist_dispel = 3 duration = 21 parameter1 = 5 END // +5 thieving
+    END
+  
+  // ac bonus can't be dispelled, power wrong
+  COPY_EXISTING ~dntshd2.itm~ ~override~
+    LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 0 resist_dispel = 3 power = 1 END
+    BUT_ONLY
+  
+  // wrong opcode for otiluke's-on-hit
+  COPY_EXISTING ~force.itm~ ~override~
+    LPF ITEM_ALTER_EFFECT INT_VAR opcode = 109 opcode_new = 185 END
+    BUT_ONLY
+  
+  // remove power, MR checks from summons
+  COPY_EXISTING ~garrow.itm~ ~override~
+    LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 259 power = 0 resist_dispel = 3 END
+    BUT_ONLY
+  
+  // undroppable items should be undroppable
+  COPY_EXISTING ~gasp.itm~  ~override~
+    WRITE_BYTE 0x18 THIS & `BIT2
+    BUT_ONLY
+  
+  // visual bypasses save
+  COPY_EXISTING ~handgf.itm~ ~override~
+    LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 233 savingthrow = BIT0 END
+    BUT_ONLY
+  
+  // bad sound ref
+  COPY_EXISTING ~jhoswd3.itm~ ~override~
+    READ_LONG   0x64 "abil_off"
+    READ_SHORT  0x68 "abil_num"
+    READ_LONG   0x6a "fx_off"
+    FOR (index = 0 ; index < abil_num ; index = index + 1) BEGIN // looks through headers
+      READ_SHORT ("%abil_off%" + 0x1e + ("%index%" * 0x38)) "abil_fx_num"
+      READ_SHORT ("%abil_off%" + 0x20 + ("%index%" * 0x38)) "abil_fx_idx"
+      FOR (index2 = 0 ; index2 < abil_fx_num ; index2 = index2 + 1) BEGIN // searches through fx for slay effect
+        READ_SHORT ("%fx_off%" +        (("%abil_fx_idx%" + "%index2%") * 0x30)) "opcode"
+        READ_ASCII ("%fx_off%" + 0x14 + (("%abil_fx_idx%" + "%index2%") * 0x30)) "sound"
+        PATCH_IF (("%opcode%" = 174) AND ("%sound%" STRING_COMPARE_CASE "eff_m12" = 0)) BEGIN // display icon
+          WRITE_ASCII ("%fx_off%" + 0x14 + (("%abil_fx_idx%" + "%index2%") * 0x30)) "eff_m12a" #8
+        END
+      END
+    END
+    BUT_ONLY
+
+  // lance of disruption hurting wielder (see spitm06.spl)
+  COPY_EXISTING ~kinetic.itm~ ~override~
+    LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 206 target = 1 timing = 2 STR_VAR resource = "spitm06" END
+    BUT_ONLY
+  
+  // remove strength bonus for throwing dagger
+  COPY_EXISTING ~lover.itm~ ~override~
+    LPF ITEM_ALTER_HEADER INT_VAR flag_strength = 0 END
+    BUT_ONLY
+
+  // luck fixes, 2/4 (see spwi209.spl (all, how-only) and chance.itm)
+  COPY_EXISTING ~lucky.itm~ ~override~
+    LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 206 target = 1 timing = 2 STR_VAR resource = spwi209 END
+    LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 206 target = 1 timing = 2 STR_VAR resource = chance END
+    LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 238 target = 1 timing = 2 parameter1 = 1 END // +1 saves
+    PATCH_FOR_EACH op IN 59 90 91 92 BEGIN
+      LPF ADD_ITEM_EQEFFECT INT_VAR opcode = op target = 1 timing = 2 parameter1 = 5 END // +5 thieving
+    END
+  
+  // power levels, sound bypassing MR
+  COPY_EXISTING ~moonbla.itm~ ~override~
+    LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 60 power = 3 END
+    LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 174 resist_dispel = 1 END
+    BUT_ONLY
+  
+  // remove power, MR checks from summons
+  COPY_EXISTING ~oblood.itm~ ~override~
+    LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 259 power = 0 resist_dispel = 3 END
+    BUT_ONLY
+  
+  // misordering prevents evasion (evasion not in base IWD)
+  COPY_EXISTING ~potn26.itm~ ~override~
+    LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 206 END
+    LPF ADD_ITEM_EFFECT INT_VAR insert_point = 0 opcode = 206 target = 2 parameter2 = 63 resist_dispel = 2 STR_VAR resource = "potn26" END
+    BUT_ONLY
+  
+  // wrong ability range, no min lev for charisma bonus
+  COPY_EXISTING ~sceptre.itm~ ~override~
+    LPF ITEM_ALTER_HEADER INT_VAR header = 3 range = 40 END
+    LPF ITEM_ALTER_EFFECT INT_VAR equipped = 1 opcode = 6 dicesize = 0 END
+    BUT_ONLY
+  
+  // change off generic icon
+  COPY_EXISTING ~sekolah.itm~ ~override~
+    WRITE_ASCII 0x3a ~ibolt05~ #8
+    WRITE_ASCII 0x58 ~cbolt05~ #8
+    LPF ITEM_ALTER_HEADER STR_VAR icon = "ibolt05" END
+    BUT_ONLY
+  
+  // stuff needs fire, acid
+  COPY_EXISTING ~shark.itm~  ~override~
+                ~shark2.itm~ ~override~
+                ~shark3.itm~ ~override~
+    PATCH_FOR_EACH icon IN 24 16 BEGIN
+      LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 142 target = 1 parameter2 = icon timing = 2 END
+    END
+    BUT_ONLY
+  
+  // wrong range for spell
+  COPY_EXISTING ~stafbes.itm~ ~override~
+    LPF ITEM_ALTER_HEADER INT_VAR header = 3 range = 100 END
+    BUT_ONLY
+
+  // sound should only play when effects kick in, missing resists & icons
+  COPY_EXISTING ~talongf.itm~ ~override~
+    LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 type = 1 probability1 = 15 power = 1 END
+    PATCH_FOR_EACH fx IN 85 84 30 28 BEGIN
+      LPF ADD_ITEM_EQEFFECT INT_VAR opcode = fx target = 1 parameter1 = 10 timing = 2 END
+    END
+    PATCH_FOR_EACH icon IN 25 16 BEGIN
+      LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 142 target = 1 parameter2 = icon timing = 2 END
+    END
+    BUT_ONLY
+  
+  // wrong damage type
+  COPY_EXISTING ~tonggf.itm~ ~override~
+    LPF ITEM_ALTER_HEADER INT_VAR type = 1 damage_type = 3 END
+    BUT_ONLY
+  
+  // missing magical cold resistance for vexed
+  COPY_EXISTING ~vexed.itm~  ~override~
+                ~vexed2.itm~ ~override~
+                ~vexed3.itm~ ~override~
+    LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 85 target = 1 parameter1 = 100 parameter2 = 1 timing = 2 END
+    BUT_ONLY
+
+  // wailing of virgins guarding against fire storm, not symbol of hopelessness
+  COPY_EXISTING ~virgin.itm~ ~override~
+    LPF DELETE_ITEM_EQEFFECT INT_VAR opcode_to_delete = 206 END
+    PATCH_FOR_EACH addme IN spwi420 spwi411 spwi205 sppr715 spin134 BEGIN
+      LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 206 target = 1 timing = 2 STR_VAR resource = EVAL "%addme%" END
+    END
+    BUT_ONLY
+  
+  // probabilities wrong for protections
+  COPY_EXISTING ~wranged.itm~ ~override~
+    LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 206 END
+    LPF ADD_ITEM_EFFECT INT_VAR type = 2 opcode = 206 target = 2 parameter2 = 52 resist_dispel = 2
+      probability1 =  33 probability2 =  0 STR_VAR resource = "spin137" END
+    LPF ADD_ITEM_EFFECT INT_VAR type = 2 opcode = 206 target = 2 parameter2 = 52 resist_dispel = 2
+      probability1 =  66 probability2 = 34 STR_VAR resource = "spin134" END
+    LPF ADD_ITEM_EFFECT INT_VAR type = 2 opcode = 206 target = 2 parameter2 = 52 resist_dispel = 2
+      probability1 = 100 probability2 = 67 STR_VAR resource = "spin135" END
+    BUT_ONLY
+  
+  // good/evil bonuses not actually working; thac0 can't work
+  COPY_EXISTING ~zz14in.itm~ ~override~
+    LPF ITEM_ALTER_HEADER INT_VAR headers = 1 damage_bonus = 4 thac0_bonus = 3 END
+    BUT_ONLY
+
+  // weapon speed
+  COPY_EXISTING ~zzg7ts.itm~ ~override~
+    LPF ITEM_ALTER_HEADER INT_VAR speed = 2 END
+    BUT_ONLY
+  
+  ACTION_IF GAME_IS ~totlm~ THEN BEGIN
+
+    // ADHW ability not recharging on bracers of icelandic pearl
+    COPY_EXISTING ~braceip.itm~ ~override~
+      LPF ITEM_ALTER_HEADER INT_VAR flag_recharge = 1 END
+      BUT_ONLY
+
+    // wrong icon, icon bypassing MR
+    COPY_EXISTING ~cwreve.itm~ ~override~
+      LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 142  parameter2 = 44 resist_dispel = 1 END
+      BUT_ONLY
+    
+    // remove charm, stun immunity from free action; have to remove all 261s and then re-add
+    COPY_EXISTING ~freeact.itm~ ~override~
+      LPF DELETE_ITEM_EQEFFECT INT_VAR opcode_to_delete = 261 END
+      PATCH_FOR_EACH addme IN 175 158 157 154 126 109 40 BEGIN
+        LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 261 target = 1 timing = 2 parameter2 = "%addme%" END
+      END
+      BUT_ONLY
+    
+    // min lev set on CHR bonus
+    COPY_EXISTING ~helmct.itm~ ~override~
+      LPF ITEM_ALTER_EFFECT INT_VAR equipped = 1 opcode = 6 dicesize = 0 END
+      BUT_ONLY
+  
+    // bad sound ref
+    COPY_EXISTING ~mhorn.itm~ ~override~
+      LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 174 STR_VAR resource = s_horn END
+      BUT_ONLY
+  
+    // wrong ability target
+    COPY_EXISTING ~ringlur.itm~ ~override~
+      LPF ITEM_ALTER_HEADER INT_VAR target = 5 END
+      BUT_ONLY
+  
+    // min lev set on CHR bonus
+    COPY_EXISTING ~stafhmg.itm~ ~override~
+      LPF ITEM_ALTER_EFFECT INT_VAR equipped = 1 opcode = 6 dicesize = 0 END
+      BUT_ONLY
+  
+    // prob wrong for icon
+    COPY_EXISTING ~xclub.itm~ ~override~
+      LPF ITEM_ALTER_EFFECT INT_VAR headers = 1 opcode = 142 probability1 = 5 END
+      BUT_ONLY
+  
+    // remove min level for CHR bonus
+    COPY_EXISTING ~xstafhmg.itm~ ~override~
+      LPF ITEM_ALTER_EFFECT INT_VAR equipped = 1 opcode = 6 dicesize = 0 END
+      BUT_ONLY
+    
+    // dagger range
+    COPY_EXISTING ~xu2ham3.itm~ ~override~
+      LPF ITEM_ALTER_HEADER INT_VAR range = 1 END
+      BUT_ONLY
+      
+  END
+
+END
+  
+/////                                                  \\\\\
+///// spell general fixes                              \\\\\
+/////                                                  \\\\\
+
+// animation, school
+COPY ~iwdfixpack/2da/spells.2da~ ~iwdfixpack/2da/spells.2da~
+  COUNT_2DA_ROWS 3 "rows"
+  FOR (index = 1 ; index < rows ; ++index) BEGIN
+    READ_2DA_ENTRY index 0 3 "file"
+    READ_2DA_ENTRY index 1 3 "anim"
+    READ_2DA_ENTRY index 2 3 "school"
+    INNER_ACTION BEGIN
+
+      ACTION_IF FILE_EXISTS_IN_GAME ~%file%.spl~ THEN BEGIN
+
+        COPY_EXISTING ~%file%.spl~ ~override~
+          PATCH_IF ("%anim%"   < 256)  BEGIN WRITE_BYTE 0x22 "%anim%"   END
+          PATCH_IF ("%school%" < 256)  BEGIN WRITE_BYTE 0x25 "%school%" END
+          BUT_ONLY
+
+      END
+
+    END
+  END
+  BUT_ONLY
+
+/////                                                  \\\\\
+///// spell school restriction fixes                   \\\\\
+/////                                                  \\\\\
+
+// opposition schools are different between iwd and how, hence all the conditionals
+
+COPY_EXISTING ~spwi513.spl~ ~override~ // summon shadow
+  WRITE_BYTE 0x1f THIS | BIT0 // add diviner flag
+  PATCH_IF GAME_IS ~how totlm~ BEGIN  // also needs invoker flag for HoW
+    WRITE_BYTE 0x1f THIS | BIT3 // add invoker flag
+  END
+  BUT_ONLY
+
+COPY_EXISTING ~spwi605.spl~ ~override~ // death fog
+              ~spwi612.spl~ ~override~ // otilukes freezing sphere
+              ~spwi802.spl~ ~override~ // incendiary cloud
+              ~spwi904.spl~ ~override~ // malavon's corrosive fog
+  WRITE_BYTE 0x1e THIS | BIT6 // add abjurer flag
+  BUT_ONLY
+
+COPY_EXISTING ~spwi616.spl~ ~override~ // tensers transformation
+  WRITE_BYTE 0x1f THIS | BIT1 // add enchanter flag
+  PATCH_IF GAME_IS ~how totlm~ BEGIN // also needs conjurer flag for HoW
+    WRITE_BYTE 0x1e THIS | BIT7 // add conjurer flag
+  END
+  BUT_ONLY
+
+ACTION_IF GAME_IS ~iwd~ THEN BEGIN // iwd-only changes
+
+  COPY_EXISTING ~spwi110.spl~ ~override~ // id
+                ~spwi111.spl~ ~override~ // infravision
+                ~spwi202.spl~ ~override~ // detect evil
+                ~spwi203.spl~ ~override~ // detect invis
+    WRITE_BYTE 0x1e THIS | BIT7 // add conjurer flag
+    BUT_ONLY
+
+  COPY_EXISTING ~spwi303.spl~ ~override~
+    WRITE_BYTE 0x1f THIS & `BIT3 // remove invoker flag
+    BUT_ONLY
+
+  COPY_EXISTING ~spwi418.spl~ ~override~ // shadow monsters
+    WRITE_BYTE 0x1f THIS | BIT4 // add necromancer flag
+    BUT_ONLY
+
+  COPY_EXISTING ~spwi610.spl~ ~override~ // lich touch
+    WRITE_BYTE 0x1f THIS & `BIT5 // remove transmuter flag
+    BUT_ONLY
+
+  // pw silence has wrong primary school set
+  COPY_EXISTING ~spwi617.spl~ ~override~
+    WRITE_BYTE 0x1e THIS | BIT0 // add conjurer flag
+    WRITE_BYTE 0x1f THIS | BIT3 // add invoker flag
+    WRITE_BYTE 0x1f THIS & `BIT1 // remove enchanter flag
+    BUT_ONLY
+
+END ELSE BEGIN // how/totlm changes
+
+  COPY_EXISTING ~spwi104.spl~ ~override~ // only wrong in GoG version of the game
+    WRITE_BYTE 0x1f THIS & `BIT3 // remove invoker flag
+    WRITE_BYTE 0x1f THIS | BIT4 // add necromancer flag
+    BUT_ONLY
+
+END
+
+/////                                                  \\\\\
+///// spell batch fixes                                \\\\\
+/////                                                  \\\\\
+
+// spells using wrong power level
+ACTION_FOR_EACH file IN sppr103 sppr105 sppr311 sppr314 sppr401 sppr504 sppr514 
+ sppr611 spwi111 spwi118 spwi215 spwi410 spwi414 spwi417 spwi606 spwi610
+BEGIN
+
+  ACTION_IF (FILE_EXISTS_IN_GAME ~%file%.spl~) THEN BEGIN
+
+    COPY_EXISTING ~%file%.spl~ ~override~
+      READ_LONG  0x34 "level"    ELSE 0
+      LPF SPELL_ALTER_EFFECT INT_VAR power = level END
+      BUT_ONLY
+
+  END
+
+END
+
+// spells with non-zero durations on instant/permanent effects
+ACTION_FOR_EACH file IN 
+  pself0 spin104 spin107 spin108 spin109 spin110 spin121 spin122 spin123 spin124 spin126 
+  spin132 spin134 spin135 spin136 spin148 spin149 spin152 spin155 spin156 spin168 spin169 
+  spin171 spin173 spin179 spin181 spin182 spin989 spin994 spin995 spin996 spitm03 spitm04 
+  spitm05 sppr103 sppr104 sppr107 sppr109 sppr110 sppr113 sppr201  sppr202 sppr204 sppr205 
+  sppr206 sppr207 sppr208 sppr210 sppr211 sppr213 sppr214 sppr215 sppr305 sppr306 sppr311 
+  sppr312 sppr313 sppr401 sppr403 sppr405 sppr407 sppr408 sppr409 sppr414 sppr417 sppr421
+  sppr502 sppr508 sppr510 sppr511 sppr515 sppr518 sppr519 sppr609 sppr709 sppr714 sppr715 
+  sppr716 sppr717 sppr988 sppr989 spwi021 spwi102 spwi104 spwi105 spwi107 spwi108 spwi111
+  spwi113 spwi114 spwi116 spwi117 spwi118 spwi201 spwi203 spwi208 spwi210 spwi211 spwi212 
+  spwi214 spwi221 spwi223 spwi299 spwi303 spwi305 spwi306 spwi310 spwi311 spwi312 spwi316 
+  spwi317 spwi401 spwi405 spwi406 spwi411 spwi412 spwi414 spwi507 spwi508 spwi509 spwi518 
+  spwi599 spwi601 spwi607 spwi608 spwi610 spwi612 spwi616 spwi617 spwi619 spwi704 spwi706 
+  spwi708 spwi711 spwi804 spwi805 spwi888 spwi961 spwi962 spwi963 spwi964 spwi965 spwi983 
+  spwi987 spwi988 spwi990 spwi991 spwi992 spwi993
+BEGIN
+
+  ACTION_IF (FILE_EXISTS_IN_GAME ~%file%.spl~) THEN BEGIN
+  
+    COPY_EXISTING ~%file%.spl~ ~override~
+      READ_LONG   0x64 "abil_off"
+      READ_SHORT  0x68 "abil_num"
+      READ_LONG   0x6a "fx_off"
+      FOR (index = 0 ; index < abil_num ; index = index + 1) BEGIN // looks through headers
+        READ_SHORT ("%abil_off%" + 0x1e + ("%index%" * 0x28)) "abil_fx_num"
+        READ_SHORT ("%abil_off%" + 0x20 + ("%index%" * 0x28)) "abil_fx_idx"
+        FOR (index2 = 0 ; index2 < abil_fx_num ; index2 = index2 + 1) BEGIN // cycle through effects
+          READ_BYTE ("%fx_off%" + 0x0c + (("%abil_fx_idx%" + "%index2%") * 0x30)) "timing"
+          PATCH_IF (("%timing%" = 1) OR ("%timing%" = 9)) BEGIN
+            WRITE_LONG ("%fx_off%" + 0x0e + (("%abil_fx_idx%" + "%index2%") * 0x30)) 0 // duration
+          END
+        END
+      END
+      BUT_ONLY
+
+  END
+
+END
+
+/////                                                  \\\\\
+///// other spell fixes                                \\\\\
+/////                                                  \\\\\
+
+// targeting, misordering of spell protections prevents effects
+COPY_EXISTING ~spin121.spl~ ~override~
+  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = 206 END
+  LPF SPELL_ALTER_EFFECT INT_VAR target = 1 END
+  PATCH_FOR_EACH spell IN sppr408 sppr107 spwi113 spin121 BEGIN
+    LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 1 resist_dispel = 2 duration = 1680 STR_VAR resource = EVAL "%spell%" END
+  END
+  BUT_ONLY
+
+// power issues for innate
+COPY_EXISTING ~spin125.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR power = 0 END
+  BUT_ONLY
+
+// visual shouldn't have min level
+COPY_EXISTING ~spin972.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR dicesize = 0 END
+  BUT_ONLY
+
+// add string, portrait for panic effect
+COPY_EXISTING ~spin975.spl~ ~override~
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 139 target = 2 parameter1 = 14007 timing = 1 resist_dispel = 1 savingthrow = BIT3 END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 142 target = 2 parameter2 = 36 duration = 70 resist_dispel = 1 savingthrow = BIT3 END
+  BUT_ONLY
+
+// visual shouldn't have min level, power
+COPY_EXISTING ~spin980.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR power = 0 dicesize = 0 END
+  BUT_ONLY
+
+// add portrait icons for effects
+COPY_EXISTING ~spin992.spl~ ~override~
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 142 target = 2 parameter2 = 14 resist_dispel = 2 savingthrow = BIT2 probability1 =  40 probability2 = 21 duration = 18 END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 142 target = 2 parameter2 = 35 resist_dispel = 2 savingthrow = BIT2 probability1 =  80 probability2 = 41 duration = 70 END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 142 target = 2 parameter2 =  7 resist_dispel = 3 savingthrow = BIT2 probability1 = 100 probability2 = 81 duration = 70 END
+  BUT_ONLY
+
+// string bypasses MR
+COPY_EXISTING ~spitm02.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR resist_dispel = 3 END
+  BUT_ONLY
+
+// string should bypass MR
+COPY_EXISTING ~sppr101.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR resist_dispel = 3 END
+  BUT_ONLY
+
+// low level creature can't save; sound effect missing max level
+COPY_EXISTING ~sppr102.spl~ ~override~
+  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = 174 END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 174 target = 2 power = 1 timing = 1 resist_dispel = 1
+    insert_point = 5 dicenumber = 100 dicesize = 6 savingthrow = BIT0 STR_VAR resource = "eff_p04" END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 174 target = 2 power = 1 timing = 1 resist_dispel = 1
+    insert_point = 2 dicenumber = 5 STR_VAR resource = "eff_p04" END
+
+// misordering of spell protections prevents effects; one spell ref wrong
+COPY_EXISTING ~sppr107.spl~ ~override~
+  READ_BYTE 0x68 abil_num
+  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = 206 END
+  FOR (index = 1 ; index < (abil_num + 1) ; ++index) BEGIN
+    PATCH_FOR_EACH spell IN sppr408 spin121 spwi113 sppr107 BEGIN
+      LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 power = 1 resist_dispel = 3
+        duration = (index * 21) header = index STR_VAR resource = EVAL "%spell%" END
+    END
+  END
+  BUT_ONLY
+
+// power, MR issues
+COPY_EXISTING ~sppr108.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 254 power = 1 END // only for totlm
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode =  23 resist_dispel = 3 END
+  BUT_ONLY
+
+// curse not affecting victim saves, string bypasses MR
+COPY_EXISTING ~sppr111.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 238 target = 2 power = 1 resist_dispel = 1 duration = 42 parameter1 = "-1" END
+  BUT_ONLY
+
+// barkskin not improving AC as it should
+COPY_EXISTING ~sppr202.spl~ ~override~
+  READ_LONG  0x6a fx_off
+  READ_LONG  0x64 abil_off
+  READ_SHORT 0x68 abil_num
+  FOR (index2 = 0 ; index2 < abil_num ; ++index2) BEGIN // looks through headers
+    READ_SHORT (abil_off + 0x10 + (index2 * 0x28)) min_lev
+    READ_SHORT (abil_off + 0x1e + (index2 * 0x28)) abil_fx_num
+    READ_SHORT (abil_off + 0x20 + (index2 * 0x28)) abil_fx_idx
+    PATCH_IF (min_lev = 1) BEGIN SET min_lev = 3 END
+    FOR (index = 0 ; index < abil_fx_num ; index = index + 1) BEGIN
+      READ_SHORT (fx_off +        ((abil_fx_idx + index) * 0x30)) opcode
+      PATCH_IF (opcode = 0) BEGIN
+        WRITE_LONG  (fx_off + 0x04 + ((index + abil_fx_idx) * 0x30)) (6 - (min_lev / 4))
+      END
+    END
+  END
+  BUT_ONLY
+
+// chant's caster effects should bypass protections
+COPY_EXISTING ~sppr203.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 145 power = 0 END
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 126 power = 0 END
+  BUT_ONLY
+
+// delayed sound bypasses save
+COPY_EXISTING ~sppr204.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 174 savingthrow = BIT0 END
+  BUT_ONLY
+
+// find traps blocked by spell protections
+COPY_EXISTING ~sppr205.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 146 power = 0 END
+  BUT_ONLY
+
+// casting speed; some effects bypass MR; duration for hold person should be two rounds/level
+COPY_EXISTING ~sppr208.spl~ ~override~
+  LPF SPELL_ALTER_HEADER INT_VAR speed = 3 END
+  READ_SHORT  0x68 abil_num
+  FOR (index = 1 ; index < (abil_num + 1) ; ++index) BEGIN
+    LPF SPELL_ALTER_EFFECT INT_VAR header = index duration_high = ((index * 14) + 28) resist_dispel = 1 END
+  END
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 206 resist_dispel = 2 END // base iwd
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 290 resist_dispel = 2 END // how/totlm
+  BUT_ONLY
+
+// sound bypasses save
+COPY_EXISTING ~sppr211.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 174 savingthrow = BIT0 END
+  BUT_ONLY
+
+// casting speed
+COPY_EXISTING ~sppr215.spl~ ~override~
+  LPF SPELL_ALTER_HEADER INT_VAR speed = 2 END
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~sppr301.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 243 power = 0 END
+  BUT_ONLY
+
+// casting speed
+COPY_EXISTING ~sppr302.spl~ ~override~
+  LPF SPELL_ALTER_HEADER INT_VAR speed = 10 END
+  BUT_ONLY
+
+// string bypassing MR
+COPY_EXISTING ~sppr303.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+  BUT_ONLY
+
+// casting sound
+COPY_EXISTING ~sppr304.spl~ ~override~
+  LPF SPELL_ALTER_HEADER INT_VAR speed = 10 END
+//  WRITE_ASCII 0x10 ~eff_p22c~ // makes sound even without one set
+  BUT_ONLY
+
+// casting speed, sound bypassing save, string/visual bypassing MR
+COPY_EXISTING ~sppr305.spl~ ~override~
+  LPF SPELL_ALTER_HEADER INT_VAR speed = 5 END
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 233 resist_dispel = 1 END
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 174 savingthrow = BIT0 END
+  BUT_ONLY
+
+// casting speed, sound bypassing save, string/visual bypassing MR
+COPY_EXISTING ~sppr310.spl~ ~override~
+  LPF SPELL_ALTER_HEADER INT_VAR speed = 5 END
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 174 savingthrow = BIT0 savebonus = "-2" END
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~sppr398.spl~ ~override~
+              ~sppr399.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 246 power = 0 END
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~sppr402.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 240 power = 0 END
+  BUT_ONLY
+
+// remove charm, stun immunity from free action; have to remove all 261s and then re-add
+COPY_EXISTING ~sppr403.spl~  ~override~
+  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = 261 END
+  READ_SHORT 0x68 abil_num
+  FOR (index = 1 ; index < (abil_num + 1) ; ++index) BEGIN
+    PATCH_FOR_EACH addme IN 175 158 157 154 126 109 40 BEGIN
+      LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 261 target = 1 power = 4
+         parameter2 = "%addme%" header = index duration = (420 + (70 * index)) END
+    END
+  END
+  BUT_ONLY
+
+// neutralize poison should bypass MR
+COPY_EXISTING ~sppr404.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR resist_dispel = 3 END
+  BUT_ONLY
+
+// misordering of spell protections prevents effects; one spell ref wrong
+COPY_EXISTING ~sppr408.spl~ ~override~
+  READ_SHORT 0x68 abil_num
+  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = 206 END
+  FOR (index = 1 ; index < (abil_num + 1) ; ++index) BEGIN
+    PATCH_FOR_EACH spell IN spin121 sppr107 spwi113 sppr408 BEGIN
+      LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 power = 4 resist_dispel = 3
+        duration = (420 + (index * 70)) header = index STR_VAR resource = EVAL "%spell%" END
+    END
+  END
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~sppr410.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 240 power = 0 END
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~sppr501.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 240 power = 0 END
+  BUT_ONLY
+
+// bad caster effects shouldn't be blocked
+COPY_EXISTING ~sppr507.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode =  93 power = 0 END
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode =  60 power = 0 END
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 145 power = 0 END
+  BUT_ONLY
+
+// casting speed, sound/damage bypassing MR, strings for low HD effects
+COPY_EXISTING ~sppr510.spl~ ~override~
+  LPF SPELL_ALTER_HEADER INT_VAR speed = 10 END
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode =  12 resist_dispel = 1 END
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 174 resist_dispel = 1 END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 139 target = 2 power = 5 parameter1 = 14007 timing = 1
+    resist_dispel = 1 dicenumber = 2 END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 139 target = 2 power = 5 parameter1 = 14007 timing = 1
+    resist_dispel = 1 dicenumber = 4 dicesize = 3 savingthrow = BIT0 END
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~sppr602.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 240 power = 0 END
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~sppr605.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 246 power = 0 END
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~sppr702.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 246 power = 0 END
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~sppr704.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 240 power = 0 END
+  BUT_ONLY
+
+// string bypassing MR
+COPY_EXISTING ~sppr707.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+  BUT_ONLY
+
+// sounds have wrong target
+COPY_EXISTING ~sppr716.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 174 target = 1 END
+  BUT_ONLY
+
+// let sound always play for trap spell
+COPY_EXISTING ~sppr984.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 174 power = 0 resist_dispel = 0 END
+  BUT_ONLY
+
+// no save for sound
+COPY_EXISTING ~sppr988.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 174 savingthrow = BIT0 END
+  BUT_ONLY
+
+// portrait icon has no power
+COPY_EXISTING ~sppr989.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 142 power = 2 END
+  BUT_ONLY
+
+// trap arrow damage targets self; change damage types while we're here
+COPY_EXISTING ~spwi006.spl~ ~override~
+  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = 12 END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 12 target = 2 parameter2 = 0x00800000 timing = 1 dicenumber = 1 dicesize = 6 END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 12 target = 2 parameter2 = 0x00040000 timing = 9 dicenumber = 2 dicesize = 6 END
+  BUT_ONLY
+
+// trap arrow damage targets self
+COPY_EXISTING ~spwi007.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 12 target = 2 END
+  BUT_ONLY
+
+// trap kill effect bypassing MR
+COPY_EXISTING ~spwi020.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 13 resist_dispel = 1 END
+  BUT_ONLY
+
+// self-sound should bypass MR/save, visual bypassing MR
+COPY_EXISTING ~spwi021.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 174 power = 0 resist_dispel = 0 savingthrow = 0 END
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 233 resist_dispel = 1 END
+  BUT_ONLY
+
+// undead not being protected from horror trap
+COPY_EXISTING ~spwi025.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 206 duration = 70 STR_VAR resource = "spwi025" END
+  BUT_ONLY
+
+// caster pause shouldn't be blocked by spell protections
+COPY_EXISTING ~spwi103.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 165 power = 0 dicesize = 0 END
+  BUT_ONLY
+
+// caster pause shouldn't be blocked by spell protections, visual bypassing MR
+COPY_EXISTING ~spwi105.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 165 power = 0 END
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 233 resist_dispel = 1 END
+  BUT_ONLY
+
+// string has 0 power
+COPY_EXISTING ~spwi107.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 139 power = 1 END
+  BUT_ONLY
+
+// visual has 0 power
+COPY_EXISTING ~spwi108.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 233 power = 2 END
+  BUT_ONLY
+
+// misordering of spell protections prevents effects; one spell ref wrong
+COPY_EXISTING ~spwi113.spl~ ~override~
+  WRITE_LONG 0x50 12148 // base iwd uses divine descript
+  READ_BYTE 0x68 abil_num
+  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = 206 END
+  FOR (index = 1 ; index < (abil_num + 1) ; ++index) BEGIN
+    PATCH_FOR_EACH spell IN sppr408 sppr107 spin121 spwi113 BEGIN
+      LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 power = 1 resist_dispel = 3
+        duration = (index * 14) header = index STR_VAR resource = EVAL "%spell%" END
+    END
+  END
+  BUT_ONLY
+
+// string has 0 power
+COPY_EXISTING ~spwi114.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 139 power = 1 END
+  BUT_ONLY
+
+// sound, visual not restricted to HD
+COPY_EXISTING ~spwi116.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR dicenumber = 4 END
+  BUT_ONLY
+  
+// chromatic orb causes double blindness messages at level 4; lev 7+ portrait icon bypassing MR
+// level 1 does something random instead of blind
+COPY_EXISTING ~spwi118.spl~ ~override~
+  // add blindness effects to level 1 header; nuke existing below
+  LPF ADD_SPELL_EFFECT INT_VAR header = 1 opcode =  12 target = 2 power = 1 resist_dispel = 1 
+    parameter2 = 0x00400000 timing = 1 savingthrow = BIT0 dicenumber = 1 dicesize = 4 END
+  LPF ADD_SPELL_EFFECT INT_VAR header = 1 opcode =  74 target = 2 power = 1 resist_dispel = 1 
+    duration = 7 savingthrow = BIT0 END
+  LPF ADD_SPELL_EFFECT INT_VAR header = 1 opcode = 142 target = 2 power = 1 resist_dispel = 1 
+    parameter2 = 8 duration = 7 savingthrow = BIT0 END
+  LPF ADD_SPELL_EFFECT INT_VAR header = 1 opcode = 174 target = 2 power = 1 resist_dispel = 1 
+    timing = 4 duration = 7 savingthrow = BIT0 STR_VAR resource = eff_m05 END
+  LPF ADD_SPELL_EFFECT INT_VAR header = 1 opcode = 233 target = 2 power = 1 resist_dispel = 3
+    timing = 1 parameter2 = 3 savingthrow = BIT0 END
+  LPF ADD_SPELL_EFFECT INT_VAR header = 1 opcode = 139 target = 2 power = 1 resist_dispel = 1
+    timing = 1 parameter1 = 14674 savingthrow = BIT0 END
+  LPF ADD_SPELL_EFFECT INT_VAR header = 1 opcode = 174 target = 2 power = 1 resist_dispel = 2
+    timing = 1 STR_VAR resource = eff_m06 END
+  READ_LONG  0x64 abil_off ELSE 0
+  READ_SHORT 0x68 abil_num ELSE 0
+  READ_LONG  0x6a fx_off   ELSE 0
+  SET abil_length = 0x28
+  SET delta = 0
+  FOR (index = 0 ; index < abil_num ; index = index + 1) BEGIN // iterate through abilities
+    READ_SHORT  (abil_off + 0x1e + (abil_length * index)) abil_fx_num
+    READ_SHORT  (abil_off + 0x20 + (abil_length * index)) abil_fx_idx
+    SET abil_fx_idx = (abil_fx_idx + delta)
+    WRITE_SHORT (abil_off + 0x20 + (abil_length * index)) abil_fx_idx
+    PATCH_IF (index = 0) BEGIN
+      DELETE_BYTES (fx_off +        (0x30 * (abil_fx_idx))) (0x30 * (abil_fx_num - 7)) // nuke old lev1 effects
+      SET delta       -= (abil_fx_num - 7)
+      SET index2      -= (abil_fx_num - 7)
+      SET abil_fx_num -= (abil_fx_num - 7)
+    END
+    FOR (index2 = 0 ; index2 < abil_fx_num ; index2 = index2 + 1) BEGIN
+      READ_SHORT (fx_off +        (0x30 * (abil_fx_idx + index2))) opcode
+      READ_SHORT (fx_off + 0x04 + (0x30 * (abil_fx_idx + index2))) string
+      READ_LONG  (fx_off + 0x0e + (0x30 * (abil_fx_idx + index2))) duration
+      PATCH_IF ((opcode = 139) AND (string = 14071)) BEGIN // 'blindness' string
+        DELETE_BYTES (fx_off +        (0x30 * (abil_fx_idx + index2))) 0x30 // delete effect
+        SET delta       -= 1
+        SET index2      -= 1
+        SET abil_fx_num -= 1
+      END
+      PATCH_IF ((opcode = 142) AND (index = 5)) BEGIN // portrait icon
+        WRITE_BYTE (fx_off + 0x0c + (0x30 * (abil_fx_idx + index2))) 0 // instant/limited
+        WRITE_BYTE (fx_off + 0x0d + (0x30 * (abil_fx_idx + index2))) 1 // don't bypass MR
+      END
+    END
+    WRITE_SHORT  (abil_off + 0x1e + (abil_length * index)) abil_fx_num
+  END
+  BUT_ONLY_IF_IT_CHANGES
+
+// casting speed
+COPY_EXISTING ~spwi202.spl~ ~override~
+  LPF SPELL_ALTER_HEADER INT_VAR speed = 10 END
+  BUT_ONLY
+
+// undocumented save bonus
+COPY_EXISTING ~spwi205.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR savebonus = 0 END
+  BUT_ONLY
+
+// should last 4 hours
+COPY_EXISTING ~spwi206.spl~ ~override~
+  LPF ITEM_ALTER_EFFECT INT_VAR duration_high = 1200 END
+  BUT_ONLY
+
+// knock should bypass MR
+COPY_EXISTING ~spwi207.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR resist_dispel = 3 END
+  BUT_ONLY
+
+// casting speed, shouldn't bypass MR
+COPY_EXISTING ~spwi208.spl~ ~override~
+  LPF SPELL_ALTER_HEADER INT_VAR speed = 10 END
+  LPF SPELL_ALTER_EFFECT INT_VAR resist_dispel = 1 END
+  BUT_ONLY
+
+// melf acid arrow lacks casting sound, casting speed/header corrections
+COPY_EXISTING ~spwi211.spl~ ~override~
+  WRITE_ASCII 0x10 "cas_m03" #8
+  LPF SPELL_ALTER_HEADER INT_VAR speed = 2 type_new = 1 END
+  BUT_ONLY
+
+// wrong sound reference
+COPY_EXISTING ~spwi214.spl~ ~override~
+  READ_LONG   0x64 "abil_off"
+  READ_SHORT  0x68 "abil_num"
+  READ_LONG   0x6a "fx_off"
+  FOR (index = 0 ; index < abil_num ; index = index + 1) BEGIN // looks through headers
+    READ_SHORT ("%abil_off%" + 0x1e + ("%index%" * 0x28)) "abil_fx_num"
+    READ_SHORT ("%abil_off%" + 0x20 + ("%index%" * 0x28)) "abil_fx_idx"
+    FOR (index2 = 0 ; index2 < abil_fx_num ; index2 = index2 + 1) BEGIN // searches through fx for sound effect
+      READ_SHORT ("%fx_off%" +        (("%abil_fx_idx%" + "%index2%") * 0x30)) "opcode"
+      READ_ASCII ("%fx_off%" + 0x14 + (("%abil_fx_idx%" + "%index2%") * 0x30)) "sound"
+      PATCH_IF (("%opcode%" = 174) AND ("%sound%" STRING_COMPARE_CASE "eff_m12" = 0)) BEGIN // display icon
+        WRITE_ASCII ("%fx_off%" + 0x14 + (("%abil_fx_idx%" + "%index2%") * 0x30)) ~eff_e03~ #8
+      END
+    END
+  END
+  BUT_ONLY
+
+// caster pause shouldn't be blocked by spell protections, casting speed
+COPY_EXISTING ~spwi217.spl~ ~override~
+  LPF SPELL_ALTER_HEADER INT_VAR speed = 3 END
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 165 power = 0 END
+  BUT_ONLY
+
+// sound bypassing MR
+COPY_EXISTING ~spwi218.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 174 resist_dispel = 1 END
+  BUT_ONLY
+
+// sound blocked by MR
+COPY_EXISTING ~spwi221.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 174 resist_dispel = 3 END
+  BUT_ONLY
+
+// sound missing save
+COPY_EXISTING ~spwi222.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 174 savingthrow = BIT0 END
+  BUT_ONLY
+
+// casting speed, string bypasses MR
+COPY_EXISTING ~spwi302.spl~ ~override~
+  LPF SPELL_ALTER_HEADER INT_VAR speed = 3 END
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+  BUT_ONLY
+
+// change haste to visual range
+COPY_EXISTING ~spwi305.spl~ ~override~
+  LPF SPELL_ALTER_HEADER INT_VAR range = 30 END
+  BUT_ONLY
+
+// duration for hold person should be two rounds/level; sound/visual bypassing MR
+COPY_EXISTING ~spwi306.spl~ ~override~
+  READ_SHORT  0x68 abil_num
+  FOR (index = 1 ; index < (abil_num + 1) ; ++index) BEGIN
+    LPF SPELL_ALTER_EFFECT INT_VAR header = index resist_dispel = 1 uration_high = ((index * 14) + 56) END
+  END
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 206 resist_dispel = 2 END // iwd w/o how
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 290 resist_dispel = 2 END // how, totlm
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~spwi309.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 240 power = 0 END
+  BUT_ONLY
+
+// self-sound should bypass spell protections
+COPY_EXISTING ~spwi313.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 174 power = 0 END
+  BUT_ONLY
+
+// vamp touch shouldn't bypass MR
+COPY_EXISTING ~spwi314.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 241 resist_dispel = 1 END
+  BUT_ONLY
+
+// color set should bypass MR
+COPY_EXISTING ~spwi317.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 7 resist_dispel = 3 END
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~spwi407.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 240 power = 0 END
+  BUT_ONLY
+
+// string bypassing MR
+COPY_EXISTING ~spwi411.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+  BUT_ONLY
+
+// casting speed, missing save
+COPY_EXISTING ~spwi413.spl~ ~override~
+  LPF SPELL_ALTER_HEADER INT_VAR speed = 1 END
+  LPF SPELL_ALTER_EFFECT INT_VAR save = BIT0 END
+  BUT_ONLY
+
+// spirit armor damage shouldn't dispel
+COPY_EXISTING ~spwi414.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 12 resist_dispel = 2 END
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~spwi418.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 248 power = 0 END
+  BUT_ONLY
+
+// effects should bypass MR
+COPY_EXISTING ~spwi419.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR resist_dispel = 3 END
+  BUT_ONLY
+
+// add panic string to spell
+COPY_EXISTING ~spwi420.spl~ ~override~
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 139 target = 2 power = 4 parameter1 = 14007 timing = 1 resist_dispel = 1 savingthrow = BIT0 END
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~spwi501.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 243 power = 0 END
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~spwi505.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 240 power = 0 END
+  BUT_ONLY
+
+// string bypassing MR
+COPY_EXISTING ~spwi508.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+  BUT_ONLY
+
+// visual effects not following min/max levels
+COPY_EXISTING ~spwi509.spl~ ~override~
+  READ_BYTE 0x68 abil_num
+  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = 233 END
+  FOR (index = 1 ; index < (abil_num + 1) ; ++index) BEGIN
+    LPF ADD_SPELL_EFFECT INT_VAR opcode = 233 target = 2 power = 5 parameter2 = 13 timing = 1 resist_dispel = 1
+      savingthrow = BIT0 savebonus = "-2" dicesize = 5 insert_point = 99 header = index END
+    LPF ADD_SPELL_EFFECT INT_VAR opcode = 233 target = 2 power = 5 parameter2 = 13 timing = 1 resist_dispel = 1 
+      dicenumber = 4 insert_point = 99 header = index END
+  END
+  BUT_ONLY
+
+// string bypassing MR
+COPY_EXISTING ~spwi510.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~spwi512.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 248 power = 0 END
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~spwi513.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 246 power = 0 END
+  BUT_ONLY
+
+// casting speed, summons should always bypass spell protections
+COPY_EXISTING ~spwi514.spl~ ~override~
+              ~spwi515.spl~ ~override~
+              ~spwi516.spl~ ~override~
+  LPF SPELL_ALTER_HEADER INT_VAR speed = 10 END
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 246 power = 0 END
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~spwi598.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 246 power = 0 END
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~spwi599.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 243 power = 0 END
+  BUT_ONLY
+
+// dispel needs power 0
+COPY_EXISTING ~spwi601.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 58 power = 0 END
+  BUT_ONLY
+
+// casting speed
+COPY_EXISTING ~spwi605.spl~ ~override~
+  LPF SPELL_ALTER_HEADER INT_VAR speed = 6 END
+  BUT_ONLY
+
+// casting speed, fade should bypass MR
+COPY_EXISTING ~spwi606.spl~ ~override~
+  LPF SPELL_ALTER_HEADER INT_VAR speed = 6 END
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 232 resist_dispel = 0 END
+  BUT_ONLY
+
+// casting speed, visual bypassing save
+COPY_EXISTING ~spwi607.spl~ ~override~
+  LPF SPELL_ALTER_HEADER INT_VAR speed = 6 END
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 233 savingthrow = BIT0 END
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~spwi609.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 246 power = 0 END
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~spwi611.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 240 power = 0 END
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~spwi613.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 248 power = 0 END
+  BUT_ONLY
+
+// string, sound bypassing MR
+COPY_EXISTING ~spwi617.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR resist_dispel = 1 END
+  BUT_ONLY
+
+// kill opcode bypassing MR
+COPY_EXISTING ~spwi702.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 13 resist_dispel = 1 END
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~spwi703.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 240 power = 0 END
+  BUT_ONLY
+
+// visual should target self
+COPY_EXISTING ~spwi704.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 233 target = 1 END
+  BUT_ONLY
+
+// visual should bypass MR
+COPY_EXISTING ~spwi706.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 233 resist_dispel = 0 END
+  BUT_ONLY
+
+// self-visual should bypass spell protections
+COPY_EXISTING ~spwi707.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 233 power = 0 END
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~spwi803.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 240 power = 0 END
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~spwi899.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 240 power = 0 END
+  BUT_ONLY
+
+// summons should always bypass spell protections
+COPY_EXISTING ~spwi902.spl~ ~override~
+  LPF SPELL_ALTER_EFFECT INT_VAR opcode = 240 power = 0 END
+  BUT_ONLY
+
+ACTION_IF GAME_IS ~iwd~ THEN BEGIN // iwd w/o how
+
+  // luck fixes, 3/4 (see spwi209.spl (x2), chance.itm, and lucky.itm)
+  COPY_EXISTING ~spwi209.spl~ ~override~
+    PATCH_FOR_EACH op IN 59 90 91 92 BEGIN
+      LPF ADD_SPELL_EFFECT INT_VAR opcode = op target = 2 power = 2 resist_dispel = 3 duration = 21 parameter1 = 5 END
+    END
+    LPF ADD_SPELL_EFFECT INT_VAR opcode = 238 target = 2 power = 2 resist_dispel = 3 duration = 21 parameter1 = 1 END
+    LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 power = 2 resist_dispel = 3 duration = 21 STR_VAR resource = spwi209 END
+
+END ELSE BEGIN // how, totlm fixes
+
+  // charm animal can charm non-animals (ok on base iwd)
+  COPY_EXISTING ~spin108.spl~ ~override~
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 206 target = 2 parameter2 = 8 resist_dispel = 2 STR_VAR resource = spin108 END
+
+  // sound effect bypasses MR
+  COPY_EXISTING ~spin127.spl~ ~override~
+    LPF SPELL_ALTER_EFFECT INT_VAR resist_dispel = 1 END
+    BUT_ONLY
+  
+  // poison effect using acid visual
+  COPY_EXISTING ~spin129.spl~ ~override~
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 233 parameter2 = 82 END
+    BUT_ONLY
+  
+  // cosmetic effects using different parameters
+  COPY_EXISTING ~spin130.spl~ ~override~
+    LPF SPELL_ALTER_EFFECT INT_VAR power = 7 resist_dispel = 1 savingthrow = BIT0 END
+    BUT_ONLY
+
+  // pause caster shouldn't be blocked; string lacks save
+  COPY_EXISTING ~spin131.spl~ ~override~
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 139 savingthrow = BIT0 END
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 165 power = 0 END
+    BUT_ONLY
+  
+  // effects bypassing MR
+  COPY_EXISTING ~spin132.spl~ ~override~
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 174 resist_dispel = 1 END
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 233 resist_dispel = 1 END
+    BUT_ONLY
+  
+  // effects bypassing MR
+  COPY_EXISTING ~spin138.spl~ ~override~
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 142 duration = 140 savingthrow = 0 savebonus = 0 END
+    BUT_ONLY
+  
+  // string bypassing MR
+  COPY_EXISTING ~spin147.spl~ ~override~
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+    BUT_ONLY
+
+  // power issues for innate
+  COPY_EXISTING ~spin159.spl~ ~override~
+    LPF SPELL_ALTER_EFFECT INT_VAR power = 0 END
+    BUT_ONLY
+
+  // lance of disruption from kinetic spear--casting time to 0 (see kinetic.itm)
+  COPY_EXISTING ~spitm06.spl~ ~override~
+    LPF SPELL_ALTER_HEADER INT_VAR speed = 0 END
+    BUT_ONLY
+  
+  // self-visuals and movement speed shouldn't be blocked
+  COPY_EXISTING ~sppr319.spl~ ~override~
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 233 power = 0 END
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 266 power = 0 END
+    BUT_ONLY
+  
+  // durations for spell protections lasting waaaaay too long
+  COPY_EXISTING ~sppr321.spl~ ~override~
+    READ_LONG   0x64 abil_off
+    READ_SHORT  0x68 abil_num
+    READ_LONG   0x6a fx_off
+    FOR (index = 0 ; index < abil_num ; index = index + 1) BEGIN // looks through headers
+      READ_SHORT  (abil_off + 0x1e + (index * 0x28)) abil_fx_num
+      READ_SHORT  (abil_off + 0x20 + (index * 0x28)) abil_fx_idx
+      FOR (index2 = 0 ; index2 < abil_fx_num ; index2 = index2 + 1) BEGIN
+        READ_SHORT (fx_off +        ((abil_fx_idx + index2) * 0x30)) opcode
+        READ_LONG  (fx_off + 0x08 + ((abil_fx_idx + index2) * 0x30)) target
+        PATCH_IF ((opcode = 206) AND (target = 0)) BEGIN
+          WRITE_LONG (fx_off + 0x0e + ((abil_fx_idx + index2) * 0x30)) 7
+        END
+      END
+    END
+    BUT_ONLY
+  
+  // add blind icon
+  COPY_EXISTING ~sppr324.spl~ ~override~
+    LPF ADD_SPELL_EFFECT INT_VAR opcode = 142 target = 2 power = 3 parameter2 = 8 resist_dispel = 1
+      duration = 7 savingthrow = BIT0 END
+    BUT_ONLY
+  
+  // add 'weakened' string
+  COPY_EXISTING ~sppr325.spl~ ~override~
+    LPF ADD_SPELL_EFFECT INT_VAR opcode = 139 target = 2 power = 3 parameter1 = 10039 timing = 1
+      resist_dispel = 1 savingthrow = BIT0 END
+    BUT_ONLY
+  
+  // casting speed
+  COPY_EXISTING ~sppr416.spl~ ~override~
+    LPF SPELL_ALTER_HEADER INT_VAR speed = 5 END
+    BUT_ONLY
+  
+  // add blinded string
+  COPY_EXISTING ~sppr417.spl~ ~override~
+    LPF ADD_SPELL_EFFECT INT_VAR opcode = 139 target = 2 power = 4 timing = 1 resist_dispel = 1
+      parameter1 = 14674 savingthrow = BIT1 END
+    BUT_ONLY
+  
+  // add portrait icons, string bypasses MR
+  COPY_EXISTING ~sppr421.spl~ ~override~
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+    LPF ADD_SPELL_EFFECT INT_VAR opcode = 142 target = 2 power = 4 resist_dispel = 1 duration = 7
+      parameter2 = 44 probability1 = 30 probability2 = 6 savingthrow = BIT1 END
+    LPF ADD_SPELL_EFFECT INT_VAR opcode = 142 target = 2 power = 4 resist_dispel = 1 duration = 14
+      parameter2 = 14 probability1 = 5 savingthrow = BIT1 END
+    BUT_ONLY
+  
+  // should be restricted from neutrals, per descript
+  COPY_EXISTING ~sppr513.spl~ ~override~
+    WRITE_BYTE 0x1e THIS | BIT5 // add neutral flag
+    BUT_ONLY
+  
+  // sound bypassing MR
+  COPY_EXISTING ~sppr515.spl~ ~override~
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 174 resist_dispel = 1 END
+    BUT_ONLY
+  
+  // self visual blocked by spell protections
+  COPY_EXISTING ~sppr516.spl~ ~override~
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 233 power = 0 END
+    BUT_ONLY
+  
+  // min levels set for rage and hp bonus
+  COPY_EXISTING ~sppr517.spl~ ~override~
+    LPF SPELL_ALTER_EFFECT INT_VAR dicesize = 0 END
+    BUT_ONLY
+
+  // self-visuals and movement speed shouldn't be blocked
+  COPY_EXISTING ~sppr610.spl~ ~override~
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 233 power = 0 END
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 266 power = 0 END
+    BUT_ONLY
+  
+  // string bypassing MR
+  COPY_EXISTING ~sppr611.spl~ ~override~
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+    BUT_ONLY
+  
+  // immunity should bypass MR, power
+  COPY_EXISTING ~sppr612.spl~ ~override~
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 290 resist_dispel = 2 power = 0 END
+    BUT_ONLY
+  
+  // sound bypassing MR
+  COPY_EXISTING ~sppr717.spl~ ~override~
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 174 resist_dispel = 1 END
+    BUT_ONLY
+  
+  // add 'healed' string
+  COPY_EXISTING ~sppr720.spl~ ~override~
+    LPF ADD_SPELL_EFFECT INT_VAR opcode = 139 target = 2 power = 7 parameter1 = 14022 timing = 1 resist_dispel = 3 END
+    BUT_ONLY
+  
+  // summons should always bypass spell protections
+  COPY_EXISTING ~sppr723.spl~ ~override~
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 259 power = 0 END
+    BUT_ONLY
+
+  // luck fixes, 4/4 (see spwi209.spl (x2), chance.itm, and lucky.itm)
+  COPY_EXISTING ~spwi209.spl~ ~override~
+    LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = 73 END
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 54 opcode_new = 133 END
+    PATCH_FOR_EACH op IN 59 90 91 92 BEGIN
+      LPF SPELL_ALTER_EFFECT INT_VAR opcode = op parameter1 = 5 END
+    END
+    LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 power = 2 resist_dispel = 3 duration = 21 STR_VAR resource = chance END
+    LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 power = 2 resist_dispel = 3 duration = 21 STR_VAR resource = spwi209 END
+
+  // caster pause shouldn't be blocked by spell protections, deafness string bypassing save
+  COPY_EXISTING ~spwi423.spl~ ~override~
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 165 power = 0 END
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 139 savingthrow = BIT0 END
+    BUT_ONLY
+
+  // summons should always bypass spell protections, cosmetics on wrong target
+  COPY_EXISTING ~spwi517.spl~ ~override~
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 259 power = 0 END
+    LPF SPELL_ALTER_EFFECT INT_VAR target = 1 END
+    BUT_ONLY
+
+  // caster pause shouldn't be blocked by spell protections
+  COPY_EXISTING ~spwi806.spl~ ~override~
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 165 power = 0 END
+    BUT_ONLY
+  
+  // sound should be self-targeted
+  COPY_EXISTING ~spwi807.spl~ ~override~
+    LPF SPELL_ALTER_EFFECT INT_VAR opcode = 174 target = 1 END
+    BUT_ONLY
+  
+  // add portrait icon for blindness
+  COPY_EXISTING ~spwi808.spl~ ~override~
+    LPF ADD_SPELL_EFFECT INT_VAR opcode = 142 target = 2 power = 8 parameter2 = 8 resist_dispel = 1 duration = 70 END
+    BUT_ONLY
+  
+  ACTION_IF GAME_IS ~totlm~ THEN BEGIN
+  
+    // string bypassing MR
+    COPY_EXISTING ~spin166.spl~ ~override~
+      LPF SPELL_ALTER_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+      BUT_ONLY
+    
+    // no save for visual
+    COPY_EXISTING ~spin171.spl~ ~override~
+      LPF SPELL_ALTER_EFFECT INT_VAR opcode = 233 savingthrow = BIT0 savebonus = "-3" END
+      BUT_ONLY
+    
+    // kill effect bypassing MR
+    COPY_EXISTING ~spin175.spl~ ~override~
+      LPF SPELL_ALTER_EFFECT INT_VAR resist_dispel = 1 END
+      BUT_ONLY
+      
+  END
+
+END
+
+// many spells stack with themselves and should not
+COPY_EXISTING ~sppr111.spl~ ~override~ // curse
+              ~sppr210.spl~ ~override~ // resist fire/cold
+              ~sppr306.spl~ ~override~ // protection from fire (priest)
+              ~spwi312.spl~ ~override~ // slow
+  PATCH_IF (SOURCE_SIZE > 0x71) THEN BEGIN // protects against invalid files
+    READ_LONG  0x64 abil_off
+    READ_SHORT 0x68 abil_num
+    READ_LONG  0x6a fx_off
+    SET delta = 0
+    FOR (index = 0 ; index < abil_num ; ++index) BEGIN
+      READ_SHORT (abil_off + 0x1e + (0x28 * index)) abil_fx_num
+      READ_SHORT (abil_off + 0x20 + (0x28 * index)) abil_fx_idx
+      SET abil_fx_idx +=  delta
+      WRITE_SHORT (abil_off + 0x20 + (0x28 * index)) abil_fx_idx
+      FOR (index2 = 0 ; index2 < abil_fx_num ; ++index2) BEGIN
+        READ_SHORT (fx_off +        (0x30 * (abil_fx_idx + index2))) opcode
+        PATCH_IF (opcode = 142) BEGIN // us portrait icon as template
+          READ_ASCII (fx_off +        (0x30 * (abil_fx_idx + index2))) clone (48)
+          SET index2 = abil_fx_num // kills WHILE loop
+        END
+      END
+      INSERT_BYTES   (fx_off +        (0x30 * (abil_fx_num + abil_fx_idx))) 0x30
+        WRITE_ASCIIE (fx_off +        (0x30 * (abil_fx_num + abil_fx_idx))) "%clone%"         // copy effect
+        WRITE_SHORT  (fx_off +        (0x30 * (abil_fx_num + abil_fx_idx))) 206               // spell immunity
+        WRITE_LONG   (fx_off + 0x08 + (0x30 * (abil_fx_num + abil_fx_idx))) 0                 // anyone
+        WRITE_ASCIIE (fx_off + 0x14 + (0x30 * (abil_fx_num + abil_fx_idx))) ~%SOURCE_RES%~ #8 // spell: self
+      SET delta += 1
+      WRITE_SHORT (abil_off + 0x1e + (0x28 * index)) (abil_fx_num + 1)
+    END
+  END
+  BUT_ONLY
+
+/////                                                  \\\\\
+///// store fixes                                      \\\\\
+/////                                                  \\\\\
+
+COPY_EXISTING ~de_lib.sto~ ~override~
+  WRITE_LONG 0xC 2865 // add store name
+
+// infinite books of fateful coin
+COPY_EXISTING ~ehinn.sto~  ~override~
+              ~kuinn1.sto~ ~override~
+              ~kuinn2.sto~ ~override~
+              ~kuinn3.sto~ ~override~
+  ADD_STORE_ITEM + ~book40~ #0 #0 #0 ~IDENTIFIED~ #1
+  BUT_ONLY
+
+COPY_EXISTING ~ehtemple.sto~ ~override~
+  ADD_STORE_ITEM + ~adisease~ #1 #0 #0 ~IDENTIFIED~ #1 ~UNLIMITED~ // identify
+  BUT_ONLY
+
+// book45 references events 80 years in the future
+COPY_EXISTING ~kugerth.sto~ ~override~
+  LPF DELETE_STORE_ITEM STR_VAR item_to_delete = book45 END
+  BUT_ONLY
+
+ACTION_IF GAME_IS ~how totlm~ THEN BEGIN
+
+  COPY_EXISTING ~edion.sto~ ~override~
+    ADD_STORE_ITEM + ~cone~ #1 #0 #0 ~IDENTIFIED~ #2 // overcharged
+    BUT_ONLY
+
+  // infinite lucky scimitars
+  COPY_EXISTING ~kusmith.sto~ ~override~
+    ADD_STORE_ITEM + ~lucky~ #1 #1 #1 ~IDENTIFIED~ #1
+    BUT_ONLY
+
+  ACTION_IF GAME_IS ~totlm~ THEN BEGIN
+
+    // now has no mummy tea in this store
+    COPY_EXISTING ~kugerth.sto~ ~override~
+      ADD_STORE_ITEM + ~adisease~ #1 #0 #0 ~IDENTIFIED~ #1 ~UNLIMITED~
+      BUT_ONLY
+  
+  END
+
+END
+
+/////                                                  \\\\\
+///// large batch fixes                                \\\\\
+/////                                                  \\\\\
+
+ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_dispel BEGIN END
+
+ACTION_FOR_EACH item IN goodber fseeds BEGIN
+
+  ACTION_IF FILE_EXISTS_IN_GAME ~%item%.itm~ BEGIN
+
+    ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_dispel BEGIN
+      "%item%" => 123
+    END
+
+  END
+
+END
+
+ACTION_FOR_EACH item IN smcudge shillel shamme3 shamme2 shamme1 msword moonbla ltouch
+              ghoult fblade dobone decasta ctouch bclaw BEGIN
+
+  ACTION_IF FILE_EXISTS_IN_GAME ~%item%.itm~ BEGIN
+
+    ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_dispel BEGIN
+      "%item%" => 112
+    END
+
+  END
+
+END
+
+ACTION_FOR_EACH file IN arow07.itm fkiller.itm pnull.itm potn33.itm scrl07.itm spin112.spl 
+  spin164.spl spin985.spl sppr303.spl spwi010.spl spwi302.spl spwi601.spl BEGIN
+
+  ACTION_IF FILE_EXISTS_IN_GAME ~%file%~ BEGIN
+
+    COPY_EXISTING ~%file%~ ~override~
+      PATCH_IF ("%SOURCE_FILE%" STRING_COMPARE_REGEXP "^.+\.itm$" = 0) BEGIN
+        LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 112 END
+        LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 123 END
+        SET abil_length = 0x38
+      END ELSE BEGIN
+        LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = 112 END
+        LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = 123 END
+        SET abil_length = 0x28
+      END
+      READ_LONG   0x64 abil_off
+      READ_SHORT  0x68 abil_num
+      READ_LONG   0x6a fx_off
+      SET delta = 0
+      FOR (index = 0; index < abil_num; ++index) BEGIN // loop through abilities
+        READ_SHORT  (abil_off + 0x1e + (index * abil_length)) abil_fx_num
+        READ_SHORT  (abil_off + 0x20 + (index * abil_length)) abil_fx_idx
+        SET abil_fx_idx += delta
+        WRITE_SHORT (abil_off + 0x20 + (index * abil_length)) abil_fx_idx
+        FOR (index2 = 0; index2 < abil_fx_num; ++index2) BEGIN // looks for effects for abilities
+          READ_SHORT  (fx_off +        ((abil_fx_idx + index2) * 0x30)) opcode
+          PATCH_IF (opcode = 58) BEGIN // dispel effects
+            READ_ASCII (fx_off +        ((abil_fx_idx + index2) * 0x30)) "clone" (48)
+            PHP_EACH cd_dispel AS item => opcode2 BEGIN
+              INSERT_BYTES (fx_off +        ((abil_fx_idx + index2 + 1) * 0x30)) 0x30
+              WRITE_ASCIIE (fx_off +        ((abil_fx_idx + index2 + 1) * 0x30)) "%clone%" #48
+              WRITE_SHORT  (fx_off +        ((abil_fx_idx + index2 + 1) * 0x30)) "%opcode2%"
+              WRITE_ASCIIE (fx_off + 0x14 + ((abil_fx_idx + index2 + 1) * 0x30)) "%item%" #8
+              SET delta       += 1
+              SET abil_fx_num += 1
+            END
+          END
+          WRITE_SHORT (abil_off + 0x1e + (index * abil_length)) abil_fx_num
+        END
+      END
+      BUT_ONLY
+
+  END
+
+END
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Game Text Update                                 \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+BEGIN @1000 DESIGNATED 100
+REQUIRE_PREDICATE GAME_IS ~iwd how totlm~ @113
+REQUIRE_PREDICATE ((FILE_EXISTS ~iwdfixpack/languages/%LANGUAGE%/gtu.tra~) AND
+                   (FILE_EXISTS ~iwdfixpack/languages/%LANGUAGE%/gtu.tpa~)) @1001
+
+// key
+//
+// @10xxxxx - string for all games
+// @22xxxxx - string for iwd w/o how
+// @33xxxxx - string for how w/o totlm
+// @44xxxxx - string for how with or without totlm
+// @55xxxxx - string for totlm
+
+LOAD_TRA ~iwdfixpack/languages/%LANGUAGE%/gtu.tra~
+INCLUDE  ~iwdfixpack/languages/%LANGUAGE%/gtu.tpa~

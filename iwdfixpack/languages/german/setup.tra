@@ -1,0 +1,243 @@
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Setup Messages                                   \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+     @0 = ~NPC Tweaks~
+     @1 = ~Dieser Schritt kann einen Moment dauern...~
+     @2 = ~Der Zusatz "Nimmervoller Beutel für BG" wird fuer diese Komponente vorausgesetzt.~
+     @3 = ~Setzt die "Magierzauber in Schwerer Ruestung erlauben" Komponente voraus~
+     @4 = ~Annehmlichkeit Kniffe/Mogeleien~
+     @5 = ~Das "Exotische Gegenstände"-Pack wird fuer diese Komponente vorausgesetzt.~
+     @6 = ~Setzt die "Diebesfertigkeiten und Schleichen in Schwerer Ruestung erlauben" Komponente voraus.~
+     @7 = ~Diese Komponente ist nicht in Eurer Sprache verfuegbar.~
+     @8 = ~Diese Komponente ist nur fuer BGT.~
+     @9 = ~Regelaenderungen~
+    @10 = ~Diese Komponente ist nicht fuer Tutu verfuegbar.~
+    @11 = ~Kosmetische Aenderungen~
+    @12 = ~Thron von Bhaal wird fuer diese Komponente vorausgesetzt.~
+    @13 = ~Inhaltsaenderungen~
+    @14 = ~Diese Komponente ist nur für Tutu oder BGT.~
+    @15 = ~Diese Komponente ist nur für Tutu.~
+    @16 = ~Die Funktionalitaet dieses Bestandteils ist entweder bereits eingeschlossen oder durch einen Eurer Mods bereits ersetzt worden.~
+    @17 = ~Erfordert die Installation von "Einheitliche Waffen +x/+y"~
+    @18 = ~Diese Komponenet wurde verworfen. ~
+    
+   @100 = ~Zahlreiche Verbesserungen~
+   @101 = ~Die kunstvolle Verarbeitung wird durch kleine Runen gekrönt, die überall auf der Oberfläche eingraviert sind. Die Herstellung hat sicher sehr viel Zeit und Mühe erfordert; bei genauerer Betrachtung sieht man auch, dass die Runen leicht hellblau schimmern.
+
+STATISTIK:
+
+Schaden: 2-8 + 3
+ETW0: +3
+Schadenstyp: durch Klinge
+Besonderheit:
++ 15% Feuerresistenz
+50 % +1-8 Schadenspunkte durch Feuer
+10 % Chance, dass Zielwesen betäubt wird
+Gewicht: 10
+Initiative: 8
+Waffenfertigkeit: Größere Schwerter
+Typ:  Einhändig
+Kann nicht verwendet werden von:
+Druiden
+Klerikern
+Magiern
+Dieben~
+@113 = ~Diese Mod ist fuer 'Eiswindtal', mit oder ohne den Erweiterungen 'Herz des Winters' und 'Die Herausforderungen des Meisters der Verlockung'.
+Vor Installation dieser Mod muss die Komponente 'Verschiedene Verbesserungen' des Icewind Dale TweakPack deinstalliert werden.~
+@115 = ~Trank der geringeren Magieabwehr~
+//10 rounds
+@116 = ~Dieses machtvolle Elixier verleiht dem Trinkenden Immunität gegen jegliche Zauber des 1. und 2. Grades. Da die Wirkung jedoch nur für 10 Runden anhält, sollte der Zeitpunkt der Einnahme sorgfältig gewählt werden~
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Cosmetic Changes Components                      \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+@1000 = ~Textverbesserungen~
+@1001 = ~Diese Auswahl ist in Deiner Sprache nicht verfuegbar.~
+
+  @2000 = ~Aennderungen von Waffenanimationen~
+
+  @3000 = ~Zaubergrafiken von Icewind Dale (Andyr)~
+
+  @4000 = ~Wiederhergestellte IWD Bilder während des Ladens~
+
+  @5000 = ~Ausgeblendete Portaitsymbole fuer Ausruestungsgegenstaende~
+
+  @6000 = ~Symbol Verbesserungen~
+
+  @7000 = ~Alle Dialoge pausieren das Spiel~
+    
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Content Changes Components                       \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+@101000 = ~Nimmervollen Beutel hinzufügen~
+@101001  = ~Munitionsgürtel~
+@101002  = ~Der Schultergürtel ist ideal dafür geeignet, Schleudersteine, Wurfpfeile, Pfeile oder Bolzen aufzubewahren.
+
+SPEZIFISCHE EIGENSCHAFTEN:
+
+Kapazität: insgesamt 2.000 Schleuderkugeln, Wurfpfeile, Pfeile oder Bolzen
+Gewicht: 2~
+@101003 = ~Nimmervoller Beutel~
+@101004 = ~Auch dieser magische Beutel wirkt, wie alle magischen Beutel, wie ein einfacher Stoffsack von ungefähr 60 x 120 cm Größe. Der Nimmervolle Beutel öffnet sich in einen außerdimensionalen Raum und ist innen wesentlich größer als außen. Unabhängig davon, was man hineintut, wiegt der Beutel immer das Gleiche.
+
+STATISTIK:
+
+Gewicht: 5~
+
+@102000 = ~Geschaefte verkaufen groessere Stapel von Gegenstaenden~
+
+@103000 = ~Edelsteine und Traenke muessen erst identifiziert werden~
+@103001 = ~Ein Edelstein ist ein Mineral, das, wenn es geschnitten oder in Facetten geschliffen und poliert ist, gesammelt oder für Schmuck verwendet werden kann.~
+ @1006394 = ~Dekastab
+(Hervorrufung)
+Grad: 2
+Reichweite: Anwender
+Wirkungsdauer: 1 Runde pro Stufe
+Zeitaufwand: 2
+Wirkungsbereich: Anwender
+Rettungswurf: Nein
+Dieser Zauberspruch erzeugt einen Kraftstab in der Hand des Anwenders. Als magische Waffe geltend, kann er auch Wesen verletzen, die gegen normale Waffen immun sind. Jeder Treffer verursacht 1-6 Schadenspunkte. Zur wirkungsvollen Benutzung der Waffe sind Fertigkeiten im Umgang mit Stabwaffen erforderlich, andernfalls wird die Verwendung des Dekastabs durch Strafpunkte erschwert.
+Der Stab hat außerdem die Macht, seinem Ziel 1-2 Trefferpunkte pro Treffer zu entziehen und damit die aktuellen Trefferpunkte des Anwenders zu erhöhen. Es wird allerdings nur Schaden geheilt; die Trefferpunkte werden nicht über die normale Höchstgrenze hinaus erhöht.~
+
+@1009764 = ~Diese Waffe wurde von dem Waldläufer Althax Grom verwendet. Althax hasste die Riesen, die in seiner Heimat ihr Unwesen trieben, und war von Kindesbeinen an dazu angeleitet worden, sie auszurotten. Obwohl Althax seine Feinde anfangs mit dem Schwert und dem Bogen bekämpfte, merkte er bald, dass diese Waffen zu langsam waren, um etwas gegen die riesigen Feinde auszurichten. Aus diesem Grunde verzauberte sein Freund Eladan, ein Druide, für ihn diesen Hammer. Der Ruf dieser Waffe nahm zu, je mehr Legenden sich um Althax rankten. Obwohl der Kriegshammer nach Althaxs frühem Ableben durch viele Hände ging, wird "Schlaf des Riesen" für immer als Waffe dieses mächtigen Kriegers in Erinnerung bleiben.
+
+STATISTIK:
+
+Schaden: 1-4 + 4
+ETW0: +3
+Schadenstyp: durch Wucht
+Gewicht: 5
+Initiative: 1
+Waffenfertigkeit: Hammer
+Typ: Einhändig
+Kann nicht verwendet werden von:
+Druiden
+Magiern
+Dieben~
+@112174 = ~Farbkugel
+(Hervorrufung)
+Grad: 1
+Reichweite: Sichtweite des Anwenders
+Wirkungsdauer: Speziell
+Zeitaufwand: 1
+Wirkungsbereich: 1 Wesen
+Rettungswurf: keine Wirkung
+Dieser Zauber erzeugt eine Kugel von 10 Zentimeter Durchmesser, die mit absoluter Treffsicherheit auf ihr Ziel geworfen werden kann. Die Wirkung der Kugel hängt von der Stufe des Anwenders ab: Eine Kugel der 1. Stufe fügt 1-4 Schadenspunkte zu und blendet das Ziel eine Runde lang. Eine Kugel der 2. Stufe verursacht 1-6 Schadenspunkte und fügt dem Opfer Schmerzen zu. Eine Kugel der 3. Stufe fügt dem Opfer 1-8 Schadenspunkte und Verbrennungen zu. Eine Kugel der 4. Stufe verursacht 1-10 Schadenspunkte und lässt das Ziel vier Runden lang erblinden. Eine Kugel der 5. bis 6. Stufe bewirkt 1-12 Schadenspunkte und betäubt das Ziel drei Runden lang. Eine Kugel der 7. bis 9. Stufe verursacht 2-16 Schadenspunkte und lähmt das Opfer 13 Runden lang. Eine Kugel der 10. bis 11. Stufe verwandelt das Ziel zu Stein, wenn es keinen Rettungswurf ausführt, und verlangsamt es 5 Runden lang, wenn der Rettungswurf gelingt. Eine Kugel der 12. Stufe bewirkt den Tod des Ziels, falls ihm kein Rettungswurf gelingt, oder lähmt es 4 Runden lang. Soweit die obige Beschreibung nichts Gegenteiliges besagt, annulliert ein Rettungswurf gegen diese Zauber sowohl den erlittenen Schaden als auch alle anderen Auswirkungen.~
+
+   
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Rule Changes Components                          \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+@201000 = ~Zweihaendige Bastardschwerter~
+
+@202000 = ~Keulen fuer alle Charakterklassen~
+
+@202100 = ~Aktualisierte Beschreibungen für die "Keulen fuer alle Charakterklassen" Komponente~
+@202101 = ~Erfordert die Installation von "Keulen fuer alle Charakterklassen"~
+
+@203000 = ~Entfernen der für Erfahrungspunkt-Grenze~
+
+@204000 = ~Diebesfertigkeiten und Schleichen in Schwerer Ruestung erlauben~
+
+@205000 = ~Magierzauber in Schwerer Ruestung erlauben~
+
+@206000 = ~Mehrere Schutzgegenstaende gleichzeitig tragen~
+@206001 = ~P&P Einschraenkungen~
+
+@206100 = ~Keine Einschraenkungen~
+
+@207000 = ~Zauber von Schriftrollen (und anderen Gegenstaenden) auf der Stufe des Charakters wirken ~
+
+@208000 = ~Grossmeister-Waffenfertigkeiten fuer Mehrklassige Charaktere (Weimer)~
+
+@209000 = ~Regeltreue Grossmeisterschaft (Baldurdash)~
+
+@210000 = ~Durch Zauber erschaffene Waffen wiegen nichts~
+
+@211000 = ~Regeltreue ETW0 Tabelle~
+
+@212000 = ~Geänderte Magierzauber Fortschritt-Tabelle~
+@212001 = ~Regeltreue Tabelle (Blucher)~
+
+@212100 = ~PnP-Tabelle~
+
+@213000 = ~Geänderte Bardenzauber Fortschritt-Tabelle~
+
+@214000 = ~Geänderte Klerikerzauber Fortschritt-Tabelle~
+
+@215000 = ~Druiden benutzen Stufen- und Zaubertabellen von Klerikern~
+    
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Convenience Tweaks                               \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+@300000 = ~Mehr Trefferpunkte beim Stufenaufstieg~
+@300001 = ~Maximale Trefferpunkte beim Stufenaufstieg~
+
+@300100 = ~NWN Stil~
+
+@301000 = ~Maximale Trefferpunkte für NPCs (the bigg)~
+
+@302000 = ~Alle Gegenstaende identifizieren~
+
+@303000 = ~Einfaches Erlernen von Zauberspruechen~
+@303001 = ~100%-iges Erlernen von Zauberspruechen~
+
+@303100 = ~100%-iges Erlernen von Zaubersprüchen ohne Höchstgrenze~
+
+@304000 = ~Nimmervoller Beutel ohne Kapazitaetsgrenze~
+
+@305000 = ~Preisnachlass bei schlechtem Ruf (Sabre)~
+@305001 = ~Ändere die AusWirkung des Rufs auf die Ladenpreise~
+
+@305100 = ~Ruf hat keine Ausirkung, Ladenpreise fest bei 100 % (Luiz)~
+
+@305200 = ~Ruf hat keine Ausirkung, Ladenpreise fest bei 80 % (Luiz)~
+
+@305300 = ~Ruf hat keine Ausirkung, Ladenpreise fest bei 60 % (Luiz)~
+
+@306000 = ~Unbegrenzte Munitionsstapel~
+
+@307000 = ~Unbegrenzte Stapel bei Edelsteinen und Schmuck~
+
+@308000 = ~Unbegrenzte Traenkestapel~
+
+@309000 = ~Unbegrenzte Schriftrollenstapel~
+
+@310000 = ~Keine Fallen und Schloesser (Weimer)~
+
+@311000 = ~Ueberall Rasten (Japheth)~
+
+@312000 = ~Verkaeufliche Staebe, Knueppel und Schleudern (Icelus)~
+    
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// NPC Tweaks                                       \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\

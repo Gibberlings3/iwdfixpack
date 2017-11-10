@@ -1,0 +1,161 @@
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Setup Messages                                   \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+   @100 = ~Corrections diverses~
+   
+   @102 = ~Oh, et si vous trouvez d'autres objets qui pourraient aider à restaurer l'arboretum, je vous en serai réellement reconnaissant. Au revoir, mes amis.~
+   @103 = ~Au revoir.~
+   @104 = ~L'arboretum est revenu à sa gloire originelle, mes amis. Je sens que mon travail ici est terminé, et qu'il est temps pour moi de partir. Je vous remercie. Adieu.~
+   @105 = ~Adieu, Valestis.~
+   @106 = ~Ce n'était rien.~
+   @113 = ~Ce mod est concu pour Icewind Dale, avec ou sans les extensions Heart of Winter et Trials of the Luremaster. Le composant "correctifs" du mod Icewind Dale Tweaks doit etre desinstalle avant d'installer ce mod.~
+
+   @115 = ~Potion mineure de blocage de magie~
+   @116 = ~Ce puissant élixir confère au buveur une immunité totale aux effets des sorts de 2ème niveau et inférieurs. Cette immunité ne dure cependant que 10 rounds, aussi faut-il bien choisir son moment.
+
+Non-utilisable par :~
+
+  @1000 = ~Game Text Update~
+  @1001 = ~Ce composant n'est pas disponible dans votre langue.~
+
+
+    
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// string fixes                                     \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+@106394 = ~Bâton décuplé
+(Évocation)
+Niveau : 2
+Portée : le jeteur de sorts
+Durée : 1 round/niveau
+Temps d'incantation : 2
+Zone d'effet : le jeteur de sorts
+Jet de sauvegarde : aucun
+Ce sort fait apparaître un bâton d'énergie dans la main du magicien. Il est considéré comme une arme magique infligeant 1-6 points de dégâts par coup et pouvant toucher les créatures immunisées contre les armes non magiques. Mais il reste un bâton, que son utilisateur doit savoir manier pour ne pas encourir de pénalité à l'attaque. À chaque coup porté, le bâton a également la possibilité d'absorber 1-2 points de vie de la cible. Ces pv sont aussitôt transférés au mage, mais uniquement pour le soigner, pas pour augmenter ses pv au-dessus du maximum.~
+@109764 = ~Cette arme appartenait à un humain de taille colossale, le rôdeur Althax Grom. Haïssant les géants qui harcelaient sa terre natale, il fut très tôt formé à les exterminer. Il les affronta tout d'abord à l'arc et à l'épée, avant de décider que ces armes n'étaient pas assez efficaces contre de tels adversaires. Son ami druide Eladan enchanta cet énorme maillet pour lui. La réputation de l'arme grandit en même temps que celle d'Althax. Même si le Sommeil des Géants est passé de main en main depuis la mort prématurée d'Althax, il reste, dans l'imaginaire collectif, l'arme de ce colosse.
+
+CARACTÉRISTIQUES :
+
+Dégâts : 1d4+4
+TAC0 : +3
+Type de dégâts : contondants
+Poids : 5
+Facteur de vitesse : 1
+Compétence : marteau
+Type : une main
+Non-utilisable par :
+ Druides
+ Mages
+ Voleurs~
+@112174 = ~Orbe chromatique
+(Évocation) 
+Niveau : 1
+Portée : champ de vision
+Durée : spéciale
+Temps d'incantation : 1 
+Zone d'effet : 1 créature
+Jet de sauvegarde : annule
+Ce sort fait apparaître une sphère de 10 cm de diamètre que le mage peut jeter (en étant sûr de toucher) sur la cible de son choix. L'effet dépend du niveau du personnage. Niveau 1 : la sphère inflige 1-4 points de dégâts et aveugle la victime pour 1 round. Niveau 2 : 1-6 points de dégâts plus grande douleur. Niveau 3 : 1-8 points de dégâts plus brûlure. Niveau 4 : 1-10 points de dégâts plus cécité pour 4 rounds. Niveau 5 et 6 : 1-12 points de dégâts plus étourdissement pour 3 rounds. Niveaux 7 à 9 : 2-16 points de dégâts plus paralysie pour 13 rounds.~
+
+
+//WeiDU prompts
+@-1000= "Le mod %TP2_FILE_NAME% contient"
+@-1001= "composants optionnels distincts.
+Pour gagner du temps, vous pouvez choisir ce que vous souhaitez faire d'eux
+au niveau general plutot que de repondre aux questions pour chacun.
+"
+@-1002= "Que faut-il faire de tous les composants qui NE sont PAS ENCORE installes ?
+Les [I]nstaller, les [S]auter, dem[A]nder pour chacun ? "
+@-1003= "Que faut-il faire de tous les composants qui sont DEJA installes ?
+Les [R]einstaller, les s[U]pprimer, les [S]auter, dem[A]nder pour chacun ? "
+
+@-1004= "S'IL VOUS PLAIT, envoyez par e-mail le fichier"
+@-1005= "a"
+
+@-1006= "Installer le composant ["
+@-1007= "] ?
+[R]einstaller, co[N]server, s[U]pprimer ou [Q]uitter ? "
+@-1008= "] ?
+[I]nstaller, [N]e pas installer ou [Q]uitter ? "
+
+@-1009= "Entrez une partie du nom du module : "
+
+@-1010= "Reinstallation du composant ["
+@-1011= "] "
+@-1012= "Reinstallation dans la langue"
+
+@-1013= "Suppression de l'ancienne installation de ["
+@-1014= "] au prealable..."
+@-1015= "SUPPRESSION REUSSIE DE L'ANCIEN"
+
+@-1016= "Installation en cours"
+@-1017= "ERREUR pendant l'installation de ["
+@-1018= "], retour a l'etat anterieur"
+@-1019= "INSTALLATION REUSSIE"
+@-1020= "Saute"
+@-1021= "Suppression de ["
+@-1022= "] (composant #"
+@-1023= ")"
+@-1024= "SUPPRESSION REUSSIE DE ["
+
+@-1025= "] ?
+[R]einstaller, co[N]server, s[U]pprimer, [Q]uitter ou choisir un parmi :"
+@-1026= "] ?
+[N]e pas installer, [Q]uitter ou choisir un parmi :"
+@-1027= " (installe actuellement)"
+
+@-1028= "Souhaitez-vous afficher les composants de ["
+@-1029= "] ?
+[Y]Oui, [N]on ? "
+
+@-1030= "] ?
+choisir un parmi :"
+@-1031= "] ?
+[R]einstaller, co[N]server, [Q]uitter ou choisir un parmi :"
+@-1032= "INSTALLATION ECHOUEE A CAUSE D'ERREURS"
+@-1033= "INSTALLATION AVEC DES ALERTES"
+@-1034= "Souhaitez-vous afficher les instructions (ReadMe) ? [Y]Oui [N]on"
+@-1035= "Dans la langue"
+
+@-1036= "Saute le GROUPE ["
+@-1037= "] pour cause d'absence des pre-requis."
+
+@-1038= "dem[A]nder pour chaque composant, tout [S]auter, ou choisir une selection pre-definie :"
+@-1039= "dem[A]nder pour chaque composant, [R]einstaller la configuration courante, tout s[U]pprimer, tout [S]auter, ou choisir une selection pre-definie :"
+
+@-1040= "
+Veuillez choisir la langue dans laquelle vous souhaitez jouer au jeu.
+Si par la suite vous desirez jouer au jeu dans une langue differente, il vous
+faudra editer le fichier weidu.conf et reinstaller vos mods.
+"
+@-1041= "Tcheque"
+@-1042= "Allemand"
+@-1043= "Anglais"
+@-1044= "Espagnol"
+@-1045= "Francais"
+@-1046= "Italien"
+@-1047= "Polonais"
+@-1048= "Portugais"
+@-1049= "Turc"
+@-1050= "Japonais"
+@-1051= "Coreen"
+@-1052= "Chinois simplifie"
+
+@-1060= "
+Ce jeu est disponible en plusieurs langues mais WeiDU ne sait pas laquelle a ete choisie quand ce mod a ete installe.
+
+Veuillez indiquer quelle langue du jeu a ete utilisee quand vous avez installe ce mod. Votre choix servira jusqu'a ce que WeiDU s'arrete mais ne sera pas memorise.
+"
+@-1061= "
+Utilisation de"
+@-1062= " et "

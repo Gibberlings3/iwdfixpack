@@ -1,0 +1,67 @@
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Setup Messages                                   \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+   @100 = ~Assorted Fixes~
+
+   @102 = ~Oh, and if you come across any other items that could help restore the Arboretum, I would be most grateful.  Farewell, my friends.~
+   @103 = ~Farewell.~
+   @104 = ~The Arboretum has been returned to its former glory, my friends.  I feel that my work here is done, that it is time to move on.  I thank you.  Farewell.~
+   @105 = ~Farewell, Valestis.~
+   @106 = ~Think nothing of it.~
+   @113 = ~This mod is for Icewind Dale, with our without the expansions Heart of Winter and Trials of the Luremaster. The fixes component of Icewind Dale tweaks must be uninstalled before installing this mod.~
+   
+   @115 = ~Potion of Minor Magic Blocking~
+   @116 = ~This powerful elixir imbues the drinker with immunity to all spells up to and including 2nd level. The effect will only last for 10 rounds however, so careful timing is necessary.
+
+Not usable by:~
+   
+  @1000 = ~Game Text Update~
+  @1001 = ~This is not available in your language.~
+  
+
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// string fixes                                     \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+@106394 = ~Decastave
+(Evocation)
+Level: 2
+Range: Caster 
+Duration: 1 round/level 
+Casting Time: 2
+Area of Effect: Caster
+Saving Throw: None
+This spell creates a staff of force in the caster's hand. It is treated as a magical weapon, doing 1-6 hit points of damage per hit, and it can hit creatures immune to normal weapons. It is a staff, however, so if the caster does not have a proficiency in staff weapons, then the Decastave is used at a penalty. The staff also has the power to drain a target of 1-2 hit points on every strike. These hit points are added to the caster's, but they can only heal damage the caster has taken; they will not raise his hit points beyond his normal maximum.~
+@109764 = ~This weapon was used by the human ranger Althax Grom.  Althax hated the giants that plagued his homeland and was trained to exterminate them from a young age.  Although Althax originally fought his foes using the sword and bow, he quickly decided that those weapons were too slow against his huge foes.  His druid friend, Eladan, enchanted this hammer for him.  The reputation of the weapon grew as legends of Althax grew.  Even though the warhammer has passed through many hands since Althax's untimely demise, Giant's Sleep will always be remembered as the weapon of that powerful warrior.
+
+STATISTICS:
+
+Damage:  1D4 +4
+THAC0:  +3
+Damage type:  Crushing
+Weight:  5
+Speed Factor:  1
+Proficiency Type:  Hammer
+Type:  1-handed
+Not Usable By:
+ Druid
+ Mage
+ Thief~
+@112174 = ~Chromatic Orb (Evocation)
+Level: 1
+Range: Sight of Caster
+Duration: Special
+Casting Time: 1 
+Area of Effect: 1 creature
+Saving Throw: Neg. 
+This spell creates a 4-inch-diameter sphere that can be hurled unerringly to its target. The orb's effect depends on the level of the wizard: a 1st-level sphere inflicts 1-4 damage and blinds the target for one round. A 2nd-level sphere inflicts 1-6 damage and inflicts pain upon the victim. A 3rd-level sphere deals 1-8 damage and burns the victim. A 4th-level sphere deals 1-10 damage and blinds the target for four rounds. A 5th to 6th-level sphere deals 1-12 damage and stuns the target for three rounds. The 7th to 9th-level sphere deals 2-16 damage and paralyzes the victim for 13 rounds.~

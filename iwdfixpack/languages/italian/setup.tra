@@ -1,0 +1,263 @@
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Messaggi di Setup                                \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+     @0 = ~Aggiustamenti ai PNG~
+     @1 = ~Questa fase potrebbe richiedere qualche momento...~
+     @2 = ~Questa componente richiede che il mod "Aggiungi Borse Conservanti a BG" sia installato.~
+     @3 = ~La componente "Consenti il lancio di incantesimi arcani in armatura" è richiesta.~
+     @4 = ~Aggiustamenti/Trucchi di convenienza~
+     @5 = ~Questa componente richiede che il pacchetto "Oggetti esotici" sia installato.~
+     @6 = ~La componente "Consenti nascondersi nelle ombre e abilità da ladro in armatura pesante" è richiesta.~
+     @7 = ~Questa componente non è disponibile nella tua lingua.~
+     @8 = ~Questa componente è solo per BGT.~
+     @9 = ~Cambiamenti alle regole~
+    @10 = ~Questa componente non è disponibile per Tutu.~
+    @11 = ~Aggiustamenti al... trucco~
+    @12 = ~Questa componente richiede Heart of Winter.~
+    @13 = ~Cambiamenti al contenuto~
+    @14 = ~Questa componente è solo per Tutu o BGT.~
+    @15 = ~Questa componente è solo per Tutu.~
+    @16 = ~La funzione di questa componente è già inclusa in - o rimpiazzata da - un'altra facente parte di uno dei mods già installati.~
+    @17 = ~La componente "Tratta le armi +x/+y coerentemente" è richiesta.~
+    @18 = ~Questa componente è stata deprecata.~
+    
+   @100 = ~Correzioni varie~
+   @101 = ~Oltre ad essere di superba manifattura, si possono vedere
+piccole rune di potere incise lungo tutta la superficie. E' ovvio che per la 
+sua creazione è stato dedicato molto tempo e molti sforzi. Sebbene non 
+sia evidente a prima vista, si può vedere un bagliore bluastro emanato 
+dalle rune.
+
+STATISTICHE:
+
+Danni: 2D4 +3
+THAC0: +3
+Tipo di danno: Taglio
+Speciale:
+15% di resistenza al Fuoco
+Probabilità del 50% di infiggere +1D8 danni da Fuoco
+Probabilità del 10% di Stordire il bersaglio
+Peso: 10
+Fattore-Velocità: 8
+Tipo di capacità: Spadone
+Tipo: A una mano
+Non utilizzabile da:
+Druidi
+Chierici
+Maghi
+Ladri~
+   @102 = ~Ah, e se doveste trovare qualche altro oggetto che potesse essere d'aiuto a risanare l'Arboreto, ve ne sarei grato. Addio, amici miei.~
+   @103 = ~Addio.~
+   @104 = ~L'Arboreto risplende nuovamente in tutta la sua gloria, amici miei. Sento che il mio lavoro qui è terminato, ed è tempo di andare. Vi ringrazio. Addio.~
+   @105 = ~Addio, Valestis.~
+   @106 = ~Figurati.~
+   @107 = ~Una scelta eccellente, gentile signore. Tornate fra tre giorni e il vostro scudo sarà pronto.~
+   @108 = ~Pelle di Pietra (Alterazione)
+Livello: 4
+Raggio di azione: Lo stregone
+Durata: Speciale
+Tempo di lancio: 1
+Area d'effetto: Lo stregone
+Tiro-salvezza: Nessuno
+
+Probabilmente uno dei migliori incantesimi difensivi esistenti, Pelle di Pietra rende lo stregone virtualmente invulnerabile contro qualsiasi attacco con arma da taglio, da punta o contundente. Gli attacchi magici, invece, continueranno ad infliggere il normale numero di danni. I successivi 1-4 attacchi (+1 attacco ogni 2 livelli dello stregone) che colpiscono lo stregone non avranno alcun effetto. Lanciare questo incantesimo più volte sullo stregone non ha effetti cumulativi.~
+   @109 = ~Pietra in Carne (Alterazione)
+Livello: 6
+Raggio d'azione: Campo visivo dello stregone
+Durata: Permanente
+Tempo di lancio: 6
+Area d'effetto:  1 Creatura
+Tiro-salvezza: Nessuno
+
+Questo incantesimo è la forma invertita di Carne in Pietra e riporta in vita una creatura che è stata pietrificata.  Allo stesso modo tutto l'equipaggiamento della creatura torna normale. L'effetto è immediato e non è necessario effettuare tiri-salvezza o prove di shock corporeo.~
+   @110 = ~Carne in Pietra (Alterazione)
+Livello: 6
+Raggio d'azione: Campo visivo dello stregone
+Durata: Permanente
+Tempo di lancio: 6
+Area d'effetto:  1 Creatura
+Tiro-salvezza: Nega gli effetti
+
+Questo incantesimo provoca la pietrificazione di una creatura vivente con tutto quello che ha addosso.  La vittima ha diritto ad un tiro-salvezza contro incantesimi per evitarla.  Se una statua creata con questa magia subisce attacchi di qualsiasi genere essa si spezza in minuscoli frammenti, rendendo impossibile per la creatura la trasformazione inversa.  La forma invertita di questo incantesimo può essere lanciata sulla vittima per riportarla in vita, ma questo è l'unico modo.~
+   @111 = ~Parola del Potere: Silenzio (Evocazione)
+Livello: 6
+Raggio d'azione: Campo visivo dello stregone
+Durata: 2 round
+Tempo di lancio: 1
+Area d'effetto: 1 Creatura
+Tiro-salvezza: Nessuno
+
+Questo incantesimo permette allo stregone di pronunciare una parola del potere. Una volta pronunciata, essa impedisce a qualsiasi creatura entro il raggio d'azione di produrre suoni.  Non sono consentiti tiri-salvezza.~
+
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Componenti degli aggiustamenti al... trucco      \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+  @1000 = ~Rimuovi le animazioni degli elmi~
+
+  @2000 = ~Aggiustamenti alle animazioni delle armi~
+
+  @3000 = ~Sostituisci gli effetti degli incantesimi di Icewind Dale con quelli di Baldur's Gate II (Andyr)~
+
+  @4000 = ~Ripristina il logo di IWD nelle schermate di caricamento~
+
+  @5000 = ~Disabilita le icone aggiunte al ritratto del personaggio dagli oggetti equipaggiati~
+
+  @6000 = ~Migliora l'aspetto delle icone~
+
+  @7000 = ~Forza tutti i dialoghi a mettere automaticamente in pausa il gioco~
+    
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Componenti dei cambiamenti al contenuto          \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+@101000 = ~Aggiungi Borse Conservanti a BG~
+@101001 = ~Cintura delle munizioni~
+@101002 = ~Questa bandoliera è l'ideale per tenere proiettili, dardi, frecce o quadrelli.
+
+STATISTICHE:
+
+Capacità: 2,000 proiettili, dardi, frecce o quadrelli in totale.
+Peso: 2~
+
+@101003 = ~Borsa Conservante~
+@101004 = ~Come nel caso di altre borse magiche, questa a prima vista sembra una semplice sacca di tela di 60 cm. per 120 cm. La borsa conservante si apre invece su uno spazio extradimensionale, ed il suo interno è molto più grande dell'esterno. A prescindere da cosa ci sia stato messo dentro, la borsa pesa sempre allo stesso modo.
+
+STATISTICHE:
+
+Peso: 5~
+
+@102000 = ~I negozi possono vendere una maggiore quantità di determinati oggetti (i.e. più frecce, più proiettili, ecc...)~
+
+@103000 = ~Gemme e Pozioni devono essere identificate~
+@103001 = ~Una gemma è un minerale che, se intagliato e levigato, può essere collezionato o usato come gioiello.~
+    
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Componenti dei cambiamenti alle regole           \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+@201000 = ~Usa le spade bastarde a due mani~
+
+@202000 = ~Rendi le clave utilizzabili da chiunque~
+
+@202100 = ~Aggiorna le descrizioni delle clave affinché rispecchino la componente "Rendi le clave utilizzabili da chiunque"~
+@202101 = ~Questa componente richiede che "Rendi le clave utilizzabili da chiunque" sia installato.~
+
+@203000 = ~Rimuovi ogni limite ai punti esperienza~
+
+@204000 = ~Consenti nascondersi nelle ombre e abilità da ladro in armatura pesante~
+
+@205000 = ~Consenti il lancio di incantesimi arcani in armatura~
+
+@206000 = ~Indossa contemporaneamente più oggetti protettivi~
+@206001 = ~Usa le restrizioni del gioco da tavolo~
+
+@206100 = ~Non usare alcuna restrizione~
+
+@207000 = ~Lancia incantesimi dalle pergamene (e da altri oggetti) al livello del personaggio~
+
+@208000 = ~Maestria Superiore per i personaggi multiclasse (Weimer)~
+
+@209000 = ~Implementa la Maestria Superiore come in BG2~
+
+@210000 = ~Imposta a Zero il peso delle armi forgiate magicamente.~
+
+@211000 = ~Tabella originale della THAC0~
+
+@212000 = ~Modifica la tabella di progressione degli incantesimi del Mago~
+@212001 = ~Tabella originale (Blucher)~
+
+@212100 = ~Tabella come nel gioco da tavolo~
+
+@213000 = ~Modifica la tabella di progressione degli incantesimi del Bardo~
+
+@214000 = ~Modifica la tabella di progressione degli incantesimi del Chierico~
+
+@215000 = ~I druidi usano il livello e le tabelle di progressione degli intasimi dei chierici~
+
+@216000 = ~Limita gli allineamenti disponibili ai druidi a quelli consentiti dalle regole della 3a edizione (NB, LN, N, CN, NM)~
+
+@217000 = ~"Allenta" le restrizioni agli oggetti utilizzabili da druidi e chierici multiclasse o con classe duale~
+
+@218000 = ~Applica penalità ai tiri-salvezza contro incantesimi lanciati da incantatori di alto livello~
+@218001 = ~Solo per gli incantesimi arcani~
+
+@218100 = ~Solo per gli incantesimi divini~
+
+@218200 = ~Per gli incantesimi sia arcani che divini~
+    
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Aggiustamenti di convenienza                     \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+@300000 = ~Guadagna più punti ferita al passaggio di livello~
+@300001 = ~Guadagna sempre punti ferita massimi~
+
+@300100 = ~Guadagna punti ferita in stile Neverwinter Nights~
+
+@301000 = ~Tutti i PNG hanno punti ferita massimi (the bigg)~
+
+@302000 = ~Identifica automaticamente tutti gli oggetti~
+
+@303000 = ~Apprendimento semplificato degli incantesimi~
+@303001 = ~Imposta la possibilità di imparare gli incantesimi al 100%~
+
+@303100 = ~Imposta la possibilità di imparare gli incantesimi al 100% e rimuovi il limite al numero di incantesimi di ogni livello che è possibile imparare~
+
+@304000 = ~Borse Conservanti senza fondo~
+
+@305000 = ~Sconti nei negozi per PG con bassa reputazione (Sabre)~
+@305001 = ~Modifica l'effetto della reputazione sui prezzi degli oggetti.~
+
+@305100 = ~La reputazione è ininfluente; prezzi fissi al 100% (Luiz)~
+
+@305200 = ~La reputazione è ininfluente; prezzi fissi all'80% (Luiz)~
+
+@305300 = ~La reputazione è ininfluente; prezzi fissi al 60% (Luiz)~
+
+@306000 = ~Rimuovi il limite di 20 alla quantità di munizioni che si possono impilare contemporaneamente~
+
+@307000 = ~Consenti di impilare un numero illimitato di gemme e gioielli~
+
+@308000 = ~Rimuovi il limite di 5 alla quantità di pozioni che si possono impilare contemporaneamente~
+
+@309000 = ~Rimuovi il limite di 5 alla quantità di pergamene che si possono impilare contemporaneamente~
+
+@310000 = ~Rimuovi tutte le trappole e apri tutte le serrature chiuse (Weimer)~
+
+@311000 = ~Riposa ovunque (Japheth)~
+
+@312000 = ~Rendi bastoni, clave e fionde vendibili (Icelus)~
+
+@313000 = ~Imposta un punteggio minimo per le caratteristiche del personaggio~
+@313001 = ~Seleziona il valore minimo dei punteggi caratteristica, compreso tra 6 e 15:~
+    
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Aggiustamenti ai PNG                             \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\

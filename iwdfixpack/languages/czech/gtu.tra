@@ -1,0 +1,55 @@
+@1014317 = ~Krom mimoÅ™Ã¡dnÃ©ho Å™emeslnÃ©ho zpracovÃ¡nÃ­ lze na tÃ©to
+zbrani pozorovat i runy moci, kterÃ© jsou rozesety po celÃ©m jejÃ­m
+povrchu. Je jasnÃ©, Å¾e aÄ to nenÃ­ na prvnÃ­ pohled patrnÃ©, byla tato
+Äepel vytvÃ¡Å™ena dlouho a usilovnÄ›. Symboly slabÄ› modravÄ› pableskujÃ­.
+
+VLASTNOSTI:
+
+ZranÄ›nÃ­: 2k4 +3
+THAC0. +3
+Druh zranÄ›nÃ­: seÄnÃ©
+ZvlÃ¡Å¡tnÃ­:
+  50%nÃ­ Å¡ance na 1k8 zranÄ›nÃ­ ohnÄ›m
+  10%nÃ­ Å¡ance na omrÃ¡ÄenÃ­ protivnÃ­ka
+VÃ¡ha: 10
+Rychlost: 8
+Dovednost: tÄ›Å¾kÃ© meÄe
+Typ: jednoruÄnÃ­
+NemÅ¯Å¾e uÅ¾Ã­vat:
+ Klerik
+ Druid
+ MÃ¡g
+ ZlodÄ›j~
+@1025876 ~Kamenná kùe (promìna)
+Úroveò: 4
+Dosah: sesílatel
+Trvání: zvláštní
+Doba kouzlení: 1
+Rozsah: sesílatel
+Hod na záchranu: ádnı
+Bezesporu jedno z nejlepších obrannıch kouzel vùbec. Kamenná kùe zpùsobí, e dotyènı je prakticky imunní vùèi jakémukoliv seku, plameni, projektilu apod. (aèkoliv magie a zranìní kouzly osobu ovlivòují normálnì). Další 1 a 4 útoky (+1 útok/2 úrovnì èarodìje), kterımi je cíl napaden, se prostì bez jakéhokoliv úèinku odrazí. Vícenásobné seslání tohoto kouzla se nesèítá.~
+@2207779 =  ~Mocné slovo: ticho (vyvolávání)
+Úroveò: 6
+Dosah: dohled sesílatele
+Trvání: 2 kola
+Doba kouzlení: 1
+Rozsah: 1 bytost
+Hod na záchranu: ádnı
+Tímto kouzlem èarodìj pronese jedno z mocnıch slov. Kdy je vyøèeno, mùe bıt pouito na libovolnou bytost v dosahu, které zabrání ve vydávání zvukù. Hod na záchranu není v tomto pøípadì monı.~
+@2208065 = ~Zkamenìní (promìna)
+Úroveò: 6
+Dosah: dohled sesílatele
+Trvání: stálé
+Doba kouzlení: 6
+Rozsah: 1 bytost
+Hod na záchranu: zruší kouzlo
+Toto kouzlo zmìní jak ivého, tak i nemrtvého tvora na kámen. Protivník má monost hodit si na záchranu pøed kouzlem, chce-li se jeho úèinkùm vyhnout. Toto pùsobení lze zvrátit zaklínadlem 6. úrovnì 'odkamenìní'.~
+@2232394 = ~Odkamenìní (promìna)
+Úroveò: 6
+Dosah: dohled sesílatele
+Trvání: stálé
+Doba kouzlení: 6
+Rozsah: 1 bytost
+Hod na záchranu: ádnı
+Toto kouzlo promìní zkamenìlé bytosti zpìt na normální. Pokud se nìkterı z vašich spoleèníkù stal obìtí baziliška nebo medúzy, toto kouzlo jej opìt oiví.~
+@4411213 =  ~Vynikající volba, veleváenı zákazníku. Pøijï za tøi dny a štít bude pøipraven.~

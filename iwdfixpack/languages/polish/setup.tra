@@ -1,0 +1,208 @@
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+/////        Wiadomoœci   Setupu                       \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+     @0 = ~Poprawki dla NPC~
+     @1 = ~To mo¿e chwilê potrwaæ ...~
+     @2 = ~Ten komponent wymaga komponentu "Torby Przechowywyania dla BG1".~
+     @3 = ~Ten komponent wymaga komponentu "Pozwól na rzucanie czarów maga w zbrojach"~
+     @4 = ~Poprawki udogadniaj¹ce grê~
+     @5 = ~Ten komponent wymaga komponentu "Egzotyczne przedmioty".~
+     @6 = ~Ten komponent wymaga komponentu "Pozwól na u¿ywanie zdolnoœci z³odziejskich w ciê¿kich pancerzach"~
+     @7 = ~Ten komponent nie jest dostêpny w tym jêzyku.~
+     @8 = ~Ten komponent jest tylko dla BGT.~
+     @9 = ~Zmiana zasad~
+    @10 = ~Ten komponent nie jest dostêpny dla Tutu.~
+    @11 = ~Zmiany wygl¹du~
+    @12 = ~Ten komponent wymaga Serca Zimy.~
+    @13 = ~Zmiany zawartoœci~
+    @14 = ~Ten komponent jest tylko dla Tutu lub BGT.~
+    @15 = ~Ten komponent jest tylko dla Tutu.~
+    @16 = ~Komponent ten byl juz zawarty w innym, zainstalowanym juz modzie.~
+    @17 = ~Wymagane poprawki konsekwentnego umagicznienia broni.~
+    @18 = ~Ten komponent zostal usuniety.~
+    
+   @100 = ~Mieszane poprawki~
+   @101 = ~Broñ ta jest szczególna, gdy¿ poza mistrzowskim wykonaniem, zosta³a ona pokryta niewielkimi runami mocy - ponadto jarzy siê delikatnym, niebieskim œwiat³em. Z pewnoœci¹ wiele wysi³ku w³o¿ono w stworzenie tak wspania³ej broni.
+
+PARAMETRY:
+
+Obra¿enia: 2K4+3
+TraK0: +3
+Typ obra¿eñ: ciête
+Specjalne:
+ +15% odpornoœci na ogieñ
+ 50% szans na dodatkowe 1K8 obra¿eñ od ognia
+ 10% szans na og³uszenie
+Waga: 10
+OpóŸnienie: 8
+Rodzaj bieg³oœci: Wielki miecz
+Typ: 1-rêczny
+Nie mo¿e u¿ywaæ:
+ Druid
+ Kap³an
+ Mag
+ Z³odziej~
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Komponenty Zmian Wygl¹du                         \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+  @1000 = ~Usuñ animacje he³mów~
+
+  @2000 = ~Poprawki animacji bronii~
+
+  @3000 = ~Wyglad rzucania zaklec z Baldur's Gate II (Andyr)~
+
+  @4000 = ~Przywrócenie ekranów wczytywania z IWD~
+
+  @5000 = ~Wy³¹cz zmiany w portretach zwi¹zane z przedmiotami~
+
+  @6000 = ~Poprawki Ikon~
+
+  @7000 = ~Wszyskie dialogi zatrzymuj¹ grê~
+    
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Komponenty Zmian Zawartoœci                      \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+@101000 = ~Dodaj Torby Przechowywania~
+@101001 = ~Pasy na amunicje~
+@101002 = ~Ten pas na ramiê jest idealny do przechowywania pocisków do procy, strza³ i be³tów.
+
+STATYSTYKI:
+
+Objêtoœæ: w sumie 2,000 pocisków do procy, strza³ i be³tów.
+Waga: 2~
+/*
+@101003 = ~Torba na mikstury~
+@101004 = ~Zwykle noszona przez podru¿uj¹cych uzdrawiaczy, ta skórzana torba ma wiele ma³ych kieszeni w których mo¿na bezpiecznie umieœciæ delikatne fiolki z miksturami sla ich bezpieczeñstwa w czasie podró¿y. Niezale¿nie od tego ile mikstur znajduje siê w torbie zawsze wa¿y ona tyle samo.
+
+STATYSTYKI:
+
+Objêtoœæ: 100 butelek
+Waga: 2~
+*/
+
+@102000 = ~Sklepy sprzedaj¹ wiêksze stosy przedmiotów~
+
+@103000 = ~Klejnoty i mikstury mymagaja identyfikacji~
+@103001 = ~Klejnot jest to minera³ a odpowiednio pociêty i wypolerowny mozê slu¿yæ jako bi¿uteria.~
+    
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Komponenty Zmieniaj¹ce Zasady                    \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+@201000 = ~Dwurêczne miecze pó³torarêczne~
+
+@202000 = ~Maczugi dla Wszystkich~
+
+@202100 = ~Wprowadzenie opisów dla Maczug dla wszystkich~
+@202101 = ~Wymaga komponentu maczugi dla wszystkich~
+
+@203000 = ~Usuñ ograniczenie doœwiadczenia~
+
+@204000 = ~Pozwól na u¿ywanie umiejêtnoœci z³odziejskich w ciê¿kich pancerzach~
+
+@205000 = ~Pozwól rzucaæ czary maga w Ciê¿kich Pancerzach~
+
+@206000 = ~Noszenie wielu magicznych przedmiotów z prmi¹ do KP~
+@206001 = ~Ograniczenie jak w papierowym AD&D~
+
+@206100 = ~Brak Ograniczeñ~
+
+@207000 = ~Rzucaj czary ze zwojów(i innych przedmiotów) na poziomie postaci~
+
+@208000 = ~Wielkie Mistrzostwo dla Wieloklasowców (Weimer)~
+
+@209000 = ~Wielkie mistrzostwo z BG2~
+
+@210000 = ~Zmiana wagi Magicznych Broni do 0~
+
+@211000 = ~Nieograniczone tabele trafienia~
+
+@212000 = ~Alternatywna tabela zaklec Maga~
+@212001 = ~Tabela nieograniczona (Blucher)~
+
+@212100 = ~Tabela podrecznikowa~
+
+@213000 = ~Zmiana tabeli zaklec Barda~
+
+@214000 = ~Zmiana tabeli zaklec Kaplana~
+
+@215000 = ~Druidzi u¿ywaj¹ rozwoju czarów Kleryków~
+
+@216000 = ~3-edycyjne ograniczenia charakteru dla Druidow (ND, PN, N, CN, NZ)~
+
+@217000 = ~Usuniecie ograniczen przedmiotow dla multi- i dwuklasowych Druidow i Kaplanow~
+    
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Udogodnienia gry                                 \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+@300000 = ~Wiêksza iloœæ punktów zdrowia prz awansie~
+@300001 = ~Maximum~
+
+@300100 = ~Tak jak w NWN ~
+
+@301000 = ~Maxymalna iloœæ punktów zdrowia dla NPC(the bigg)~
+
+@302000 = ~Wszystkie przedmioty zidentyfikowane~
+
+@303000 = ~£atwa Nauka Czarów~
+@303001 = ~100% Szansa Nauczenia Czaru~
+
+@303100 = ~100% Szansa Nauczenia Czaru oraz brak maksymalnej iloœci czarów~
+
+@304000 = ~Uczyñ Torby Przechowywania Bezdennymi~
+
+@305000 = ~Obni¿ki dla grup o niskiej reputacji (Sabre)~
+@305001 = ~Zmiana wplywu Reputacji na ceny w sklepach~
+
+@305100 = ~Reputacja nic nie zmienia, ceny w sklepach ustalone na poziomie 100% (Luiz)~
+
+@305200 = ~Reputacja nic nie zmienia, ceny w sklepach ustalone na poziomie 80% (Luiz)~
+
+@305300 = ~Reputacja nic nie zmienia, ceny w sklepach ustalone na poziomie 60% (Luiz)~
+
+@306000 = ~Nieograniczone stackowanie amunicji~
+
+@307000 = ~Nieograniczone stackowanie kamieni i bi¿uterii~
+
+@308000 = ~Nieograniczone stackowanie mikstur~
+
+@309000 = ~Nieograniczone stackowanie zwojów~
+
+@310000 = ~Brak pu³apek i zamków(Weimer)~
+
+@311000 = ~Odpoczywaj gdziekolwiek(Japheth)~
+
+@312000 = ~Mo¿liwoœæ sprzedawania kijów, maczug i proc (Icelus)~
+    
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Poprawki NPC                                     \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\

@@ -1,0 +1,57 @@
+@1014317 = ~Además de la gran calidad de su creación, se aprecian runas
+de
+poder por toda la superficie. Es obvio que se ha invertido mucho tiempo
+en la creación de este aparato y aunque no se aprecia al principio, un
+brillo azul emana de las runas.
+
+CARACTERÍSTICAS:
+
+Daño:  2D4 +3
+THAC0: +3
+Tipo de Daño:  Cortante
+Especial:
+  +15% Resistencia al Fuego
+  50% posibilidad de +1D8 daño por fuego
+  10% posibilidad de que el objetivo sea atontado
+Peso: 10
+Factor de velocidad: 8
+Tipo de talento: Espada grande
+Tipo :  1-puño
+No Usable por:
+ Druida
+ Clerigo
+ Mago
+ Ladrón~
+@1025876 ~Piel Pétrea (Alteración)
+Nivel: 4
+Rango: Lanzador
+Duración: Special
+Tiempo de lanzamiento: 1
+Area de efecto: Lanzador
+Tirada de salvación: Ninguna
+Uno de los mejores hechizos de protección jamás creados, Piel pétrea hace que la criatura afectada sea virtualmente inmune a cualquier corte, proyectil o similar (aunque los hechizos y el daño de los hechizos afectarán a la criatura normalmente). Los siguientes 1 a 4to ataques (+1 ataque/2 dos niveles del lanzador) que golpeen a la criatura simplemente rebotarán en ella sin efecto. El lanzar este hechizo varias veces no tiene acción acumulativa.~
+@2207779 =  ~Palabra de poder: Silencio (Evocación)
+Nivel: 6
+Rango: Visión del Lanzador
+Duración: 2 turnos
+Tiempo de lanzamiento: 1
+Area de efecto: 1 criatura
+Tirada de salvación: Ninguna
+Este hechizo permite al lanzador decir una de las palabras del poder. Cuando es pronunciada, el hechizo puede ser utilizado contra cualquier criatura que se encuentre dentro del rango de lanzamiento, evitando que puedan emitir sonidos. No existe tirada de salvación.~
+@2208065 = ~De la carne a la piedra (Alteración)
+Nivel: 6
+Rango: Visión del Lanzador
+Duración: Permanente
+Tiempo de lanzamiento: 6
+Area de efecto: 1 criatura
+Tirada de salvación: Neg.
+Este hechizo torna a la criatura objetivo en piedra. Pueden salvar contra conjuros para evitar el efecto. Los efectos de este hechizo pueden ser revertidos con el hechizo de nivel 6 De la piedra a la carne. Este hechizo funciona contra criaturas no-muertas.~
+@2232394 = ~De la piedra a la carne (Alteración)
+Nivel: 6
+Rango: Visión del Lanzador
+Duración: Permanente
+Tiempo de lanzamiento: 6
+Area de efecto: 1 criatura
+Tirada de salvación: Ninguna
+Este hechizo hace que una criatura petrificada regrese a la normalidad.  Si uno de tus compañeros ha caído víctima de un basilisco o medusa, este hechizo le regresará la salud.~
+@4411213 =  ~Una elección excelente. Regresa en tres días y tu escudo estará listo.~

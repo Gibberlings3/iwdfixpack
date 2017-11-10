@@ -1,0 +1,53 @@
+@1014317 = ~Elle a été ouvragée par un maître-artisan et de minuscules runes magiques sont visibles à sa surface. Sa création a manifestement demandé beaucoup de temps et, même si cela n'est pas apparent au premier coup d'oeil, une lueur bleutée semble émaner des runes.
+
+CARACTERISTIQUES :
+
+Dégâts : 2d4+3
+TAC0 : +3
+Type de dégâts : tranchants
+Spécial :
+Résistance au feu : +15 %
++1d8 de dégâts de feu (50% de chances)
+10 % de chances d'étourdir la cible
+Poids : 10
+Facteur de vitesse : 8
+Compétence : épée de grande taille
+Type : une main
+Non-utilisable par :
+Druides
+Clercs
+Mages
+Voleurs~
+@1025876 = ~Peau de pierre (Altération)
+Niveau : 4
+Portée : contact
+Durée : spéciale
+Temps d'incantation : 1
+Zone d'effet : le jeteur de sorts
+Jet de sauvegarde : aucun
+Peau de pierre est sans doute l'un des meilleurs sorts de défense qui soient, puisqu'il immunise virtuellement le sujet contre toutes les attaques physiques (même si les sorts continuent de l'affecter normalement). A partir du moment de l'incantation, les 1 à 4 attaques suivantes (plus 1 tous les deux niveaux) rebondissent sans affecter le mage. Jeter ce sort à de multiples reprises n'a pas le moindre effet.~
+@2207779 =  ~Mot de pouvoir, silence (Evocation)
+Niveau : 6
+Portée : champ de vision
+Durée : 2 rounds
+Temps d'incantation : 1
+Zone d'effet : 1 créature
+Jet de sauvegarde : aucun
+Ce sort permet d'invoquer l'un des mots de pouvoir. La créature prise pour cible se retrouve dans l'incapacité de prononcer le moindre son, et ce sans jet de sauvegarde.~
+@2208065 = ~Transmutation de la chair en pierre (Altération)
+Niveau : 6
+Portée : champ de vision
+Durée : permanente
+Temps d'incantation : 6
+Zone d'effet : 1 créature
+Jet de sauvegarde : annule
+Ce sort transforme une créature en pierre. La victime a droit à un jet de sauvegarde contre les sorts pour éviter la transformation. Les effets de ce sort peuvent être annulés avec le sort de magicien de niveau 6, Transformation de la pierre en chair. Ce sort fonctionne également sur les morts-vivants.~
+@2232394 = ~Transformation de la pierre en chair (Altération)
+Niveau : 6
+Portée : champ de vision
+Durée : permanente
+Temps d'incantation : 6
+Zone d'effet : 1 créature
+Jet de sauvegarde : aucun
+Ce sort ramène à la vie quiconque a été pétrifié. Si l'un de vos compagnons a été victime d'un basilic ou d'une méduse, ce sort lui redonnera un état normal.~
+@4411213 =  ~Un choix des plus judicieux, cher client. Revenez dans trois jours et votre bouclier sera prêt.~ ~Un choix des plus judicieux, chère cliente. Revenez dans trois jours et votre bouclier sera prêt.~

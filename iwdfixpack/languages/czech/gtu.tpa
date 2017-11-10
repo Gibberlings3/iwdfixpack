@@ -1,0 +1,16 @@
+STRING_SET 14317 @1014317 // adds fire resist to descript of Incinerator
+STRING_SET 25876 @1025876 // stoneskin descript should say alteration not evocation
+
+ACTION_IF(GAME_IS ~iwd~ THEN BEGIN
+
+  STRING_SET  7779 @2207779 // PW Silence descript should say conj/summ
+  STRING_SET  8065 @2208065 // flesh to stone descript should say alteration not evocation
+  STRING_SET 32394 @2232394 // stone to flesh descript should say alteration not evocation
+
+END
+
+ACTION_IF GAME_IS ~how totlm~ THEN BEGIN
+
+  STRING_SET 11213 @4411213 // Nym's timer reduced to three days, but still says 10
+
+END

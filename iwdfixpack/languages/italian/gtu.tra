@@ -1,0 +1,61 @@
+@1014317 = ~Oltre ad essere di superba manifattura, si possono vedere
+piccole rune di potere incise lungo tutta la superficie. E' ovvio che per la
+sua creazione è stato dedicato molto tempo e molti sforzi. Sebbene non
+sia evidente a prima vista, si può vedere un bagliore bluastro emanato
+dalle rune.
+
+STATISTICHE:
+
+Danni: 2D4 +3
+THAC0: +3
+Tipo di danno: Taglio
+Speciale:
+15% di resistenza al Fuoco
+Probabilità del 50% di infiggere +1D8 danni da Fuoco
+Probabilità del 10% di Stordire il bersaglio
+Peso: 10
+Fattore-Velocità: 8
+Tipo di capacità: Spadone
+Tipo: A una mano
+Non utilizzabile da:
+Druidi
+Chierici
+Maghi
+Ladri~
+@1025876 ~Pelle di Pietra (Alterazione)
+Livello: 4
+Raggio di azione: Lo stregone
+Durata: Speciale
+Tempo di lancio: 1
+Area d'effetto: Lo stregone
+Tiro-salvezza: Nessuno
+
+Probabilmente uno dei migliori incantesimi difensivi esistenti, Pelle di Pietra rende lo stregone virtualmente invulnerabile contro qualsiasi attacco con arma da taglio, da punta o contundente. Gli attacchi magici, invece, continueranno ad infliggere il normale numero di danni. I successivi 1-4 attacchi (+1 attacco ogni 2 livelli dello stregone) che colpiscono lo stregone non avranno alcun effetto. Lanciare questo incantesimo più volte sullo stregone non ha effetti cumulativi.~
+@2207779 =  ~Parola del Potere: Silenzio (Evocazione)
+Livello: 6
+Raggio d'azione: Campo visivo dello stregone
+Durata: 2 round
+Tempo di lancio: 1
+Area d'effetto: 1 Creatura
+Tiro-salvezza: Nessuno
+
+Questo incantesimo permette allo stregone di pronunciare una parola del potere. Una volta pronunciata, essa impedisce a qualsiasi creatura entro il raggio d'azione di produrre suoni.  Non sono consentiti tiri-salvezza.~
+@2208065 = ~Carne in Pietra (Alterazione)
+Livello: 6
+Raggio d'azione: Campo visivo dello stregone
+Durata: Permanente
+Tempo di lancio: 6
+Area d'effetto:  1 Creatura
+Tiro-salvezza: Nega gli effetti
+
+Questo incantesimo provoca la pietrificazione di una creatura vivente con tutto quello che ha addosso.  La vittima ha diritto ad un tiro-salvezza contro incantesimi per evitarla.  Se una statua creata con questa magia subisce attacchi di qualsiasi genere essa si spezza in minuscoli frammenti, rendendo impossibile per la creatura la trasformazione inversa.  La forma invertita di questo incantesimo può essere lanciata sulla vittima per riportarla in vita, ma questo è l'unico modo.~
+@2232394 = ~Pietra in Carne (Alterazione)
+Livello: 6
+Raggio d'azione: Campo visivo dello stregone
+Durata: Permanente
+Tempo di lancio: 6
+Area d'effetto:  1 Creatura
+Tiro-salvezza: Nessuno
+
+Questo incantesimo è la forma invertita di Carne in Pietra e riporta in vita una creatura che è stata pietrificata.  Allo stesso modo tutto l'equipaggiamento della creatura torna normale. L'effetto è immediato e non è necessario effettuare tiri-salvezza o prove di shock corporeo.~
+@4411213 =  ~Una scelta eccellente, gentile signore. Tornate fra tre giorni e il vostro scudo sarà pronto.~

@@ -1,0 +1,255 @@
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Setup Messages                                   \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+     @0 = ~Upravy NPC~
+     @1 = ~Tento krok muze chvilku trvat...~
+     @2 = ~Tato cast vyzaduje komponentu 'Pridat do BG1 Bezedny vak'~
+     @3 = ~Tato cast vyzaduje komponentu
+'Umozneni sesilani magovych kouzel ve zbrojich'~
+     @4 = ~Vyhodne upravy/cheaty~
+     @5 = ~Pro tuto komponentu  je vyzadovana 'Sada exotickych predmetu'~
+     @6 = ~Vyzaduje komponentu 'Umozneni pouziti zlodejskych schopnosti
+a ukryvani v tezkych zbrojich'~
+     @7 = ~Tato cast není dostupna ve tvem jazyce~
+     @8 = ~Tato cast je pouze pro BGT(Baldur's Gate Trilogy)~
+     @9 = ~Zmeny pravidel~
+    @10 = ~Tato cast neni dostupna pro BG1Tutu~
+    @11 = ~Kosmeticke upravy~
+    @12 = ~Tato cast modu vyzaduje datadisk Throne of Bhaal~
+    @13 = ~Vyhovujici upravy~
+    @14 = ~Tato cas je pouze pro BG1Tutu nebo BGT(Baldur's Gate Trilogy)~
+    @15 = ~Tato cast je pouze pro BG1Tutu~
+    @16 = ~Funkce teto casti modu uz bud tva hra obsahuje nebo
+je prekonana jinym, jiz nainstalovanym modem~
+    @17 = ~Vyzaduje cast modu Ucineni +x/+y zbrani konzistentnimi.~
+    @18 = ~Tato cast modu uz je zavrzena.~
+
+   @100 = ~Rozmanite opravy~
+   @101 = ~Krom mimoÅ™Ã¡dnÃ©ho Å™emeslnÃ©ho zpracovÃ¡nÃ­ lze na tÃ©to
+zbrani pozorovat i runy moci, kterÃ© jsou rozesety po celÃ©m jejÃ­m 
+povrchu. Je jasnÃ©, Å¾e aÄ to nenÃ­ na prvnÃ­ pohled patrnÃ©, byla tato 
+Äepel vytvÃ¡Å™ena dlouho a usilovnÄ›. Symboly slabÄ› modravÄ› pableskujÃ­.
+
+VLASTNOSTI:
+
+ZranÄ›nÃ­: 2k4 +3
+THAC0. +3
+Druh zranÄ›nÃ­: seÄnÃ©
+ZvlÃ¡Å¡tnÃ­:
+  50%nÃ­ Å¡ance na 1k8 zranÄ›nÃ­ ohnÄ›m
+  10%nÃ­ Å¡ance na omrÃ¡ÄenÃ­ protivnÃ­ka
+VÃ¡ha: 10
+Rychlost: 8
+Dovednost: tÄ›Å¾kÃ© meÄe
+Typ: jednoruÄnÃ­
+NemÅ¯Å¾e uÅ¾Ã­vat:
+ Klerik
+ Druid
+ MÃ¡g
+ ZlodÄ›j~
+   @102 = ~Ó, a kdybyste narazili na další vìci, které by mohly pomoci obnovit Arboretum, byla bych vám velmi vdìèná. Sbohem, pøátelé.~
+   @103 = ~Sbohem.~
+   @104 = ~Arboretu byla navrácena jeho bıvalá krása, pøátelé. Cítím, e tu moje práce skonèila a nastal èas k odchodu. Dìkuji vám. Sbohem.~
+   @105 = ~Sbohem, Valestis.~
+   @106 = ~U na to nemysli.~
+   @107 = ~Vynikající volba, veleváenı zákazníku. Pøijï za tøi dny a štít bude pøipraven.~
+   @108 = ~Kamenná kùe (promìna)
+Úroveò: 4
+Dosah: sesílatel
+Trvání: zvláštní
+Doba kouzlení: 1
+Rozsah: sesílatel
+Hod na záchranu: ádnı
+Bezesporu jedno z nejlepších obrannıch kouzel vùbec. Kamenná kùe zpùsobí, e dotyènı je prakticky imunní vùèi jakémukoliv seku, plameni, projektilu apod. (aèkoliv magie a zranìní kouzly osobu ovlivòují normálnì). Další 1 a 4 útoky (+1 útok/2 úrovnì èarodìje), kterımi je cíl napaden, se prostì bez jakéhokoliv úèinku odrazí. Vícenásobné seslání tohoto kouzla se nesèítá.~
+   @109 = ~Odkamenìní (promìna)
+Úroveò: 6
+Dosah: dohled sesílatele
+Trvání: stálé
+Doba kouzlení: 6
+Rozsah: 1 bytost
+Hod na záchranu: ádnı
+Toto kouzlo promìní zkamenìlé bytosti zpìt na normální. Pokud se nìkterı z vašich spoleèníkù stal obìtí baziliška nebo medúzy, toto kouzlo jej opìt oiví.~
+   @110 = ~Zkamenìní (promìna)
+Úroveò: 6
+Dosah: dohled sesílatele
+Trvání: stálé
+Doba kouzlení: 6
+Rozsah: 1 bytost
+Hod na záchranu: zruší kouzlo
+Toto kouzlo zmìní jak ivého, tak i nemrtvého tvora na kámen. Protivník má monost hodit si na záchranu pøed kouzlem, chce-li se jeho úèinkùm vyhnout. Toto pùsobení lze zvrátit zaklínadlem 6. úrovnì 'odkamenìní'.~
+   @111 = ~Mocné slovo: ticho (vyvolávání)
+Úroveò: 6
+Dosah: dohled sesílatele
+Trvání: 2 kola
+Doba kouzlení: 1
+Rozsah: 1 bytost
+Hod na záchranu: ádnı
+Tímto kouzlem èarodìj pronese jedno z mocnıch slov. Kdy je vyøèeno, mùe bıt pouito na libovolnou bytost v dosahu, které zabrání ve vydávání zvukù. Hod na záchranu není v tomto pøípadì monı.~
+
+
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Cosmetic Changes Components                      \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+  @1000 = ~Odstranit animace prileb~
+
+  @2000 = ~Uprava animace zbrani~
+
+  @3000 = ~Graficke efekty kouzleni z Icewind Dale (Andyr)~
+
+  @4000 = ~Obnoveni nahravacich IWD obrazovek~
+
+  @5000 = ~Zruseni ikon na portretu od nosenych predmetu~
+
+  @6000 = ~Vylepseni ikon~
+
+  @7000 = ~Pri kazdem dialogu zapauzovat hru~
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Content Changes Components                       \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+@101000 = ~Pridat do BG1 Bezedny vak~
+@101001 = ~Pas na munici~
+@101002 = ~Tento pás je ideální pro nošení kamenù do praku, šipek nebo šípù.
+
+VLASTNOSTI:
+
+Kapacita: celkovì 2000 støel do praku, vrhacích šipek, šípù nebo šipek
+Váha: 2~
+@101003 = ~Vak dr¾ení~
+@101004 = ~Podobnì jako ostatní magické vaky vypadá i tento jako bì¾nı plátìnı pytel o velikosti zhruba 60 krát 120 cm. Otvírá se v¹ak do nedimenzionálního prostoru, tak¾e jeho vnitøní rozmìry daleko pøesahují rozmìry vnìj¹í. Bez ohledu na to, co do nìj ulo¾í¹, bude tento tlumok vá¾it poøád stejnì.
+
+VLASTNOSTI:
+
+Váha: 5~
+
+@102000  = ~Obchody nabizeji vetsi mnozstvi predmetu najednou~
+
+@103000 = ~Klenoty a lektvary vyzaduji identifikaci~
+@103001 = ~Drahokam je ruda, po které je, kdy se obrousí nebo na ní vytvoøí fazety a vyleští, poptávka nebo se mùe uívat na šperky.~
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Rule Changes Components                          \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+@201000 = ~Obourucni mece bastardy~
+
+@202000 = ~Kyje pouzitelne kazdym~
+
+@202100 = ~Upravy popisu pro komponentu 'Kyje pouzitelne kazdym'~
+@202101 = ~Vyzaduje nainstalovanou komponentu 'Kyje pouzitelne kazdym'~
+
+@203000 = ~Odstranit limit zkusenosti~
+
+@204000 = ~Umozneni pouziti zlodejskych schopnosti a ukryvani v tezkych zbrojich~
+
+@205000 = ~Umozneni sesilani magovych kouzel ve zbrojich~
+
+@206000 = ~Moznost noseni vice ochrannych predmetu najednou~
+@206001 = ~Omezeni podle P&P~
+
+@206100 = ~Bez omezeni~
+
+@207000 = ~Sesilani kouzel ze svitku (a jinych predmetu) na levelu
+postavy~
+
+@208000 = ~Velmistrovstvi ve zbranovych dovednostech
+i pro multi-povolani (Weimer)~
+
+@209000 = ~Prave velmistrovstvi ve zbrani (Baldurdash)~
+
+@210000 = ~Zmena magicky vytvorenych zbrani na nulovou vahu~
+
+@211000 = ~Upravena THAC0 tabulka~
+
+@212000 = ~Uprav tabulku sesilani kouzel pro magy~
+@212001 = ~Upravena tabulka (Blucher)~
+
+@212100 = ~PnP tabulka~
+
+@213000 = ~Uprav tabulku sesilani kouzel pro bardy~
+
+@214000 = ~Uprav tabulku sesilani kouzel pro kleriky~
+
+@215000 = ~Pouzit pro druida knezovy tabulky postupu v urovnich
+a kouzlech~
+
+@216000 = ~Druidi pouzivaji omezeni presvedceni z 3e pravidel (ND, ZN, N, CN, NZ)~
+
+@217000 = ~Uvolneni predmetovych omezeni pro multi- a dualpovolani knezich a druidu~
+
+@218000 = ~Pridej penalizaci na zachranne hody pro kouzla sesilana postavami na vysokych levelech~
+@218001 = ~Pouze pro arkanni magii~
+
+@218100 = ~Pouze pro knezskou magii~
+
+@218200 = ~Arkanni & knezska magie~
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Convenience Tweaks                               \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+@300000 = ~Vice zivotu pri levelovani~
+@300001 = ~Maximum~
+
+@300100 = ~NWN styl~
+
+@301000 = ~Maximum zivotu pro NPC (the bigg)~
+
+@302000 = ~Vsechny predmety identifikovane~
+
+@303000 = ~Jednoduche uceni kouzel~
+@303001 = ~100% nauceni kouzel~
+
+@303100 = ~100% nauceni kouzel a neomezeny pocet kouzel na level~
+
+@304000 = ~Skutecne bezedne Bezedne vaky~
+
+@305000 = ~Slevy za nizkou reputaci (Sabre)~
+@305001 = ~Zmen vliv reputace na ceny v obchodech~
+
+@305100 = ~Reputace nema zadny vliv, ceny v obchodech nastaveny na 100% (Luiz)~
+
+@305200 = ~Reputace nema zadny vliv, ceny v obchodech nastaveny na 80% (Luiz)~
+
+@305300 = ~Reputace nema zadny vliv, ceny v obchodech nastaveny na 60% (Luiz)~
+
+@306000 = ~Neomezene skladani streliva do jednoho slotu~
+
+@307000 = ~Neomezene skladani drahokamu a sperku do jednoho slotu~
+
+@308000 = ~Neomezene skladani lektvaru do jednoho slotu~
+
+@309000 = ~Neomezene skladani svitku do jednoho slotu~
+
+@310000 = ~Zadne pasti a zamky (Weimer)~
+
+@311000 = ~Odpocinek je mozny kdekoliv (Japheth)~
+
+@312000 = ~Prodejne hole, kyje a praky (Icelus)~
+
+@313000 = ~Cheat minimalnich vlastnosti~
+@313001 = ~Zvol minimalni hodnotu vlastnosti, v rozmezi 6 az 15:~

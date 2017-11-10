@@ -1,0 +1,253 @@
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Setup Messages                                   \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+     @0 = ~Retoques a los NPCs~
+     @1 = ~Esto puede llevar unos momentos ...~
+     @2 = ~Este componente requiere "Agregar bolsas contenedoras al BG1"~
+     @3 = ~Requiere el componente 'Permitir lanzar hechizos arcanos con armadura'~
+     @4 = ~Retoques/Trucos de conveniencia~
+     @5 = ~El Exotic Item Pack se requiere para este componente.~
+     @6 = ~Requiere el componente 'Permitir robar y actividades de ladron en armadura pesada'~
+     @7 = ~Este componente no esta disponible en tu idioma.~
+     @8 = ~Este componete es solo para BGT.~
+     @9 = ~Cambio de Reglas~
+    @10 = ~Este componente no es necesario para tutu~
+    @11 = ~Cambios Cosméticos~
+    @12 = ~Se requiere Heart of Winter para este componente.~
+    @13 = ~Cambio de Contenidos~
+    @14 = ~Este componente es solo para Tutu o BGT.~
+    @15 = ~Este componente es solo para Tutu.~
+    @16 = ~La funcionalidad de este componente está ya incluída en algún mod instalado previamente.~
+    @17 = ~Este componente requiere el hacer consistentes las armas +x/+y.~
+    @18 = ~Este componente está desactualizado.~
+
+   @100 = ~Otros Arreglos~
+   @101 = ~Además de la gran calidad de su creación, se aprecian runas
+de
+poder por toda la superficie. Es obvio que se ha invertido mucho tiempo
+en la creación de este aparato y aunque no se aprecia al principio, un
+brillo azul emana de las runas.
+
+CARACTERÍSTICAS:
+
+Daño:  2D4 +3
+THAC0: +3
+Tipo de Daño:  Cortante
+Especial:
+  +15% Resistencia al Fuego
+  50% posibilidad de +1D8 daño por fuego
+  10% posibilidad de que el objetivo sea atontado
+Peso: 10
+Factor de velocidad: 8
+Tipo de talento: Espada grande
+Tipo :  1-puño
+No Usable por:
+ Druida
+ Clerigo
+ Mago
+ Ladrón~
+   @102 = ~Oh, y si encuentras otros objetos que puedan ayudar a arreglar el invernadero, estaría agradecido. Adiós, amigos.~
+   @103 = ~Adiós.~
+   @104 = ~El invernadero ha sido restaurado a su antigua gloria, amigos. Siento que el trabajo aquí está terminado, es hora de continuar. Gracias. Adiós.~
+   @105 = ~Adiós, Valestis.~
+   @106 = ~No pasa nada.~
+   @107 = ~Una elección excelente. Regresa en tres días y tu escudo estará listo.~
+   @108 = ~Piel Pétrea (Alteración)
+Nivel: 4
+Rango: Lanzador
+Duración: Special
+Tiempo de lanzamiento: 1
+Area de efecto: Lanzador
+Tirada de salvación: Ninguna
+Uno de los mejores hechizos de protección jamás creados, Piel pétrea hace que la criatura afectada sea virtualmente inmune a cualquier corte, proyectil o similar (aunque los hechizos y el daño de los hechizos afectarán a la criatura normalmente). Los siguientes 1 a 4to ataques (+1 ataque/2 dos niveles del lanzador) que golpeen a la criatura simplemente rebotarán en ella sin efecto. El lanzar este hechizo varias veces no tiene acción acumulativa.~
+   @109 = ~De la piedra a la carne (Alteración)
+Nivel: 6
+Rango: Visión del Lanzador
+Duración: Permanente
+Tiempo de lanzamiento: 6
+Area de efecto: 1 criatura
+Tirada de salvación: Ninguna
+Este hechizo hace que una criatura petrificada regrese a la normalidad.  Si uno de tus compañeros ha caído víctima de un basilisco o medusa, este hechizo le regresará la salud.~
+   @110 = ~De la carne a la piedra (Alteración)
+Nivel: 6
+Rango: Visión del Lanzador
+Duración: Permanente
+Tiempo de lanzamiento: 6
+Area de efecto: 1 criatura
+Tirada de salvación: Neg.
+Este hechizo torna a la criatura objetivo en piedra. Pueden salvar contra conjuros para evitar el efecto. Los efectos de este hechizo pueden ser revertidos con el hechizo de nivel 6 De la piedra a la carne. Este hechizo funciona contra criaturas no-muertas.~
+   @111 = ~Palabra de poder: Silencio (Evocación)
+Nivel: 6
+Rango: Visión del Lanzador
+Duración: 2 turnos
+Tiempo de lanzamiento: 1
+Area de efecto: 1 criatura
+Tirada de salvación: Ninguna
+Este hechizo permite al lanzador decir una de las palabras del poder. Cuando es pronunciada, el hechizo puede ser utilizado contra cualquier criatura que se encuentre dentro del rango de lanzamiento, evitando que puedan emitir sonidos. No existe tirada de salvación.~
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Cosmetic Changes Components                      \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+  @1000 = ~Quitar animaciones de los yelmos~
+
+  @2000 = ~Cambios en las animaciones de armas~
+
+  @3000 = ~Graficos de lanzamiento de Baldur's Gate II (Andyr)~
+
+  @4000 = ~Restablecer escenas de apertura de IWD.~
+
+  @5000 = ~Desactivar los Iconos de los Portraits que agregan los Objetos Equipados~
+
+  @6000 = ~Mejoras en los Iconos~
+
+  @7000 = ~Forzar a pausa a todos los diálogos~
+    
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Content Changes Components                       \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+@101000  = ~Agregar bolsas contenedoras al BG1~
+@101001  = ~Faja de municiones~
+@101002  = ~Esta faja se usa para poder guardar balas, dardos, flechas o virotes.
+
+ESTADÍSTICAS:
+
+Capacidad: 2,000 balas, dardos, flechas o balas en total
+Peso: 2~
+@101003 = ~Bolsa de contención~
+@101004 = ~Al igual que sucede con otras bolsas mágicas, ésta tiene el aspecto de un saco de tela corriente de entre 60 centímetros y 1'20 metros de alto. La bolsa de contención se abre a un espacio no dimensional, y es mayor por dentro que por fuera. El saco siempre pesará lo mismo, sin importar lo que se meta en su interior.
+
+CARACTERÍSTICAS:
+
+Peso: 5~
+@101003 = ~Bolsa de contención~
+@101004 = ~Al igual que sucede con otras bolsas mágicas, ésta tiene el aspecto de un saco de tela corriente de entre 60 centímetros y 1'20 metros de alto. La bolsa de contención se abre a un espacio no dimensional, y es mayor por dentro que por fuera. El saco siempre pesará lo mismo, sin importar lo que se meta en su interior.
+
+CARACTERÍSTICAS:
+
+Peso: 5~
+
+@102000 = ~Las tiendas venden mas cantidad de objetos apilados~
+
+@103000  = ~Las gemas y pociones requieren ser identificadas~
+@103001 = ~Una gema es un mineral que al cortarse o facetarse puede ser usada en joyería.~
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Rule Changes Components                          \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+@201000 = ~Espadas bastardas de dos puños~
+
+@202000 = ~Palos universales~
+
+@202100 = ~Mejoras en las descripciones de los palos universales~
+@202101 = ~Requiere tener instalado el componente de Palos Universales~
+
+@203000 = ~Quita el tope de nivel~
+
+@204000 = ~Permitir habilidades de ladrón con armadura pesada~
+
+@205000 = ~Permitir lanzar hechizos con armadur~
+
+@206000 = ~Usar Multiples Objetos de Proteccion~
+@206001 = ~Restricciones al estilo P&P~
+
+@206100 = ~Sin Restricciones~
+
+@207000 = ~Lanzar hechizos de pergaminos (y otros objetos) al nivel del personaje~
+
+@208000 = ~Gran Maestria en armas para los multi-clase (Weimer)~
+
+@209000 = ~Gran Maestria de BG2~
+
+@210000 = ~Cambiar el peso de las armas creadas mágicamente a 0~
+
+@211000 = ~Tabla de THAC0 extendida ~
+
+@212000 = ~Alterar la tabla de progresión de hechizos de mago~
+@212001 = ~Tabla extendida (Blucher)~
+
+@212100 = ~Tabla PnP ~
+
+@213000 = ~Alterar la tabla de progresión de hechizos de bardo~
+
+@214000 = ~Alterar la tabla de progresión de hechizos de clérigo~
+
+@215000 = ~Druidas usan progresion de clérigos al subir niveles y hechizos~
+
+@216000 = ~Los druidas usan restricciones de alineamiento de 3e (NB, NL, NV, NC, NM)~
+
+@217000 = ~Relajar las restricciones de los objetos para clérigos y druidas multiclase y de clase dual~
+
+@218000 = ~Agregar penalizaciones de salvación para los hechizos lanzados por lanzadores de alto nivel~
+@218001 = ~Sólo magia arcana~
+
+@218100 = ~Sólo magia divina~
+
+@218200 = ~Magias arcana y divina~
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// Convenience Tweaks                               \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+@300000 = ~Mayor número de PG al subir de nivel~
+@300001 = ~Máximo~
+
+@300100 = ~Estilo NWN~
+
+@301000 = ~HP Máximos para (the bigg)~
+
+@302000 = ~Identificar todos los objetos~
+@303000 = ~Aprender hechizos facilmente~
+@303001 = ~Siempre aprender hechizos~
+@303100 = ~Aprender hechizos al 100% y quitar el tope de hechizos aprendidos~
+
+@304000  = ~Hacer la bolsa de contencion sin fondo~
+
+@305000 = ~Descuentos en tiendas a baja reputacion (Sabre)~
+@305001 = ~Cambiar el efecto de la reputación en los precios de las tiendas~
+
+@305100 = ~La reputación no tiene efecto, precios de las tiendas fijos al 100% (Luiz)~
+
+@305200 = ~La reputación no tiene efecto, precios de las tiendas fijos al 80% (Luiz)~
+
+@305300 = ~La reputación no tiene efecto, precios de las tiendas fijos al 60% (Luiz)~
+
+@306000  = ~Apilación de municiones ilimitada~
+
+@307000  = ~Apilacion de gemas y joyas ilimitada~
+
+@308000  = ~Apilación de pociones ilimitada~
+
+@309000  = ~Apilación de Hechizos ilimitada~
+
+@310000 = ~No trampas o Cerraduras (Weimer)~
+
+@311000 = ~Descansar en cualquier sitio (Japheth)~
+
+@312000 = ~Bastones, Palos y Hondas vendibles (Icelus)~
+
+@313000 = ~Truco de estadísticas mínimas~
+@313001 = ~Selecciona un valor mínimo de estadísticas, entre 6 y 15:~
