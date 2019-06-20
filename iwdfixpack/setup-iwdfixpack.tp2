@@ -12,7 +12,7 @@ LANGUAGE
   ~english~
   ~iwdfixpack/languages/english/setup.tra~
 LANGUAGE
-  ~Czech (Razfallow and Vlas·k)~
+  ~Czech (Razfallow and Vlas√°k)~
   ~czech~   
   ~iwdfixpack/languages/english/setup.tra~
   ~iwdfixpack/languages/czech/setup.tra~
@@ -1339,6 +1339,11 @@ ACTION_IF GAME_IS ~how totlm~ THEN BEGIN // how, totlm fixes
   END
 
 END
+
+// typo in tag name for beetle,fire attacks
+COPY_EXISTING ~sounds.ini~ ~override~
+  REPLACE_TEXTUALLY ~^tt1=~ ~att1=~
+  BUT_ONLY
 
 /////                                                  \\\\\
 ///// creature spellbook fixes                         \\\\\
