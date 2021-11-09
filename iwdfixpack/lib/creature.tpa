@@ -1,7 +1,6 @@
 ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_creature BEGIN
 
-  // file, gender, sex, align, general, race, class => file
-  
+  // file,  gender,   sex,      align,    general,  race,     class     =>        file
   ad1sklm,  256,      256,      34,       256,      256,      256       =>        ad1sklm
   ad2sklm,  256,      256,      34,       256,      256,      256       =>        ad2sklm
   ad2sklr,  256,      256,      34,       256,      256,      256       =>        ad2sklr
@@ -39,7 +38,7 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_creature BEGIN
   beetle,   256,      256,      34,       256,      256,      256       =>        beetle
   beetleg,  256,      256,      34,       256,      256,      256       =>        beetleg
   beetrhin, 256,      256,      34,       256,      256,      256       =>        beetrhin
-  belhif,   256,      256,      256,      255,      256,      256       =>        belhif
+  belhif,   1,        256,      256,      255,      256,      256       =>        belhif   // belhifet: monster, male
   bharken,  1,        256,      256,      1,        1,        256       =>        bharken
   biknight, 4,        256,      256,      255,      255,      256       =>        biknight
   bird,     1,        256,      34,       256,      255,      255       =>        bird
@@ -291,6 +290,7 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_creature BEGIN
   orrick,   256,      256,      256,      1,        256,      256       =>        orrick
   pomab,    256,      256,      19,       256,      256,      256       =>        pomab
   pomimg,   256,      256,      19,       256,      256,      256       =>        pomimg
+  poquelin, 256,      256,      256,      255,      256,      256       =>        poquelin // Revered Brother Poquelin: monster
   presapp,  256,      256,      256,      1,        1,        1         =>        presapp
   presfig,  1,        256,      256,      1,        1,        256       =>        presfig
   psborbtl, 256,      256,      34,       256,      256,      256       =>        psborbtl
@@ -334,6 +334,7 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_creature BEGIN
   sarpries, 256,      256,      256,      256,      256,      3         =>        sarpries
   saumber,  256,      256,      256,      255,      256,      256       =>        saumber
   saumber2, 256,      256,      256,      255,      256,      256       =>        saumber2
+  sbethla,  256,      256,      256,      1,        1,        256       =>        sbethla  // Priestess of Ilmater: humanoid, human
   sdelfac,  256,      256,      49,       256,      256,      256       =>        sdelfac
   sdelfbw1, 256,      256,      49,       256,      256,      256       =>        sdelfbw1
   sdelfbw2, 256,      256,      49,       256,      256,      256       =>        sdelfbw2
@@ -401,12 +402,9 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_creature BEGIN
   ss1gob1,  256,      256,      19,       1,        256,      256       =>        ss1gob1
   ss1gob2,  256,      256,      19,       1,        256,      256       =>        ss1gob2
   ss1gob3,  256,      256,      19,       1,        256,      256       =>        ss1gob3
-  ss2gob1,  256,      256,      256,      1,        256,      256       =>        ss2gob1
-  ss2gob1,  256,      256,      19,       256,      256,      256       =>        ss2gob1
-  ss2gob2,  256,      256,      256,      1,        256,      256       =>        ss2gob2
-  ss2gob2,  256,      256,      19,       256,      256,      256       =>        ss2gob2
-  ss2gob3,  256,      256,      256,      1,        256,      256       =>        ss2gob3
-  ss2gob3,  256,      256,      19,       256,      256,      256       =>        ss2gob3
+  ss2gob1,  256,      256,      19,       1,        256,      256       =>        ss2gob1
+  ss2gob2,  256,      256,      19,       1,        256,      256       =>        ss2gob2
+  ss2gob3,  256,      256,      19,       1,        256,      256       =>        ss2gob3
   ss3umb8,  256,      256,      51,       256,      256,      256       =>        ss3umb8
   ss3umb9,  256,      256,      51,       256,      256,      256       =>        ss3umb9
   stnnui,   256,      256,      34,       255,      256,      256       =>        stnnui
@@ -504,5 +502,5 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_creature BEGIN
   zombie,   256,      256,      34,       256,      256,      256       =>        zombie
   zombie2,  256,      256,      34,       256,      256,      256       =>        zombie2
   zombiej,  256,      256,      34,       256,      256,      256       =>        zombiej
-
+  
 END

@@ -664,6 +664,9 @@ END
 ///// area fixes                                       \\\\\
 /////                                                  \\\\\
 
+// match actor animation information to its creature file
+INCLUDE ~iwdfixpack/lib/area_anims.tpa~
+
 // areas with existing area scripts, but not assigned
 ACTION_FOR_EACH file IN ar1101 ar1102 ar1104 ar1106 ar1109 ar1200 ar1201 ar2001 ar2002 ar2003 ar2005
   ar2006 ar3001 ar3101 ar3201 ar3301 ar3401 ar3501 ar3502 ar3503 ar3600 ar3601 ar3602 ar3603 ar4002
