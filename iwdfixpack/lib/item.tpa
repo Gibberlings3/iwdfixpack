@@ -1,0 +1,39 @@
+ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_item BEGIN
+
+  // file, magical, enchant, weight, price, mspeed, prof => file
+
+  bagh01,   1,        256,      256,      256,      256,      256       =>        bagh01
+  bagh02,   1,        256,      256,      256,      256,      256       =>        bagh02
+  blun01,   256,      256,      256,      2,        256,      256       =>        blun01
+  book39,   256,      256,      2,        256,      256,      256       =>        book39
+  cairn,    256,      256,      256,      256,      6,        256       =>        cairn
+  chance,   256,      256,      256,      256,      256,      0         =>        chance
+  decasta,  256,      256,      0,        256,      256,      26        =>        decasta
+  dver,     256,      256,      256,      256,      256,      0         =>        dver
+  eidanrng, 0,        256,      256,      256,      256,      256       =>        eidanrng
+  fblade,   0,        0,        256,      256,      256,      20        =>        fblade
+  fele1-8,  1,        256,      256,      256,      256,      256       =>        fele1-8
+  king,     0,        256,      256,      256,      256,      256       =>        king
+  mielikk,  256,      256,      256,      256,      4,        256       =>        mielikk
+  misc75,   256,      2,        256,      256,      256,      256       =>        misc75
+  msword,   1,        2,        256,      256,      256,      256       =>        msword
+  pnull,    256,      256,      256,      256,      256,      0         =>        pnull
+  portrait, 256,      256,      256,      256,      256,      0         =>        portrait
+  potn13,   256,      256,      256,      256,      256,      0         =>        potn13
+  potn26,   256,      256,      256,      256,      256,      0         =>        potn26
+  presdag,  256,      2,        256,      256,      256,      256       =>        presdag
+  scrnote,  256,      256,      256,      256,      256,      0         =>        scrnote
+  serpsca,  256,      256,      256,      256,      256,      0         =>        serpsca
+  shillel,  1,        1,        0,        256,      256,      256       =>        shillel
+  slng01,   256,      256,      256,      1,        256,      256       =>        slng01
+  smcudge,  256,      4,        256,      256,      256,      256       =>        smcudge
+  staf01,   256,      256,      256,      4,        256,      256       =>        staf01
+  stafhmg,  256,      1,        256,      256,      256,      256       =>        stafhmg
+  u1ham3a,  256,      2,        256,      256,      256,      256       =>        u1ham3a
+  xstafhmg, 256,      1,        256,      256,      256,      256       =>        xstafhmg
+  zz14in,   256,      3,        256,      256,      256,      256       =>        zz14in
+  zzf6al,   256,      256,      256,      256,      2,        256       =>        zzf6al
+  zzg7ts,   256,      256,      256,      256,      2,        256       =>        zzg7ts
+  zzj6sp,   256,      256,      256,      256,      6,        256       =>        zzj6sp
+
+END

@@ -1135,34 +1135,21 @@ END
 /////                                                  \\\\\
 
 // gender, sex, alignment, general, race, class fixes
-COPY ~iwdfixpack/2da/creature.2da~ ~iwdfixpack/2da/creature.2da~
-  COUNT_2DA_ROWS 7 "rows"
-  FOR (index = 1 ; index < rows ; ++index) BEGIN
-    READ_2DA_ENTRY index 0 7 "file"
-    READ_2DA_ENTRY index 1 7 "gender"
-    READ_2DA_ENTRY index 2 7 "sex"
-    READ_2DA_ENTRY index 3 7 "align"
-    READ_2DA_ENTRY index 4 7 "general"
-    READ_2DA_ENTRY index 5 7 "race"
-    READ_2DA_ENTRY index 6 7 "class"
-    INNER_ACTION BEGIN
+INCLUDE ~iwdfixpack/lib/creature.tpa~
 
-      ACTION_IF FILE_EXISTS_IN_GAME ~%file%.cre~ THEN BEGIN
+// file, gender, sex, align, general, race, class => file
+ACTION_PHP_EACH cd_iwdfixpack_creature AS params => file BEGIN
 
-        COPY_EXISTING ~%file%.cre~ ~override~
-          PATCH_IF ("%sex%"    < 256)  BEGIN WRITE_BYTE 0x237 "%sex%"     END
-          PATCH_IF ("%gender%" < 256)  BEGIN WRITE_BYTE 0x2dd "%gender%"  END
-          PATCH_IF ("%align%" < 256)   BEGIN WRITE_BYTE 0x2e3 "%align%"   END
-          PATCH_IF ("%general%" < 256) BEGIN WRITE_BYTE 0x2d9 "%general%" END
-          PATCH_IF ("%race%" < 256)    BEGIN WRITE_BYTE 0x2da "%race%"    END
-          PATCH_IF ("%class%" < 256)   BEGIN WRITE_BYTE 0x2db "%class%"   END
-          BUT_ONLY
-
-      END
-
-    END
-  END
-  BUT_ONLY
+  COPY_EXISTING ~%file%.cre~ ~override~
+    PATCH_IF (params_2 < 256) BEGIN WRITE_BYTE 0x237 params_2 END // sex
+    PATCH_IF (params_1 < 256) BEGIN WRITE_BYTE 0x2dd params_1 END // gender
+    PATCH_IF (params_3 < 256) BEGIN WRITE_BYTE 0x2e3 params_3 END // alignment
+    PATCH_IF (params_4 < 256) BEGIN WRITE_BYTE 0x2d9 params_4 END // general
+    PATCH_IF (params_5 < 256) BEGIN WRITE_BYTE 0x2da params_5 END // race
+    PATCH_IF (params_6 < 256) BEGIN WRITE_BYTE 0x2db params_6 END // class
+    BUT_ONLY IF_EXISTS
+          
+END
 
 /////                                                  \\\\\
 ///// soundset fixes                                   \\\\\
@@ -2014,36 +2001,23 @@ END
 ///// mass item fixes                                  \\\\\
 /////                                                  \\\\\
 
-// lookup table for magical, enchantment, speed, weight, price, type fixes
-COPY ~iwdfixpack/2da/items.2da~ ~iwdfixpack/2da/items.2da~
-  COUNT_2DA_ROWS 7 "rows"
-  FOR (index = 1 ; index < rows ; ++index) BEGIN
-    READ_2DA_ENTRY index 0 7 "file"
-    READ_2DA_ENTRY index 1 7 "magical"
-    READ_2DA_ENTRY index 2 7 "enchant"
-    READ_2DA_ENTRY index 3 7 "weight"
-    READ_2DA_ENTRY index 4 7 "price"
-    READ_2DA_ENTRY index 5 7 "mspeed"
-    READ_2DA_ENTRY index 6 7 "prof"
-    INNER_ACTION BEGIN
+// gender, sex, alignment, general, race, class fixes
+INCLUDE ~iwdfixpack/lib/item.tpa~
 
-      ACTION_IF FILE_EXISTS_IN_GAME ~%file%.itm~ THEN BEGIN
+// file, magical, enchant, weight, price, mspeed, prof => file
+ACTION_PHP_EACH cd_iwdfixpack_item AS params => file BEGIN
 
-        COPY_EXISTING ~%file%.itm~ ~override~
-          PATCH_IF (magical = 0)   BEGIN WRITE_BYTE 0x18 THIS & `BIT6 END
-          PATCH_IF (magical = 1)   BEGIN WRITE_BYTE 0x18 THIS | BIT6  END
-          PATCH_IF (enchant < 256) BEGIN WRITE_LONG 0x60 enchant      END
-          PATCH_IF (weight < 256)  BEGIN WRITE_LONG 0x4c weight       END
-          PATCH_IF (price < 256)   BEGIN WRITE_LONG 0x34 price        END
-          PATCH_IF (mspeed < 256)  BEGIN LPF ALTER_ITEM_HEADER INT_VAR type = 1 speed = mspeed END END
-          PATCH_IF (prof < 256)    BEGIN WRITE_SHORT 0x1c prof        END
-          BUT_ONLY
+  COPY_EXISTING ~%file%.itm~ ~override~
+    PATCH_IF (params_1 = 0)   BEGIN WRITE_BYTE 0x18 THIS & `BIT6 END // remove magical flag
+    PATCH_IF (params_1 = 1)   BEGIN WRITE_BYTE 0x18 THIS | BIT6  END // add magical flag
+    PATCH_IF (params_2 < 256) BEGIN WRITE_LONG 0x60 params_2     END // enchanment
+    PATCH_IF (params_3 < 256) BEGIN WRITE_LONG 0x4c params_3     END // weight
+    PATCH_IF (params_4 < 256) BEGIN WRITE_LONG 0x34 params_4     END // price
+    PATCH_IF (params_5 < 256) BEGIN LPF ALTER_ITEM_HEADER INT_VAR type = 1 speed = params_5 END END // weapon speed
+    PATCH_IF (params_6 < 256) BEGIN WRITE_SHORT 0x1c params_6    END // proficiency
+    BUT_ONLY IF_EXISTS
 
-      END
-
-    END
-  END
-  BUT_ONLY
+END
 
 // global item effects not being applied due to incorrect timing mode
 // all of these are for cosmetic effects, except:
@@ -3321,27 +3295,18 @@ END
 ///// spell general fixes                              \\\\\
 /////                                                  \\\\\
 
-// animation, school
-COPY ~iwdfixpack/2da/spells.2da~ ~iwdfixpack/2da/spells.2da~
-  COUNT_2DA_ROWS 3 "rows"
-  FOR (index = 1 ; index < rows ; ++index) BEGIN
-    READ_2DA_ENTRY index 0 3 "file"
-    READ_2DA_ENTRY index 1 3 "anim"
-    READ_2DA_ENTRY index 2 3 "school"
-    INNER_ACTION BEGIN
+// gender, sex, alignment, general, race, class fixes
+INCLUDE ~iwdfixpack/lib/spell.tpa~
 
-      ACTION_IF FILE_EXISTS_IN_GAME ~%file%.spl~ THEN BEGIN
+// file, anim, school => file
+ACTION_PHP_EACH cd_iwdfixpack_spell AS params => file BEGIN
 
-        COPY_EXISTING ~%file%.spl~ ~override~
-          PATCH_IF ("%anim%"   < 256)  BEGIN WRITE_BYTE 0x22 "%anim%"   END
-          PATCH_IF ("%school%" < 256)  BEGIN WRITE_BYTE 0x25 "%school%" END
-          BUT_ONLY
+  COPY_EXISTING ~%file%.spl~ ~override~
+    PATCH_IF (params_1 < 256) BEGIN WRITE_BYTE 0x22 params_1 END // animation
+    PATCH_IF (params_2 < 256) BEGIN WRITE_BYTE 0x25 params_2 END // school
+    BUT_ONLY IF_EXISTS
 
-      END
-
-    END
-  END
-  BUT_ONLY
+END
 
 /////                                                  \\\\\
 ///// spell school restriction fixes                   \\\\\

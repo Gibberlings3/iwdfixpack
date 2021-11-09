@@ -1,0 +1,21 @@
+ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_spell BEGIN
+
+  // file, anim, school => file
+
+  spin121, 256,     9        =>       spin121
+  spin126, 256,     4        =>       spin126
+  spin129, 9,       7        =>       spin129
+  spin130, 256,     8        =>       spin130
+  spin159, 256,     9        =>       spin159
+  sppr309, 12,      1        =>       sppr309
+  sppr314, 12,      1        =>       sppr314
+  sppr315, 12,      1        =>       sppr315
+  sppr510, 14,      2        =>       sppr510
+  sppr608, 256,     6        =>       sppr608
+  sppr705, 256,     6        =>       sppr705
+  spwi617, 256,     2        =>       spwi617
+  spwi704, 256,     6        =>       spwi704
+  spin125, 12,      256      =>       spin125
+  sppr511, 11,      256      =>       sppr511
+  
+END
