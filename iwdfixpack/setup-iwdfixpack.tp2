@@ -730,6 +730,10 @@ COPY_EXISTING ~ar1201.are~ ~override~
   LPF ALTER_AREA_REGION INT_VAR cursor = 30 STR_VAR trig_name = "To1200" END
   BUT_ONLY
 
+// random flag in unused bits
+COPY_EXISTING ~ar2000.are~ ~override~
+  WRITE_LONG 0x2c 0 // clear flags for old, unused area transition
+  BUT_ONLY
 // cursor fix
 COPY_EXISTING ~ar2000.are~ ~override~
               ~ar2002.are~ ~override~
@@ -758,6 +762,11 @@ COPY_EXISTING ~ar2111.are~ ~override~
 // wrong icon
 COPY_EXISTING ~ar2115.are~ ~override~
   LPF ALTER_AREA_CONTAINER INT_VAR cont_icon = 12 STR_VAR cont_name = "Locked Crate" END
+  BUT_ONLY
+
+// ambient mismatch
+COPY_EXISTING ~ar3001.are~ ~override~
+  LPF ALTER_AREA_AMBIENT INT_VAR sounds = 5 STR_VAR ambient_name = "growls 1" END // only five ambient sounds, not six
   BUT_ONLY
 
 // container icon
@@ -806,7 +815,8 @@ COPY_EXISTING ~ar4005.are~ ~override~
   BUT_ONLY
 
 COPY_EXISTING ~ar5000.are~ ~override~
-  LPF ALTER_AREA_REGION INT_VAR cursor = 28 STR_VAR trig_name = "To5001" END
+  LPF ALTER_AREA_REGION INT_VAR cursor = 28 STR_VAR trig_name = "To5001" END // cursor fix
+  LPF ALTER_AREA_ACTOR STR_VAR actor_name = "Squirrel" script_default = "" END // blanks reference to non-existent script
   BUT_ONLY
 
 // container icons
@@ -935,6 +945,11 @@ COPY_EXISTING ~ar6002.are~ ~override~
   LPF ALTER_AREA_DOOR INT_VAR door_icon = 8 STR_VAR door_name = "AR6002PuzzleDoorTrigger" END
   LPF REPLACE_AREA_ITEM STR_VAR old_item = "zzu6cs" new_item = "u1hax4b" END
   BUT_ONLY
+  
+// piles with bounding box
+COPY_EXISTING ~ar6003.are~ ~override~
+  LPF ALTER_AREA_CONTAINER INT_VAR bounding_left = 0 bounding_top = 0 bounding_right = 0 bounding_bottom = 0 STR_VAR container_name = "Container 1" END
+  BUT_ONLY
 
 // container icons
 COPY_EXISTING ~ar6005.are~ ~override~
@@ -949,6 +964,11 @@ COPY_EXISTING ~ar6006.are~ ~override~
   LPF ALTER_AREA_CONTAINER INT_VAR cont_icon = 7 STR_VAR cont_name = "Container 9"  END
   LPF ALTER_AREA_CONTAINER INT_VAR cont_icon = 7 STR_VAR cont_name = "Container 11" END
   LPF ALTER_AREA_DOOR INT_VAR lock_diff = 100 STR_VAR door_name = "AR6006Door11" END
+  BUT_ONLY
+
+// piles with bounding box
+COPY_EXISTING ~ar6011.are~ ~override~
+  LPF ALTER_AREA_CONTAINER INT_VAR bounding_left = 0 bounding_top = 0 bounding_right = 0 bounding_bottom = 0 STR_VAR container_name = "Container 1" END
   BUT_ONLY
 
 // container icon, door cursor, travel cursor
@@ -1012,6 +1032,7 @@ COPY_EXISTING ~ar8007.are~ ~override~
 
 // dialogue for gnomes, charges for oil of null effect
 COPY_EXISTING ~ar8010.are~ ~override~
+  LPF ALTER_AREA_DOOR STR_VAR door_name = "AR8010HideMe" door_script = "" END // blanks reference to non-existent script
   LPF REPLACE_AREA_ITEM INT_VAR charges1 = 1 STR_VAR old_item = pnull new_item = pnull END
   FOR (index = 13 ; index < 23 ; ++index) BEGIN
     LPF ALTER_AREA_ACTOR STR_VAR dlg_file = "dgnomebl" actor_name = EVAL "Blind Svirfneblin %index%" END
@@ -1046,6 +1067,7 @@ END ELSE BEGIN // how, totlm fixes
 
   // remove dupe random item drops (extres4 also available in ar9601)
   COPY_EXISTING ~ar9200.are~ ~override~
+    LPF ALTER_AREA_AMBIENT INT_VAR sounds = 1 STR_VAR ambient_name = "Banner 1" END // ambient lists two sounds, but only one
     READ_LONG  0x70 cont_off
     READ_SHORT 0x74 cont_num
     READ_LONG  0x78 item_off
@@ -1061,6 +1083,11 @@ END ELSE BEGIN // how, totlm fixes
         END
       END
     END
+    BUT_ONLY
+
+  // ambient lists two sounds, but only one
+  COPY_EXISTING ~ar9300.are~ ~override~
+    LPF ALTER_AREA_AMBIENT INT_VAR sounds = 1 STR_VAR ambient_name = "main ambi" END
     BUT_ONLY
   
   // container icon, key required

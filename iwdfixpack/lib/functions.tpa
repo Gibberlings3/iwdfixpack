@@ -4,6 +4,156 @@
 ///// item/spell functions                             \\\\\
 /////                                                  \\\\\
 
+DEFINE_PATCH_FUNCTION ALTER_AREA_AMBIENT
+  INT_VAR coord_x = "-10" 
+          coord_y = "-10"
+          radius = "-10"
+          height = "-10"
+          pitch = "-10"
+          volume_variation = "-10"
+          volume = "-10"
+          sounds = "-10"
+          base_interval = "-10"
+          interval_variation = "-10"
+          flag_time_0 = "-10"
+          flag_time_1 = "-10"
+          flag_time_2 = "-10"
+          flag_time_3 = "-10"
+          flag_time_4 = "-10"
+          flag_time_5 = "-10"
+          flag_time_6 = "-10"
+          flag_time_7 = "-10"
+          flag_time_8 = "-10"
+          flag_time_9 = "-10"
+          flag_time_10 = "-10"
+          flag_time_11 = "-10"
+          flag_time_12 = "-10"
+          flag_time_13 = "-10"
+          flag_time_14 = "-10"
+          flag_time_15 = "-10"
+          flag_time_16 = "-10"
+          flag_time_17 = "-10"
+          flag_time_18 = "-10"
+          flag_time_19 = "-10"
+          flag_time_20 = "-10"
+          flag_time_21 = "-10"
+          flag_time_22 = "-10"
+          flag_time_23 = "-10"
+          flag_enabled = "-10"
+          flag_looping = "-10"
+          flag_ignore_radius = "-10"
+          flag_random_order = "-10"
+          flag_high_mem = "-10"
+  STR_VAR ambient_name = ~~
+          sound0 = null
+          sound1 = null
+          sound2 = null
+          sound3 = null
+          sound4 = null
+          sound5 = null
+          sound6 = null
+          sound7 = null
+          sound8 = null
+          sound9 = null
+BEGIN
+
+  READ_SHORT 0x82 amb_num
+  READ_LONG  0x84 amb_off
+  FOR (index = 0 ; index < amb_num ; ++index) BEGIN
+    READ_ASCII (amb_off + 0x00 + (index * 0xd4)) ambient_name_check (32) NULL
+    PATCH_IF ("%ambient_name%" STRING_COMPARE_CASE "%ambient_name_check%" = 0) BEGIN
+      PATCH_PRINT ~sounds is %sounds%~
+      PATCH_IF coord_x != "-10"            BEGIN WRITE_SHORT (amb_off + 0x20 + (index * 0xd4)) coord_x END
+      PATCH_IF coord_y != "-10"            BEGIN WRITE_SHORT (amb_off + 0x22 + (index * 0xd4)) coord_y END
+      PATCH_IF radius != "-10"             BEGIN WRITE_SHORT (amb_off + 0x24 + (index * 0xd4)) radius END
+      PATCH_IF height != "-10"             BEGIN WRITE_SHORT (amb_off + 0x26 + (index * 0xd4)) height END
+      PATCH_IF pitch != "-10"              BEGIN WRITE_LONG  (amb_off + 0x28 + (index * 0xd4)) pitch END
+      PATCH_IF volume_variation != "-10"   BEGIN WRITE_SHORT (amb_off + 0x2c + (index * 0xd4)) volume_variation END
+      PATCH_IF volume != "-10"             BEGIN WRITE_SHORT (amb_off + 0x2e + (index * 0xd4)) volume END
+      PATCH_IF sounds != "-10"             BEGIN WRITE_SHORT (amb_off + 0x80 + (index * 0xd4)) sounds END
+      PATCH_IF base_interval != "-10"      BEGIN WRITE_LONG  (amb_off + 0x84 + (index * 0xd4)) base_interval END
+      PATCH_IF interval_variation != "-10" BEGIN WRITE_LONG  (amb_off + 0x88 + (index * 0xd4)) interval_variation END
+      READ_LONG (amb_off + 0x8c + (index * 0xd4)) time
+        PATCH_IF flag_time_0  = 0 BEGIN SET time = (time BAND `BIT0) END
+        PATCH_IF flag_time_1  = 0 BEGIN SET time = (time BAND `BIT1) END
+        PATCH_IF flag_time_2  = 0 BEGIN SET time = (time BAND `BIT2) END
+        PATCH_IF flag_time_3  = 0 BEGIN SET time = (time BAND `BIT3) END
+        PATCH_IF flag_time_4  = 0 BEGIN SET time = (time BAND `BIT4) END
+        PATCH_IF flag_time_5  = 0 BEGIN SET time = (time BAND `BIT5) END
+        PATCH_IF flag_time_6  = 0 BEGIN SET time = (time BAND `BIT6) END
+        PATCH_IF flag_time_7  = 0 BEGIN SET time = (time BAND `BIT7) END
+        PATCH_IF flag_time_8  = 0 BEGIN SET time = (time BAND `BIT8) END
+        PATCH_IF flag_time_9  = 0 BEGIN SET time = (time BAND `BIT9) END
+        PATCH_IF flag_time_10 = 0 BEGIN SET time = (time BAND `BIT10) END
+        PATCH_IF flag_time_11 = 0 BEGIN SET time = (time BAND `BIT11) END
+        PATCH_IF flag_time_12 = 0 BEGIN SET time = (time BAND `BIT12) END
+        PATCH_IF flag_time_13 = 0 BEGIN SET time = (time BAND `BIT13) END
+        PATCH_IF flag_time_14 = 0 BEGIN SET time = (time BAND `BIT14) END
+        PATCH_IF flag_time_15 = 0 BEGIN SET time = (time BAND `BIT15) END
+        PATCH_IF flag_time_16 = 0 BEGIN SET time = (time BAND `BIT16) END
+        PATCH_IF flag_time_17 = 0 BEGIN SET time = (time BAND `BIT17) END
+        PATCH_IF flag_time_18 = 0 BEGIN SET time = (time BAND `BIT18) END
+        PATCH_IF flag_time_19 = 0 BEGIN SET time = (time BAND `BIT19) END
+        PATCH_IF flag_time_20 = 0 BEGIN SET time = (time BAND `BIT20) END
+        PATCH_IF flag_time_21 = 0 BEGIN SET time = (time BAND `BIT21) END
+        PATCH_IF flag_time_22 = 0 BEGIN SET time = (time BAND `BIT22) END
+        PATCH_IF flag_time_23 = 0 BEGIN SET time = (time BAND `BIT23) END
+        PATCH_IF flag_time_0  = 1 BEGIN SET time = (time BOR BIT0) END
+        PATCH_IF flag_time_1  = 1 BEGIN SET time = (time BOR BIT1) END
+        PATCH_IF flag_time_2  = 1 BEGIN SET time = (time BOR BIT2) END
+        PATCH_IF flag_time_3  = 1 BEGIN SET time = (time BOR BIT3) END
+        PATCH_IF flag_time_4  = 1 BEGIN SET time = (time BOR BIT4) END
+        PATCH_IF flag_time_5  = 1 BEGIN SET time = (time BOR BIT5) END
+        PATCH_IF flag_time_6  = 1 BEGIN SET time = (time BOR BIT6) END
+        PATCH_IF flag_time_7  = 1 BEGIN SET time = (time BOR BIT7) END
+        PATCH_IF flag_time_8  = 1 BEGIN SET time = (time BOR BIT8) END
+        PATCH_IF flag_time_9  = 1 BEGIN SET time = (time BOR BIT9) END
+        PATCH_IF flag_time_10 = 1 BEGIN SET time = (time BOR BIT10) END
+        PATCH_IF flag_time_11 = 1 BEGIN SET time = (time BOR BIT11) END
+        PATCH_IF flag_time_12 = 1 BEGIN SET time = (time BOR BIT12) END
+        PATCH_IF flag_time_13 = 1 BEGIN SET time = (time BOR BIT13) END
+        PATCH_IF flag_time_14 = 1 BEGIN SET time = (time BOR BIT14) END
+        PATCH_IF flag_time_15 = 1 BEGIN SET time = (time BOR BIT15) END
+        PATCH_IF flag_time_16 = 1 BEGIN SET time = (time BOR BIT16) END
+        PATCH_IF flag_time_17 = 1 BEGIN SET time = (time BOR BIT17) END
+        PATCH_IF flag_time_18 = 1 BEGIN SET time = (time BOR BIT18) END
+        PATCH_IF flag_time_19 = 1 BEGIN SET time = (time BOR BIT19) END
+        PATCH_IF flag_time_20 = 1 BEGIN SET time = (time BOR BIT20) END
+        PATCH_IF flag_time_21 = 1 BEGIN SET time = (time BOR BIT21) END
+        PATCH_IF flag_time_22 = 1 BEGIN SET time = (time BOR BIT22) END
+        PATCH_IF flag_time_23 = 1 BEGIN SET time = (time BOR BIT23) END
+      WRITE_LONG (amb_off + 0x8c + (index * 0xd4)) time
+      READ_LONG  (amb_off + 0x90 + (index * 0xd4)) flags
+        PATCH_IF flag_enabled       = 0 BEGIN SET flags = (flags BAND `BIT0) END
+        PATCH_IF flag_looping       = 0 BEGIN SET flags = (flags BAND `BIT1) END
+        PATCH_IF flag_ignore_radius = 0 BEGIN SET flags = (flags BAND `BIT2) END
+        PATCH_IF flag_random_order  = 0 BEGIN SET flags = (flags BAND `BIT3) END
+        PATCH_IF flag_high_mem      = 0 BEGIN SET flags = (flags BAND `BIT4) END
+        PATCH_IF flag_enabled       = 1 BEGIN SET flags = (flags BOR BIT0) END
+        PATCH_IF flag_looping       = 1 BEGIN SET flags = (flags BOR BIT1) END
+        PATCH_IF flag_ignore_radius = 1 BEGIN SET flags = (flags BOR BIT2) END
+        PATCH_IF flag_random_order  = 1 BEGIN SET flags = (flags BOR BIT3) END
+        PATCH_IF flag_high_mem      = 1 BEGIN SET flags = (flags BOR BIT4) END
+      WRITE_LONG (amb_off + 0x90 + (index * 0xd4)) flags
+      PATCH_IF ("%sound0%" STRING_COMPARE_CASE "null") BEGIN WRITE_ASCIIE (amb_off + 0x30 + (index * 0xd4)) "%sound0%" #8 END
+      PATCH_IF ("%sound1%" STRING_COMPARE_CASE "null") BEGIN WRITE_ASCIIE (amb_off + 0x38 + (index * 0xd4)) "%sound1%" #8 END
+      PATCH_IF ("%sound2%" STRING_COMPARE_CASE "null") BEGIN WRITE_ASCIIE (amb_off + 0x40 + (index * 0xd4)) "%sound2%" #8 END
+      PATCH_IF ("%sound3%" STRING_COMPARE_CASE "null") BEGIN WRITE_ASCIIE (amb_off + 0x48 + (index * 0xd4)) "%sound3%" #8 END
+      PATCH_IF ("%sound4%" STRING_COMPARE_CASE "null") BEGIN WRITE_ASCIIE (amb_off + 0x50 + (index * 0xd4)) "%sound4%" #8 END
+      PATCH_IF ("%sound5%" STRING_COMPARE_CASE "null") BEGIN WRITE_ASCIIE (amb_off + 0x58 + (index * 0xd4)) "%sound5%" #8 END
+      PATCH_IF ("%sound6%" STRING_COMPARE_CASE "null") BEGIN WRITE_ASCIIE (amb_off + 0x60 + (index * 0xd4)) "%sound6%" #8 END
+      PATCH_IF ("%sound7%" STRING_COMPARE_CASE "null") BEGIN WRITE_ASCIIE (amb_off + 0x68 + (index * 0xd4)) "%sound7%" #8 END
+      PATCH_IF ("%sound8%" STRING_COMPARE_CASE "null") BEGIN WRITE_ASCIIE (amb_off + 0x70 + (index * 0xd4)) "%sound8%" #8 END
+      PATCH_IF ("%sound9%" STRING_COMPARE_CASE "null") BEGIN WRITE_ASCIIE (amb_off + 0x78 + (index * 0xd4)) "%sound9%" #8 END
+    END // end ambient name check
+  END // end for loop
+
+END // end function
+  
+/////                                                  \\\\\
+///// item/spell functions                             \\\\\
+/////                                                  \\\\\
+
 DEFINE_PATCH_FUNCTION CONVERT_BG_IWD_DURATION
   STR_VAR changeto = "iwd" // iwd changes effects to use round = 7; otherwise use round = 6
   BEGIN
