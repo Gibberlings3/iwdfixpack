@@ -65,3 +65,22 @@ Casting Time: 1
 Area of Effect: 1 creature
 Saving Throw: Neg. 
 This spell creates a 4-inch-diameter sphere that can be hurled unerringly to its target. The orb's effect depends on the level of the wizard: a 1st-level sphere inflicts 1-4 damage and blinds the target for one round. A 2nd-level sphere inflicts 1-6 damage and inflicts pain upon the victim. A 3rd-level sphere deals 1-8 damage and burns the victim. A 4th-level sphere deals 1-10 damage and blinds the target for four rounds. A 5th to 6th-level sphere deals 1-12 damage and stuns the target for three rounds. The 7th to 9th-level sphere deals 2-16 damage and paralyzes the victim for 13 rounds.~
+// War Hammer of Phasing +2 descript, says hammer causes disease when it causes phasing
+@114959 = ~Like others of its type, this warhammer is made entirely of steel, with a bone-crushing hammer mounted upon an 18" shaft.  It has also been bestowed with a small number of magical properties, however, thus making it more effective in combat.
+
+STATISTICS:
+
+Damage:  1D4 +3
+THAC0:  +2 bonus
+Damage type:  Crushing
+Special: 
+  10% chance of target being Phased
+  15% chance +1D4 cold damage
+Weight:  6
+Speed Factor:  3
+Proficiency Type:  Hammer
+Type:  1-handed
+Not Usable By:
+ Druid
+ Mage 
+ Thief~

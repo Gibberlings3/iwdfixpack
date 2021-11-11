@@ -88,6 +88,7 @@ ACTION_IF (("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) OR
   STRING_SET  6394 @106394 // DECASTAVE DRAINING
               9764 @109764 // thac0/damage bonus for hammer
              12174 @112174 // four turns > rounds for chromatic orb
+             14959 @114959 // disease > phase for descript of War Hammer of Phasing +3
 
   // description not even close to accurate
   COPY_EXISTING ~potn34.itm~ ~override~
@@ -2640,6 +2641,12 @@ COPY_EXISTING ~days.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 40 power = 3 END
   BUT_ONLY
 
+// dazer has wrong percentage on one effect, so do manually - IF_EXISTS since xclub is a totlm copy
+COPY_EXISTING ~dazer.itm~ ~override~
+              ~xclub.itm~ ~override~ // undroppable version used by spectral hero
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 header_type = 1 probability1 = 4 END // one effect has prob=6, others all prob=5
+  BUT_ONLY IF_EXISTS
+
 // visual power is wrong
 COPY_EXISTING ~decasta.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 power = 2 END
@@ -2673,28 +2680,11 @@ COPY_EXISTING ~ghast1.itm~ ~override~
 
 // unparalyzed sound too late, no str bonus, stuff bypassing MR/not dispelling, half-elves not getting paralyzation resistance
 COPY_EXISTING ~ghoul1.itm~ ~override~
-  READ_LONG   0x64 abil_off
-  READ_SHORT  0x68 abil_num
-  READ_LONG   0x6a fx_off
-  FOR (index = 0 ; index < abil_num ; index = index + 1) BEGIN // looks through headers
-    READ_SHORT (abil_off + 0x1e + (index * 0x38)) abil_fx_num
-    READ_SHORT (abil_off + 0x20 + (index * 0x38)) abil_fx_idx
-    WRITE_BYTE (abil_off + 0x26 + (index * 0x38)) THIS | BIT0 // add strength bonus
-    FOR (index2 = 0 ; index2 < abil_fx_num ; index2 = index2 + 1) BEGIN // searches through fx for slay effect
-      READ_SHORT (fx_off +        ((abil_fx_idx + index2) * 0x30)) opcode
-      READ_LONG  (fx_off + 0x04 + ((abil_fx_idx + index2) * 0x30)) parameter1
-      READ_BYTE  (fx_off + 0x0c + ((abil_fx_idx + index2) * 0x30)) timing
-      PATCH_IF (opcode != 206) BEGIN // all opcodes except protection from spell
-        WRITE_BYTE  (fx_off + 0x0d + ((abil_fx_idx + index2) * 0x30)) 1 // dispel, not bypass MR
-      END
-      PATCH_IF ((opcode = 174) AND (timing = 4)) BEGIN // delayed play sound effect
-        WRITE_LONG  (fx_off + 0x0e + ((abil_fx_idx + index2) * 0x30)) 30
-      END ELSE
-      PATCH_IF ((opcode = 109) AND (parameter1 = 3)) BEGIN // half-elves not getting their paralyzation resistance
-        WRITE_BYTE  (fx_off + 0x12 + ((abil_fx_idx + index2) * 0x30)) 70
-      END
-    END
-  END
+  LPF ALTER_ITEM_HEADER INT_VAR flag_strength = 1 END
+  LPF ALTER_EFFECT INT_VAR resist_dispel = 1 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 174 match_timing = 4 duration = 30 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 206 resist_dispel = 0 END // reset resist/dispel
+  LPF CLONE_EFFECT INT_VAR match_opcode = 206 match_parameter2 = 15 parameter2 = 19 probability1 = 69 END // half-elf 70% chance to resist outright
   BUT_ONLY
 
 // hp bonus should have 0 power
@@ -2846,10 +2836,10 @@ COPY_EXISTING ~presrob.itm~ ~override~
   WRITE_ASCII 0x3a ~iclck15~ #8
   BUT_ONLY
 
-// cast spells at power 0; power set in spell itself
-COPY_EXISTING ~quost.itm~   ~override~
-              ~stafbes.itm~ ~override~
-  LPF ALTER_EFFECT INT_VAR header_type = 3 power = 0 END
+// kill target prevents visuals
+COPY_EXISTING ~reaver.itm~ ~override~
+  LPF CLONE_EFFECT  INT_VAR match_opcode = 13 multi_match = 1 STR_VAR insert = last END // clone to last effect
+  LPF DELETE_EFFECT INT_VAR match_opcode = 13 multi_match = 1 END                       // delete original
   BUT_ONLY
 
 // dispelling one spell twice, one spell wrong
@@ -2926,15 +2916,14 @@ COPY_EXISTING ~swanarm.itm~ ~override~
   END
   BUT_ONLY
 
-// save is vs. death, not vs. spell; should block effects on failed save
-COPY_EXISTING ~thrym.itm~ ~override~
-  LPF ALTER_EFFECT INT_VAR match_savingthrow = BIT0 savingthrow = BIT2 END 
-  LPF ALTER_EFFECT INT_VAR match_opcode = 261 opcode = 290 parameter2 = 0 STR_VAR resource = thrym END 
-  BUT_ONLY
-
 // no save for one sound effect
 COPY_EXISTING ~trnbolt.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 savingthrow = BIT0 END
+  BUT_ONLY
+
+// hammer has random heal
+COPY_EXISTING ~u1ham5b.itm~  ~override~ // war hammer +4: defender: 20% heal
+  LPF DELETE_EFFECT INT_VAR match_opcode = 17 END // delete random heal
   BUT_ONLY
 
 // remove min level on stun effect
@@ -2958,9 +2947,19 @@ COPY_EXISTING ~u2hax4a.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 12 probability2 = 16 END
   BUT_ONLY
 
+// chance of +damage completely overlaps chance of berserk
+COPY_EXISTING ~u2hax5a.itm~  ~override~ // foe's fate: 25% berserk, 25% electric damage
+  LPF ALTER_EFFECT INT_VAR match_opcode = 12 probability1 = 50 probability2 = 26 END // these will get adjusted to correct 25-49 in bulk patch
+  BUT_ONLY
+
 // remove min level on stun effect
 COPY_EXISTING ~uarow3b.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 45 dicesize = 0 END
+  BUT_ONLY
+  
+// blindness is correct 25%, other effects (string, icon) are at 10%
+COPY_EXISTING ~udart3b.itm~  ~override~ // blinding darts +2: 25% blind
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 header_type = 2 probability1 = 24 END
   BUT_ONLY
 
 // remove min level on visuals
@@ -2971,10 +2970,11 @@ COPY_EXISTING ~uhalb3c.itm~ ~override~
 COPY_EXISTING ~ulbow2b.itm~ ~override~
   WRITE_SHORT 0x26 12 // min strength
   BUT_ONLY
-
-// add save on visuals
-COPY_EXISTING ~ulswd4a.itm~ ~override~
+  
+// hold fast only holds humanoids, but plays ancillary effects on everyone; add save on visuals
+COPY_EXISTING ~ulswd4a.itm~  ~override~ // hold fast: 15% hold
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 233 savingthrow = BIT0 END
+  LPF ADD_ITEM_EFFECT INT_VAR type = 1 insert_point = 0 opcode = 206 target = 2 power = 0 parameter2 = 6 duration = 1 STR_VAR resource = ulswd4a END
   BUT_ONLY
 
 // remove min level on slow effect
@@ -3019,6 +3019,12 @@ COPY_EXISTING ~uspot1a.itm~ ~override~
 // one more effect for 4b
 COPY_EXISTING ~uspot4b.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 233 power = 0 resist_dispel = 2 END
+  BUT_ONLY
+  
+// supposed to be elctric damage 50%, stun 25%, but was actually 40% and 20%  
+COPY_EXISTING ~utswd5a.itm~  ~override~ // static two handed sword +4: 50% electric damage, 25% stun, fixed elsewhere
+  LPF ALTER_EFFECT INT_VAR header_type = 1                   probability1 = 50 probability2 = 74 END // stun effects
+  LPF ALTER_EFFECT INT_VAR header_type = 1 match_opcode = 12 probability1 =  0 probability2 = 49 END // reset electrical damage
   BUT_ONLY
 
 // inconsistent saves, power
@@ -3218,11 +3224,24 @@ END ELSE BEGIN // how, totlm fixes
   COPY_EXISTING ~oblood.itm~ ~override~
     LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 259 power = 0 resist_dispel = 3 END
     BUT_ONLY
+
+  // pestilent dawn does not actually make bearer immune to disease
+  COPY_EXISTING ~pest.itm~ ~override~
+    LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 169 target = 1 parameter2 =  7 timing = 2 END // prevent disease icon
+    LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 169 target = 1 parameter2 = 43 timing = 2 END // prevent nausea icon
+    LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 261 target = 1 parameter2 = 78 timing = 2 END // immunity to disease
+    BUT_ONLY
   
   // misordering prevents evasion (evasion not in base IWD)
   COPY_EXISTING ~potn26.itm~ ~override~
     LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 206 END
     LPF ADD_ITEM_EFFECT INT_VAR insert_point = 0 opcode = 206 target = 2 parameter2 = 63 resist_dispel = 2 STR_VAR resource = "potn26" END
+    BUT_ONLY
+
+  // cast spells at power 0; power set in spell itself
+  COPY_EXISTING ~quost.itm~   ~override~
+                ~stafbes.itm~ ~override~
+    LPF ALTER_EFFECT INT_VAR header_type = 3 power = 0 END
     BUT_ONLY
   
   // wrong ability range, no min lev for charisma bonus
@@ -3261,6 +3280,12 @@ END ELSE BEGIN // how, totlm fixes
     PATCH_FOR_EACH icon IN 25 16 BEGIN
       LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 142 target = 1 parameter2 = icon timing = 2 END
     END
+    BUT_ONLY
+
+  // save is vs. death, not vs. spell; should block effects on failed save
+  COPY_EXISTING ~thrym.itm~ ~override~
+    LPF ALTER_EFFECT INT_VAR match_savingthrow = BIT0 savingthrow = BIT2 END 
+    LPF ALTER_EFFECT INT_VAR match_opcode = 261 opcode = 290 parameter2 = 0 STR_VAR resource = thrym END 
     BUT_ONLY
   
   // wrong damage type
@@ -4276,22 +4301,10 @@ END ELSE BEGIN // how, totlm fixes
     LPF ALTER_SPELL_EFFECT INT_VAR opcode = 266 power = 0 END
     BUT_ONLY
   
-  // durations for spell protections lasting waaaaay too long
-  COPY_EXISTING ~sppr321.spl~ ~override~
-    READ_LONG   0x64 abil_off
-    READ_SHORT  0x68 abil_num
-    READ_LONG   0x6a fx_off
-    FOR (index = 0 ; index < abil_num ; index = index + 1) BEGIN // looks through headers
-      READ_SHORT  (abil_off + 0x1e + (index * 0x28)) abil_fx_num
-      READ_SHORT  (abil_off + 0x20 + (index * 0x28)) abil_fx_idx
-      FOR (index2 = 0 ; index2 < abil_fx_num ; index2 = index2 + 1) BEGIN
-        READ_SHORT (fx_off +        ((abil_fx_idx + index2) * 0x30)) opcode
-        READ_LONG  (fx_off + 0x08 + ((abil_fx_idx + index2) * 0x30)) target
-        PATCH_IF ((opcode = 206) AND (target = 0)) BEGIN
-          WRITE_LONG (fx_off + 0x0e + ((abil_fx_idx + index2) * 0x30)) 7
-        END
-      END
-    END
+  // 2d3 damage to cold/fire creatures should be at 100%, not 50
+  COPY_EXISTING ~sppr321.spl~  ~override~ // cloudburst: 50% lightning strike 
+    LPF ALTER_EFFECT INT_VAR match_opcode = 12 match_dicenumber = 2 probability1 = 100 END 
+    LPF ALTER_EFFECT INT_VAR match_opcode = 206 match_parameter2 = 0 duration = 7 END // durations for spell protections lasting waaaaay too long
     BUT_ONLY
   
   // add blind icon
@@ -4590,6 +4603,208 @@ ACTION_FOR_EACH file IN arow07.itm fkiller.itm pnull.itm potn33.itm scrl07.itm s
   END
 
 END
+
+/////                                                  \\\\\
+///// bulk probability fixes                           \\\\\
+/////                                                  \\\\\
+
+COPY_EXISTING ~amaunat.itm~  ~override~ // amaunator's legacy: 5% beltyn's burning blood
+              ~axemino.itm~  ~override~ // axe of the minotaur lord: 25% stun 
+//            ~behwep.itm~   ~override~ // belhifet's weapon, fixed elsewhere
+              ~bess.itm~     ~override~ // the love of black bess: 10% bad luck
+              ~biteme.itm~   ~override~ // spear of kerish: 5% cold damage
+              ~blast.itm~    ~override~ // bracers of blasting: 10% chance to explode
+              ~bloodgf.itm~  ~override~ // blood of the gloomfrost: 5% chance to heal
+              ~cwreve.itm~   ~override~ // revenant: 50% stun
+              ~cwszomb.itm~  ~override~ // slime zombie: 10% poison
+              ~cynicis.itm~  ~override~ // cynicism: display stringheads
+              ~days.itm~     ~override~ // the sword of days: 25% slow
+              ~decasta.itm~  ~override~ // decastave: 50% chance to drain 1 or 2 hp
+              ~diver.itm~    ~override~ // spell diver: 50% to block spellcasting
+              ~firekis.itm~  ~override~ // fire kiss: 5% shroud of flame
+              ~fistgf.itm~   ~override~ // fist of the gloomfrost: 5% chance for extra crush damage 
+              ~fkiller.itm~  ~override~ // faith killer: 5% dispel magic
+              ~flailsk.itm~  ~override~ // skullflail: 10% piercing damage
+//            ~gasp.itm~     ~override~ // stalker weapon: seems correct already
+//            ~ghoul1.itm~   ~override~ // ghoul touch, fixed elsewhere 
+              ~giving.itm~   ~override~ // the giving star: 10% cure and str bonus
+              ~gvalor2.itm~  ~override~ // gauntlet of valor: 12% extra damage and stun
+              ~handgf.itm~   ~override~ // hand of the gloomfrost: 5% suffocate
+              ~hlydeck.itm~  ~override~ // holy chaos! deck: 50% bless, 25% prayer, 15% recitation, 10% RWotF
+              ~holding.itm~  ~override~ // jester's bag of holding: all inventory creation effects
+              ~icegolem.itm~ ~override~ // ice golem weapon: 10% stun
+              ~kinetic.itm~  ~override~ // kinetic spear: 5% lance of disruption
+              ~kissgf.itm~   ~override~ // kiss of the gloomfrost: 5% cold damage
+              ~kris.itm~     ~override~ // bone kris of black ichor: 20% poison 
+              ~lizspear.itm~ ~override~ // no such index: 10% extra piercing damage 
+              ~mae.itm~      ~override~ // flail of mae: 5% petrification 
+              ~pest.itm~     ~override~ // pestilent dawn: 25% cause disease
+//            ~poq2-16.itm~  ~override~ // no such index: stun chance
+              ~reaver.itm~   ~override~ // the snow maiden's reaver: 2% freezing target
+              ~remorha.itm~  ~override~ // remorhaz weapon: 5% fire damage
+              ~sbowebu.itm~  ~override~ // short bow of ebullience: 25% fire damage
+              ~serrate.itm~  ~override~ // serrated bone blade: 20% cold damage
+              ~sflail.itm~   ~override~ // conrnugon: 50% bleed, 25% stun 
+              ~shax4d4c.itm~ ~override~ // shadowed orc weapon: 40% cold damage
+              ~shaxe2c.itm~  ~override~ // shadowed orc weapon: 40% cold damage
+              ~slimed2.itm~  ~override~ // kill targets in increments of 20%
+              ~spin126.spl~  ~override~ // eye of the mind: elf, half-elf immunity
+//            ~spin134.spl~  ~override~ // mournful wail: percntages already OK
+              ~spin146.spl~  ~override~ // the song of kaudies - resistant to sound attacks: 50% immunity to some spells
+              ~spin147.spl~  ~override~ // the siren's yearning - enthralls creatures: elf, half-elf immunity
+              ~spin166.spl~  ~override~ // harpy wail: elf, half-elf immunity
+              ~spin168.spl~  ~override~ // charm person: elf, half-elf immunity
+//            ~spin990.spl~  ~override~ // INNATE_MYCONID_SPORES: percntages already OK
+              ~spin992.spl~  ~override~ // INNATE_ZOMBIE_LORD_AURA: 20% each kill, sleep, stats drain, ac/save penalty, disease
+              ~spin993.spl~  ~override~ // INNATE_BOMBARDIER_BEETLE_CLOUD: 20% stun, 20% deaf
+              ~sppr315.spl~  ~override~ // cause disease: 5-20 strength drain
+              ~sppr321.spl~  ~override~ // cloudburst: 50% lightning strike
+              ~sppr421.spl~  ~override~ // smashing wave: 5% sleep, 25% stun
+              ~sppr507.spl~  ~override~ // champion's strength: 25% each to set strength to 20-23
+              ~sppr611.spl~  ~override~ // harm: reduces HP to 1d4
+              ~spwi104.spl~  ~override~ // charm person: elf, half-elf immunity
+              ~spwi119.spl~  ~override~ // larloch's minor drain: 1d4 hp drain
+              ~spwi316.spl~  ~override~ // dire charm: elf, half-elf immunity
+              ~spwi518.spl~  ~override~ // lower resistance: 50% chance for MR to resist
+              ~spwi706.spl~  ~override~ // prismatic spray: 1/6 chances for effects
+              ~sw1h99.itm~   ~override~ // sword of chaos: slay lawful 10%
+              ~talongf.itm~  ~override~ // talon of the gloomfrost: 15% entangle
+              ~tonggf.itm~   ~override~ // tongue of the gloomfrost: 3% cone of cold 
+              ~tongue.itm~   ~override~ // the salamander's tongue: 20% fire damage
+              ~u1ham3a.itm~  ~override~ // corrosive hammer: 30% acid damage
+              ~u1ham3b.itm~  ~override~ // war hammer of sparks +2: 50% electrical damage, 10% stun 
+              ~u1ham4a.itm~  ~override~ // war hammer +3: life giver: 20% heal
+              ~u1ham5a.itm~  ~override~ // war hammer of phasing +3: 15% phase, 25% cold damage
+              ~u1hax2a.itm~  ~override~ // charged battle axe +2: 50% electrical damage, 15% stun
+              ~u1hax3a.itm~  ~override~ // poisonous battle axe +2: 25% poison
+              ~u1hax4a.itm~  ~override~ // battle axe +3: fatigue: 20% slow 
+              ~u1hax4b.itm~  ~override~ // benorg's truth: 10% stun
+              ~u2ham4b.itm~  ~override~ // war hammer of phasing +2: 10% disease, 15% cold damage
+              ~u2ham5a.itm~  ~override~ // demon's breath: 20% fireball, 50% fire damage
+              ~u2hax2a.itm~  ~override~ // two handed fire axe +1: 50% fire damage
+              ~u2hax3a.itm~  ~override~ // infected two handed axe +2: 15% disease
+              ~u2hax3b.itm~  ~override~ // two handed axe +2: life giver: 10% heal
+              ~u2hax4a.itm~  ~override~ // 2h axe of greater phasing +2: 15% phased, 25% cold damage
+              ~u2hax5a.itm~  ~override~ // foe's fate: 25% berserk, 25% electric damage
+              ~uarow3a.itm~  ~override~ // confusion arrows +3: 10% confusion
+              ~uarow3b.itm~  ~override~ // hammer arrow +1: 10% stun
+              ~ubswd1a.itm~  ~override~ // fang: 25% acid damage
+              ~ubswd2a.itm~  ~override~ // phasing bastard sword +1: 15% phased
+              ~ubswd2b.itm~  ~override~ // flaming bastard sword +1: 25% fire damage
+              ~ubswd3a.itm~  ~override~ // bastard sword +2: life giver: 5% heal
+              ~ubswd4b.itm~  ~override~ // bastard sword of greater phasing: 15% phased 
+              ~ubswd4c.itm~  ~override~ // bastard sword +2: conflagration: 10% fireball
+              ~ubswd5a.itm~  ~override~ // cancerous bastard sword +4: 15% disease 
+              ~ubswd5b.itm~  ~override~ // bastard sword +3: incinerator: 50% fire damage, 10% stun
+              ~ubull4a.itm~  ~override~ // bullets of fire +2: 50% fire damage
+              ~udagg1a.itm~  ~override~ // fire dagger: 15% fire damage
+              ~udagg1b.itm~  ~override~ // phase dagger: 15% phased
+              ~udagg2a.itm~  ~override~ // static dagger +1: 50% electric damage
+              ~udagg3a.itm~  ~override~ // fire dagger +2: 50% fire damage
+              ~udagg3c.itm~  ~override~ // life dagger +2: 15% heal
+              ~udagg4a.itm~  ~override~ // chaos dagger +3: 20% disease
+              ~udart1a.itm~  ~override~ // hammer darts: 15% stun
+              ~udart2a.itm~  ~override~ // berserker darts: 10% berserk
+//            ~udart3b.itm~  ~override~ // blinding darts +2: 25% blind, fixed elsewhere
+              ~udart5a.itm~  ~override~ // inferno darts +4: 20% fire damage
+              ~uflal2a.itm~  ~override~ // crooked flail: 50% pierce damage
+              ~uflal2b.itm~  ~override~ // hammer flail +2: 15% stun
+              ~uflal4a.itm~  ~override~ // fire flail +3: 50% fire damage
+              ~uflal5a.itm~  ~override~ // shocking flail +4: 50% electric damage, 10% stun 
+              ~uhalb1a.itm~  ~override~ // halberd of sparks +1: 15% electric damage
+              ~uhalb2a.itm~  ~override~ // diseased halberd +1: 10% disease
+              ~uhalb3b.itm~  ~override~ // darig's rest: 10% sleep
+              ~uhalb3c.itm~  ~override~ // life halberd +2: 10% heal
+              ~uhalb4a.itm~  ~override~ // doom halberd +3: 50% fire damage, 15% stun
+              ~uhalb4b.itm~  ~override~ // star forged halberd +3: 15% stun
+              ~uhalb5a.itm~  ~override~ // great halberd +4: 50% acid damage
+              ~ulswd2b.itm~  ~override~ // spiked long sword +1: 25% pierce damage
+              ~ulswd3b.itm~  ~override~ // long sword of confusion +2: 25% confusion
+              ~ulswd3c.itm~  ~override~ // life's gift: 15% heal
+              ~ulswd4a.itm~  ~override~ // hold fast: 15% hold
+              ~ulswd5b.itm~  ~override~ // bhaal's fire: 15% stun
+              ~umstr2a.itm~  ~override~ // morning star of confusion +1: 10% confusion
+              ~umstr2b.itm~  ~override~ // lesser static star +1: 20% electric damage, 10% stun
+              ~umstr3a.itm~  ~override~ // morning star +2: hammer: 20% stun
+              ~umstr3c.itm~  ~override~ // morning star of lesser phasing: 15% phase, 25% cold
+              ~umstr4b.itm~  ~override~ // static star +3: 15% slow, 25% electric damage
+              ~umstr5a.itm~  ~override~ // morning star of action +4: 5% stun
+              ~usswd2a.itm~  ~override~ // flaming short sword +1: 50% fire damage
+              ~usswd2b.itm~  ~override~ // short sword of lesser phasing: 10% phased
+              ~usswd3a.itm~  ~override~ // sloth: 10% slow
+              ~usswd3b.itm~  ~override~ // some god's lesser promise: 5% heal
+              ~usswd5a.itm~  ~override~ // short sword of health +4: 15% heal
+              ~usswd5b.itm~  ~override~ // short sword +4: hammer: 20% stun 
+              ~utswd2b.itm~  ~override~ // two handed sword +1: hammering: 20% stun
+              ~utswd3a.itm~  ~override~ // two handed sword +2: hammering: 20% stun
+              ~utswd4a.itm~  ~override~ // two handed sword +4: backbiter: 25% user takes piercing
+              ~utswd4b.itm~  ~override~ // two handed sword +3: bane: 25% disease
+//            ~utswd5a.itm~  ~override~ // static two handed sword +4: 50% electric damage, 25% stun, fixed elsewhere
+              ~utswd5b.itm~  ~override~ // two handed sword +4: life giver: 5% heal
+//            ~wepwyv.itm~   ~override~ // wyvern attack: 50% poison, already correct
+              ~whtash.itm~   ~override~ // the spear of white ash: 5% extra damage
+              ~withery.itm~  ~override~ // ol' withery: 2% finger of death
+//            ~wranged.itm~  ~override~ // no such index: existing splits are fine
+//            ~xclub.itm~    ~override~ // dazer: 5% stun, fixed elsewhere
+              ~young.itm~    ~override~ // young rage: 5% berserk
+              ~zz05we.itm~   ~override~ // the mace of weal and woe: 13% curse
+              ~zze6pe.itm~   ~override~ // pig's eye: 50% blinds orcs
+              ~zzj6sp.itm~   ~override~ // selune's promise: 2% morale failure
+              ~zzm5mh.itm~   ~override~ // misery's herald: 10% horror
+  READ_ASCII 0x00 type (3)
+  SET min_size = 0
+  PATCH_IF ("%type%" STRING_COMPARE_CASE "spl" = 0) BEGIN
+    READ_LONG  0x64 abil_off ELSE 0
+    READ_SHORT 0x68 abil_num ELSE 0
+    READ_LONG  0x6a fx_off   ELSE 0
+    SET counter_offset = 0x70
+    SET abil_length    = 0x28
+    SET global_loop    = 0
+    SET fx_type        = 0
+    SET min_size       = 0x72
+  END ELSE
+  PATCH_IF ("%type%" STRING_COMPARE_CASE "itm" = 0) BEGIN
+    READ_LONG  0x64 abil_off ELSE 0
+    READ_SHORT 0x68 abil_num ELSE 0
+    READ_LONG  0x6a fx_off   ELSE 0
+    SET counter_offset = 0x70
+    SET abil_length    = 0x38
+    SET global_loop    = 1
+    SET fx_type        = 0
+    SET min_size       = 0x72
+/*  END ELSE
+  PATCH_IF ("%type%" STRING_COMPARE_CASE "cre" = 0) BEGIN
+    READ_LONG  0x2c4 fx_off ELSE 0
+    READ_BYTE 0x33 fx_type ELSE 2
+    SET abil_off       = 0
+    SET abil_num       = 0
+    SET counter_offset = 0x2c8
+    SET abil_length    = 0
+    SET global_loop    = 1
+    SET min_size       = 0x2d4
+    SET cosmetic       = 0 */
+  END
+  PATCH_IF ((SOURCE_SIZE >= min_size) AND (min_size != 0)) BEGIN // min_size must get set by file type detection
+    FOR (index = (0 - global_loop) ; index < abil_num ; ++index) BEGIN
+      PATCH_IF (index < 0) BEGIN // if loop through globals needed
+        SET abil_fx_idx = 0
+      END ELSE BEGIN // otherwise normal ability
+        SET counter_offset = (abil_off + 0x1e + (abil_length * index))
+        READ_SHORT  (abil_off + 0x20 + (abil_length * index)) abil_fx_idx
+      END
+      READ_SHORT counter_offset counter // fx_num on global loop, otherwise abil_fx_num
+      // run one pass purely looking for keys
+      FOR (index2 = 0 ; index2 < counter ; ++index2) BEGIN
+        PATCH_FOR_EACH offset IN 0x12 0x13 BEGIN
+          READ_BYTE  (fx_off + offset + (offset * fx_type) + ((abil_fx_idx + index2) * (0x30 + (0xd8 * fx_type)))) prob
+          PATCH_IF (prob > 0) AND (prob < 100) BEGIN
+            WRITE_BYTE  (fx_off + offset + (offset * fx_type) + ((abil_fx_idx + index2) * (0x30 + (0xd8 * fx_type)))) (prob - 1)
+          END
+        END
+      END
+    END
+  END
+  BUT_ONLY IF_EXISTS
 
 /////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
 /////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
