@@ -1181,12 +1181,12 @@ INCLUDE ~iwdfixpack/lib/creature.tpa~
 ACTION_PHP_EACH cd_iwdfixpack_creature AS params => file BEGIN
 
   COPY_EXISTING ~%file%.cre~ ~override~
-    PATCH_IF (params_2 < 256) BEGIN WRITE_BYTE 0x237 params_2 END // sex
-    PATCH_IF (params_1 < 256) BEGIN WRITE_BYTE 0x2dd params_1 END // gender
-    PATCH_IF (params_3 < 256) BEGIN WRITE_BYTE 0x2e3 params_3 END // alignment
-    PATCH_IF (params_4 < 256) BEGIN WRITE_BYTE 0x2d9 params_4 END // general
-    PATCH_IF (params_5 < 256) BEGIN WRITE_BYTE 0x2da params_5 END // race
-    PATCH_IF (params_6 < 256) BEGIN WRITE_BYTE 0x2db params_6 END // class
+    PATCH_IF (IS_AN_INT params_2) BEGIN WRITE_BYTE 0x237 params_2 END // sex
+    PATCH_IF (IS_AN_INT params_1) BEGIN WRITE_BYTE 0x2dd params_1 END // gender
+    PATCH_IF (IS_AN_INT params_3) BEGIN WRITE_BYTE 0x2e3 params_3 END // alignment
+    PATCH_IF (IS_AN_INT params_4) BEGIN WRITE_BYTE 0x2d9 params_4 END // general
+    PATCH_IF (IS_AN_INT params_5) BEGIN WRITE_BYTE 0x2da params_5 END // race
+    PATCH_IF (IS_AN_INT params_6) BEGIN WRITE_BYTE 0x2db params_6 END // class
     BUT_ONLY IF_EXISTS
           
 END
