@@ -1,0 +1,316 @@
+/////
+///// now, run the immunity batches against the consolidated strings
+/////
+  
+COPY_EXISTING ~aldeth.itm~   ~override~ // ring of free action, 7 new effects from cd_immunity_free_action_arrays
+              ~cigbard.itm~  ~override~ // ring of free action, 2 new effects from cd_immunity_free_action_arrays
+              ~freeact.itm~  ~override~ // ring of free action, 2 new effects from cd_immunity_free_action_arrays
+              ~labelt.itm~   ~override~ // girdle of labelas, 5 new effects from cd_immunity_free_action_arrays
+              ~mage05.itm~   ~override~ // ring of free action, 7 new effects from cd_immunity_free_action_arrays
+              ~potn45.itm~   ~override~ // potion of freedom, 3 new effects from cd_immunity_free_action_arrays
+              ~ring09.itm~   ~override~ // ring of free action, 2 new effects from cd_immunity_free_action_arrays
+              ~ring97.itm~   ~override~ // ring, 8 new effects from cd_immunity_free_action_arrays
+              ~sppr403.spl~  ~override~ // free action, 72 new effects from cd_immunity_free_action_arrays
+              ~sw2h06.itm~   ~override~ // spider's bane, 6 new effects from cd_immunity_free_action_arrays
+  LPF cd_apply_batch STR_VAR array_name = cd_immunity_free_action_arrays END
+  BUT_ONLY IF_EXISTS
+
+COPY_EXISTING ~blindman.itm~ ~override~ // <Invalid Strref -1>, 2 new effects from cd_full_blindness_opcode_arrays
+              ~spwi958.spl~  ~override~ // Power Word, Blind, 2 new effects from cd_full_blindness_opcode_arrays
+  LPF cd_apply_batch STR_VAR array_name = cd_full_blindness_opcode_arrays END
+  BUT_ONLY IF_EXISTS
+  
+COPY_EXISTING ~arow07.itm~   ~override~ // arrows of dispelling, 3 new effects from cd_full_dispel_arrays
+              ~fkiller.itm~  ~override~ // faith killer, 3 new effects from cd_full_dispel_arrays
+              ~pnull.itm~    ~override~ // oil of null effect, 4 new effects from cd_full_dispel_arrays
+              ~potn33.itm~   ~override~ // potion of magic blocking, 4 new effects from cd_full_dispel_arrays
+              ~scrl07.itm~   ~override~ // protection from magic, 4 new effects from cd_full_dispel_arrays
+              ~spin112.spl~  ~override~ // dispel magic, 3 new effects from cd_full_dispel_arrays
+              ~spin164.spl~  ~override~ // dispel magic, 3 new effects from cd_full_dispel_arrays
+              ~spin985.spl~  ~override~ // <invalid strref -1>, 3 new effects from cd_full_dispel_arrays
+              ~sppr303.spl~  ~override~ // dispel magic, 3 new effects from cd_full_dispel_arrays
+              ~spwi010.spl~  ~override~ // <invalid strref -1>, 3 new effects from cd_full_dispel_arrays
+              ~spwi302.spl~  ~override~ // dispel magic, 3 new effects from cd_full_dispel_arrays
+              ~spwi601.spl~  ~override~ // antimagic shell, 76 new effects from cd_full_dispel_arrays
+  LPF cd_apply_batch STR_VAR array_name = cd_full_dispel_arrays END
+  BUT_ONLY IF_EXISTS
+
+COPY_EXISTING ~axemino.itm~  ~override~ // axe of the minotaur lord, 0 new effects from cd_full_stun_arrays
+              ~carrio.itm~   ~override~ // ghoul hand, 0 new effects from cd_full_stun_arrays
+              ~cwreve.itm~   ~override~ // attack, 2 new effects from cd_full_stun_arrays
+              ~dart03.itm~   ~override~ // dart of stunning, 1 new effects from cd_full_stun_arrays
+              ~dazer.itm~    ~override~ // dazer, 0 new effects from cd_full_stun_arrays
+              ~ghoulc.itm~   ~override~ // ghoul hand, 0 new effects from cd_full_stun_arrays
+              ~gvalor2.itm~  ~override~ // gauntlet of valor, 1 new effects from cd_full_stun_arrays
+              ~icegolem.itm~ ~override~ // skull, 0 new effects from cd_full_stun_arrays
+              ~paracarr.itm~ ~override~ // ghoul hand, 2 new effects from cd_full_stun_arrays
+              ~paraghas.itm~ ~override~ // ghoul touch, 2 new effects from cd_full_stun_arrays
+              ~paraghou.itm~ ~override~ // ghoul touch, 2 new effects from cd_full_stun_arrays
+              ~poq2-16.itm~  ~override~ // <invalid strref -1>, 0 new effects from cd_full_stun_arrays
+              ~sflail.itm~   ~override~ // flail, 1 new effects from cd_full_stun_arrays
+              ~spin134.spl~  ~override~ // mournful wail, 2 new effects from cd_full_stun_arrays
+              ~spin147.spl~  ~override~ // the siren's yearning - enthralls creatures, 1 new effects from cd_full_stun_arrays
+              ~spin159.spl~  ~override~ // wing buffet, 0 new effects from cd_full_stun_arrays
+              ~spin166.spl~  ~override~ // harpy wail, 2 new effects from cd_full_stun_arrays
+              ~spin990.spl~  ~override~ // <invalid strref -1>, 0 new effects from cd_full_stun_arrays
+              ~spin993.spl~  ~override~ // <invalid strref -1>, 0 new effects from cd_full_stun_arrays
+              ~sppr421.spl~  ~override~ // smashing wave, 0 new effects from cd_full_stun_arrays
+              ~sppr613.spl~  ~override~ // whirlwind, 0 new effects from cd_full_stun_arrays
+              ~sppr715.spl~  ~override~ // symbol of hopelessness, 2 new effects from cd_full_stun_arrays
+              ~sppr721.spl~  ~override~ // holy word, 0 new effects from cd_full_stun_arrays
+              ~sppr722.spl~  ~override~ // unholy word, 0 new effects from cd_full_stun_arrays
+              ~spwi021.spl~  ~override~ // color spray, 0 new effects from cd_full_stun_arrays
+              ~spwi105.spl~  ~override~ // color spray, 0 new effects from cd_full_stun_arrays
+              ~spwi118.spl~  ~override~ // chromatic orb, 0 new effects from cd_full_stun_arrays
+              ~spwi318.spl~  ~override~ // icelance, 0 new effects from cd_full_stun_arrays
+              ~spwi411.spl~  ~override~ // emotion: hopelessness, 2 new effects from cd_full_stun_arrays
+              ~spwi705.spl~  ~override~ // power word, stun, 1 new effects from cd_full_stun_arrays
+              ~spwi806.spl~  ~override~ // great shout, 0 new effects from cd_full_stun_arrays
+              ~spwi959.spl~  ~override~ // power word, stun, 2 new effects from cd_full_stun_arrays
+              ~u1ham3b.itm~  ~override~ // war hammer of sparks +2, 0 new effects from cd_full_stun_arrays
+              ~u1hax2a.itm~  ~override~ // charged battle axe +2, 0 new effects from cd_full_stun_arrays
+              ~u1hax4b.itm~  ~override~ // benorg's truth, 0 new effects from cd_full_stun_arrays
+              ~uarow3b.itm~  ~override~ // hammer arrow +1, 0 new effects from cd_full_stun_arrays
+              ~ubswd5b.itm~  ~override~ // bastard sword +3: incinerator, 0 new effects from cd_full_stun_arrays
+              ~udart1a.itm~  ~override~ // hammer darts, 0 new effects from cd_full_stun_arrays
+              ~uflal2b.itm~  ~override~ // hammer flail +2, 0 new effects from cd_full_stun_arrays
+              ~uflal5a.itm~  ~override~ // shocking flail +4, 0 new effects from cd_full_stun_arrays
+              ~uhalb4a.itm~  ~override~ // doom halberd +3, 0 new effects from cd_full_stun_arrays
+              ~uhalb4b.itm~  ~override~ // star forged halberd +3, 0 new effects from cd_full_stun_arrays
+              ~ulswd5b.itm~  ~override~ // bhaal's fire, 0 new effects from cd_full_stun_arrays
+              ~umstr2b.itm~  ~override~ // lesser static star +1, 0 new effects from cd_full_stun_arrays
+              ~umstr3a.itm~  ~override~ // morning star +2: hammer, 0 new effects from cd_full_stun_arrays
+              ~umstr5a.itm~  ~override~ // morning star of action +4, 0 new effects from cd_full_stun_arrays
+              ~usswd5b.itm~  ~override~ // short sword +4: hammer, 0 new effects from cd_full_stun_arrays
+              ~utswd2b.itm~  ~override~ // two handed sword +1: hammering, 0 new effects from cd_full_stun_arrays
+              ~utswd3a.itm~  ~override~ // two handed sword +2: hammering, 0 new effects from cd_full_stun_arrays
+              ~utswd5a.itm~  ~override~ // static two handed sword +4, 0 new effects from cd_full_stun_arrays
+              ~wand04.itm~   ~override~ // wand of paralyzation , 2 new effects from cd_full_stun_arrays
+              ~wandfre.itm~  ~override~ // wand of freezing death, 0 new effects from cd_full_stun_arrays
+              ~xclub.itm~    ~override~ // dazer, 0 new effects from cd_full_stun_arrays
+  LPF cd_apply_batch STR_VAR array_name = cd_full_stun_arrays END
+  BUT_ONLY IF_EXISTS
+  
+COPY_EXISTING ~behamu.itm~   ~override~ // <invalid strref -1>, 1 new effects from cd_immunity_charm_arrays
+              ~cibossb.itm~  ~override~ // ring, 1 new effects from cd_immunity_charm_arrays
+              ~cigbard.itm~  ~override~ // ring of free action, 1 new effects from cd_immunity_charm_arrays
+              ~ciigen.itm~   ~override~ // broken shield, 1 new effects from cd_immunity_charm_arrays
+              ~cispgrd1.itm~ ~override~ // helmet of charm protection, 1 new effects from cd_immunity_charm_arrays
+              ~cwreve.itm~   ~override~ // attack, 1 new effects from cd_immunity_charm_arrays
+              ~gvalor1.itm~  ~override~ // gauntlet of valor, 4 new effects from cd_immunity_charm_arrays
+              ~helm06.itm~   ~override~ // helmet of charm protection, 2 new effects from cd_immunity_charm_arrays
+              ~potn21.itm~   ~override~ // potion of clarity, 2 new effects from cd_immunity_charm_arrays
+              ~ring90.itm~   ~override~ // ring, 1 new effects from cd_immunity_charm_arrays
+              ~ring91.itm~   ~override~ // ring, 1 new effects from cd_immunity_charm_arrays
+              ~ring95.itm~   ~override~ // ring, 1 new effects from cd_immunity_charm_arrays
+              ~ring98.itm~   ~override~ // ring, 1 new effects from cd_immunity_charm_arrays
+              ~spitm05.spl~  ~override~ // righteous wrath of the faithful, 4 new effects from cd_immunity_charm_arrays
+              ~sppr107.spl~  ~override~ // protection from evil, 120 new effects from cd_immunity_charm_arrays
+              ~sppr408.spl~  ~override~ // protection from evil 10' radius, 96 new effects from cd_immunity_charm_arrays
+              ~sppr415.spl~  ~override~ // blood rage, 4 new effects from cd_immunity_charm_arrays
+              ~sppr508.spl~  ~override~ // chaotic commands, 88 new effects from cd_immunity_charm_arrays
+              ~sppr511.spl~  ~override~ // righteous wrath of the faithful, 88 new effects from cd_immunity_charm_arrays
+              ~sppr716.spl~  ~override~ // impervious sanctity of mind, 68 new effects from cd_immunity_charm_arrays
+              ~spwi113.spl~  ~override~ // protection from evil, 120 new effects from cd_immunity_charm_arrays
+              ~spwi804.spl~  ~override~ // mind blank, 4 new effects from cd_immunity_charm_arrays
+              ~stupid.itm~   ~override~ // ring, 1 new effects from cd_immunity_charm_arrays
+  LPF cd_apply_batch STR_VAR array_name = cd_immunity_charm_arrays END
+  BUT_ONLY IF_EXISTS
+
+COPY_EXISTING ~cibossb.itm~  ~override~ // ring, 1 new effects from cd_immunity_confusion_arrays
+              ~potn21.itm~   ~override~ // potion of clarity, 1 new effects from cd_immunity_confusion_arrays
+              ~ring90.itm~   ~override~ // ring, 1 new effects from cd_immunity_confusion_arrays
+              ~ring91.itm~   ~override~ // ring, 1 new effects from cd_immunity_confusion_arrays
+              ~ring94.itm~   ~override~ // ring, 1 new effects from cd_immunity_confusion_arrays
+              ~ring95.itm~   ~override~ // ring, 1 new effects from cd_immunity_confusion_arrays
+              ~ring98.itm~   ~override~ // ring, 1 new effects from cd_immunity_confusion_arrays
+              ~ring99.itm~   ~override~ // ring, 1 new effects from cd_immunity_confusion_arrays
+              ~ringkora.itm~ ~override~ // ring, 1 new effects from cd_immunity_confusion_arrays
+              ~sppr316.spl~  ~override~ // exaltation, 1 new effects from cd_immunity_confusion_arrays
+              ~sppr415.spl~  ~override~ // blood rage, 2 new effects from cd_immunity_confusion_arrays
+              ~sppr508.spl~  ~override~ // chaotic commands, 44 new effects from cd_immunity_confusion_arrays
+              ~sppr716.spl~  ~override~ // impervious sanctity of mind, 34 new effects from cd_immunity_confusion_arrays
+              ~spwi804.spl~  ~override~ // mind blank, 2 new effects from cd_immunity_confusion_arrays
+              ~stupid.itm~   ~override~ // ring, 1 new effects from cd_immunity_confusion_arrays
+              ~yxuresi.itm~  ~override~ // <invalid strref -1>, 1 new effects from cd_immunity_confusion_arrays 
+  LPF cd_apply_batch STR_VAR array_name = cd_immunity_confusion_arrays END
+  BUT_ONLY IF_EXISTS
+  
+COPY_EXISTING ~spwi807.spl~  ~override~ // iron body, 2 new effects from cd_immunity_disease_arrays
+  LPF cd_apply_batch STR_VAR array_name = cd_immunity_disease_arrays END
+  BUT_ONLY IF_EXISTS
+  
+COPY_EXISTING ~aldeth.itm~   ~override~ // ring of free action, 2 new effects from cd_immunity_entangle_arrays
+              ~bootmoa.itm~  ~override~ // boots of moander, 1 new effects from cd_immunity_entangle_arrays
+              ~ciigen.itm~   ~override~ // broken shield, 2 new effects from cd_immunity_entangle_arrays
+              ~cwreve.itm~   ~override~ // attack, 2 new effects from cd_immunity_entangle_arrays
+              ~gvalor1.itm~  ~override~ // gauntlet of valor, 1 new effects from cd_immunity_entangle_arrays
+              ~labelt.itm~   ~override~ // girdle of labelas, 1 new effects from cd_immunity_entangle_arrays
+              ~mage05.itm~   ~override~ // ring of free action, 2 new effects from cd_immunity_entangle_arrays
+              ~potn45.itm~   ~override~ // potion of freedom, 1 new effects from cd_immunity_entangle_arrays
+              ~ring97.itm~   ~override~ // ring, 2 new effects from cd_immunity_entangle_arrays
+              ~sppr403.spl~  ~override~ // free action, 24 new effects from cd_immunity_entangle_arrays
+              ~sw2h06.itm~   ~override~ // spider's bane, 2 new effects from cd_immunity_entangle_arrays
+  LPF cd_apply_batch STR_VAR array_name = cd_immunity_entangle_arrays END
+  BUT_ONLY IF_EXISTS
+
+COPY_EXISTING ~behamu.itm~   ~override~ // <invalid strref -1>, 6 new effects from cd_immunity_fear_arrays
+              ~cibossb.itm~  ~override~ // ring, 6 new effects from cd_immunity_fear_arrays
+              ~ciigen.itm~   ~override~ // broken shield, 6 new effects from cd_immunity_fear_arrays
+              ~helmded.itm~  ~override~ // dead man's face, 8 new effects from cd_immunity_fear_arrays
+              ~potn21.itm~   ~override~ // potion of clarity, 6 new effects from cd_immunity_fear_arrays
+              ~ring90.itm~   ~override~ // ring, 6 new effects from cd_immunity_fear_arrays
+              ~ring91.itm~   ~override~ // ring, 6 new effects from cd_immunity_fear_arrays
+              ~ring94.itm~   ~override~ // ring, 6 new effects from cd_immunity_fear_arrays
+              ~ring95.itm~   ~override~ // ring, 6 new effects from cd_immunity_fear_arrays
+              ~ring98.itm~   ~override~ // ring, 6 new effects from cd_immunity_fear_arrays
+              ~ring99.itm~   ~override~ // ring, 6 new effects from cd_immunity_fear_arrays
+              ~ringkora.itm~ ~override~ // ring, 6 new effects from cd_immunity_fear_arrays
+              ~sceptre.itm~  ~override~ // sceptre of tyranny, 8 new effects from cd_immunity_fear_arrays
+              ~spin144.spl~  ~override~ // the tale of curran strongheart - immunity fear, 7 new effects from cd_immunity_fear_arrays
+              ~sppr108.spl~  ~override~ // remove fear, 5 new effects from cd_immunity_fear_arrays
+              ~sppr316.spl~  ~override~ // exaltation, 7 new effects from cd_immunity_fear_arrays
+              ~sppr415.spl~  ~override~ // blood rage, 8 new effects from cd_immunity_fear_arrays
+              ~sppr716.spl~  ~override~ // impervious sanctity of mind, 136 new effects from cd_immunity_fear_arrays
+              ~spwi210.spl~  ~override~ // resist fear, 6 new effects from cd_immunity_fear_arrays
+              ~spwi804.spl~  ~override~ // mind blank, 8 new effects from cd_immunity_fear_arrays
+              ~stupid.itm~   ~override~ // ring, 6 new effects from cd_immunity_fear_arrays
+              ~virgin.itm~   ~override~ // wailing of virgins, 8 new effects from cd_immunity_fear_arrays  
+  LPF cd_apply_batch STR_VAR array_name = cd_immunity_fear_arrays END
+  BUT_ONLY IF_EXISTS
+
+COPY_EXISTING ~sppr316.spl~  ~override~ // exaltation, 1 new effects from cd_immunity_feeblemind_arrays
+              ~sppr508.spl~  ~override~ // chaotic commands, 22 new effects from cd_immunity_feeblemind_arrays
+              ~sppr716.spl~  ~override~ // impervious sanctity of mind, 17 new effects from cd_immunity_feeblemind_arrays
+              ~spwi804.spl~  ~override~ // mind blank, 1 new effects from cd_immunity_feeblemind_arrays
+  LPF cd_apply_batch STR_VAR array_name = cd_immunity_feeblemind_arrays END
+  BUT_ONLY IF_EXISTS
+  
+COPY_EXISTING ~aldeth.itm~   ~override~ // ring of free action, 2 new effects from cd_immunity_grease_arrays
+              ~labelt.itm~   ~override~ // girdle of labelas, 1 new effects from cd_immunity_grease_arrays
+              ~mage05.itm~   ~override~ // ring of free action, 2 new effects from cd_immunity_grease_arrays
+              ~potn45.itm~   ~override~ // potion of freedom, 1 new effects from cd_immunity_grease_arrays
+              ~ring97.itm~   ~override~ // ring, 2 new effects from cd_immunity_grease_arrays
+              ~sppr403.spl~  ~override~ // free action, 24 new effects from cd_immunity_grease_arrays
+              ~sw2h06.itm~   ~override~ // spider's bane, 2 new effects from cd_immunity_grease_arrays  
+  LPF cd_apply_batch STR_VAR array_name = cd_immunity_grease_arrays END
+  BUT_ONLY IF_EXISTS
+  
+COPY_EXISTING ~spitm05.spl~  ~override~ // righteous wrath of the faithful, 3 new effects from cd_immunity_haste_arrays
+              ~sppr511.spl~  ~override~ // righteous wrath of the faithful, 66 new effects from cd_immunity_haste_arrays  
+  LPF cd_apply_batch STR_VAR array_name = cd_immunity_haste_arrays END
+  BUT_ONLY IF_EXISTS
+  
+COPY_EXISTING ~gvalor1.itm~  ~override~ // gauntlet of valor, 1 new effects from cd_immunity_hold_arrays
+              ~ring09.itm~   ~override~ // ring of free action, 1 new effects from cd_immunity_hold_arrays
+              ~spitm05.spl~  ~override~ // righteous wrath of the faithful, 1 new effects from cd_immunity_hold_arrays
+              ~sppr403.spl~  ~override~ // free action, 24 new effects from cd_immunity_hold_arrays
+              ~sppr415.spl~  ~override~ // blood rage, 1 new effects from cd_immunity_hold_arrays
+              ~sppr508.spl~  ~override~ // chaotic commands, 22 new effects from cd_immunity_hold_arrays
+              ~sppr511.spl~  ~override~ // righteous wrath of the faithful, 22 new effects from cd_immunity_hold_arrays
+              ~sppr716.spl~  ~override~ // impervious sanctity of mind, 17 new effects from cd_immunity_hold_arrays
+              ~spwi804.spl~  ~override~ // mind blank, 1 new effects from cd_immunity_hold_arrays  
+  LPF cd_apply_batch STR_VAR array_name = cd_immunity_hold_arrays END
+  BUT_ONLY IF_EXISTS
+  
+COPY_EXISTING ~potn38.itm~   ~override~ // potion of mirrored eyes, 1 new effects from cd_immunity_petrification_arrays
+              ~scrl15.itm~   ~override~ // protection from petrification, 1 new effects from cd_immunity_petrification_arrays
+              ~spwi108.spl~  ~override~ // protection from petrification, 30 new effects from cd_immunity_petrification_arrays
+  LPF cd_apply_batch STR_VAR array_name = cd_immunity_petrification_arrays END
+  BUT_ONLY IF_EXISTS
+  
+COPY_EXISTING ~behamu.itm~   ~override~ // <invalid strref -1>, 2 new effects from cd_immunity_poison_arrays
+              ~cibossb.itm~  ~override~ // ring, 2 new effects from cd_immunity_poison_arrays
+              ~cwszomb.itm~  ~override~ // attack, 2 new effects from cd_immunity_poison_arrays
+              ~ring90.itm~   ~override~ // ring, 2 new effects from cd_immunity_poison_arrays
+              ~ring91.itm~   ~override~ // ring, 2 new effects from cd_immunity_poison_arrays
+              ~ring94.itm~   ~override~ // ring, 2 new effects from cd_immunity_poison_arrays
+              ~ring95.itm~   ~override~ // ring, 2 new effects from cd_immunity_poison_arrays
+              ~ring98.itm~   ~override~ // ring, 2 new effects from cd_immunity_poison_arrays
+              ~ring99.itm~   ~override~ // ring, 2 new effects from cd_immunity_poison_arrays
+              ~ringkora.itm~ ~override~ // ring, 2 new effects from cd_immunity_poison_arrays
+              ~scrl08.itm~   ~override~ // protection from poison, 2 new effects from cd_immunity_poison_arrays
+              ~spwi807.spl~  ~override~ // iron body, 3 new effects from cd_immunity_poison_arrays
+              ~stupid.itm~   ~override~ // ring, 2 new effects from cd_immunity_poison_arrays
+              ~yxuresi.itm~  ~override~ // <invalid strref -1>, 2 new effects from cd_immunity_poison_arrays
+  LPF cd_apply_batch STR_VAR array_name = cd_immunity_poison_arrays END
+  BUT_ONLY IF_EXISTS
+  
+COPY_EXISTING ~behamu.itm~   ~override~ // <invalid strref -1>, 1 new effects from cd_immunity_poison_resistance_arrays
+              ~cibossb.itm~  ~override~ // ring, 1 new effects from cd_immunity_poison_resistance_arrays
+              ~cwszomb.itm~  ~override~ // attack, 2 new effects from cd_immunity_poison_resistance_arrays
+              ~pest.itm~     ~override~ // pestilent dawn, 2 new effects from cd_immunity_poison_resistance_arrays
+              ~ring90.itm~   ~override~ // ring, 1 new effects from cd_immunity_poison_resistance_arrays
+              ~ring94.itm~   ~override~ // ring, 1 new effects from cd_immunity_poison_resistance_arrays
+              ~ring95.itm~   ~override~ // ring, 1 new effects from cd_immunity_poison_resistance_arrays
+              ~ring98.itm~   ~override~ // ring, 1 new effects from cd_immunity_poison_resistance_arrays
+              ~ring99.itm~   ~override~ // ring, 1 new effects from cd_immunity_poison_resistance_arrays
+              ~ringkora.itm~ ~override~ // ring, 1 new effects from cd_immunity_poison_resistance_arrays
+              ~scrl08.itm~   ~override~ // protection from poison, 2 new effects from cd_immunity_poison_resistance_arrays
+              ~spwi807.spl~  ~override~ // iron body, 1 new effects from cd_immunity_poison_resistance_arrays
+              ~stupid.itm~   ~override~ // ring, 1 new effects from cd_immunity_poison_resistance_arrays
+              ~yxuresi.itm~  ~override~ // <invalid strref -1>, 1 new effects from cd_immunity_poison_resistance_arrays
+  LPF cd_apply_batch STR_VAR array_name = cd_immunity_poison_resistance_arrays END
+  BUT_ONLY IF_EXISTS
+  
+COPY_EXISTING ~spin146.spl~  ~override~ // the song of kaudies - resistant to sound attacks, 1 new effects from cd_immunity_silence_arrays
+  LPF cd_apply_batch STR_VAR array_name = cd_immunity_silence_arrays END
+  BUT_ONLY IF_EXISTS
+  
+COPY_EXISTING ~behamu.itm~   ~override~ // <invalid strref -1>, 1 new effects from cd_immunity_sleep_arrays
+              ~cibossb.itm~  ~override~ // ring, 1 new effects from cd_immunity_sleep_arrays
+              ~ciigen.itm~   ~override~ // broken shield, 1 new effects from cd_immunity_sleep_arrays
+              ~cwreve.itm~   ~override~ // attack, 1 new effects from cd_immunity_sleep_arrays
+              ~gvalor1.itm~  ~override~ // gauntlet of valor, 2 new effects from cd_immunity_sleep_arrays
+              ~helmdef.itm~  ~override~ // helm of the trusted defender, 2 new effects from cd_immunity_sleep_arrays
+              ~ring90.itm~   ~override~ // ring, 1 new effects from cd_immunity_sleep_arrays
+              ~ring91.itm~   ~override~ // ring, 1 new effects from cd_immunity_sleep_arrays
+              ~ring94.itm~   ~override~ // ring, 1 new effects from cd_immunity_sleep_arrays
+              ~ring95.itm~   ~override~ // ring, 1 new effects from cd_immunity_sleep_arrays
+              ~ring98.itm~   ~override~ // ring, 1 new effects from cd_immunity_sleep_arrays
+              ~ring99.itm~   ~override~ // ring, 1 new effects from cd_immunity_sleep_arrays
+              ~ringkora.itm~ ~override~ // ring, 1 new effects from cd_immunity_sleep_arrays
+              ~sppr316.spl~  ~override~ // exaltation, 1 new effects from cd_immunity_sleep_arrays
+              ~sppr415.spl~  ~override~ // blood rage, 2 new effects from cd_immunity_sleep_arrays
+              ~stupid.itm~   ~override~ // ring, 1 new effects from cd_immunity_sleep_arrays
+  LPF cd_apply_batch STR_VAR array_name = cd_immunity_sleep_arrays END
+  BUT_ONLY IF_EXISTS
+  
+COPY_EXISTING ~aldeth.itm~   ~override~ // ring of free action, 2 new effects from cd_immunity_slow_arrays
+              ~cigbard.itm~  ~override~ // ring of free action, 2 new effects from cd_immunity_slow_arrays
+              ~freeact.itm~  ~override~ // ring of free action, 2 new effects from cd_immunity_slow_arrays
+              ~labelt.itm~   ~override~ // girdle of labelas, 2 new effects from cd_immunity_slow_arrays
+              ~mage05.itm~   ~override~ // ring of free action, 2 new effects from cd_immunity_slow_arrays
+              ~potn45.itm~   ~override~ // potion of freedom, 2 new effects from cd_immunity_slow_arrays
+              ~ring09.itm~   ~override~ // ring of free action, 3 new effects from cd_immunity_slow_arrays
+              ~ring97.itm~   ~override~ // ring, 2 new effects from cd_immunity_slow_arrays
+              ~sppr403.spl~  ~override~ // free action, 72 new effects from cd_immunity_slow_arrays
+              ~sw2h06.itm~   ~override~ // spider's bane, 3 new effects from cd_immunity_slow_arrays
+  LPF cd_apply_batch STR_VAR array_name = cd_immunity_slow_arrays END
+  BUT_ONLY IF_EXISTS
+  
+COPY_EXISTING ~aldeth.itm~   ~override~ // ring of free action, 1 new effects from cd_immunity_stun_arrays
+              ~behamu.itm~   ~override~ // <invalid strref -1>, 1 new effects from cd_immunity_stun_arrays
+              ~cibossb.itm~  ~override~ // ring, 1 new effects from cd_immunity_stun_arrays
+              ~mage05.itm~   ~override~ // ring of free action, 1 new effects from cd_immunity_stun_arrays
+              ~ring90.itm~   ~override~ // ring, 1 new effects from cd_immunity_stun_arrays
+              ~ring91.itm~   ~override~ // ring, 1 new effects from cd_immunity_stun_arrays
+              ~ring95.itm~   ~override~ // ring, 1 new effects from cd_immunity_stun_arrays
+              ~sppr415.spl~  ~override~ // blood rage, 2 new effects from cd_immunity_stun_arrays
+              ~sw2h06.itm~   ~override~ // spider's bane, 2 new effects from cd_immunity_stun_arrays
+  LPF cd_apply_batch STR_VAR array_name = cd_immunity_stun_arrays END
+  BUT_ONLY IF_EXISTS
+  
+COPY_EXISTING ~aldeth.itm~   ~override~ // ring of free action, 2 new effects from cd_immunity_web_arrays
+              ~antiweb.itm~  ~override~ // <invalid strref -1>, 2 new effects from cd_immunity_web_arrays
+              ~gvalor1.itm~  ~override~ // gauntlet of valor, 1 new effects from cd_immunity_web_arrays
+              ~labelt.itm~   ~override~ // girdle of labelas, 1 new effects from cd_immunity_web_arrays
+              ~mage05.itm~   ~override~ // ring of free action, 2 new effects from cd_immunity_web_arrays
+              ~magiweb.itm~  ~override~ // <invalid strref -1>, 2 new effects from cd_immunity_web_arrays
+              ~potn45.itm~   ~override~ // potion of freedom, 1 new effects from cd_immunity_web_arrays
+              ~ring97.itm~   ~override~ // ring, 2 new effects from cd_immunity_web_arrays
+              ~sppr403.spl~  ~override~ // free action, 24 new effects from cd_immunity_web_arrays
+              ~sw2h06.itm~   ~override~ // spider's bane, 2 new effects from cd_immunity_web_arrays
+  LPF cd_apply_batch STR_VAR array_name = cd_immunity_web_arrays END
+  BUT_ONLY IF_EXISTS
+  
