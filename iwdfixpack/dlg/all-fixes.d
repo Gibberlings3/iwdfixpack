@@ -87,6 +87,9 @@ ADD_TRANS_ACTION DLARREL
 BEGIN 46 END
 BEGIN 4 END
 ~TakePartyItem("EvaJour")~
+  
+// close infinite garnet exploit for clerics
+ADD_TRANS_TRIGGER DKUTOWNG 40 ~Global("Priest_Gem","GLOBAL",0)~ DO 0
 
 // marchon of waterdeep non-sequitir
 ALTER_TRANS DMARCH BEGIN 9 END BEGIN END
@@ -108,9 +111,15 @@ END
 // question about legs going to wrong place
 ALTER_TRANS DNORL BEGIN 4 END BEGIN 1 END
   BEGIN EPILOGUE ~GOTO 3~ END
+  
+// close xp exploit
+REPLACE_TRIGGER_TEXT DORRICK ~\([^!]PartyHasItem("bookmyt")\)~ ~\1 !Global("Orrick_Quest","GLOBAL",4)~
 
 // perdiem should only go through his post-rescue spiel once
 ADD_STATE_TRIGGER DPERDIEM 15 ~Global("Crazy_Speech","GLOBAL",0)~
+
+// sheemish only sets journal entry in one branch
+ALTER_TRANS DSHEEMIS BEGIN 8 END BEGIN 1 2 END BEGIN ~JOURNAL~ ~#34198~ END
 
 // tarnelm looking for wrong item here
 REPLACE_TRIGGER_TEXT ~dtarnelm~ ~!PartyHasItem("Food")~ ~!PartyHasItem("potatoes")~
