@@ -2915,9 +2915,10 @@ COPY_EXISTING ~redemt.itm~ ~override~
   END
   BUT_ONLY
 
-// missing saves for sound, visual
+// missing saves for sound, visual; prevent portrait icon for creatures ho can't be charmed
 COPY_EXISTING ~ring03.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 savingthrow = BIT3 power = 2 END
+  LPF CLONE_EFFECT INT_VAR parameter2 = 8 match_opcode = 5 opcode = 206 power = 0 timing = 0 duration = 0 resist_dispel = 0 STR_VAR insert = first resource = EVAL "%SOURCE_RES%" END
   BUT_ONLY
 
 // wrong power for equipped fx
@@ -3597,6 +3598,11 @@ END
 /////                                                  \\\\\
 ///// other spell fixes                                \\\\\
 /////                                                  \\\\\
+
+// no portrait icon for creatures that can't be charmed
+COPY_EXISTING ~spin119.spl~ ~override~
+  LPF CLONE_EFFECT INT_VAR parameter2 = 6 match_opcode = 5 opcode = 206 power = 0 timing = 0 duration = 0 resist_dispel = 0 STR_VAR insert = first resource = EVAL "%SOURCE_RES%" END
+  BUT_ONLY 
 
 // targeting, misordering of spell protections prevents effects
 COPY_EXISTING ~spin121.spl~ ~override~
@@ -4524,38 +4530,50 @@ END ELSE BEGIN // how, totlm fixes
 
 END
 
-// many spells stack with themselves and should not
+/////                                                  \\\\\
+///// spell stacking                                   \\\\\
+/////                                                  \\\\\
+
+// many spells stack with themselves and should not - no existing 206
 COPY_EXISTING ~sppr111.spl~ ~override~ // curse
               ~sppr210.spl~ ~override~ // resist fire/cold
               ~sppr306.spl~ ~override~ // protection from fire (priest)
-              ~spwi312.spl~ ~override~ // slow
-  PATCH_IF (SOURCE_SIZE > 0x71) THEN BEGIN // protects against invalid files
-    READ_LONG  0x64 abil_off
-    READ_SHORT 0x68 abil_num
-    READ_LONG  0x6a fx_off
-    SET delta = 0
-    FOR (index = 0 ; index < abil_num ; ++index) BEGIN
-      READ_SHORT (abil_off + 0x1e + (0x28 * index)) abil_fx_num
-      READ_SHORT (abil_off + 0x20 + (0x28 * index)) abil_fx_idx
-      SET abil_fx_idx +=  delta
-      WRITE_SHORT (abil_off + 0x20 + (0x28 * index)) abil_fx_idx
-      FOR (index2 = 0 ; index2 < abil_fx_num ; ++index2) BEGIN
-        READ_SHORT (fx_off +        (0x30 * (abil_fx_idx + index2))) opcode
-        PATCH_IF (opcode = 142) BEGIN // us portrait icon as template
-          READ_ASCII (fx_off +        (0x30 * (abil_fx_idx + index2))) clone (48)
-          SET index2 = abil_fx_num // kills WHILE loop
-        END
-      END
-      INSERT_BYTES   (fx_off +        (0x30 * (abil_fx_num + abil_fx_idx))) 0x30
-        WRITE_ASCIIE (fx_off +        (0x30 * (abil_fx_num + abil_fx_idx))) "%clone%"         // copy effect
-        WRITE_SHORT  (fx_off +        (0x30 * (abil_fx_num + abil_fx_idx))) 206               // spell immunity
-        WRITE_LONG   (fx_off + 0x08 + (0x30 * (abil_fx_num + abil_fx_idx))) 0                 // anyone
-        WRITE_ASCIIE (fx_off + 0x14 + (0x30 * (abil_fx_num + abil_fx_idx))) ~%SOURCE_RES%~ #8 // spell: self
-      SET delta += 1
-      WRITE_SHORT (abil_off + 0x1e + (0x28 * index)) (abil_fx_num + 1)
-    END
-  END
+              ~spwi412.spl~ ~override~ // greater malison
+  LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 142 opcode = 254 parameter2 = 0 timing = 1 duration = 0 STR_VAR insert = first resource = EVAL "%SOURCE_RES%" END
+  BUT_ONLY 
+  
+// many spells stack with themselves and should not; convert existing 206 to 254
+COPY_EXISTING ~sppr406.spl~ ~override~ // defensive harmony
+              ~spwi107.spl~ ~override~ // friends
+              ~spwi114.spl~ ~override~ // shield
+              ~spwi201.spl~ ~override~ // blur
+              ~spwi214.spl~ ~override~ // strength
+  LPF CLONE_EFFECT  INT_VAR multi_match = 1 match_opcode = 206 match_parameter2 = 0 opcode = 254 timing = 1 duration = 0 
+                    STR_VAR insert = first match_resource = EVAL "%SOURCE_RES%" resource = EVAL "%SOURCE_RES%" END
+  LPF DELETE_EFFECT INT_VAR match_opcode = 206 match_parameter2 = 0 STR_VAR match_resource = EVAL "%SOURCE_RES%" resource = EVAL "%SOURCE_RES%" END
   BUT_ONLY
+  
+// iwd: no chance, no 206; how: chance exists, but no 206; totlm: has 2x 206 vs. self and chance
+COPY_EXISTING ~spwi209.spl~ ~override~ // luck
+  LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 142 opcode = 254 parameter2 = 0 timing = 1 duration = 0 STR_VAR insert = first resource = EVAL "%SOURCE_RES%" END
+  PATCH_IF !game_is_iwd BEGIN
+    LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 142 opcode = 254 parameter2 = 0 timing = 1 duration = 0 STR_VAR insert = first resource = chance END
+    PATCH_IF game_is_totlm BEGIN
+      LPF DELETE_EFFECT INT_VAR match_opcode = 206 match_parameter2 = 0 STR_VAR match_resource = EVAL "%SOURCE_RES%" resource = EVAL "%SOURCE_RES%" END // delete, handled by 254
+    END ELSE BEGIN
+      LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 142 opcode = 206 parameter2 = 0 STR_VAR insert = last resource = chance END // add 206 vs. chance
+    END
+  END    
+  BUT_ONLY
+  
+// slow spells should cancel all other slow spells before applying themselves
+COPY_EXISTING ~spin173.spl~  ~override~
+              ~spwi312.spl~  ~override~
+  LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 142 opcode = 254 parameter2 = 0 timing = 1 duration = 0 STR_VAR insert = first resource = spwi312 END
+  PATCH_IF game_is_totlm BEGIN
+    LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 142 opcode = 254 parameter2 = 0 timing = 1 duration = 0 STR_VAR insert = first resource = spin173 END
+  END  
+  BUT_ONLY IF_EXISTS 
 
 /////                                                  \\\\\
 ///// store fixes                                      \\\\\
