@@ -764,6 +764,12 @@ COPY_EXISTING ~ar2115.are~ ~override~
   LPF ALTER_AREA_CONTAINER INT_VAR cont_icon = 12 STR_VAR cont_name = "Locked Crate" END
   BUT_ONLY
 
+// removes extended night flag 
+COPY_EXISTING ~ar3000.are~ ~override~ // Vale of Shadows
+              ~ar9500.are~ ~override~ // Gloomfrost
+  WRITE_SHORT 0x48 (THIS BAND `BIT6) 
+  BUT_ONLY IF_EXISTS // ar9500 is HoW area
+
 // ambient mismatch
 COPY_EXISTING ~ar3001.are~ ~override~
   LPF ALTER_AREA_AMBIENT INT_VAR sounds = 5 STR_VAR ambient_name = "growls 1" END // only five ambient sounds, not six
@@ -792,6 +798,11 @@ COPY_EXISTING ~ar3501.are~ ~override~
 COPY_EXISTING ~ar3502.are~ ~override~
   LPF ALTER_AREA_DOOR INT_VAR door_icon = 8 STR_VAR door_name = "AR3502Switch1" END
   BUT_ONLY
+  
+// Kresselack's chest in AR3503 should not show up as trapped
+COPY_EXISTING ~ar3503.are~ ~override~ // Kresselack's Tomb, level 3
+  LPF ALTER_AREA_CONTAINER INT_VAR trapped = 0 STR_VAR container_name = "Sarcophagus" END // technically untraps all, but none should be trapped anyway
+  BUT_ONLY_IF_IT_CHANGES
 
 // lizard king, minions keep together EA-wise
 COPY_EXISTING ~ar4001.are~ ~override~
@@ -1189,6 +1200,28 @@ ACTION_PHP_EACH cd_iwdfixpack_creature AS params => file BEGIN
     PATCH_IF (IS_AN_INT params_6) BEGIN WRITE_BYTE 0x2db params_6 END // class
     BUT_ONLY IF_EXISTS
           
+END
+  
+// changing low > high animations
+ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_anim_fixes BEGIN
+
+  badson   => 0x6000 // Brother Adson
+  bharken  => 0x6000 // Brother Harken
+  talodead => 0x6000 // Talonite Priest
+  sbethla  => 0x6010 // Priestess of Ilmater
+  sincylia => 0x6010 // Sister Incylia  
+  kalabac  => 0x6100 // Corpse
+  idol     => 0x6200 // The Idol
+  kieran   => 0x6200 // Kieran Nye
+  nym      => 0x6301 // Nym
+END
+
+ACTION_PHP_EACH cd_anim_fixes AS file => anim BEGIN
+
+  COPY_EXISTING ~%file%.cre~ ~override~
+    WRITE_LONG 0x28 anim
+    BUT_ONLY
+    
 END
 
 /////                                                  \\\\\
@@ -2745,6 +2778,11 @@ COPY_EXISTING ~holding.itm~ ~override~
 // add back ApR as equipped effect
 COPY_EXISTING ~idart01.itm~ ~override~ // ApR
   LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 1 target = 1 parameter1 = 3 parameter2 = 1 timing = 2 END
+  BUT_ONLY 
+  
+// name Kaylessa's Armor 
+COPY_EXISTING ~kaychai.itm~ ~override~ // Kaylessa's Armor
+  SAY 0x0c @117
   BUT_ONLY
 
 // move cold resistance to equipped effect
@@ -4084,6 +4122,17 @@ COPY_EXISTING ~spwi317.spl~ ~override~
 COPY_EXISTING ~spwi407.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 240 power = 0 END
   BUT_ONLY
+  
+// stoneskin should be 1d4 skins +1 skin per 2 levels; was defaulting to 2 +1 skin per 2 levels
+COPY_EXISTING ~spwi408.spl~ ~override~ // Stoneskin
+  READ_SHORT 0x68 abil_num
+  FOR (index = 0 ; index < abil_num ; ++index) BEGIN
+    LPF ALTER_EFFECT INT_VAR header = index match_opcode = 218 match_parameter1 = (index + 5) parameter1 = (index + 4) probability1 =  24 probability2 =  0 END // 1 on 1d4
+    LPF CLONE_EFFECT INT_VAR header = index match_opcode = 218 match_parameter1 = (index + 4) parameter1 = (index + 7) probability1 = 100 probability2 = 75 END // 4 on 1d4
+    LPF CLONE_EFFECT INT_VAR header = index match_opcode = 218 match_parameter1 = (index + 4) parameter1 = (index + 6) probability1 =  74 probability2 = 50 END // 3 on 1d4
+    LPF CLONE_EFFECT INT_VAR header = index match_opcode = 218 match_parameter1 = (index + 4) parameter1 = (index + 5) probability1 =  49 probability2 = 25 END // 2 on 1d4
+  END
+  BUT_ONLY 
 
 // string bypassing MR
 COPY_EXISTING ~spwi411.spl~ ~override~
@@ -4558,78 +4607,8 @@ END
 ///// large batch fixes                                \\\\\
 /////                                                  \\\\\
 
-ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_dispel BEGIN END
-
-ACTION_FOR_EACH item IN goodber fseeds BEGIN
-
-  ACTION_IF FILE_EXISTS_IN_GAME ~%item%.itm~ BEGIN
-
-    ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_dispel BEGIN
-      "%item%" => 123
-    END
-
-  END
-
-END
-
-ACTION_FOR_EACH item IN smcudge shillel shamme3 shamme2 shamme1 msword moonbla ltouch
-              ghoult fblade dobone decasta ctouch bclaw BEGIN
-
-  ACTION_IF FILE_EXISTS_IN_GAME ~%item%.itm~ BEGIN
-
-    ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_dispel BEGIN
-      "%item%" => 112
-    END
-
-  END
-
-END
-
-ACTION_FOR_EACH file IN arow07.itm fkiller.itm pnull.itm potn33.itm scrl07.itm spin112.spl 
-  spin164.spl spin985.spl sppr303.spl spwi010.spl spwi302.spl spwi601.spl BEGIN
-
-  ACTION_IF FILE_EXISTS_IN_GAME ~%file%~ BEGIN
-
-    COPY_EXISTING ~%file%~ ~override~
-      PATCH_IF ("%SOURCE_FILE%" STRING_COMPARE_REGEXP "^.+\.itm$" = 0) BEGIN
-        LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 112 END
-        LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 123 END
-        SET abil_length = 0x38
-      END ELSE BEGIN
-        LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = 112 END
-        LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = 123 END
-        SET abil_length = 0x28
-      END
-      READ_LONG   0x64 abil_off
-      READ_SHORT  0x68 abil_num
-      READ_LONG   0x6a fx_off
-      SET delta = 0
-      FOR (index = 0; index < abil_num; ++index) BEGIN // loop through abilities
-        READ_SHORT  (abil_off + 0x1e + (index * abil_length)) abil_fx_num
-        READ_SHORT  (abil_off + 0x20 + (index * abil_length)) abil_fx_idx
-        SET abil_fx_idx += delta
-        WRITE_SHORT (abil_off + 0x20 + (index * abil_length)) abil_fx_idx
-        FOR (index2 = 0; index2 < abil_fx_num; ++index2) BEGIN // looks for effects for abilities
-          READ_SHORT  (fx_off +        ((abil_fx_idx + index2) * 0x30)) opcode
-          PATCH_IF (opcode = 58) BEGIN // dispel effects
-            READ_ASCII (fx_off +        ((abil_fx_idx + index2) * 0x30)) "clone" (48)
-            PHP_EACH cd_dispel AS item => opcode2 BEGIN
-              INSERT_BYTES (fx_off +        ((abil_fx_idx + index2 + 1) * 0x30)) 0x30
-              WRITE_ASCIIE (fx_off +        ((abil_fx_idx + index2 + 1) * 0x30)) "%clone%" #48
-              WRITE_SHORT  (fx_off +        ((abil_fx_idx + index2 + 1) * 0x30)) "%opcode2%"
-              WRITE_ASCIIE (fx_off + 0x14 + ((abil_fx_idx + index2 + 1) * 0x30)) "%item%" #8
-              SET delta       += 1
-              SET abil_fx_num += 1
-            END
-          END
-          WRITE_SHORT (abil_off + 0x1e + (index * abil_length)) abil_fx_num
-        END
-      END
-      BUT_ONLY
-
-  END
-
-END
+INCLUDE ~iwdfixpack/lib/iwdfp_effect_batches.tpa~
+INCLUDE ~iwdfixpack/lib/batch_patches.tpa~
 
 /////                                                  \\\\\
 ///// bulk probability fixes                           \\\\\
