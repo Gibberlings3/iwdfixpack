@@ -41,7 +41,7 @@ DEFINE_PATCH_FUNCTION cd_elven_sleep_charm_resistance_iwd BEGIN
           END          
           PATCH_IF prob1 > 99 BEGIN SET prob1 = 99 END // prob1's ceiling is actually 99, not 100
           PATCH_FOR_EACH race IN 15 19 BEGIN
-            SET prob1_new = ((((((prob1 + 1) - prob2) * (315 - (race * 15))) / 10) + prob2) - 1) // 90/30% of original, +1/-1 to signify the bounds are inclusive
+            SET prob1_new = ((((((prob1 + 1) - prob2) * (315 - (race * 15))) / 100) + prob2) - 1) // 90/30% of original, +1/-1 to signify the bounds are inclusive
             INSERT_BYTES   (fx_off +        (0x30 * abil_fx_idx)) 0x30                 // insert new effect
               WRITE_SHORT  (fx_off +        (0x30 * abil_fx_idx)) 206                  // use eff file
               WRITE_BYTE   (fx_off + 0x02 + (0x30 * abil_fx_idx)) target               // preserve target
@@ -147,7 +147,7 @@ DEFINE_PATCH_MACRO ~cd_immunity_entangle_arrays~ BEGIN
   END
   DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN
     276, "-10",   154,    "same",      1,     0, "same" => 1 // remove opcode: entangle
-    206, "-10", "-10", "sppr105",  "-10", "-10", "same" => 1 // protection from spell, entangle
+    206,     0,     0, "sppr105",  "-10", "-10", "same" => 1 // protection from spell, entangle
   END
   DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_delete BEGIN END // nothing to delete
 END
@@ -161,7 +161,7 @@ DEFINE_PATCH_MACRO ~cd_immunity_grease_arrays~ BEGIN
   END
   DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN 
     276, "-10",   158,    "same",      1,     0, "same" => 1 // remove opcode: grease
-    206, "-10", "-10", "spwi101",  "-10", "-10", "same" => 1 // protection from spell, grease
+    206,     0,     0, "spwi101",  "-10", "-10", "same" => 1 // protection from spell, grease
   END 
   DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_delete BEGIN END // nothing to delete
 END
@@ -175,8 +175,8 @@ DEFINE_PATCH_MACRO ~cd_immunity_slow_arrays~ BEGIN
     261,  "-10", 40, "same",  "-10",  "-10", "same" => 1 // immunity to slow
   END
   DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN
-    206, "-1",  "-10", "spwi312",  "-10", "-10", "same" => 1 // protection from spell, slow
-    206, "-1",  "-10", "spin173",  "-10", "-10", "same" => 1 // protection from spell, vortex web
+    206, 0,  0, "spwi312",  "-10", "-10", "same" => 1 // protection from spell, slow
+    206, 0,  0, "spin173",  "-10", "-10", "same" => 1 // protection from spell, vortex web
   END
   PATCH_IF cosmetic = 1 BEGIN
     DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN
@@ -233,12 +233,12 @@ DEFINE_PATCH_MACRO ~cd_immunity_fear_arrays~ BEGIN
     261,  "-10",  24, "same",  "-10",  "-10", "last" => 1 // immunity to horror
   END
   DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN
-     23, "-10",    10,     "same",     1,     0, "first" => 1 // reset morale
+     23, "-10",     0,     "same",     1,     0, "first" => 1 // reset morale
     161, "-10", "-10",     "same",     1,     0, "same"  => 1 // remove fear
-    254, "-10", "-10", "spin166", 1, 0, "same" => 1 // remove spell effects: horror, innate (removes visuals)
-    254, "-10", "-10", "spwi205", 1, 0, "same" => 1 // remove spell effects: horror, arcane (removes visuals)
-    254, "-10", "-10", "spwi420", 1, 0, "same" => 1 // remove spell effects: horror, innate (removes visuals)
-    254, "-10", "-10", "sppr409", 1, 0, "same" => 1 // remove spell effects: horror, arcane (removes visuals)
+    254,     0,     0, "spin166", 1, 0, "same" => 1 // remove spell effects: horror, innate (removes visuals)
+    254,     0,     0, "spwi205", 1, 0, "same" => 1 // remove spell effects: horror, arcane (removes visuals)
+    254,     0,     0, "spwi420", 1, 0, "same" => 1 // remove spell effects: horror, innate (removes visuals)
+    254,     0,     0, "sppr409", 1, 0, "same" => 1 // remove spell effects: horror, arcane (removes visuals)
   END
   PATCH_IF cosmetic = 1 BEGIN
     DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN
@@ -257,7 +257,7 @@ DEFINE_PATCH_MACRO ~cd_immunity_charm_arrays~ BEGIN
     261,  "-10",  5, "same",  "-10",  "-10", "same" => 1 // immunity to charm
   END
   DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN
-    254, "-10", "-10", "sppr405", 1, 0, "same" => 1 // block domination outright
+    254,     0,     0, "sppr405", 1, 0, "same" => 1 // block domination outright
   END
   PATCH_IF cosmetic = 1 BEGIN
     DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN
@@ -277,8 +277,8 @@ DEFINE_PATCH_MACRO ~cd_immunity_haste_arrays~ BEGIN
     261,  "-10", 16, "same",  "-10",  "-10", "same" => 1 // immunity to haste
   END
   DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN
-    206,     0,  "-10", "potn14",   "-10", "-10", "same" => 1 // protection from oil of speed
-    206,     0,  "-10", "spwi305",  "-10", "-10", "same" => 1 // protection from spell, haste
+    206,     0,  0, "potn14",   "-10", "-10", "same" => 1 // protection from oil of speed
+    206,     0,  0, "spwi305",  "-10", "-10", "same" => 1 // protection from spell, haste
   END
   PATCH_IF cosmetic = 1 BEGIN
     DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN
@@ -313,8 +313,8 @@ DEFINE_PATCH_MACRO ~cd_immunity_poison_arrays~ BEGIN
     261,  "-10", 25, "same",  "-10",  "-10", "same" => 1 // immunity to poison
   END
   DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN
-    206,  "-1", "-10", "spwi018",  "-10", "-10", "same" => 1 // protection from spell, cloudkill (via trap)
-    206,  "-1", "-10", "spwi503",  "-10", "-10", "same" => 1 // protection from spell, cloudkill (via arcane magic)
+    206,  0, 0, "spwi018",  "-10", "-10", "same" => 1 // protection from spell, cloudkill (via trap)
+    206,  0, 0, "spwi503",  "-10", "-10", "same" => 1 // protection from spell, cloudkill (via arcane magic)
   END
   PATCH_IF cosmetic = 1 BEGIN
     DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN
@@ -350,7 +350,7 @@ DEFINE_PATCH_MACRO ~cd_immunity_web_arrays~ BEGIN
     261,  "-10", 157, "same",  "-10",  "-10", "same" => 1 // immunity to web
   END
   DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN
-    206,     0,  "-10", "spwi215",  "-10", "-10", "same" => 1 // protection from spell, web
+    206,       0,      0, "spwi215",  "-10", "-10", "same" => 1 // protection from spell, web
     276,   "-10",    157,    "same",       1,      0, "same"  => 1 // remove opcode: web
 //   261,  "-10", 109, "same",  "-10",  "-10", "last" => 1 // immunity to paralyze
   END

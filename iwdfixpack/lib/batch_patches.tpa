@@ -1,5 +1,14 @@
+ 
+// add elven/half-elven charm resistance
+COPY_EXISTING ~clck07.itm~  ~override~
+              ~clck08.itm~  ~override~
+              ~spin119.spl~ ~override~
+              ~sppr204.spl~ ~override~
+  LPF cd_elven_sleep_charm_resistance_iwd END
+  BUT_ONLY 
+  
 /////
-///// now, run the immunity batches against the consolidated strings
+///// immunity batches
 /////
   
 COPY_EXISTING ~aldeth.itm~   ~override~ // ring of free action, 7 new effects from cd_immunity_free_action_arrays
