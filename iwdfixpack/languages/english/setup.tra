@@ -21,12 +21,21 @@
 Not usable by:~
    @117 = ~Kaylessa's Chainmail~
    @118 = ~Shadowed Plate~
-   
+   @119 = ~There is a foul odor in the air. On occasion, you find large, black feathers that must have been discarded by some sort of an avian beast. In addition, there are droppings on the ground which indicate the presence of wyverns. Scratch marks on the walls hint that some parts of this area may also be populated by exceptionally large insects.~
+   @120 = ~There is a foul odor in the air. On occasion, you find large, black feathers that must have been discarded by some sort of an avian beast.~
+   @121 = ~Droppings on the ground indicate the presence of wyverns in this area.~
+   @122 = ~Whatever creatures used to live in this area are either dead or long gone. However, you find small quantities of animal hair on the floor, possibly belonging to a feline creature of some sort.~
+   @123 = ~Several doors in this area appear to have been used recently, but there are no tracks indicating that anyone has actually stepped through them. It is almost as if the doors had been manipulated by some kind of external force.~
+   @124 = ~This area smells of dust and decay; it was likely a burial crypt of some sort. On occasion, you are able to spot a few stray bones and some torn rags on the ground.~
+   @125 = ~There is a strange smell of offal in the air which indicates the presence of either orogs or minotaurs, or possibly both. Scratches on some of the walls imply that umber hulks and trolls may also be nearby. In addition, you detect a very faint fungoid smell.~
+   @126 = ~There is a strange smell of offal in the air which indicates the presence of either orogs or minotaurs, or possibly both. Scratches on some of the walls imply that a few umber hulks may also be nearby. Occasionally, you also see dung from some sort of wyvern-like creatures.~
+   @127 = ~Your tracking skills reveal little about this location. However, you vaguely discern traces of a strange slimy substance which appears to cover the darker patches of the ceiling.~
+   @128 = ~The most common tracks in this area seemingly belong to large canines. In several spots, they appear to blend into human footprints. Traces of unusually large webs and consistent waste lead you to believe that there may be unnaturally large spiders in the northeastern portions of the caves. In addition, heaps of rotting vegetation are strewn throughout northern parts of the area. There is also a faint smell of sulfur in the air.~
+   @129 = ~The most common tracks in this area resemble those of large canines. In several spots, they appear to blend into human footprints. Traces of unusually large webs and consistent waste lead you to believe that there may be unnaturally large spiders in the northern portions of the caves. On occasion, you find large, black feathers that must have been discarded by some sort of an avian beast. In addition, there is a strange smell of offal in the air. It seems to be both human and animal. It might come from some sort of hybrid monster.~
+      
   @1000 = ~Game Text Update~
   @1001 = ~This is not available in your language.~
   
-
-
 /////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
 /////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
 /////                                                  \\\\\
