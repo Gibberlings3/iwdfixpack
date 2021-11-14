@@ -2,6 +2,11 @@
 REPLACE_TRIGGER_TEXT ~dedion~   ~ClassEx(Protagonist,Priest)~ ~ClassEx(Protagonist,CLERIC)~
 REPLACE_ACTION_TEXT  ~dwylf~    ~SetGlobal(Looked_Mirror","GLOBAL", 1)~ ~SetGlobal("Looked_Mirror","GLOBAL",1)~
 
+// shouldn't make 'not a fisherman' comment if edion never claimed to be a fisherman
+ADD_TRANS_TRIGGER DEDION 3 ~Global("EdionFisherman","LOCALS",1)~ DO 1
+ADD_TRANS_ACTION DEDION BEGIN 0 END BEGIN 1 3 END ~SetGlobal("EdionFisherman","LOCALS",1)~
+ADD_TRANS_ACTION DEDION BEGIN 1 END BEGIN 0   END ~SetGlobal("EdionFisherman","LOCALS",1)~
+
 // checking for wrong item resref
 REPLACE_TRIGGER_TEXT ~dicasa~   ~PartyHasItem("jhosiwd2")~ ~PartyHasItem("jhoswd2")~
 

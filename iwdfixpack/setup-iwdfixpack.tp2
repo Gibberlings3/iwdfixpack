@@ -665,6 +665,11 @@ END
 ///// area fixes                                       \\\\\
 /////                                                  \\\\\
 
+// spawning elementals trapped in narrow tunnels
+COPY_EXISTING ~ar8013.ini~ ~override~
+  REPLACE_TEXTUALLY ~^\(spawn_point[ %TAB%]*=[ %TAB%]*\[\)0530\.0360:0\]~ ~\1625.506:0]~
+  BUT_ONLY
+
 // match actor animation information to its creature file
 INCLUDE ~iwdfixpack/lib/area_anims.tpa~
 
@@ -1122,6 +1127,30 @@ END ELSE BEGIN // how, totlm fixes
     BUT_ONLY
 
   ACTION_IF game_is_totlm THEN BEGIN // totlm fixes
+
+    // add tracking info for totlm areas
+    OUTER_SET tracking9700 = RESOLVE_STR_REF (@119) 
+    OUTER_SET tracking9709 = RESOLVE_STR_REF (@120) 
+    OUTER_SET tracking9710 = RESOLVE_STR_REF (@121) 
+    OUTER_SET tracking9711 = RESOLVE_STR_REF (@122) 
+    OUTER_SET tracking9712 = RESOLVE_STR_REF (@123) 
+    OUTER_SET tracking9714 = RESOLVE_STR_REF (@124) 
+    OUTER_SET tracking9716 = RESOLVE_STR_REF (@125) 
+    OUTER_SET tracking9717 = RESOLVE_STR_REF (@126) 
+    OUTER_SET tracking9718 = RESOLVE_STR_REF (@127) 
+    OUTER_SET tracking9800 = RESOLVE_STR_REF (@128) 
+    OUTER_SET tracking9801 = RESOLVE_STR_REF (@129) 
+    APPEND ~tracking.2da~ ~AR9700    %tracking9700%    50~ UNLESS ~^AR9700~ // Anauroch Castle - outer courtyard (TotL start area)
+    APPEND ~tracking.2da~ ~AR9709    %tracking9709%    50~ UNLESS ~^AR9709~ // Anauroch Castle - western battlements
+    APPEND ~tracking.2da~ ~AR9710    %tracking9710%    50~ UNLESS ~^AR9710~ // Anauroch Castle - eastern battlements
+    APPEND ~tracking.2da~ ~AR9711    %tracking9711%    50~ UNLESS ~^AR9711~ // Anauroch Castle - inner courtyard
+    APPEND ~tracking.2da~ ~AR9712    %tracking9712%    50~ UNLESS ~^AR9712~ // Anauroch Castle - upper story
+    APPEND ~tracking.2da~ ~AR9714    %tracking9714%    50~ UNLESS ~^AR9714~ // Anauroch Castle - Watchknight Tomb
+    APPEND ~tracking.2da~ ~AR9716    %tracking9716%    50~ UNLESS ~^AR9716~ // Anauroch Castle - dungeon level 1
+    APPEND ~tracking.2da~ ~AR9717    %tracking9717%    50~ UNLESS ~^AR9717~ // Anauroch Castle - dungeon level 2
+    APPEND ~tracking.2da~ ~AR9718    %tracking9718%    50~ UNLESS ~^AR9718~ // Anauroch Castle - dungeon level 3
+    APPEND ~tracking.2da~ ~AR9800    %tracking9800%    50~ UNLESS ~^AR9800~ // Anauroch Castle - Jackal Clan caverns - level 1
+    APPEND ~tracking.2da~ ~AR9801    %tracking9801%    50~ UNLESS ~^AR9801~ // Anauroch Castle - Jackal Clan caverns - level 2
 
     // container icon
     COPY_EXISTING ~ar9711.are~ ~override~
@@ -2089,13 +2118,15 @@ INCLUDE ~iwdfixpack/lib/item.tpa~
 ACTION_PHP_EACH cd_iwdfixpack_item AS params => file BEGIN
 
   COPY_EXISTING ~%file%.itm~ ~override~
-    PATCH_IF (params_1 = 0)   BEGIN WRITE_BYTE 0x18 THIS & `BIT6 END // remove magical flag
-    PATCH_IF (params_1 = 1)   BEGIN WRITE_BYTE 0x18 THIS | BIT6  END // add magical flag
-    PATCH_IF (params_2 < 256) BEGIN WRITE_LONG 0x60 params_2     END // enchanment
-    PATCH_IF (params_3 < 256) BEGIN WRITE_LONG 0x4c params_3     END // weight
-    PATCH_IF (params_4 < 256) BEGIN WRITE_LONG 0x34 params_4     END // price
-    PATCH_IF (params_5 < 256) BEGIN LPF ALTER_ITEM_HEADER INT_VAR type = 1 speed = params_5 END END // weapon speed
-    PATCH_IF (params_6 < 256) BEGIN WRITE_SHORT 0x1c params_6    END // proficiency
+    PATCH_IF (IS_AN_INT params_1) BEGIN
+      PATCH_IF (params_1 = 0)   BEGIN WRITE_BYTE 0x18 THIS & `BIT6 END // remove magical flag
+      PATCH_IF (params_1 = 1)   BEGIN WRITE_BYTE 0x18 THIS | BIT6  END // add magical flag
+    END  
+    PATCH_IF (IS_AN_INT params_5) BEGIN LPF ALTER_ITEM_HEADER INT_VAR type = 1 speed = params_5 END END // weapon speed
+    PATCH_IF (IS_AN_INT params_2) BEGIN WRITE_LONG 0x60 params_2     END // enchanment
+    PATCH_IF (IS_AN_INT params_3) BEGIN WRITE_LONG 0x4c params_3     END // weight
+    PATCH_IF (IS_AN_INT params_4) BEGIN WRITE_LONG 0x34 params_4     END // price
+    PATCH_IF (IS_AN_INT params_6) BEGIN WRITE_SHORT 0x1c params_6    END // proficiency
     BUT_ONLY IF_EXISTS
 
 END
@@ -3183,9 +3214,9 @@ COPY_EXISTING ~zz57pj.itm~ ~override~
 COPY_EXISTING ~zzm5mh.itm~ ~override~
   WRITE_BYTE 0x19 THIS | BIT1 // add cold-iron flag
   LPF ADD_ITEM_EFFECT INT_VAR type = 1 target = 2 probability1 = 10 opcode = 290 parameter2 = 1 STR_VAR resource = "zzm5mh" END // undead immunity
-  LPF ADD_ITEM_EFFECT INT_VAR type = 1 target = 2 power = 2 resist_dispel = 1 duration = 28 probability1 = 10 savingthrow = BIT0
+  LPF ADD_ITEM_EFFECT INT_VAR type = 1 target = 2 power = 2 resist_dispel = 1 duration = 70 probability1 = 10 savingthrow = BIT0
     opcode = 24 END // panic
-  LPF ADD_ITEM_EFFECT INT_VAR type = 1 target = 2 power = 2 resist_dispel = 1 duration = 28 probability1 = 10 savingthrow = BIT0
+  LPF ADD_ITEM_EFFECT INT_VAR type = 1 target = 2 power = 2 resist_dispel = 1 duration = 70 probability1 = 10 savingthrow = BIT0
     opcode = 142 parameter2 = 36 END // panic portrait icon
   LPF ADD_ITEM_EFFECT INT_VAR type = 1 target = 2 power = 2 resist_dispel = 1 duration =  0 probability1 = 10 savingthrow = BIT0
     opcode = 139 parameter1 = 14007 timing = 1 END // display panic string
@@ -4029,6 +4060,11 @@ COPY_EXISTING ~spwi118.spl~ ~override~
 // casting speed
 COPY_EXISTING ~spwi202.spl~ ~override~
   LPF ALTER_SPELL_HEADER INT_VAR speed = 10 END
+  BUT_ONLY
+
+// horror duration should be one turn not four rounds
+COPY_EXISTING ~spwi205.spl~ ~override~ // Horror
+  LPF ALTER_EFFECT INT_VAR match_duration = 28 duration = 70 END
   BUT_ONLY
 
 // undocumented save bonus
