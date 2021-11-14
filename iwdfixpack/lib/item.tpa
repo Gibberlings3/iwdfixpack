@@ -30,6 +30,8 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_item BEGIN
   perdiem, null, null, null, 1, null, null => perdiem // Brother Perdiem's Badge
   portrait, null, null, null, null, null, 0 => portrait // Portrait of Marketh
   potatoes, null, null, null, 1, null, null => potatoes // Sack of Potatoes
+  potn41, null, null, 1, null, null, null => potn41 // Potion of Power
+  potn46, null, null, 1, null, null, null => potn46 // Potion of Stone Form
   presdag, null, 2, null, null, null, null => presdag // Presio's Dagger
   razor, null, null, null, 1, null, null => razor // Container of Razorvine Extract
   scrnote, null, null, null, null, null, 0 => scrnote // Scribbled Note

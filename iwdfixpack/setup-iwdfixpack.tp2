@@ -635,6 +635,13 @@ END ELSE BEGIN // how, totlm fixes
         REPLACE_TEXTUALLY ~EndCutSceneMode()~ ~SetGlobal("OPENED_HIDE","MYAREA",1) OpenDoor("AR9800_Hide1") EndCutSceneMode()~
       END
       BUT_ONLY
+      
+    // no teleport for dead creatures
+    COPY_EXISTING ~cpcttele.bcs~ ~override~
+      DECOMPILE_AND_PATCH BEGIN
+        REPLACE_TEXTUALLY ~\([ %TAB%]!?Global("CRYPT_THING_TELEPORT","LOCALS",0)\)~ ~\1 !StateCheck(Myself,STATE_REALLY_DEAD)~
+      END
+      BUT_ONLY
 
     // revenant regen item fix (see ar9714.are, revnant.cre, rndrevn.cre x2)
     COPY_EXISTING ~eftrolg.bcs~ ~override/cdtrolg.bcs~
@@ -1830,6 +1837,11 @@ ACTION_IF !game_is_iwd THEN BEGIN
   COPY_EXISTING ~dlsgem.cre~  ~override~
     REMOVE_CRE_ITEM ~ring91~                                      // removes from quickslot
     ADD_CRE_ITEM    ~ring91~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as ring/amulet
+    BUT_ONLY
+
+  // one snow troll missing item for knockdown/revive sequence
+  COPY_EXISTING ~dlsnotr.cre~ ~override~
+    ADD_CRE_ITEM ~reg1hp2~ #0 #0 #0 NONE ~LRING RRING~ // missing don't die item, which might help
     BUT_ONLY
 
   // move and equip sword
