@@ -3433,11 +3433,6 @@ END ELSE BEGIN // how, totlm fixes
   COPY_EXISTING ~zz14in.itm~ ~override~
     LPF ALTER_ITEM_HEADER INT_VAR headers = 1 damage_bonus = 4 thac0_bonus = 3 END
     BUT_ONLY
-
-  // weapon speed
-  COPY_EXISTING ~zzg7ts.itm~ ~override~
-    LPF ALTER_ITEM_HEADER INT_VAR speed = 2 END
-    BUT_ONLY
   
   ACTION_IF game_is_totlm THEN BEGIN
 
@@ -3505,14 +3500,15 @@ END
 // gender, sex, alignment, general, race, class fixes
 INCLUDE ~iwdfixpack/lib/spell.tpa~
 
-// file, anim, school => file
+// file, anim, school, casting speed => file
 ACTION_PHP_EACH cd_iwdfixpack_spell AS params => file BEGIN
 
   COPY_EXISTING ~%file%.spl~ ~override~
-    PATCH_IF (params_1 < 256) BEGIN WRITE_BYTE 0x22 params_1 END // animation
-    PATCH_IF (params_2 < 256) BEGIN WRITE_BYTE 0x25 params_2 END // school
+    PATCH_IF (IS_AN_INT params_1) BEGIN WRITE_BYTE 0x22 params_1 END // animation
+    PATCH_IF (IS_AN_INT params_2) BEGIN WRITE_BYTE 0x25 params_2 END // school
+    PATCH_IF (IS_AN_INT params_3) BEGIN LPF ALTER_SPELL_HEADER INT_VAR speed = params_3 END END // casting sped
     BUT_ONLY IF_EXISTS
-
+    
 END
 
 /////                                                  \\\\\
@@ -3762,9 +3758,8 @@ COPY_EXISTING ~sppr205.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 146 power = 0 END
   BUT_ONLY
 
-// casting speed; some effects bypass MR; duration for hold person should be two rounds/level
+// some effects bypass MR; duration for hold person should be two rounds/level
 COPY_EXISTING ~sppr208.spl~ ~override~
-  LPF ALTER_SPELL_HEADER INT_VAR speed = 3 END
   READ_SHORT  0x68 abil_num
   FOR (index = 1 ; index < (abil_num + 1) ; ++index) BEGIN
     LPF ALTER_SPELL_EFFECT INT_VAR header = index duration_high = ((index * 14) + 28) resist_dispel = 1 END
@@ -3778,19 +3773,9 @@ COPY_EXISTING ~sppr211.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 savingthrow = BIT0 END
   BUT_ONLY
 
-// casting speed
-COPY_EXISTING ~sppr215.spl~ ~override~
-  LPF ALTER_SPELL_HEADER INT_VAR speed = 2 END
-  BUT_ONLY
-
 // summons should always bypass spell protections
 COPY_EXISTING ~sppr301.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 243 power = 0 END
-  BUT_ONLY
-
-// casting speed
-COPY_EXISTING ~sppr302.spl~ ~override~
-  LPF ALTER_SPELL_HEADER INT_VAR speed = 10 END
   BUT_ONLY
 
 // string bypassing MR
@@ -3798,23 +3783,15 @@ COPY_EXISTING ~sppr303.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
   BUT_ONLY
 
-// casting sound
-COPY_EXISTING ~sppr304.spl~ ~override~
-  LPF ALTER_SPELL_HEADER INT_VAR speed = 10 END
-//  WRITE_ASCII 0x10 ~eff_p22c~ // makes sound even without one set
-  BUT_ONLY
-
-// casting speed, sound bypassing save, string/visual bypassing MR
+// sound bypassing save, string/visual bypassing MR
 COPY_EXISTING ~sppr305.spl~ ~override~
-  LPF ALTER_SPELL_HEADER INT_VAR speed = 5 END
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 233 resist_dispel = 1 END
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 savingthrow = BIT0 END
   BUT_ONLY
 
-// casting speed, sound bypassing save, string/visual bypassing MR
+// sound bypassing save, string/visual bypassing MR
 COPY_EXISTING ~sppr310.spl~ ~override~
-  LPF ALTER_SPELL_HEADER INT_VAR speed = 5 END
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 savingthrow = BIT0 savebonus = "-2" END
   BUT_ONLY
 
@@ -3875,9 +3852,8 @@ COPY_EXISTING ~sppr507.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 145 power = 0 END
   BUT_ONLY
 
-// casting speed, sound/damage bypassing MR, strings for low HD effects
+// sound/damage bypassing MR, strings for low HD effects
 COPY_EXISTING ~sppr510.spl~ ~override~
-  LPF ALTER_SPELL_HEADER INT_VAR speed = 10 END
   LPF ALTER_SPELL_EFFECT INT_VAR opcode =  12 resist_dispel = 1 END
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 resist_dispel = 1 END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 139 target = 2 power = 5 parameter1 = 14007 timing = 1
@@ -4057,11 +4033,6 @@ COPY_EXISTING ~spwi118.spl~ ~override~
   END
   BUT_ONLY_IF_IT_CHANGES
 
-// casting speed
-COPY_EXISTING ~spwi202.spl~ ~override~
-  LPF ALTER_SPELL_HEADER INT_VAR speed = 10 END
-  BUT_ONLY
-
 // horror duration should be one turn not four rounds
 COPY_EXISTING ~spwi205.spl~ ~override~ // Horror
   LPF ALTER_EFFECT INT_VAR match_duration = 28 duration = 70 END
@@ -4082,16 +4053,15 @@ COPY_EXISTING ~spwi207.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR resist_dispel = 3 END
   BUT_ONLY
 
-// casting speed, shouldn't bypass MR
+// shouldn't bypass MR
 COPY_EXISTING ~spwi208.spl~ ~override~
-  LPF ALTER_SPELL_HEADER INT_VAR speed = 10 END
   LPF ALTER_SPELL_EFFECT INT_VAR resist_dispel = 1 END
   BUT_ONLY
 
-// melf acid arrow lacks casting sound, casting speed/header corrections
+// melf acid arrow lacks casting sound, header corrections
 COPY_EXISTING ~spwi211.spl~ ~override~
   WRITE_ASCII 0x10 "cas_m03" #8
-  LPF ALTER_SPELL_HEADER INT_VAR speed = 2 type_new = 1 END
+  LPF ALTER_SPELL_HEADER INT_VAR type_new = 1 END
   BUT_ONLY
 
 // wrong sound reference
@@ -4112,9 +4082,8 @@ COPY_EXISTING ~spwi214.spl~ ~override~
   END
   BUT_ONLY
 
-// caster pause shouldn't be blocked by spell protections, casting speed
+// caster pause shouldn't be blocked by spell protections
 COPY_EXISTING ~spwi217.spl~ ~override~
-  LPF ALTER_SPELL_HEADER INT_VAR speed = 3 END
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 165 power = 0 END
   BUT_ONLY
 
@@ -4133,9 +4102,8 @@ COPY_EXISTING ~spwi222.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 savingthrow = BIT0 END
   BUT_ONLY
 
-// casting speed, string bypasses MR
+// string bypasses MR
 COPY_EXISTING ~spwi302.spl~ ~override~
-  LPF ALTER_SPELL_HEADER INT_VAR speed = 3 END
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
   BUT_ONLY
 
@@ -4195,9 +4163,8 @@ COPY_EXISTING ~spwi411.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
   BUT_ONLY
 
-// casting speed, missing save
+// missing save
 COPY_EXISTING ~spwi413.spl~ ~override~
-  LPF ALTER_SPELL_HEADER INT_VAR speed = 1 END
   LPF ALTER_SPELL_EFFECT INT_VAR save = BIT0 END
   BUT_ONLY
 
@@ -4264,11 +4231,10 @@ COPY_EXISTING ~spwi513.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 246 power = 0 END
   BUT_ONLY
 
-// casting speed, summons should always bypass spell protections
+// summons should always bypass spell protections
 COPY_EXISTING ~spwi514.spl~ ~override~
               ~spwi515.spl~ ~override~
               ~spwi516.spl~ ~override~
-  LPF ALTER_SPELL_HEADER INT_VAR speed = 10 END
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 246 power = 0 END
   BUT_ONLY
 
@@ -4287,20 +4253,14 @@ COPY_EXISTING ~spwi601.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 58 power = 0 END
   BUT_ONLY
 
-// casting speed
-COPY_EXISTING ~spwi605.spl~ ~override~
-  LPF ALTER_SPELL_HEADER INT_VAR speed = 6 END
-  BUT_ONLY
-
 // casting speed, fade should bypass MR
 COPY_EXISTING ~spwi606.spl~ ~override~
   LPF ALTER_SPELL_HEADER INT_VAR speed = 6 END
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 232 resist_dispel = 0 END
   BUT_ONLY
 
-// casting speed, visual bypassing save
+// visual bypassing save
 COPY_EXISTING ~spwi607.spl~ ~override~
-  LPF ALTER_SPELL_HEADER INT_VAR speed = 6 END
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 233 savingthrow = BIT0 END
   BUT_ONLY
 
@@ -4427,11 +4387,6 @@ END ELSE BEGIN // how, totlm fixes
   COPY_EXISTING ~spin159.spl~ ~override~
     LPF ALTER_SPELL_EFFECT INT_VAR power = 0 END
     BUT_ONLY
-
-  // lance of disruption from kinetic spear--casting time to 0 (see kinetic.itm)
-  COPY_EXISTING ~spitm06.spl~ ~override~
-    LPF ALTER_SPELL_HEADER INT_VAR speed = 0 END
-    BUT_ONLY
   
   // self-visuals and movement speed shouldn't be blocked
   COPY_EXISTING ~sppr319.spl~ ~override~
@@ -4455,11 +4410,6 @@ END ELSE BEGIN // how, totlm fixes
   COPY_EXISTING ~sppr325.spl~ ~override~
     LPF ADD_SPELL_EFFECT INT_VAR opcode = 139 target = 2 power = 3 parameter1 = 10039 timing = 1
       resist_dispel = 1 savingthrow = BIT0 END
-    BUT_ONLY
-  
-  // casting speed
-  COPY_EXISTING ~sppr416.spl~ ~override~
-    LPF ALTER_SPELL_HEADER INT_VAR speed = 5 END
     BUT_ONLY
   
   // add blinded string
