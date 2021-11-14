@@ -2046,6 +2046,11 @@ ACTION_IF !game_is_iwd THEN BEGIN // how, totlm fixes
   COPY_EXISTING ~tiernon.cre~  ~override~
     WRITE_LONG 0x1C 0 // gold
     BUT_ONLY
+  
+  // should start ENEMY like her companions
+  COPY_EXISTING ~pshar.cre~ ~override~
+    WRITE_BYTE 0x2d8 255 // ENEMY
+    BUT_ONLY
 
   ACTION_IF game_is_totlm THEN BEGIN // totlm fixes
 
@@ -2571,7 +2576,7 @@ COPY_EXISTING ~amul01.itm~   ~override~
 // just cast spell directly
 COPY_EXISTING ~amul15.itm~ ~override~
   LPF DELETE_EFFECT INT_VAR check_globals = 0 END // delete all effects
-  LPF ADD_ITEM_EFFECT INT_VAR opcode = 146 target = 1 parameter2 = 1 timing = 1 STR_VAR resource = spwi114 END // just cast shield spell directly
+  LPF ADD_ITEM_EFFECT INT_VAR opcode = 146 target = 1 parameter1 = 9 parameter2 = 1 timing = 1 STR_VAR resource = spwi114 END // just cast shield spell directly
   BUT_ONLY
 
 // targeting fixes for cast spell
@@ -2968,6 +2973,11 @@ COPY_EXISTING ~shldbch.itm~ ~override~
 // add immunity to second projectile
 COPY_EXISTING ~shldrng.itm~ ~override~
   LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 83 target = 1 parameter2 = 313 timing = 2 resist_dispel = 2 END
+  BUT_ONLY
+  
+// give shadowed plate a non-generic name
+COPY_EXISTING ~shplate.itm~ ~override~ // Shadowed Plate +3
+  SAY 0x0c @118 // "Shadowed Plate"
   BUT_ONLY
 
 // sound can be blocked
@@ -3949,9 +3959,10 @@ COPY_EXISTING ~spwi113.spl~ ~override~
   END
   BUT_ONLY
 
-// string has 0 power
-COPY_EXISTING ~spwi114.spl~ ~override~
+// shield blocks direct targeting from mordy missiles, but not the splash; 139 has 0 power
+COPY_EXISTING ~spwi114.spl~ ~override~ // Shield
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 power = 1 END
+  LPF CLONE_EFFECT INT_VAR match_opcode = 142 opcode = 206 parameter2 = 0 STR_VAR resource = spwi422 insert = below END
   BUT_ONLY
 
 // sound, visual not restricted to HD
@@ -4198,9 +4209,10 @@ COPY_EXISTING ~spwi509.spl~ ~override~
   END
   BUT_ONLY
 
-// string bypassing MR
-COPY_EXISTING ~spwi510.spl~ ~override~
+// per descript feeblemind is permanent, not 20 rounds; string bypassing MR
+COPY_EXISTING ~spwi510.spl~ ~override~ // Feeblemind
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+  LPF ALTER_EFFECT INT_VAR match_duration = 140 duration = 3600000 END
   BUT_ONLY
 
 // summons should always bypass spell protections
@@ -4301,6 +4313,11 @@ COPY_EXISTING ~spwi707.spl~ ~override~
 // summons should always bypass spell protections
 COPY_EXISTING ~spwi803.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 240 power = 0 END
+  BUT_ONLY
+
+// mind blank blocks command, but should also block greater command
+COPY_EXISTING ~spwi804.spl~ ~override~
+  LPF CLONE_EFFECT INT_VAR opcode = 206 STR_VAR match_resource = sppr102 resource = sppr518 END
   BUT_ONLY
 
 // summons should always bypass spell protections
