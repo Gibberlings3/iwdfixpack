@@ -1,30 +1,48 @@
 ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_item BEGIN
 
   // file, magical, enchantment, weight, price, weapon speed, item type => file // Name
-
+  
   bagh01, 1, null, null, null, null, null => bagh01 // Bag of Holding
   bagh02, 1, null, null, null, null, null => bagh02 // Bag of Holding
   blun01, null, null, null, 2, null, null => blun01 // Club
   book39, null, null, 2, null, null, null => book39 // History of the Drow II
   cairn, null, null, null, null, 6, null => cairn // Cairn Blade
   decasta, null, null, 0, null, null, 26 => decasta // Decastave
-  dver, null, null, null, null, null, 0 => dver // Dver's Note
+  dver, null, null, null, 1, null, 0 => dver // Dver's Note
   eidanrng, 0, null, null, null, null, null => eidanrng // Eidan's Legacy Ring
   fblade, 0, 0, null, null, null, 20 => fblade // Flame Blade
   fele1-8, 1, null, null, null, null, null => fele1-8 // Skull
+  fkey, null, null, null, 1, null, null => fkey // Forge Key
+  holysym, null, null, null, 1, null, null => holysym // Holy Symbol
+  joril, null, null, null, 1, null, null => joril // Joril's Badge
+  kalabac, null, null, null, 1, null, null => kalabac // Kalabac's Journal
   king, 0, null, null, null, null, null => king // Winter King's Plate
+  krilag, null, null, null, 1, null, null => krilag // Krilag's Badge
+  maiden, null, null, null, 1, null, null => maiden // Maiden Ilmadia's Badge
+  malavon, null, null, null, 1, null, null => malavon // Malavon's Badge
+  marketh, null, null, null, 1, null, null => marketh // Marketh's Badge
   mielikk, null, null, null, null, 4, null => mielikk // Cradle of Mielikki
+  mirror, null, null, null, 1, null, null => mirror // Mirror of Black Ice
+  mirror2, null, null, null, 1, null, null => mirror2 // Mirror of Black Ice Amulet
   misc75, null, 2, null, null, null, null => misc75 // Dagger of Venom
+  mjourn, null, null, null, 1, null, null => mjourn // Maluradek's Journal
   msword, 1, 2, null, null, null, null => msword // Mordenkainen's Sword
+  perdiem, null, null, null, 1, null, null => perdiem // Brother Perdiem's Badge
   portrait, null, null, null, null, null, 0 => portrait // Portrait of Marketh
+  potatoes, null, null, null, 1, null, null => potatoes // Sack of Potatoes
   presdag, null, 2, null, null, null, null => presdag // Presio's Dagger
+  razor, null, null, null, 1, null, null => razor // Container of Razorvine Extract
   scrnote, null, null, null, null, null, 0 => scrnote // Scribbled Note
   shillel, 1, 1, 0, null, null, null => shillel // Shillelagh
   slng01, null, null, null, 1, null, null => slng01 // Sling
   smcudge, null, 4, null, null, null, null => smcudge // Star Metal Cudgel
   staf01, null, null, null, 4, null, null => staf01 // Quarter Staff
   stafhmg, null, 1, null, null, null, null => stafhmg // Staff of the Hanged Men's Glee
+  symhelm, null, null, null, 1, null, null => symhelm // Holy Symbol
   tiernon, null, null, null, null, null, null => tiernon // Tiernon's Hearthstone
+  tjourn, null, null, null, 1, null, null => tjourn // Terikan's Journal
+  tkey, null, null, null, 1, null, null => tkey // Terikan's Key
+  torn, null, null, null, 1, null, null => torn // Scroll
   u1ham3a, null, 2, null, null, null, null => u1ham3a // Corrosive Hammer
   xstafhmg, null, 1, null, null, null, null => xstafhmg // Staff of the Hanged Men's Glee
   zz14in, null, 3, null, null, null, null => zz14in // Inconsequence

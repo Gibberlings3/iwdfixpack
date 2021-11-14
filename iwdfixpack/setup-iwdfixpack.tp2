@@ -807,7 +807,15 @@ COPY_EXISTING ~ar3502.are~ ~override~
 // Kresselack's chest in AR3503 should not show up as trapped
 COPY_EXISTING ~ar3503.are~ ~override~ // Kresselack's Tomb, level 3
   LPF ALTER_AREA_CONTAINER INT_VAR trapped = 0 STR_VAR container_name = "Sarcophagus" END // technically untraps all, but none should be trapped anyway
-  BUT_ONLY_IF_IT_CHANGES
+  BUT_ONLY
+
+// scripts don't do anything to non-party, so disable for non-party triggering
+COPY_EXISTING ~ar3602.are~ ~override~
+  LPF ALTER_AREA_REGION INT_VAR flag_trap_npcs = 0 STR_VAR region_name = "Trigger Point 6" END // script won't do anything to non-party members
+  LPF ALTER_AREA_REGION INT_VAR flag_trap_npcs = 0 STR_VAR region_name = "Trigger Point 7" END // script won't do anything to non-party members
+  LPF ALTER_AREA_REGION INT_VAR flag_trap_npcs = 0 STR_VAR region_name = "Trigger Point 8" END // script won't do anything to non-party members
+  LPF ALTER_AREA_REGION INT_VAR flag_trap_npcs = 0 STR_VAR region_name = "Trigger Point 9" END // script won't do anything to non-party members
+  BUT_ONLY
 
 // lizard king, minions keep together EA-wise
 COPY_EXISTING ~ar4001.are~ ~override~
@@ -820,8 +828,10 @@ COPY_EXISTING ~ar4004.are~ ~override~
   LPF DELETE_AREA_ITEM STR_VAR item_to_delete = book45 END // references future events
   BUT_ONLY
 
-// container icons, missing generic dialogue for creatures
+// container icons, missing generic dialogue for creatures; two traps missing scripts
 COPY_EXISTING ~ar4005.are~ ~override~
+  LPF ALTER_AREA_REGION STR_VAR region_name = "Poison Needle Confusion 3" door_script = GNT2017 END // trap has no script
+  LPF ALTER_AREA_REGION STR_VAR region_name = "Poison Needle Damage 3" door_script = GNT2015 END // trap has no script
   LPF ALTER_AREA_ACTOR STR_VAR dlg_file = "dgenmond" actor_name = "Yuan-Ti Champion 1" END
   LPF ALTER_AREA_ACTOR STR_VAR dlg_file = "dgenmond" actor_name = "Yuan-Ti Champion 2" END
   LPF ALTER_AREA_CONTAINER INT_VAR cont_icon = 5 STR_VAR cont_name = "Desk 2" END
@@ -967,11 +977,15 @@ COPY_EXISTING ~ar6003.are~ ~override~
   LPF ALTER_AREA_CONTAINER INT_VAR bounding_left = 0 bounding_top = 0 bounding_right = 0 bounding_bottom = 0 STR_VAR container_name = "Container 1" END
   BUT_ONLY
 
-// container icons
+// container icons; bad party orientation on entrance
 COPY_EXISTING ~ar6005.are~ ~override~
   FOR (index = 1 ; index < 26 ; ++index) BEGIN
     LPF ALTER_AREA_CONTAINER INT_VAR cont_icon = 7 STR_VAR cont_name = EVAL "Container %index%"  END
   END
+  LPF ALTER_AREA_ENTRANCE INT_VAR orient = 9 STR_VAR entrance_name = "FR6004b" END
+  LPF ALTER_AREA_ENTRANCE INT_VAR orient = 9 STR_VAR entrance_name = "FR6013b" END
+  LPF ALTER_AREA_ENTRANCE INT_VAR orient = 7 STR_VAR entrance_name = "FR6004c" END
+  LPF ALTER_AREA_ENTRANCE INT_VAR orient = 7 STR_VAR entrance_name = "FR6013c" END
   BUT_ONLY
 
 // container icons, made key required
@@ -1105,6 +1119,10 @@ END ELSE BEGIN // how, totlm fixes
   COPY_EXISTING ~ar9300.are~ ~override~
     LPF ALTER_AREA_AMBIENT INT_VAR sounds = 1 STR_VAR ambient_name = "main ambi" END
     BUT_ONLY
+
+  // missing script, but no obvious replacement
+  //COPY_EXISTING ~ar9500.are~ ~override~
+  //  LPF ALTER_AREA_REGION INT_VAR flag_trap_npcs = 0 STR_VAR region_name = "FG Encounters" END // SCFROGT1 is blank, no suitable replacement
   
   // container icon, key required
   COPY_EXISTING ~ar9600.are~ ~override~
@@ -1151,6 +1169,11 @@ END ELSE BEGIN // how, totlm fixes
     APPEND ~tracking.2da~ ~AR9718    %tracking9718%    50~ UNLESS ~^AR9718~ // Anauroch Castle - dungeon level 3
     APPEND ~tracking.2da~ ~AR9800    %tracking9800%    50~ UNLESS ~^AR9800~ // Anauroch Castle - Jackal Clan caverns - level 1
     APPEND ~tracking.2da~ ~AR9801    %tracking9801%    50~ UNLESS ~^AR9801~ // Anauroch Castle - Jackal Clan caverns - level 2
+
+    // scripts don't do anything to non-party, so disable for non-party triggering
+    COPY_EXISTING ~ar9708.are~ ~override~
+      LPF ALTER_AREA_REGION INT_VAR flag_trap_npcs = 0 STR_VAR region_name = "Fire Trap" END // script won't do anything to non-party members
+      BUT_ONLY
 
     // container icon
     COPY_EXISTING ~ar9711.are~ ~override~
@@ -1978,6 +2001,23 @@ ACTION_FOR_EACH file IN
   END
 
 END
+
+// tough lizerdmen should still be tough in their tooltips
+COPY_EXISTING ~belhif.cre~   ~override~ // also fix Belhifet's tooltip while we're here
+              ~lm2hwla.cre~  ~override~
+              ~lm2hwlay.cre~ ~override~
+              ~lm2hwna.cre~  ~override~
+              ~lm2hwnay.cre~ ~override~
+              ~lm2hwte.cre~  ~override~
+              ~lm2hwtey.cre~ ~override~
+              ~ms3tliz.cre~  ~override~
+              ~rdeliztl.cre~ ~override~
+              ~ss2liz5.cre~  ~override~
+              ~ss2liz6.cre~  ~override~
+              ~ss2liz7.cre~  ~override~
+  READ_LONG  0x08 name
+  WRITE_LONG 0x0c name
+  BUT_ONLY
 
 // remove gold
 COPY_EXISTING ~biknight.cre~ ~override~
@@ -2983,6 +3023,11 @@ COPY_EXISTING ~shadless.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 233 timing = 0 END
   BUT_ONLY
 
+// shadows tried to play 'disease' string on themselves ratehr than target
+COPY_EXISTING ~shadow1.itm~ ~override~
+  LPF ALTER_EFFECT INT_VAR check_headers = 1 match_opcode = 139 target = 2 END
+  BUT_ONLY
+
 // wrong prof for shillelagh (IWD only), wrong thac0 bonus (all)
 COPY_EXISTING ~shillel.itm~ ~override~
   WRITE_SHORT 0x26 0 // min str
@@ -3024,6 +3069,14 @@ COPY_EXISTING ~swanarm.itm~ ~override~
   PATCH_FOR_EACH icon IN 25 24 17 16 BEGIN
     LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 142 target = 1 parameter2 = icon timing = 2 END
   END
+  BUT_ONLY
+
+// trolls should not be killed by poison/disease
+COPY_EXISTING ~trollde.itm~ ~override~ // effects rounded out in immnity batches
+  LPF ADD_ITEM_EQEFFECT INT_VAR insert_point = 0 opcode = 261 target = 1 parameter2 = 25 timing = 2 END // immunity to poison
+  LPF ADD_ITEM_EQEFFECT INT_VAR insert_point = 0 opcode = 261 target = 1 parameter2 = 78 timing = 2 END // immunity to disease
+  LPF ADD_ITEM_EQEFFECT INT_VAR insert_point = 0 opcode = 11 target = 1 timing = 1 END // cure any poison currently in effect
+  LPF ADD_ITEM_EQEFFECT INT_VAR insert_point = 0 opcode = 79 target = 1 timing = 1 END // cure any disease currently in effect
   BUT_ONLY
 
 // no save for one sound effect
@@ -3644,13 +3697,9 @@ COPY_EXISTING ~spin119.spl~ ~override~
   LPF CLONE_EFFECT INT_VAR parameter2 = 6 match_opcode = 5 opcode = 206 power = 0 timing = 0 duration = 0 resist_dispel = 0 STR_VAR insert = first resource = EVAL "%SOURCE_RES%" END
   BUT_ONLY 
 
-// targeting, misordering of spell protections prevents effects
+// targeting prevents effects
 COPY_EXISTING ~spin121.spl~ ~override~
-  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = 206 END
   LPF ALTER_SPELL_EFFECT INT_VAR target = 1 END
-  PATCH_FOR_EACH spell IN sppr408 sppr107 spwi113 spin121 BEGIN
-    LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 1 resist_dispel = 2 duration = 1680 STR_VAR resource = EVAL "%spell%" END
-  END
   BUT_ONLY
 
 // power issues for innate
@@ -3698,18 +3747,6 @@ COPY_EXISTING ~sppr102.spl~ ~override~
     insert_point = 5 dicenumber = 100 dicesize = 6 savingthrow = BIT0 STR_VAR resource = "eff_p04" END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 174 target = 2 power = 1 timing = 1 resist_dispel = 1
     insert_point = 2 dicenumber = 5 STR_VAR resource = "eff_p04" END
-
-// misordering of spell protections prevents effects; one spell ref wrong
-COPY_EXISTING ~sppr107.spl~ ~override~
-  READ_BYTE 0x68 abil_num
-  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = 206 END
-  FOR (index = 1 ; index < (abil_num + 1) ; ++index) BEGIN
-    PATCH_FOR_EACH spell IN sppr408 spin121 spwi113 sppr107 BEGIN
-      LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 power = 1 resist_dispel = 3
-        duration = (index * 21) header = index STR_VAR resource = EVAL "%spell%" END
-    END
-  END
-  BUT_ONLY
 
 // power, MR issues
 COPY_EXISTING ~sppr108.spl~ ~override~
@@ -3823,18 +3860,6 @@ COPY_EXISTING ~sppr404.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR resist_dispel = 3 END
   BUT_ONLY
 
-// misordering of spell protections prevents effects; one spell ref wrong
-COPY_EXISTING ~sppr408.spl~ ~override~
-  READ_SHORT 0x68 abil_num
-  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = 206 END
-  FOR (index = 1 ; index < (abil_num + 1) ; ++index) BEGIN
-    PATCH_FOR_EACH spell IN spin121 sppr107 spwi113 sppr408 BEGIN
-      LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 power = 4 resist_dispel = 3
-        duration = (420 + (index * 70)) header = index STR_VAR resource = EVAL "%spell%" END
-    END
-  END
-  BUT_ONLY
-
 // summons should always bypass spell protections
 COPY_EXISTING ~sppr410.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 240 power = 0 END
@@ -3870,6 +3895,18 @@ COPY_EXISTING ~sppr602.spl~ ~override~
 // summons should always bypass spell protections
 COPY_EXISTING ~sppr605.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 246 power = 0 END
+  BUT_ONLY
+
+// entropy shield blocks 'missile-based' attacks; missing protections from
+// reg darts, magic missile, melf's acid arrow, flame arrow, chromatic orb, sol's searing orb
+// otiluke's freezing sphere, icelance, lance of disruption, magic stone, MFM
+COPY_EXISTING ~sppr609.spl~ ~override~ // entropy shield
+  PATCH_FOR_EACH proj IN 2 7 24 35 59 101 102 217 251 269 271 313 BEGIN
+    LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 83 match_parameter2 = 1 parameter2 = proj END
+  END
+  PATCH_FOR_EACH spell IN spwi422 BEGIN // mfm
+    LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 83 match_parameter2 = 1 opcode = 206 parameter2 = 0 STR_VAR resource = EVAL ~%spell%~ END
+  END
   BUT_ONLY
 
 // summons should always bypass spell protections
@@ -3959,20 +3996,12 @@ COPY_EXISTING ~spwi108.spl~ ~override~
 // misordering of spell protections prevents effects; one spell ref wrong
 COPY_EXISTING ~spwi113.spl~ ~override~
   WRITE_LONG 0x50 12148 // base iwd uses divine descript
-  READ_BYTE 0x68 abil_num
-  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = 206 END
-  FOR (index = 1 ; index < (abil_num + 1) ; ++index) BEGIN
-    PATCH_FOR_EACH spell IN sppr408 sppr107 spin121 spwi113 BEGIN
-      LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 power = 1 resist_dispel = 3
-        duration = (index * 14) header = index STR_VAR resource = EVAL "%spell%" END
-    END
-  END
   BUT_ONLY
 
 // shield blocks direct targeting from mordy missiles, but not the splash; 139 has 0 power
 COPY_EXISTING ~spwi114.spl~ ~override~ // Shield
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 power = 1 END
-  LPF CLONE_EFFECT INT_VAR match_opcode = 142 opcode = 206 parameter2 = 0 STR_VAR resource = spwi422 insert = below END
+  LPF CLONE_EFFECT INT_VAR match_opcode = 142 opcode = 206 parameter2 = 0 STR_VAR resource = spwi422 insert = below END // mordy force missiles
   BUT_ONLY
 
 // sound, visual not restricted to HD
@@ -4387,6 +4416,11 @@ END ELSE BEGIN // how, totlm fixes
   COPY_EXISTING ~spin159.spl~ ~override~
     LPF ALTER_SPELL_EFFECT INT_VAR power = 0 END
     BUT_ONLY
+
+  // sunscorch now does extra damage to myconids in addition to undead
+  COPY_EXISTING ~sppr113.spl~ ~override~ // Sunscorch
+    LPF ALTER_EFFECT INT_VAR match_opcode = 206 match_parameter2 = 2 parameter2 = 32 END
+    BUT_ONLY
   
   // self-visuals and movement speed shouldn't be blocked
   COPY_EXISTING ~sppr319.spl~ ~override~
@@ -4572,7 +4606,7 @@ COPY_EXISTING ~spwi209.spl~ ~override~ // luck
   END    
   BUT_ONLY
   
-// slow spells should cancel all other slow spells before applying themselves
+// stacking: slow spells should cancel all other slow spells before applying themselves
 COPY_EXISTING ~spin173.spl~  ~override~
               ~spwi312.spl~  ~override~
   LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 142 opcode = 254 parameter2 = 0 timing = 1 duration = 0 STR_VAR insert = first resource = spwi312 END
@@ -4580,6 +4614,17 @@ COPY_EXISTING ~spin173.spl~  ~override~
     LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 142 opcode = 254 parameter2 = 0 timing = 1 duration = 0 STR_VAR insert = first resource = spin173 END
   END  
   BUT_ONLY IF_EXISTS 
+  
+// stacking: protection from evil spells should remove self and each other before applying themselves
+COPY_EXISTING ~spin121.spl~ ~override~
+              ~sppr107.spl~ ~override~
+              ~sppr408.spl~ ~override~
+              ~spwi113.spl~ ~override~
+  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = 206 END
+  PATCH_FOR_EACH spell IN spin121 sppr107 sppr408 spwi113 BEGIN
+    LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 142 opcode = 254 parameter2 = 0 timing = 1 duration = 0 STR_VAR insert = first resource = EVAL "%spell%" END
+  END
+  BUT_ONLY
 
 /////                                                  \\\\\
 ///// store fixes                                      \\\\\
