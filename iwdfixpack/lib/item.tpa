@@ -36,9 +36,11 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_item BEGIN
   presdag, null, 2, null, null, null, null => presdag // Presio's Dagger
   razor, null, null, null, 1, null, null => razor // Container of Razorvine Extract
   scrnote, null, null, null, null, null, 0 => scrnote // Scribbled Note
+  shamme2, null, 2, null, null, null, null => shamme2 // Spiritual Hammer
+  shamme3, null, 3, null, null, null, null => shamme3 // Spiritual Hammer
   shillel, 1, 1, 0, null, null, null => shillel // Shillelagh
   slng01, null, null, null, 1, null, null => slng01 // Sling
-  smcudge, null, 4, null, null, null, null => smcudge // Star Metal Cudgel
+  smcudge, null, 4, null, null, 0, null => smcudge // Star Metal Cudgel
   staf01, null, null, null, 4, null, null => staf01 // Quarter Staff
   stafhmg, null, 1, null, null, null, null => stafhmg // Staff of the Hanged Men's Glee
   sw1h03, null, 3, null, null, null, null => sw1h03 // Bastard Sword +1, +3 vs. Shapeshifters 
