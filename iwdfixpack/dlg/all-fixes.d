@@ -53,6 +53,9 @@ END
 
 // sister calliana not recognizing egenia's return
 REPLACE_TRIGGER_TEXT ~dcallian~ ~Global("Talonite_Dead","GLOBAL",4)~ ~GlobalGT("Talonite_Dead","GLOBAL",9)~
+ADD_TRANS_TRIGGER dcallian 2 ~!Global("Egenia_Talked","GLOBAL",1)~ DO 0 2
+ADD_STATE_TRIGGER dcallian 8 ~!Global("Egenia_Talked","GLOBAL",1)~ 
+REPLACE_STATE_TRIGGER dcallian 7 ~NumTimesTalkedToGT(0) OR(2) Global("Know_Egenia","GLOBAL",0) Global("Egenia_Talked","GLOBAL",1)~	
 
 // prisoners not realizing they're free due to bad DV checks
 REPLACE_TRIGGER_TEXT ~dcapkid2~ ~GlobalLT("Talonites_Dead","GLOBAL"~ ~GlobalLT("Talonite_Dead","GLOBAL"~
@@ -90,6 +93,19 @@ BEGIN 4 END
   
 // close infinite garnet exploit for clerics
 ADD_TRANS_TRIGGER DKUTOWNG 40 ~Global("Priest_Gem","GLOBAL",0)~ DO 0
+
+// once you know eidan's fate, villagers will no longer his mysterious disappearance
+// essentially, re-route anything going to state 20 to identical (new) state that doesn't mention eidan
+ADD_TRANS_TRIGGER dkutowng 18 ~GlobalLT("Aldwin_Eidan","GLOBAL",2)~ 19 DO 0
+EXTEND_TOP ~dkutowng~ 18 #1 IF ~Global("Aldwin_Eidan","GLOBAL",2)~ THEN REPLY #12648 GOTO state20copy END
+EXTEND_TOP ~dkutowng~ 19 #1 IF ~Global("Aldwin_Eidan","GLOBAL",2)~ THEN REPLY #12653 GOTO state20copy END
+APPEND ~dkutowng~
+  IF ~~ THEN BEGIN state20copy SAY @131
+    IF ~~ THEN REPLY #12637 GOTO 14
+    IF ~~ THEN REPLY #12638 GOTO 0
+    IF ~~ THEN REPLY #376 EXIT
+  END
+END
 
 // marchon of waterdeep non-sequitir
 ALTER_TRANS DMARCH BEGIN 9 END BEGIN END

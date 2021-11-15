@@ -33,6 +33,9 @@ Not usable by:~
    @128 = ~The most common tracks in this area seemingly belong to large canines. In several spots, they appear to blend into human footprints. Traces of unusually large webs and consistent waste lead you to believe that there may be unnaturally large spiders in the northeastern portions of the caves. In addition, heaps of rotting vegetation are strewn throughout northern parts of the area. There is also a faint smell of sulfur in the air.~
    @129 = ~The most common tracks in this area resemble those of large canines. In several spots, they appear to blend into human footprints. Traces of unusually large webs and consistent waste lead you to believe that there may be unnaturally large spiders in the northern portions of the caves. On occasion, you find large, black feathers that must have been discarded by some sort of an avian beast. In addition, there is a strange smell of offal in the air. It seems to be both human and animal. It might come from some sort of hybrid monster.~
    @130 = ~Armor of Penance~   
+   // this is strref 12657 minus the reference to Eidan the Innkeeper
+   @131 = ~Aye, a lot of people have gone missing recently - one of them was Conlan's boy, Sheemish.  The next morning, the whole town searched for the boy but turned up nothing.  He was just gone.  Vanished without a trace.  Then Mother Egenia from the church, Maegan Potts - and others.  Not a trace of any of them.  *Nothing.*~
+           
   @1000 = ~Game Text Update~
   @1001 = ~This is not available in your language.~
   
