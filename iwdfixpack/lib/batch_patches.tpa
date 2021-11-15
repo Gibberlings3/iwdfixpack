@@ -1,4 +1,3 @@
- 
 // add elven/half-elven charm resistance
 COPY_EXISTING ~clck07.itm~  ~override~
               ~clck08.itm~  ~override~
@@ -146,6 +145,7 @@ COPY_EXISTING ~cibossb.itm~  ~override~ // ring, 1 new effects from cd_immunity_
   BUT_ONLY IF_EXISTS
   
 COPY_EXISTING ~spwi807.spl~  ~override~ // iron body, 2 new effects from cd_immunity_disease_arrays
+              ~trollde.itm~  ~override~ // troll immunity item
   LPF cd_apply_batch STR_VAR array_name = cd_immunity_disease_arrays END
   BUT_ONLY IF_EXISTS
   
@@ -182,6 +182,7 @@ COPY_EXISTING ~behamu.itm~   ~override~ // <invalid strref -1>, 6 new effects fr
               ~sppr415.spl~  ~override~ // blood rage, 8 new effects from cd_immunity_fear_arrays
               ~sppr716.spl~  ~override~ // impervious sanctity of mind, 136 new effects from cd_immunity_fear_arrays
               ~spwi210.spl~  ~override~ // resist fear, 6 new effects from cd_immunity_fear_arrays
+              ~spwi610.spl~  ~override~ // lich touch
               ~spwi804.spl~  ~override~ // mind blank, 8 new effects from cd_immunity_fear_arrays
               ~stupid.itm~   ~override~ // ring, 6 new effects from cd_immunity_fear_arrays
               ~virgin.itm~   ~override~ // wailing of virgins, 8 new effects from cd_immunity_fear_arrays  
@@ -241,6 +242,7 @@ COPY_EXISTING ~behamu.itm~   ~override~ // <invalid strref -1>, 2 new effects fr
               ~scrl08.itm~   ~override~ // protection from poison, 2 new effects from cd_immunity_poison_arrays
               ~spwi807.spl~  ~override~ // iron body, 3 new effects from cd_immunity_poison_arrays
               ~stupid.itm~   ~override~ // ring, 2 new effects from cd_immunity_poison_arrays
+              ~trollde.itm~  ~override~ // troll immunity item
               ~yxuresi.itm~  ~override~ // <invalid strref -1>, 2 new effects from cd_immunity_poison_arrays
   LPF cd_apply_batch STR_VAR array_name = cd_immunity_poison_arrays END
   BUT_ONLY IF_EXISTS
@@ -258,6 +260,7 @@ COPY_EXISTING ~behamu.itm~   ~override~ // <invalid strref -1>, 1 new effects fr
               ~scrl08.itm~   ~override~ // protection from poison, 2 new effects from cd_immunity_poison_resistance_arrays
               ~spwi807.spl~  ~override~ // iron body, 1 new effects from cd_immunity_poison_resistance_arrays
               ~stupid.itm~   ~override~ // ring, 1 new effects from cd_immunity_poison_resistance_arrays
+              ~trollde.itm~  ~override~ // troll immunity item
               ~yxuresi.itm~  ~override~ // <invalid strref -1>, 1 new effects from cd_immunity_poison_resistance_arrays
   LPF cd_apply_batch STR_VAR array_name = cd_immunity_poison_resistance_arrays END
   BUT_ONLY IF_EXISTS
@@ -306,6 +309,7 @@ COPY_EXISTING ~aldeth.itm~   ~override~ // ring of free action, 1 new effects fr
               ~ring91.itm~   ~override~ // ring, 1 new effects from cd_immunity_stun_arrays
               ~ring95.itm~   ~override~ // ring, 1 new effects from cd_immunity_stun_arrays
               ~sppr415.spl~  ~override~ // blood rage, 2 new effects from cd_immunity_stun_arrays
+              ~spwi610.spl~  ~override~ // lich touch
               ~sw2h06.itm~   ~override~ // spider's bane, 2 new effects from cd_immunity_stun_arrays
   LPF cd_apply_batch STR_VAR array_name = cd_immunity_stun_arrays END
   BUT_ONLY IF_EXISTS

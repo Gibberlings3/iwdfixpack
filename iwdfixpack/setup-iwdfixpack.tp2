@@ -142,6 +142,9 @@ END
 ///// ids fixes                                        \\\\\
 /////                                                  \\\\\
 
+// bitch queen's envoy blocks *all* elementals, not just water 1/2; see also shldbch.itm and general bulk creature changes
+APPEND ~specific.ids~ ~114 WATER_ELEMENTAL~
+
 // new state needed for fixing Dead(object) triggers
 APPEND ~state.ids~ ~0x00000fc0 STATE_REALLY_DEAD~ UNLESS ~0x00000fc0 STATE_REALLY_DEAD~
 
@@ -640,6 +643,13 @@ END ELSE BEGIN // how, totlm fixes
     COPY_EXISTING ~cpcttele.bcs~ ~override~
       DECOMPILE_AND_PATCH BEGIN
         REPLACE_TEXTUALLY ~\([ %TAB%]!?Global("CRYPT_THING_TELEPORT","LOCALS",0)\)~ ~\1 !StateCheck(Myself,STATE_REALLY_DEAD)~
+      END
+      BUT_ONLY
+
+    // double dispel magic messages due to (useless) self-cast
+    COPY_EXISTING ~efbgaze.bcs~ ~override~
+      DECOMPILE_AND_PATCH BEGIN
+        REPLACE_TEXTUALLY ~ReallyForceSpell(Myself,INNATE_BEHOLDER_GAZE)~ ~~
       END
       BUT_ONLY
 
@@ -1244,22 +1254,19 @@ END
 ///// creature field fixes                             \\\\\
 /////                                                  \\\\\
 
-// gender, sex, alignment, general, race, class fixes
 INCLUDE ~iwdfixpack/lib/creature.tpa~
 
-// file, magical, enchant, weight, price, mspeed, prof => file
+// file, gender, sex, alignment, general, race, class, specifics => file // name
 ACTION_PHP_EACH cd_iwdfixpack_item AS params => file BEGIN
 
-  COPY_EXISTING ~%file%.itm~ ~override~
-    PATCH_IF (IS_AN_INT params_1) BEGIN // magical flag
-      PATCH_IF (params_1 = 0) BEGIN WRITE_BYTE 0x18 THIS & `BIT6 END // remove magical flag
-      PATCH_IF (params_1 = 1) BEGIN WRITE_BYTE 0x18 THIS | BIT6  END // add magical flag
-    END 
-    PATCH_IF (IS_AN_INT params_5) BEGIN LPF ALTER_ITEM_HEADER INT_VAR type = 1 speed = params_5 END END // weapon speed
-    PATCH_IF (IS_AN_INT params_2) BEGIN WRITE_LONG  0x60 params_2 END // enchanment
-    PATCH_IF (IS_AN_INT params_3) BEGIN WRITE_LONG  0x4c params_3 END // weight
-    PATCH_IF (IS_AN_INT params_4) BEGIN WRITE_LONG  0x34 params_4 END // price
-    PATCH_IF (IS_AN_INT params_6) BEGIN WRITE_SHORT 0x1c params_6 END // item type
+  COPY_EXISTING ~%file%.cre~ ~override~
+    PATCH_IF (IS_AN_INT params_2) BEGIN WRITE_BYTE 0x237 params_2 END // sex
+    PATCH_IF (IS_AN_INT params_4) BEGIN WRITE_BYTE 0x2d9 params_4 END // general
+    PATCH_IF (IS_AN_INT params_5) BEGIN WRITE_BYTE 0x2da params_5 END // race
+    PATCH_IF (IS_AN_INT params_6) BEGIN WRITE_BYTE 0x2db params_6 END // class
+    PATCH_IF (IS_AN_INT params_7) BEGIN WRITE_BYTE 0x2dc params_7 END // specifics
+    PATCH_IF (IS_AN_INT params_1) BEGIN WRITE_BYTE 0x2dd params_1 END // gender
+    PATCH_IF (IS_AN_INT params_3) BEGIN WRITE_BYTE 0x2e3 params_3 END // alignment
     BUT_ONLY IF_EXISTS
 
 END
@@ -2658,12 +2665,6 @@ COPY_EXISTING ~amul01.itm~   ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 power = 0 resist_dispel = 0 END
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 206 power = 0 resist_dispel = 2 END
   BUT_ONLY
-  
-// just cast spell directly
-COPY_EXISTING ~amul15.itm~ ~override~
-  LPF DELETE_EFFECT INT_VAR check_globals = 0 END // delete all effects
-  LPF ADD_ITEM_EFFECT INT_VAR opcode = 146 target = 1 parameter1 = 9 parameter2 = 1 timing = 1 STR_VAR resource = spwi114 END // just cast shield spell directly
-  BUT_ONLY
 
 // targeting fixes for cast spell
 COPY_EXISTING ~amulbra.itm~ ~override~
@@ -2680,6 +2681,12 @@ COPY_EXISTING ~arhand.itm~ ~override~
   WRITE_ASCII 0x3a ~iarow11~ #8
   WRITE_ASCII 0x58 ~carow11~ #8
   LPF ALTER_ITEM_HEADER STR_VAR icon = "iarow11" END
+  BUT_ONLY
+
+// Armor of Penance should use the proper identified name and reduce the wearer's dexterity by 1, as per the description
+COPY_EXISTING ~armpen.itm~ ~override~ // Armor of Penance +5
+  SAY 0x0c @130
+  LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 15 target = 1 timing = 2 parameter1 = "-1" END // Dexterity Modifier
   BUT_ONLY
 
 // remove strength bonus
@@ -3055,10 +3062,12 @@ COPY_EXISTING ~shld09.itm~ ~override~
   BUT_ONLY
 
 // wrong min strength, penalizes missile AC
+// bitch queen's envoy blocks *all* elementals, not just water 1/2; see also specifics.ids and general bulk creature changes
 COPY_EXISTING ~shldbch.itm~ ~override~
   WRITE_SHORT 0x26 12
   LPF DELETE_ITEM_EQEFFECT INT_VAR opcode_to_delete = 0 END
   LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 0 target = 1 parameter1 = 3 timing = 2 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 100 parameter1 = 114 parameter2 = 6 END // specifics = WATER_ELEMENTAL
   BUT_ONLY
 
 // add immunity to second projectile
@@ -3146,10 +3155,18 @@ COPY_EXISTING ~ulbow2b.itm~ ~override~
   WRITE_SHORT 0x26 12 // min strength
   BUT_ONLY
   
-// hold fast only holds humanoids, but plays ancillary effects on everyone; add save on visuals
-COPY_EXISTING ~ulswd4a.itm~  ~override~ // hold fast: 15% hold
+// hold fast only holds humanoids, but plays ancillary effects on everyone; add hold icon; fix sound target; add save on visuals
+COPY_EXISTING ~ulswd4a.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 233 savingthrow = BIT0 END
   LPF ADD_ITEM_EFFECT INT_VAR type = 1 insert_point = 0 opcode = 206 target = 2 power = 0 parameter2 = 6 duration = 1 STR_VAR resource = ulswd4a END
+  LPF CLONE_EFFECT INT_VAR match_opcode = 175 opcode = 142 parameter2 = 13 END // add hold icon
+  LPF ALTER_EFFECT INT_VAR match_opcode = 175 parameter1 = 0 parameter2 = 2 END // target this against all (humanoids now immune due to new 206)
+  LPF ALTER_EFFECT INT_VAR match_opcode = 174 match_target = 1 target = 2 END // held sound being applied to wielder, not target
+  BUT_ONLY
+
+// Morning Star of the Gods should grant two extra level 1 spells, not one
+COPY_EXISTING ~umstr4a.itm~ ~override~ // morning star of the gods
+  LPF ALTER_EFFECT INT_VAR match_opcode = 62 match_parameter2 = BIT0 parameter1 = 2 END
   BUT_ONLY
 
 // remove min level on slow effect
@@ -3235,13 +3252,10 @@ COPY_EXISTING ~wand12.itm~ ~override~
   LPF ALTER_ITEM_HEADER INT_VAR identify = 1 END // require ID to use
   BUT_ONLY
 
-// seems unused, fix anyway
-COPY_EXISTING ~wandcor.itm~ ~override~
-  LPF DELETE_EFFECT INT_VAR check_globals = 0 END // delete all effects
-  LPF ALTER_ITEM_HEADER INT_VAR header = 1 projectile = 1 STR_VAR icon = spwi605a END // remove projectile, set death fog icon
-  LPF ALTER_ITEM_HEADER INT_VAR header = 2 projectile = 1 STR_VAR icon = spwi708a END // remove projectile, set acid storm icon
-  LPF ADD_ITEM_EFFECT INT_VAR header = 1 opcode = 148 target = 1 parameter1 = 13 parameter2 = 1 timing = 1 STR_VAR resource = spwi605 END // cast death fog
-  LPF ADD_ITEM_EFFECT INT_VAR header = 2 opcode = 148 target = 1 parameter1 = 15 parameter2 = 1 timing = 1 STR_VAR resource = spwi708 END // cast acid storm
+// setting icons for wand of corrosion - seems unused, fixing anyway
+COPY_EXISTING ~wandcor.itm~ ~override~ // wand of corrosion casts death fog or acid storm
+  LPF ALTER_ITEM_HEADER INT_VAR header = 1 STR_VAR icon = spwi605a END // set death fog icon
+  LPF ALTER_ITEM_HEADER INT_VAR header = 2 STR_VAR icon = spwi708a END // set acid storm icon
   BUT_ONLY
 
 // wrong type of damage for mag missiles
@@ -3326,10 +3340,16 @@ END ELSE BEGIN // how, totlm fixes
     PATCH_FOR_EACH op IN 59 90 91 92 BEGIN
       LPF ADD_ITEM_EFFECT INT_VAR opcode = op target = 1 power = 2 resist_dispel = 3 duration = 21 parameter1 = 5 END // +5 thieving
     END
-  
-  // ac bonus can't be dispelled, power wrong
+
+  // broken tiernon shield missing missile damage reduction
+  COPY_EXISTING ~dntshd1.itm~ ~override~
+    LPF CLONE_EFFECT INT_VAR match_opcode = 88 opcode = 89 parameter2 = 13 END // add missile damage reduction
+    BUT_ONLY
+
+  // fixed shield adds 0% missile reduction on 1/day ability; ac bonus can't be dispelled, power wrong
   COPY_EXISTING ~dntshd2.itm~ ~override~
     LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 0 resist_dispel = 3 power = 1 END
+    LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 89 parameter1 = 15 END // missile damage reduction set to 0, not 15
     BUT_ONLY
   
   // wrong opcode for otiluke's-on-hit
@@ -3984,9 +4004,23 @@ COPY_EXISTING ~spwi025.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 206 duration = 70 STR_VAR resource = "spwi025" END
   BUT_ONLY
 
+// crazy staggered damage to get 1d3+2/level (save for half) correct, rounding up 0.5s to 1s - had to sit down and do some math for this one
 // caster pause shouldn't be blocked by spell protections
 COPY_EXISTING ~spwi103.spl~ ~override~
+  LPF DELETE_EFFECT INT_VAR match_opcode = 12 END
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 165 power = 0 dicesize = 0 END
+  FOR (index = 1 ; index < 11 ; ++index) BEGIN
+    // always damage
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 99 header = index opcode = 12 target = 2 power = 1 timing = 1 parameter2 = 524288 resist_dispel = 1
+      parameter1 = (index + 1) probability1 =  0 probability2 =  66 END
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 99 header = index opcode = 12 target = 2 power = 1 timing = 1 parameter2 = 524288 resist_dispel = 1
+      parameter1 = (index + 2) probability1 =  67 probability2 =  100 END
+    // damage that only applies with failed save
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 99 header = index opcode = 12 target = 2 power = 1 timing = 1 parameter2 = 524288 resist_dispel = 1
+      parameter1 = index probability1 =  0 probability2 =  33 savingthrow = BIT0 END
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 99 header = index opcode = 12 target = 2 power = 1 timing = 1 parameter2 = 524288 resist_dispel = 1
+      parameter1 = (index + 1) probability1 = 34 probability2 =  100 savingthrow = BIT0 END
+  END
   BUT_ONLY
 
 // caster pause shouldn't be blocked by spell protections, visual bypassing MR
@@ -4305,9 +4339,14 @@ COPY_EXISTING ~spwi607.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 233 savingthrow = BIT0 END
   BUT_ONLY
 
-// summons should always bypass spell protections
+// invisble stalker is 2 hours = 10 turns = 100 rounds; summons should always bypass spell protections
 COPY_EXISTING ~spwi609.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 246 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_duration = 840 power = 0 duration = 700 END
+  BUT_ONLY
+
+// change immunity opcode on lich touch so it'll get fixed by the immunity effect batches
+COPY_EXISTING ~spwi610.spl~ ~override~
+  LPF ALTER_EFFECT INT_VAR match_opcode = 101 opcode = 261 END // change immunity opcode
   BUT_ONLY
 
 // summons should always bypass spell protections
@@ -4513,6 +4552,11 @@ END ELSE BEGIN // how, totlm fixes
   COPY_EXISTING ~sppr717.spl~ ~override~
     LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 resist_dispel = 1 END
     BUT_ONLY
+
+  // had two extraneous sleep effects
+  COPY_EXISTING ~sppr719.spl~ ~override~
+    LPF DELETE_EFFECT INT_VAR check_globals = 0 match_opcode = 285 match_duration = 1 END
+    BUT_ONLY
   
   // add 'healed' string
   COPY_EXISTING ~sppr720.spl~ ~override~
@@ -4708,7 +4752,7 @@ COPY_EXISTING ~amaunat.itm~  ~override~ // amaunator's legacy: 5% beltyn's burni
               ~days.itm~     ~override~ // the sword of days: 25% slow
               ~decasta.itm~  ~override~ // decastave: 50% chance to drain 1 or 2 hp
               ~diver.itm~    ~override~ // spell diver: 50% to block spellcasting
-              ~firekis.itm~  ~override~ // fire kiss: 5% shroud of flame
+//            ~firekis.itm~  ~override~ // fire kiss: 5% shroud of flame - fixed in items casting spells, below
               ~fistgf.itm~   ~override~ // fist of the gloomfrost: 5% chance for extra crush damage 
               ~fkiller.itm~  ~override~ // faith killer: 5% dispel magic
               ~flailsk.itm~  ~override~ // skullflail: 10% piercing damage
@@ -4834,7 +4878,7 @@ COPY_EXISTING ~amaunat.itm~  ~override~ // amaunator's legacy: 5% beltyn's burni
 //            ~wranged.itm~  ~override~ // no such index: existing splits are fine
 //            ~xclub.itm~    ~override~ // dazer: 5% stun, fixed elsewhere
               ~young.itm~    ~override~ // young rage: 5% berserk
-              ~zz05we.itm~   ~override~ // the mace of weal and woe: 13% curse
+//            ~zz05we.itm~   ~override~ // the mace of weal and woe: 13% curse - fixed in items casting spells, below
               ~zze6pe.itm~   ~override~ // pig's eye: 50% blinds orcs
               ~zzj6sp.itm~   ~override~ // selune's promise: 2% morale failure
               ~zzm5mh.itm~   ~override~ // misery's herald: 10% horror
@@ -4892,6 +4936,45 @@ COPY_EXISTING ~amaunat.itm~  ~override~ // amaunator's legacy: 5% beltyn's burni
     END
   END
   BUT_ONLY IF_EXISTS
+
+/////                                                  \\\\\
+///// items casting spells                             \\\\\
+/////                                                  \\\\\
+
+/* 
+origially I was planning on making all items that cast X on hit or cast X directly to use 146/148 opcodes 
+so that the items would always use the spells fully fixed and I could avoid duplicating work. However, in oIWD,
+these cause the source to go through a casting animation, e.g. the character throwing force bullets would 
+actually go through a casting animation when it caused Otiluke's on the target. So instead we run them through
+this macro *at the end* so that the fixed effects are copied over.
+
+First we delete effects from item, then run the macro.  
+*/
+  
+COPY_EXISTING ~amul15.itm~  ~override~ // shield amulet cn cast shield
+              ~firekis.itm~ ~override~ // Fire Kiss +3 casting shroud of flame on-hit
+              ~force.itm~   ~override~ // force bullets causing ORS on-hit
+              ~wandcor.itm~ ~override~ // wand of corrosion casts death fog or acid storm
+              ~zz05we.itm~  ~override~ // The Mace of Weal and Woe +1 casting curse on-hit
+  LPF DELETE_EFFECT INT_VAR check_globals = 0 END // delete all effects
+  BUT_ONLY IF_EXISTS //force is a how item
+
+COPY_EXISTING ~gauntid.itm~ ~override~ // Gauntlets of Infernal Damnation casting shroud of flame on-equip
+  LPF DELETE_EFFECT INT_VAR check_headers = 0 END // delete all equipping effects
+  BUT_ONLY
+
+LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1            duration = 300 STR_VAR item = amul15  spell = spwi114 END
+LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1 prob1 =  4 duration =   7 STR_VAR item = firekis spell = spwi511 END 
+LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 0            duration =   7 STR_VAR item = gauntid spell = spwi511 END 
+LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1                           STR_VAR item = wandcor spell = spwi605 END // death fog
+LAF cd_items_casting_spells INT_VAR cast_at_level = 15 item_header = 2                           STR_VAR item = wandcor spell = spwi708 END // acid storm
+LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1 prob1 = 12                STR_VAR item = zz05we  spell = sppr111 END 
+
+ACTION_IF !game_is_iwd BEGIN
+
+  LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1                           STR_VAR item = force   spell = spwi413 END
+  
+END
 
 /////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
 /////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\

@@ -38,6 +38,14 @@ REPLACE_STATE_TRIGGER dplanar 69
 !Global("Exp_Pause","GLOBAL",1)
 !Global("HOW_COMPLETED","GLOBAL",1)~
 
+// planar spirit should go away if no question
+ADD_TRANS_ACTION DPLANAR BEGIN    45 END BEGIN  5 END ~StartCutScene("gnDstSlf")~
+ADD_TRANS_ACTION DPLANAR BEGIN  0 51 END BEGIN  6 END ~StartCutScene("gnDstSlf")~
+ADD_TRANS_ACTION DPLANAR BEGIN  8 69 END BEGIN  7 END ~StartCutScene("gnDstSlf")~
+ADD_TRANS_ACTION DPLANAR BEGIN    16 END BEGIN  8 END ~StartCutScene("gnDstSlf")~
+ADD_TRANS_ACTION DPLANAR BEGIN    57 END BEGIN  9 END ~StartCutScene("gnDstSlf")~
+ADD_TRANS_ACTION DPLANAR BEGIN    26 END BEGIN 10 END ~StartCutScene("gnDstSlf")~
+
 // contact other plane waits until after exposure to drop hints about albion
 REPLACE_TRIGGER_TEXT ~dplanar~ ~GlobalGT("Yuanti_Inferno","GLOBAL",0)~ ~Global("Yuanti_Inferno","GLOBAL",0) Global("CDTalkedAlbion","GLOBAL",1)~
 ADD_TRANS_ACTION DALBION BEGIN 0 END BEGIN END ~SetGlobal("CDTalkedAlbion","GLOBAL",1)~// pair ar9200 reveal with ar9200_revealed variable 2/3; see also demmrch.dlg and droald.dlg
