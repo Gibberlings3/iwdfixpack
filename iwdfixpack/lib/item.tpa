@@ -5,6 +5,7 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_item BEGIN
   bagh01, 1, null, null, null, null, null => bagh01 // Bag of Holding
   bagh02, 1, null, null, null, null, null => bagh02 // Bag of Holding
   blun01, null, null, null, 2, null, null => blun01 // Club
+  boneam, null, null, 3, null, null, null => boneam // Bone Talisman
   book39, null, null, 2, null, null, null => book39 // History of the Drow II
   cairn, null, null, null, null, 6, null => cairn // Cairn Blade
   decasta, null, null, 0, null, null, 26 => decasta // Decastave

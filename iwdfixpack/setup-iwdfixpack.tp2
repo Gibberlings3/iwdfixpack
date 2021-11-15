@@ -2342,6 +2342,29 @@ ACTION_FOR_EACH potion IN potn27 potn28 potn29 potn30 potn31 potn32 potn33 potn3
 
 END
 
+ACTION_FOR_EACH item IN // remove breakable flags
+  2haxe amaunat auril ax1h01 axemino axlizman axyuanti bael bess biron biteme blckswd bloodgf 
+  blun02 blun04 blun08 blyuanti cairn cattac1 celebra cynicis dagg01 dagg06 dagg07 dagg08 
+  daggshit days diver doves ehdag erevain fanggf fayr firekis fistgf fkiller flailsk gsleep 
+  gullwyn halb01 halbrd01 hamm01 handgf hellpik hq2hswd hqaxe hqbswrd hqdagg hqhalb hqhamm 
+  hqlswrd hqmace hqsswrd iax1h01 iblun04 ihamm01 intrces isw1h07 j2haxe jhoswd2 jhoswd3 
+  kinetic kissgf kreswrd kris lalizman lonesom longclev lshand mae maul mslizman myrloch 
+  nalizman nymdagg peasrew pikeman poker polizman power ranax ranbswd reaver redemt relian 
+  serrate shlswrd2 shmace2 shsswrd slayer sper01 sper04 sw1h01 sw1h04 sw1h07 sw1h12 sw1h17 
+  sw2h01 sw2h01b sw2h05 swyuanti tasloiil telizman tomb tonggf tongue turodah u1hax1a u1hax2a 
+  u1hax3a u1hax3b u1hax4a u1hax4b u2ham2a u2ham3a u2ham4a u2ham4b u2ham5a u2hax1a u2hax2a 
+  u2hax3a u2hax3b u2hax4a u2hax4b u2hax5a ubswd1a ubswd2a ubswd2b ubswd3a ubswd3b ubswd4a 
+  ubswd4b ubswd4c ubswd5a ubswd5b udagg1a udagg1b udagg2a udagg2b udagg3a udagg3b udagg3c 
+  udagg4a udagg4b udagg5a ulswd1a wsword xu2ham3 xvartil young zz14in zz36dgd zz57pj zzc8hb 
+  zze6pe zzg7ts zzj6sp zzn6gc zzu6cs zzz6bc 
+BEGIN
+
+  COPY_EXISTING ~%item%.itm~ ~override~ // Hell's Bane +4
+    LPF ALTER_ITEM_HEADER INT_VAR flag_break = 0 END // should not be flagged as breakable
+    BUT_ONLY IF_EXISTS
+
+END
+
 // adding portrait icons
 ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_item_icons BEGIN
   auril   =>  35 // cursed, breath of auril
@@ -2374,7 +2397,7 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_item_icons BEGIN
   uring3a =>  16 // fire resistance, ring of resistance
   ushld3a =>  16 // fire resistance, reinforced large shield +2
   vexed   =>  25 // cursed, vexed
-  zzc8fb  =>  16 // fire resistance, hell's bane
+  zzc8hb  =>  16 // fire resistance, hell's bane
 END
 
 ACTION_PHP_EACH cd_item_icons AS item => icon BEGIN
@@ -2789,6 +2812,11 @@ COPY_EXISTING ~ctouch.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 savingthrow = 1 END
   BUT_ONLY
 
+// darts of stunning last 10 seonds too long
+COPY_EXISTING ~dart03.itm~ ~override~
+  LPF ALTER_EFFECT INT_VAR match_duration = 45 duration = 35 END
+  BUT_ONLY
+
 // portrait can be dispelled
 COPY_EXISTING ~dart04.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 142  resist_dispel = 0 END
@@ -2967,6 +2995,11 @@ COPY_EXISTING ~potn34.itm~ ~override~
   LPF ADD_ITEM_EFFECT INT_VAR opcode = 233 target = 1 parameter2 = 6 timing = 4 duration = 1 resist_dispel = 1 END
   LPF ADD_ITEM_EFFECT INT_VAR opcode = 174 target = 1 timing = 4 duration = 1  resist_dispel = 1 STR_VAR resource = eff_m02 END
   LPF ADD_ITEM_EFFECT INT_VAR opcode = 174 target = 1 timing = 4 duration = 70 resist_dispel = 1 STR_VAR resource = eff_e04 END
+  BUT_ONLY
+
+// duration is 3 hours = 15 turns = 150 rounds
+COPY_EXISTING ~potn36.itm~ ~override~
+  LPF ALTER_EFFECT INT_VAR match_duration = 1260 duration = 1050 END
   BUT_ONLY
 
 // extraneous header, power for immunities
@@ -3219,8 +3252,10 @@ COPY_EXISTING ~utswd5a.itm~  ~override~ // static two handed sword +4: 50% elect
   LPF ALTER_EFFECT INT_VAR header_type = 1 match_opcode = 12 probability1 =  0 probability2 = 49 END // reset electrical damage
   BUT_ONLY
 
-// inconsistent saves, power
+// inconsistent saves, power, range, duration incorect for wand of fear
 COPY_EXISTING ~wand02.itm~ ~override~
+  LPF ALTER_ITEM_HEADER INT_VAR check_headers = 1 range = 100 END
+  LPF ALTER_EFFECT INT_VAR match_duration = 100 duration = 105 END
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 power = 4 savingthrow = BIT0 savebonus = 2 END
   BUT_ONLY
 
@@ -3366,10 +3401,10 @@ END ELSE BEGIN // how, totlm fixes
   COPY_EXISTING ~gasp.itm~  ~override~
     WRITE_BYTE 0x18 THIS & `BIT2
     BUT_ONLY
-  
-  // visual bypasses save
-  COPY_EXISTING ~handgf.itm~ ~override~
-    LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 233 savingthrow = BIT0 END
+
+  // helm of shouting missing its listed AC bonus
+  COPY_EXISTING ~helmsh.itm~ ~override~
+    LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 0 target = 1 parameter1 = 1 timing = 2 END
     BUT_ONLY
   
   // bad sound ref
@@ -3408,6 +3443,11 @@ END ELSE BEGIN // how, totlm fixes
     PATCH_FOR_EACH op IN 59 90 91 92 BEGIN
       LPF ADD_ITEM_EQEFFECT INT_VAR opcode = op target = 1 timing = 2 parameter1 = 5 END // +5 thieving
     END
+
+  // missing save vs. wand bonus
+  COPY_EXISTING ~mirror2.itm~ ~override~ // Mirror of Black Ice Amulet
+    LPF CLONE_EFFECT INT_VAR match_opcode = 37 opcode = 34 END
+    BUT_ONLY
   
   // power levels, sound bypassing MR
   COPY_EXISTING ~moonbla.itm~ ~override~
@@ -3445,11 +3485,11 @@ END ELSE BEGIN // how, totlm fixes
     LPF ALTER_ITEM_EFFECT INT_VAR equipped = 1 opcode = 6 dicesize = 0 END
     BUT_ONLY
   
-  // change off generic icon
+  // change off generic icon, has random +10 to-hit
   COPY_EXISTING ~sekolah.itm~ ~override~
     WRITE_ASCII 0x3a ~ibolt05~ #8
     WRITE_ASCII 0x58 ~cbolt05~ #8
-    LPF ALTER_ITEM_HEADER STR_VAR icon = "ibolt05" END
+    LPF ALTER_ITEM_HEADER STR_VAR icon = "ibolt05" thac0_bonus = 0 END
     BUT_ONLY
   
   // stuff needs fire, acid
@@ -3572,6 +3612,12 @@ END ELSE BEGIN // how, totlm fixes
     // dagger range
     COPY_EXISTING ~xu2ham3.itm~ ~override~
       LPF ALTER_ITEM_HEADER INT_VAR range = 1 END
+      BUT_ONLY
+
+    // hells' bane has wrong fire resitance; no extra damage to 'unnatural'
+    COPY_EXISTING ~zzc8hb.itm~ ~override~ // Hell's Bane +4
+      LPF ALTER_EFFECT INT_VAR check_headers = 0 match_opcode = 30 parameter1 = 20 END
+      LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 parameter1 = 4 dicenumber = 1 dicesize = 8 END
       BUT_ONLY
       
   END
@@ -4963,16 +5009,27 @@ COPY_EXISTING ~gauntid.itm~ ~override~ // Gauntlets of Infernal Damnation castin
   LPF DELETE_EFFECT INT_VAR check_headers = 0 END // delete all equipping effects
   BUT_ONLY
 
-LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1            duration = 300 STR_VAR item = amul15  spell = spwi114 END
-LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1 prob1 =  4 duration =   7 STR_VAR item = firekis spell = spwi511 END 
-LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 0            duration =   7 STR_VAR item = gauntid spell = spwi511 END 
-LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1                           STR_VAR item = wandcor spell = spwi605 END // death fog
-LAF cd_items_casting_spells INT_VAR cast_at_level = 15 item_header = 2                           STR_VAR item = wandcor spell = spwi708 END // acid storm
-LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1 prob1 = 12                STR_VAR item = zz05we  spell = sppr111 END 
+LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1                  duration = 300 STR_VAR item = amul15  spell = spwi114 END
+LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1 probability =  4 duration =   7 STR_VAR item = firekis spell = spwi511 END 
+LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 0                  duration =   7 STR_VAR item = gauntid spell = spwi511 END 
+LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1                                 STR_VAR item = wandcor spell = spwi605 END // death fog
+LAF cd_items_casting_spells INT_VAR cast_at_level = 15 item_header = 2                                 STR_VAR item = wandcor spell = spwi708 END // acid storm
+LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1 probability = 12                STR_VAR item = zz05we  spell = sppr111 END 
 
 ACTION_IF !game_is_iwd BEGIN
+    
+  COPY_EXISTING ~handgf.itm~ ~override~ // Hand of the Gloomfrost
+    LPF DELETE_EFFECT INT_VAR check_globals = 0 header_type = 1 END // delete all melee effects
+    LPF ADD_ITEM_EFFECT INT_VAR type = 1 opcode = 233 target = 2 power = 7 parameter2 = 93 timing = 1 probability1 = 4 savingthrow = BIT0 END // re-add visual
+    BUT_ONLY
+
+  COPY_EXISTING ~tonggf.itm~ ~override~ // Tongue of the Gloomfrost +4
+    LPF DELETE_EFFECT INT_VAR match_opcode = 12 END // delete all CoC effects
+    BUT_ONLY
 
   LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1                           STR_VAR item = force   spell = spwi413 END
+  LAF cd_items_casting_spells INT_VAR cast_at_level = 10 item_header = 1 probability =  4 STR_VAR item = handgf  spell = spwi711 END
+  LAF cd_items_casting_spells INT_VAR cast_at_level = 10 item_header = 1 probability =  2 STR_VAR item = tonggf  spell = spwi504 END
   
 END
 
