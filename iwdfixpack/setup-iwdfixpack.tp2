@@ -1161,6 +1161,11 @@ ACTION_IF game_is_iwd THEN BEGIN // iwd w/o how or totlm
 
 END ELSE BEGIN // how, totlm fixes
 
+  // one of the hard-difficulty-only spiders doesn't do anything since it lacks scripting
+  COPY_EXISTING ~ar4001.are~ ~override~ // this spider only added in how
+    LPF ALTER_AREA_ACTOR STR_VAR actor_name = ~NEW Sword Spider 5~ script_class = gnteam7m script_race = efatkmel END
+    BUT_ONLY
+
   // container icon, ID'd item
   COPY_EXISTING ~ar9102.are~ ~override~
     LPF ALTER_AREA_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Container 5"  END
@@ -1825,6 +1830,22 @@ COPY_EXISTING ~kubear.cre~   ~override~
 COPY_EXISTING ~malavon.cre~  ~override~
   REMOVE_CRE_ITEM ~ringmal~                                      // removes from quickslot
   ADD_CRE_ITEM    ~ringmal~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as ring/amulet
+  BUT_ONLY
+  
+// summoned lizardmen using weapons without animations; see ms2lizm.itm
+COPY_EXISTING ~ms2lizm.cre~ ~override~ // Lizard Man (monster summoning)
+              ~ss1liz3.cre~ ~override~ // Lizard Man (summon shadow monsters)
+              ~ss1liz4.cre~ ~override~ // Lizard Man (summon shadow monsters)
+              ~ss1liz5.cre~ ~override~ // Lizard Man (summon shadow monsters)
+  REPLACE_CRE_ITEM ms2lizm #0 #0 #0 NONE WEAPON1 EQUIP
+  BUT_ONLY
+  
+// summoned tough lizardmen using weapons without animations; see ms3tliz.itm
+COPY_EXISTING ~ms3tliz.cre~ ~override~ // Tough Lizard Man (monster summoning)
+              ~ss2liz5.cre~ ~override~ // Tough Lizard Man (summon shadow monsters)
+              ~ss2liz6.cre~ ~override~ // Tough Lizard Man (summon shadow monsters)
+              ~ss2liz7.cre~ ~override~ // Tough Lizard Man (summon shadow monsters)
+  REPLACE_CRE_ITEM ms3tliz #0 #0 #0 NONE WEAPON1 EQUIP
   BUT_ONLY
 
 // has armor in cloak/quickslots/inventory
@@ -2818,6 +2839,10 @@ COPY_EXISTING ~arow1-6.itm~ ~override~ // Arrow
 COPY_EXISTING ~arowtrn.itm~ ~override~
   LPF ALTER_EFFECT INT_VAR match_opcode = 124 parameter2 = 1 END
   BUT_ONLY
+  
+// summoned tough lizardmen using weapons without animations; see ms3tliz.cre et al
+COPY_EXISTING ~b1-12.itm~ ~override/ms3tliz.itm~
+  WRITE_ASCII 0x22 CL #2 // club animation
 
 // belhifet's weapon not doing poison effect due to bad timing; strings are wrong; extend range
 COPY_EXISTING ~behwep.itm~ ~override~
@@ -3153,6 +3178,10 @@ COPY_EXISTING ~ringmal.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR equipped = 1 power = 0 END
   BUT_ONLY
 
+// summoned lizardmen using weapons without animations; see ms2lizm.cre et al
+COPY_EXISTING ~s1-12.itm~ ~override/ms2lizm.itm~
+  WRITE_ASCII 0x22 HB #2 // halberd animation
+
 // timing modes for effects, add round of putting on oil
 COPY_EXISTING ~serpsca.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 timing = 1 duration = 0 END
@@ -3260,6 +3289,13 @@ COPY_EXISTING ~u2ham3a.itm~ ~override~
 COPY_EXISTING ~u2hax4a.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 12 probability2 = 16 END
   BUT_ONLY
+
+// change berserk type
+COPY_EXISTING ~u2hax5a.itm~ ~override~ // Foe's Fate +4
+              ~udart2a.itm~ ~override~ // Berserker Darts
+              ~young.itm~   ~override~ // Young Rage +5
+  LPF ALTER_EFFECT INT_VAR cmatch_opcode = 3 parameter2 = 1 END
+  BUT_ONLY IF_EXISTS // young is an how item
 
 // chance of +damage completely overlaps chance of berserk
 COPY_EXISTING ~u2hax5a.itm~  ~override~ // foe's fate: 25% berserk, 25% electric damage
@@ -3563,10 +3599,11 @@ END ELSE BEGIN // how, totlm fixes
     LPF CLONE_EFFECT INT_VAR match_opcode = 37 opcode = 34 END
     BUT_ONLY
   
-  // power levels, sound bypassing MR
+  // power levels, sound bypassing MR, add miscast icon
   COPY_EXISTING ~moonbla.itm~ ~override~
     LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 60 power = 3 END
     LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 resist_dispel = 1 END
+    LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 60 opcode = 142 parameter2 = 60 END
     BUT_ONLY
   
   // remove power, MR checks from summons
@@ -3983,6 +4020,12 @@ COPY_EXISTING ~spin980.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR power = 0 dicesize = 0 END
   BUT_ONLY
 
+// change berserk type, name spell
+COPY_EXISTING ~spin990.spl~ ~override~ // Sprays Spores (Myconid)
+  WRITE_LONG 0x08 4386 // name ability so "sprays spores"
+  LPF ALTER_EFFECT INT_VAR match_opcode = 3 parameter2 = 1 END
+  BUT_ONLY
+
 // add portrait icons for effects
 COPY_EXISTING ~spin992.spl~ ~override~
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 142 target = 2 parameter2 = 14 resist_dispel = 2 savingthrow = BIT2 probability1 =  40 probability2 = 21 duration = 18 END
@@ -4245,6 +4288,12 @@ COPY_EXISTING ~sppr707.spl~ ~override~ // Sunray
 COPY_EXISTING ~sppr714.spl~ ~override~ // Symbol, Pain (divine version)
               ~sppr715.spl~ ~override~ // Symbol, Hopelessness (divine version)
   LPF ALTER_SPELL_HEADER INT_VAR range = 30 END
+  BUT_ONLY
+
+// hope should cancel hopelessness and vice versa; see spin134, spwi421
+COPY_EXISTING ~sppr715.spl~ ~override~ // Symbol: Hopelessness
+              ~spwi411.spl~ ~override~ // Emotion: Hopelessness
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 254 target = 2 STR_VAR resource = spwi421 END // remove Emotion: Hope
   BUT_ONLY
 
 // sounds have wrong target
@@ -4559,14 +4608,25 @@ COPY_EXISTING ~spwi418.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 248 power = 0 END
   BUT_ONLY
 
-// effects should bypass MR
+// effects should bypass MR; emotions courage and fear should cancel each other
 COPY_EXISTING ~spwi419.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR resist_dispel = 3 END
+  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 254 target = 2 STR_VAR resource = spwi420 END // remove Emotion: Fear
   BUT_ONLY
 
-// add panic string to spell
+// add panic string to spell; emotions courage and fear should cancel each other
 COPY_EXISTING ~spwi420.spl~ ~override~
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 139 target = 2 power = 4 parameter1 = 14007 timing = 1 resist_dispel = 1 savingthrow = BIT0 END
+  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 254 target = 2 STR_VAR resource = spwi419 END // remove Emotion: Courage
+  BUT_ONLY
+
+// hope should cancel hopelessness and vice versa; see spin134, sppr715, spwi411
+COPY_EXISTING ~spwi421.spl~ ~override~ // Emotion: Hope
+  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 254 target = 2 STR_VAR resource = spwi411 END // remove Emotion: Hopelessness
+  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 254 target = 2 STR_VAR resource = sppr715 END // remove Symbol: Hopelessness
+  PATCH_IF !game_is_iwd BEGIN
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 254 target = 2 STR_VAR resource = spin134 END // remove Mournful Wail
+  END
   BUT_ONLY
 
 // summons should always bypass spell protections
@@ -4757,6 +4817,11 @@ END ELSE BEGIN // how, totlm fixes
     LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
     LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 resist_dispel = 1 END
     LPF ALTER_SPELL_EFFECT INT_VAR opcode = 233 resist_dispel = 1 END
+    BUT_ONLY
+    
+  // hope should cancel hopelessness and vice versa; see sppr715, spwi411, spwi421
+  COPY_EXISTING ~spin134.spl~ ~override~ // Mournful Wail; do separately since it has a 206 at top of stack
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 254 target = 2 STR_VAR resource = spwi421 END // remove Emotion: Hope
     BUT_ONLY
   
   // effects bypassing MR
