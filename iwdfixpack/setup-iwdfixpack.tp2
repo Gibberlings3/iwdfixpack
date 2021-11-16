@@ -2637,8 +2637,8 @@ BEGIN
   ACTION_IF (FILE_EXISTS_IN_GAME ~%file%.itm~) THEN BEGIN
 
     COPY_EXISTING ~%file%.itm~ ~override~
-      LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 146 power = 0 END
-      LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 148 power = 0 END
+      LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 146 power = 0 END
+      LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 148 power = 0 END
       BUT_ONLY
 
   END
@@ -3221,12 +3221,13 @@ COPY_EXISTING ~swanarm.itm~ ~override~
   END
   BUT_ONLY
 
-// trolls should not be killed by poison/disease
+// 'dead' trolls should not be killed by poison/disease; shouldn't save against anything
 COPY_EXISTING ~trollde.itm~ ~override~ // effects rounded out in immnity batches
   LPF ADD_ITEM_EQEFFECT INT_VAR insert_point = 0 opcode = 261 target = 1 parameter2 = 25 timing = 2 END // immunity to poison
   LPF ADD_ITEM_EQEFFECT INT_VAR insert_point = 0 opcode = 261 target = 1 parameter2 = 78 timing = 2 END // immunity to disease
   LPF ADD_ITEM_EQEFFECT INT_VAR insert_point = 0 opcode = 11 target = 1 timing = 1 END // cure any poison currently in effect
   LPF ADD_ITEM_EQEFFECT INT_VAR insert_point = 0 opcode = 79 target = 1 timing = 1 END // cure any disease currently in effect
+  LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 261 opcode = 238 parameter1 = 20 parameter2 = 1 STR_VAR insert = last END // set all saves to 20
   BUT_ONLY
 
 // no save for one sound effect
@@ -3263,6 +3264,13 @@ COPY_EXISTING ~u2hax4a.itm~ ~override~
 // chance of +damage completely overlaps chance of berserk
 COPY_EXISTING ~u2hax5a.itm~  ~override~ // foe's fate: 25% berserk, 25% electric damage
   LPF ALTER_EFFECT INT_VAR match_opcode = 12 probability1 = 50 probability2 = 26 END // these will get adjusted to correct 25-49 in bulk patch
+  BUT_ONLY
+
+// hammer/berserker darts/arrows should require ID
+COPY_EXISTING ~uarow2a.itm~ ~override~ // hammer arrow
+              ~udart1a.itm~ ~override~ // hammer darts
+              ~udart2a.itm~ ~override~ // berserker darts
+  WRITE_SHORT 0x42 15 // lore 
   BUT_ONLY
 
 // remove min level on stun effect
@@ -4909,6 +4917,11 @@ END ELSE BEGIN // how, totlm fixes
     COPY_EXISTING ~spin166.spl~ ~override~
       LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
       BUT_ONLY
+      
+    // beholder sleep should be wake-on-damge 
+    COPY_EXISTING ~spin169.spl~ ~override~ // Sleep (Beholder)
+      LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 39 match_parameter2 = 1 parameter2 = 0 END
+      BUT_ONLY
     
     // no save for visual
     COPY_EXISTING ~spin171.spl~ ~override~
@@ -4932,6 +4945,7 @@ END
 COPY_EXISTING ~sppr111.spl~ ~override~ // curse
               ~sppr210.spl~ ~override~ // resist fire/cold
               ~sppr306.spl~ ~override~ // protection from fire (priest)
+              ~sppr417.spl~ ~override~ // cloud of pestilence
               ~spwi412.spl~ ~override~ // greater malison
               ~spwi620.spl~ ~override~ // trollish fortitude
   LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 142 opcode = 254 parameter2 = 0 timing = 1 duration = 0 STR_VAR insert = first resource = EVAL "%SOURCE_RES%" END

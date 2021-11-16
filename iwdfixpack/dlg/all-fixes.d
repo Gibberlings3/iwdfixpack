@@ -86,6 +86,11 @@ END
 
 SET_WEIGHT DDIRTYLL 22 #-1 // replace ignores weight for some reason
 
+// grisella should only give cash if party asked for it
+REPLACE_ACTION_TEXT DGRISELL ~GivePartyGold(5)~ ~~ // remove all
+ADD_TRANS_TRIGGER DGRISELL 12 ~Global("Grisella_Cash","GLOBAL",1)~ DO 4
+ADD_TRANS_ACTION DGRISELL BEGIN 12 END BEGIN 3 4 END ~GivePartyGold(5)~
+
 ADD_TRANS_ACTION DLARREL
 BEGIN 46 END
 BEGIN 4 END
