@@ -30,6 +30,9 @@ ALTER_TRANS DHJOLLDE BEGIN 65 END BEGIN 3 END // file, state, trans
 // checking for wrong item resref
 REPLACE_TRIGGER_TEXT ~dicasa~   ~PartyHasItem("jhosiwd2")~ ~PartyHasItem("jhoswd2")~
 
+// keep mebdinga alive until she speaks 2/2; see mebding.cre
+ADD_TRANS_ACTION DMEBD BEGIN 0 END BEGIN END ~DestroyItem("MIN1HP")~
+
 // loosen variables for murdaugh's quest
 REPLACE_TRIGGER_TEXT ~dmurdaug~ ~Global("Know_Murdaugh", *"GLOBAL", *0)~ ~Global("Murdaugh_Quest","GLOBAL",0)~
   

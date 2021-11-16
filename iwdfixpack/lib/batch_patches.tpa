@@ -1,8 +1,39 @@
 // add elven/half-elven charm resistance
 COPY_EXISTING ~clck07.itm~  ~override~
               ~clck08.itm~  ~override~
+              ~ring03.itm~  ~override~ // ring of animal friendship
+              ~spin108.spl~ ~override~ // charm animal
               ~spin119.spl~ ~override~
+              ~spin169.spl~ ~override~ // sleep, innate_beholder_gaze
+              ~spin179.spl~ ~override~ // jackalwere gaze
+              ~spitm99.spl~ ~override~ // charm elemental kin from mantle of hell's furnace
+              ~sppr102.spl~ ~override~ // command
               ~sppr204.spl~ ~override~
+              ~sppr518.spl~ ~override~ // greater command
+              ~spwi116.spl~ ~override~ // sleep
+              ~spwi507.spl~ ~override~ // domination
+              ~spwi996.spl~ ~override~ // charm_korax
+              ~uhalb3b.itm~ ~override~ // darig's rest
+              ~wand08.itm~  ~override~ // wand of sleep
+//            ~sleep.itm~   ~override~ // unk, unused
+//            ~spin119.spl~ ~override~ // charm person (already has protection)
+//            ~spin126.spl~ ~override~ // eye of the mind (already has protection)
+//            ~spin140.spl~ ~override~ // retribution
+//            ~spin150.spl~ ~override~ // innate_werewolf_death
+//            ~spin153.spl~ ~override~ // innate_wylfdenes death animation
+//            ~spin168.spl~ ~override~ // charm person (already has protection)
+//            ~spin176.spl~ ~override~ // innate_polymorph_to_dog
+//            ~spin992.spl~ ~override~ // innate_zombie_lord_aura
+//            ~sppr204.spl~ ~override~ // charm person or mammal (already has protection)
+//            ~sppr405.spl~ ~override~ // mental domination
+//            ~sppr421.spl~ ~override~ // smashing wave
+//            ~spwi004.spl~ ~override~ // stinking cloud (trap)
+//            ~spwi021.spl~ ~override~ // color spray (trap)
+//            ~spwi104.spl~ ~override~ // charm person (already has protection)
+//            ~spwi105.spl~ ~override~ // color spray
+//            ~spwi213.spl~ ~override~ // stinking cloud
+//            ~spwi316.spl~ ~override~ // dire charm (already has protection)
+//            ~spwi806.spl~ ~override~ // great shout
   LPF cd_elven_sleep_charm_resistance_iwd END
   BUT_ONLY 
   
@@ -284,6 +315,8 @@ COPY_EXISTING ~behamu.itm~   ~override~ // <invalid strref -1>, 1 new effects fr
               ~ringkora.itm~ ~override~ // ring, 1 new effects from cd_immunity_sleep_arrays
               ~sppr316.spl~  ~override~ // exaltation, 1 new effects from cd_immunity_sleep_arrays
               ~sppr415.spl~  ~override~ // blood rage, 2 new effects from cd_immunity_sleep_arrays
+              ~sppr508.spl~  ~override~ // Chaotic Commands
+              ~sppr716.spl~  ~override~ // impervious sanctity of mind
               ~stupid.itm~   ~override~ // ring, 1 new effects from cd_immunity_sleep_arrays
   LPF cd_apply_batch STR_VAR array_name = cd_immunity_sleep_arrays END
   BUT_ONLY IF_EXISTS

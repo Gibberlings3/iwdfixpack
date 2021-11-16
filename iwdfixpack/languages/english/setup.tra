@@ -35,7 +35,10 @@ Not usable by:~
    @130 = ~Armor of Penance~   
    // this is strref 12657 minus the reference to Eidan the Innkeeper
    @131 = ~Aye, a lot of people have gone missing recently - one of them was Conlan's boy, Sheemish.  The next morning, the whole town searched for the boy but turned up nothing.  He was just gone.  Vanished without a trace.  Then Mother Egenia from the church, Maegan Potts - and others.  Not a trace of any of them.  *Nothing.*~
-           
+   
+   // a variation of 7398 - remove the part about flaws since this is the description of a "Flawless Waterstar Gem" 
+   @132 = ~Waterstar is also called achroite or colorless tourmaline and is rare in the Realms.  This beautiful stone is flawless and hence is fit for cutting.~        
+  
   @1000 = ~Game Text Update~
   @1001 = ~This is not available in your language.~
   

@@ -533,7 +533,14 @@ COPY_EXISTING ~shelfc1.bcs~  ~override~
     REPLACE_TEXTUALLY ~\(See([A-Za-z]*NearestEnemyOf(NearestEnemyOf(Myself)))\)~ ~\1 Allegiance(LastSeenBy(Myself),ENEMY)~
     REPLACE_TEXTUALLY ~See(\[ENEMY\])~ ~False()~
   END
-  BUT_ONLY
+  BUT_ONLY 
+  
+// disable lich phylactery regions once destroyed
+COPY_EXISTING ~udtrap3.bcs~ ~override~
+  DECOMPILE_AND_PATCH BEGIN
+    REPLACE_TEXTUALLY ~\(Wait(2)\)~ ~\1 TriggerActivation(Myself,FALSE)~
+  END
+  BUT_ONLY  
 
 ACTION_IF game_is_iwd THEN BEGIN // fixes for iwd without how & totlm
 
@@ -690,6 +697,21 @@ END ELSE BEGIN // how, totlm fixes
     COPY_EXISTING ~eftrolg.bcs~ ~override/cdtrolg.bcs~
       DECOMPILE_AND_PATCH BEGIN
         REPLACE_TEXTUALLY ~REG1HP2~ ~CIREVE~
+      END
+      BUT_ONLY
+
+    // fail-safe: move enemy() to end of cutscene to prevent player scripts kicking in and attacking hobart in cutscene
+    COPY_EXISTING ~kerakrev.bcs~ ~override~
+      DECOMPILE_AND_PATCH BEGIN
+        REPLACE_TEXTUALLY ~Enemy()~ ~~
+        REPLACE_TEXTUALLY ~\(EndCutSceneMode()\)~ ~Enemy() \1~
+      END
+      BUT_ONLY
+
+    // bump master_quest to 7 to signal full totlm completion
+    COPY_EXISTING ~kertrnlw.bcs~ ~override~
+      DECOMPILE_AND_PATCH BEGIN
+        REPLACE_TEXTUALLY ~\(TakePartyItemAll("RINGLUR")\)~ ~SetGlobal("Master_Quest","GLOBAL",7) \1~
       END
       BUT_ONLY
 
@@ -1884,6 +1906,11 @@ ACTION_IF !game_is_iwd THEN BEGIN
     ADD_CRE_ITEM ~reg1hp2~ #0 #0 #0 NONE ~LRING RRING~ // missing don't die item, which might help
     BUT_ONLY
 
+  // keep mebdinga alive until she speaks 1/2; see dmebd.dlg
+  COPY_EXISTING ~mebding.cre~ ~override~
+    ADD_CRE_ITEM ~min1hp~ #0 #0 #0 ~UNSTEALABLE&UNDROPPABLE~ ~AMULET~
+    BUT_ONLY
+
   // move and equip sword
   COPY_EXISTING ~murdaugh.cre~ ~override~
     REMOVE_CRE_ITEM  ~ulswd3d~
@@ -2781,6 +2808,11 @@ COPY_EXISTING ~arow05.itm~ ~override~
 COPY_EXISTING ~arow08.itm~ ~override~
   LPF ALTER_ITEM_HEADER INT_VAR thac0_bonus = 0 damage_bonus = 0 END
   BUT_ONLY
+
+// arrows from shadowed creatures aren't magical but bypass PFNM
+COPY_EXISTING ~arow1-6.itm~ ~override~ // Arrow
+  LPF ALTER_ITEM_HEADER INT_VAR projectile = 6 END
+  BUT_ONLY
   
 // per descript, supposed to teleport archer next to target
 COPY_EXISTING ~arowtrn.itm~ ~override~
@@ -3095,8 +3127,9 @@ COPY_EXISTING ~presrob.itm~ ~override~
   WRITE_ASCII 0x3a ~iclck15~ #8
   BUT_ONLY
 
-// kill target prevents visuals
+// kill target prevents visuals, fix header for snow maiden's reaver
 COPY_EXISTING ~reaver.itm~ ~override~
+  LPF ALTER_ITEM_HEADER INT_VAR header_type = 1 dicesize = 0 dicenumber = 0 END
   LPF CLONE_EFFECT  INT_VAR match_opcode = 13 multi_match = 1 STR_VAR insert = last END // clone to last effect
   LPF DELETE_EFFECT INT_VAR match_opcode = 13 multi_match = 1 END                       // delete original
   BUT_ONLY
@@ -3444,6 +3477,11 @@ END ELSE BEGIN // how, totlm fixes
       LPF ADD_ITEM_EFFECT INT_VAR opcode = op target = 1 power = 2 resist_dispel = 3 duration = 21 parameter1 = 5 END // +5 thieving
     END
 
+  // council letter has extraneous magical header
+  COPY_EXISTING  ~cletter.itm~ ~override~
+    LPF DELETE_ITEM_HEADER INT_VAR header_type = 3 END
+    BUT_ONLY
+
   // broken tiernon shield missing missile damage reduction
   COPY_EXISTING ~dntshd1.itm~ ~override~
     LPF CLONE_EFFECT INT_VAR match_opcode = 88 opcode = 89 parameter2 = 13 END // add missile damage reduction
@@ -3642,6 +3680,11 @@ END ELSE BEGIN // how, totlm fixes
     // wrong icon, icon bypassing MR
     COPY_EXISTING ~cwreve.itm~ ~override~
       LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 142  parameter2 = 44 resist_dispel = 1 END
+      BUT_ONLY
+
+    // flawless waterstar gem descripitong shouldn't refer to being riddled with flaws  
+    COPY_EXISTING ~dgem05.itm~ ~override~
+      SAY 0x54 @132
       BUT_ONLY
     
     // remove charm, stun immunity from free action; have to remove all 261s and then re-add
@@ -3943,6 +3986,12 @@ COPY_EXISTING ~spin992.spl~ ~override~
 COPY_EXISTING ~spitm02.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR resist_dispel = 3 END
   BUT_ONLY
+  
+// mantle of hells' furnace should only charm fire elementals (elves handled in batch patches)
+COPY_EXISTING ~spitm99.spl~ ~override~
+  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 206 target = 2 parameter2 =  4 duration = 1 STR_VAR resource = spitm99 END // block non-fire-dwelling
+  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 206 target = 2 parameter2 = 10 duration = 1 STR_VAR resource = spitm99 END // block non-elementals
+  BUT_ONLY
 
 // string should bypass MR
 COPY_EXISTING ~sppr101.spl~ ~override~
@@ -3957,7 +4006,7 @@ COPY_EXISTING ~sppr102.spl~ ~override~
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 174 target = 2 power = 1 timing = 1 resist_dispel = 1
     insert_point = 2 dicenumber = 5 STR_VAR resource = "eff_p04" END
 
-// cure X spells shouldn't work on undead/extraplanar, like the cause X spells
+// cure X spells, hp drain spells shouldn't work on undead/extraplanar, like the cause X spells
 COPY_EXISTING ~sppr103.spl~  ~override~ // Cure Light Wounds
               ~sppr214.spl~  ~override~ // Cure Moderate Wounds
               ~sppr314.spl~  ~override~ // Cure Disease
@@ -3965,8 +4014,15 @@ COPY_EXISTING ~sppr103.spl~  ~override~ // Cure Light Wounds
               ~sppr401.spl~  ~override~ // Cure Serious Wounds
               ~sppr502.spl~  ~override~ // Cure Critical Wounds
               ~sppr607.spl~  ~override~ // Heal
+              ~spwi119.spl~  ~override~ // larloch's minor drain
+              ~spwi314.spl~  ~override~ // vampiric touch
   LPF CLONE_EFFECT INT_VAR match_opcode = 233 opcode = 290 parameter2 = 55 timing = 0 duration = 1 resist_dispel = 0 STR_VAR insert = first resource = EVAL ~%SOURCE_RES%~ END 
   BUT_ONLY IF_EXISTS // cause disease not in iwd
+
+// because entangle and grease both set movement speeds, can actually escape an entangle if grease is cast
+COPY_EXISTING ~sppr105.spl~ ~override~ // Entangle
+  LPF CLONE_EFFECT INT_VAR check_globals = 0 match_opcode = 126 opcode = 206 parameter1 = 0 parameter2 = 0 STR_VAR resource = spwi101 END // Grease
+  BUT_ONLY
 
 // power, MR issues
 COPY_EXISTING ~sppr108.spl~ ~override~
@@ -4115,6 +4171,12 @@ COPY_EXISTING ~sppr507.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 145 power = 0 END
   BUT_ONLY
 
+// per their descript, chaotic commands & impervious sanctity should prevent sleep; add to immunity batches to round out
+COPY_EXISTING ~sppr508.spl~ ~override~ // Chaotic Commands
+              ~sppr716.spl~ ~override~ // impervious sanctity of mind
+  LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 261 parameter2 = 39  END // sleep
+  BUT_ONLY
+
 // sound/damage bypassing MR; strings for low HD effects; panic from insect plague should affect creatures up to *and including* 5 HD
 COPY_EXISTING ~sppr510.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode =  12 resist_dispel = 1 END
@@ -4197,6 +4259,15 @@ COPY_EXISTING ~sppr989.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 142 power = 2 END
   BUT_ONLY
 
+// like suffocate, cloud kill and stinking cloud shouldn't work on 'non-breathing' creatures
+// not extending this to death fog, incendiary cloud, or cloud of pestilence
+COPY_EXISTING ~spwi004.spl~ ~override~ // stinking cloud via trap
+              ~spwi018.spl~ ~override~ // cloud kill via trap
+              ~spwi213.spl~ ~override~ // stinking cloud 
+              ~spwi503.spl~ ~override~ // cloud kill
+  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 206 target = 2 parameter2 = 48 duration = 1 STR_VAR resource = EVAL ~%SOURCE_RES%~ END
+  BUT_ONLY
+
 // trap arrow damage targets self; change damage types while we're here
 COPY_EXISTING ~spwi006.spl~ ~override~
   LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = 12 END
@@ -4270,9 +4341,10 @@ COPY_EXISTING ~spwi113.spl~ ~override~
   WRITE_LONG 0x50 12148 // base iwd uses divine descript
   BUT_ONLY
 
-// shield blocks direct targeting from mordy missiles, but not the splash; 139 has 0 power
+// shield blocks direct targeting from mordy missiles, but not the splash; 139 has 0 power; block wand of magic missiles
 COPY_EXISTING ~spwi114.spl~ ~override~ // Shield
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 power = 1 END
+  LPF CLONE_EFFECT INT_VAR check_globals = 0 multi_match = 1 match_opcode = 83 parameter2 = 36 STR_VAR insert = below END // Wand of Magic Missiles
   LPF CLONE_EFFECT INT_VAR match_opcode = 142 opcode = 206 parameter2 = 0 STR_VAR resource = spwi422 insert = below END // mordy force missiles
   BUT_ONLY
 
@@ -4908,6 +4980,14 @@ COPY_EXISTING ~spin121.spl~ ~override~
     LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 142 opcode = 254 parameter2 = 0 timing = 1 duration = 0 STR_VAR insert = first resource = EVAL "%spell%" END
   END
   BUT_ONLY
+  
+ACTION_IF !game_is_iwd BEGIN 
+
+  COPY_EXISTING ~spwi711.spl~ ~override~ // suffocate - not in main batch because no op 142
+    LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 54 opcode = 254 parameter2 = 0 timing = 1 duration = 0 STR_VAR insert = first resource = EVAL "%SOURCE_RES%" END
+    BUT_ONLY 
+
+END
 
 /////                                                  \\\\\
 ///// store fixes                                      \\\\\
@@ -5187,15 +5267,21 @@ COPY_EXISTING ~amul15.itm~  ~override~ // shield amulet cn cast shield
   BUT_ONLY IF_EXISTS //force is a how item
 
 COPY_EXISTING ~gauntid.itm~ ~override~ // Gauntlets of Infernal Damnation casting shroud of flame on-equip
+              ~shldrng.itm~ ~override~ // shield ring has shield spell active while equipped
   LPF DELETE_EFFECT INT_VAR check_headers = 0 END // delete all equipping effects
   BUT_ONLY
 
 LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1                  duration = 300 STR_VAR item = amul15  spell = spwi114 END
+LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 0                  duration =   0 STR_VAR item = shldrng spell = spwi114 END
 LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1 probability =  4 duration =   7 STR_VAR item = firekis spell = spwi511 END 
 LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 0                  duration =   7 STR_VAR item = gauntid spell = spwi511 END 
 LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1                                 STR_VAR item = wandcor spell = spwi605 END // death fog
 LAF cd_items_casting_spells INT_VAR cast_at_level = 15 item_header = 2                                 STR_VAR item = wandcor spell = spwi708 END // acid storm
 LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1 probability = 12                STR_VAR item = zz05we  spell = sppr111 END 
+
+COPY_EXISTING ~shldrng.itm~ ~override~ // make these equipping effects, not time-limited
+  LPF ALTER_EFFECT INT_VAR timing = 2 END
+  BUT_ONLY
 
 ACTION_IF !game_is_iwd BEGIN
     
