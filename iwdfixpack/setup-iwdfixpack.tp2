@@ -291,6 +291,12 @@ END ELSE BEGIN // fixes for how & totlm games
   ACTION_IF game_is_totlm THEN BEGIN // totlm fixes
 
     COMPILE ~iwdfixpack/dlg/totlm-fixes.d~
+    
+    ACTION_IF FILE_EXISTS ~iwdfixpack/languages/%LANGUAGE%/dplanar.tra~ BEGIN
+    
+      COMPILE ~iwdfixpack/dlg/dplanar.d~ USING ~iwdfixpack/languages/%LANGUAGE%/dplanar.tra~ // contact other plane
+
+    END      
 
   END
 
