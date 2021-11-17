@@ -1,7 +1,6 @@
 ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_item BEGIN
 
   // file, magical, enchantment, weight, price, weapon speed, item type => file // Name
-  
   bagh01, 1, null, null, null, null, null => bagh01 // Bag of Holding
   bagh02, 1, null, null, null, null, null => bagh02 // Bag of Holding
   blun01, null, null, null, 2, null, null => blun01 // Club
@@ -14,6 +13,7 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_item BEGIN
   fblade, 0, 0, null, null, null, 20 => fblade // Flame Blade
   fele1-8, 1, null, null, null, null, null => fele1-8 // Skull
   fkey, null, null, null, 1, null, null => fkey // Forge Key
+  ghast1, 1, 1, null, null, null, null => ghast1 // ghast weapon
   holysym, null, null, null, 1, null, null => holysym // Holy Symbol
   joril, null, null, null, 1, null, null => joril // Joril's Badge
   kalabac, null, null, null, 1, null, null => kalabac // Kalabac's Journal
@@ -36,6 +36,8 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_item BEGIN
   presdag, null, 2, null, null, null, null => presdag // Presio's Dagger
   razor, null, null, null, 1, null, null => razor // Container of Razorvine Extract
   scrnote, null, null, null, null, null, 0 => scrnote // Scribbled Note
+  shadless, 1, 1, null, null, null, null => shadless // lesser shadow weapon
+  shadow1, 1, 1, null, null, null, null => shadow1 // shadow weapon
   shamme2, null, 2, null, null, null, null => shamme2 // Spiritual Hammer
   shamme3, null, 3, null, null, null, null => shamme3 // Spiritual Hammer
   shillel, 1, 1, 0, null, null, null => shillel // Shillelagh
@@ -50,6 +52,7 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_item BEGIN
   tkey, null, null, null, 1, null, null => tkey // Terikan's Key
   torn, null, null, null, 1, null, null => torn // Scroll
   u1ham3a, null, 2, null, null, null, null => u1ham3a // Corrosive Hammer
+  wcwight, 1, 1, null, null, null, null => wcwight // cold wight weapon
   xstafhmg, null, 1, null, null, null, null => xstafhmg // Staff of the Hanged Men's Glee
   zz14in, null, 3, null, null, null, null => zz14in // Inconsequence
   zzf6al, null, null, null, null, 2, null => zzf6al // Alamion

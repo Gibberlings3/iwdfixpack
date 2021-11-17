@@ -38,7 +38,8 @@ Not usable by:~
    
    // a variation of 7398 - remove the part about flaws since this is the description of a "Flawless Waterstar Gem" 
    @132 = ~Waterstar is also called achroite or colorless tourmaline and is rare in the Realms.  This beautiful stone is flawless and hence is fit for cutting.~        
-  
+   // change vocalize description to caster-only
+
   @1000 = ~Game Text Update~
   @1001 = ~This is not available in your language.~
   
@@ -82,6 +83,16 @@ Casting Time: 1
 Area of Effect: 1 creature
 Saving Throw: Neg. 
 This spell creates a 4-inch-diameter sphere that can be hurled unerringly to its target. The orb's effect depends on the level of the wizard: a 1st-level sphere inflicts 1-4 damage and blinds the target for one round. A 2nd-level sphere inflicts 1-6 damage and inflicts pain upon the victim. A 3rd-level sphere deals 1-8 damage and burns the victim. A 4th-level sphere deals 1-10 damage and blinds the target for four rounds. A 5th to 6th-level sphere deals 1-12 damage and stuns the target for three rounds. The 7th to 9th-level sphere deals 2-16 damage and paralyzes the victim for 13 rounds.~
+// vocalize only affects the caster
+@112182 = ~Vocalize (Alteration) 
+Level: 2
+Range: Touch 
+Duration: 1 turn
+Casting Time: 2 
+Area of Effect: Caster
+Saving Throw: None 
+The wizard can cast spells with a verbal component without having to make any noise, so long as the casting takes place entirely within the duration of the Vocalize spell. This spell has no effect on other noises or speech - it simply removes a spell's verbal component. This spell is a great counter for Silence 15' Radius.~
+
 // War Hammer of Phasing +2 descript, says hammer causes disease when it causes phasing
 @114959 = ~Like others of its type, this warhammer is made entirely of steel, with a bone-crushing hammer mounted upon an 18" shaft.  It has also been bestowed with a small number of magical properties, however, thus making it more effective in combat.
 

@@ -88,6 +88,7 @@ ACTION_IF (("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) OR
   STRING_SET  6394 @106394 // DECASTAVE DRAINING
               9764 @109764 // thac0/damage bonus for hammer
              12174 @112174 // four turns > rounds for chromatic orb
+             12182 @112182 // vocalize only affects the caster
              14959 @114959 // disease > phase for descript of War Hammer of Phasing +3
 
   // description not even close to accurate
@@ -2726,6 +2727,12 @@ COPY_EXISTING ~scrl1t.itm~ ~override~
 COPY_EXISTING ~scrl3g.itm~ ~override~
   READ_ASCII  0x3a "item_icon"
   LPF ALTER_ITEM_HEADER INT_VAR location = 3 STR_VAR icon = EVAL "%item_icon%" END
+  LPF ALTER_EFFECT INT_VAR target = 1 END // vocalize is caster-only 
+  BUT_ONLY
+  
+// scrolls with non-caster targets for spell learning ability
+COPY_EXISTING ~scrl70.itm~ ~override~
+  LPF ALTER_ITEM_HEADER INT_VAR header = 2 target = 5 END // change second header to target caster
   BUT_ONLY
 
 // wrong target for prayer from scroll
@@ -2900,6 +2907,11 @@ COPY_EXISTING ~bring.itm~ ~override~
   WRITE_BYTE 0x18 THIS & `BIT2
   BUT_ONLY
 
+// use different bullet ptojectile from bullet +1
+COPY_EXISTING ~bull03.itm~ ~override~ // bullet +2
+  LPF ALTER_ITEM_HEADER INT_VAR projectile = 20 END // bullet, heavy
+  BUT_ONLY
+
 // min level interfering with hp bonus?
 COPY_EXISTING ~bwtalis.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR equipped = 1 dicesize = 0 END
@@ -3025,6 +3037,18 @@ COPY_EXISTING ~holdfst.itm~ ~override~
 // jester bag produces 20 oils of speed
 COPY_EXISTING ~holding.itm~ ~override~
   LPF ALTER_EFFECT INT_VAR match_opcode = 122 parameter1 = 1 STR_VAR match_resource = potn23 END
+  BUT_ONLY
+
+// hq long bow, composite long bow icons swapped to match normal version icon swap 
+COPY_EXISTING ~hqcbow.itm~ ~override~ // High Quality Composite Long Bow
+  WRITE_ASCII 0x3a ~ibow12~ #8 
+  LPF ALTER_ITEM_HEADER STR_VAR icon = ibow12 END
+  BUT_ONLY
+
+// hq long bow, composite long bow icons swapped to match normal version icon swap  
+COPY_EXISTING ~hqlbow.itm~ ~override~ // High Quality Long Bow
+  WRITE_ASCII 0x3a ~ibow11~ #8 
+  LPF ALTER_ITEM_HEADER STR_VAR icon = ibow11 END
   BUT_ONLY
 
 // add back ApR as equipped effect
@@ -3438,12 +3462,6 @@ COPY_EXISTING ~wand12.itm~ ~override~
   LPF ALTER_ITEM_HEADER INT_VAR identify = 1 END // require ID to use
   BUT_ONLY
 
-// setting icons for wand of corrosion - seems unused, fixing anyway
-COPY_EXISTING ~wandcor.itm~ ~override~ // wand of corrosion casts death fog or acid storm
-  LPF ALTER_ITEM_HEADER INT_VAR header = 1 STR_VAR icon = spwi605a END // set death fog icon
-  LPF ALTER_ITEM_HEADER INT_VAR header = 2 STR_VAR icon = spwi708a END // set acid storm icon
-  BUT_ONLY
-
 // wrong type of damage for mag missiles
 COPY_EXISTING ~wandmis.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 12 parameter2 = 0x00400000 END
@@ -3834,6 +3852,10 @@ COPY_EXISTING ~spwi616.spl~ ~override~ // tensers transformation
   PATCH_IF !game_is_iwd BEGIN // also needs conjurer flag for HoW
     WRITE_BYTE 0x1e THIS | BIT7 // add conjurer flag
   END
+  BUT_ONLY
+
+COPY_EXISTING ~spwi904.spl~ ~override~ // Malavon's Corrosive Fog
+  WRITE_BYTE 0x1e THIS & `BIT6 // remove abjurer flag
   BUT_ONLY
 
 ACTION_IF game_is_iwd THEN BEGIN // iwd-only changes
@@ -4256,10 +4278,10 @@ COPY_EXISTING ~sppr605.spl~ ~override~
   BUT_ONLY
 
 // entropy shield blocks 'missile-based' attacks; missing protections from
-// reg darts, magic missile, melf's acid arrow, flame arrow, chromatic orb, sol's searing orb
-// otiluke's freezing sphere, icelance, lance of disruption, magic stone, MFM
+// reg darts & bullets, magic missile, melf's acid arrow, flame arrow, chromatic orb, 
+// sol's searing orb, otiluke's freezing sphere, icelance, lance of disruption, magic stone, MFM
 COPY_EXISTING ~sppr609.spl~ ~override~ // entropy shield
-  PATCH_FOR_EACH proj IN 2 7 24 35 59 101 102 217 251 269 271 313 BEGIN
+  PATCH_FOR_EACH proj IN 2 7 20 24 35 59 101 102 217 251 269 271 313 BEGIN
     LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 83 match_parameter2 = 1 parameter2 = proj END
   END
   PATCH_FOR_EACH spell IN spwi422 BEGIN // mfm
@@ -4699,6 +4721,13 @@ COPY_EXISTING ~spwi599.spl~ ~override~
 COPY_EXISTING ~spwi601.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 58 power = 0 END
   BUT_ONLY
+  
+// kill effect misorder prevents other effects
+COPY_EXISTING ~spwi606.spl~ ~override~ // death spell
+              ~spwi607.spl~ ~override~ // disintegrate (actually fine in base iwd)
+  LPF CLONE_EFFECT  INT_VAR match_opcode = 13 STR_VAR insert = last END // clone to last effect
+  LPF DELETE_EFFECT INT_VAR match_opcode = 13 multi_match = 1 END       // delete original effect
+  BUT_ONLY
 
 // casting speed, fade should bypass MR
 COPY_EXISTING ~spwi606.spl~ ~override~
@@ -4955,6 +4984,11 @@ END ELSE BEGIN // how, totlm fixes
     LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 power = 2 resist_dispel = 3 duration = 21 STR_VAR resource = chance END
     LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 power = 2 resist_dispel = 3 duration = 21 STR_VAR resource = spwi209 END
 
+  // agannazar's scorcher should allow evasion
+  COPY_EXISTING ~spwi217.spl~ ~override~
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 206 target = 2 parameter2 = 63 STR_VAR resource = spwi217 END
+    BUT_ONLY
+
   // caster pause shouldn't be blocked by spell protections, deafness string bypassing save
   COPY_EXISTING ~spwi423.spl~ ~override~
     LPF ALTER_SPELL_EFFECT INT_VAR opcode = 165 power = 0 END
@@ -4983,6 +5017,11 @@ END ELSE BEGIN // how, totlm fixes
     BUT_ONLY
   
   ACTION_IF game_is_totlm THEN BEGIN
+
+    // seems unused, adding portrait icon anyway
+    COPY_EXISTING ~spin164.spl~ ~override~
+      LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 60 opcode = 142 parameter1 = 0 parameter2 = 60 END // clone miscast into miscast icon
+      BUT_ONLY
   
     // string bypassing MR
     COPY_EXISTING ~spin166.spl~ ~override~
@@ -5131,7 +5170,7 @@ INCLUDE ~iwdfixpack/lib/batch_patches.tpa~
 ///// bulk probability fixes                           \\\\\
 /////                                                  \\\\\
 
-COPY_EXISTING ~amaunat.itm~  ~override~ // amaunator's legacy: 5% beltyn's burning blood
+COPY_EXISTING //~amaunat.itm~  ~override~ // amaunator's legacy: 5% beltyn's burning blood, fixed below
               ~axemino.itm~  ~override~ // axe of the minotaur lord: 25% stun 
 //            ~behwep.itm~   ~override~ // belhifet's weapon, fixed elsewhere
               ~bess.itm~     ~override~ // the love of black bess: 10% bad luck
@@ -5347,6 +5386,7 @@ COPY_EXISTING ~amul15.itm~  ~override~ // shield amulet cn cast shield
               ~firekis.itm~ ~override~ // Fire Kiss +3 casting shroud of flame on-hit
               ~force.itm~   ~override~ // force bullets causing ORS on-hit
               ~wandcor.itm~ ~override~ // wand of corrosion casts death fog or acid storm
+              ~wandfre.itm~ ~override~ // wand of freezing death
               ~zz05we.itm~  ~override~ // The Mace of Weal and Woe +1 casting curse on-hit
   LPF DELETE_EFFECT INT_VAR check_globals = 0 END // delete all effects
   BUT_ONLY IF_EXISTS //force is a how item
@@ -5356,19 +5396,28 @@ COPY_EXISTING ~gauntid.itm~ ~override~ // Gauntlets of Infernal Damnation castin
   LPF DELETE_EFFECT INT_VAR check_headers = 0 END // delete all equipping effects
   BUT_ONLY
 
-LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1                  duration = 300 STR_VAR item = amul15  spell = spwi114 END
-LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 0                  duration =   0 STR_VAR item = shldrng spell = spwi114 END
-LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1 probability =  4 duration =   7 STR_VAR item = firekis spell = spwi511 END 
-LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 0                  duration =   7 STR_VAR item = gauntid spell = spwi511 END 
-LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1                                 STR_VAR item = wandcor spell = spwi605 END // death fog
-LAF cd_items_casting_spells INT_VAR cast_at_level = 15 item_header = 2                                 STR_VAR item = wandcor spell = spwi708 END // acid storm
-LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1 probability = 12                STR_VAR item = zz05we  spell = sppr111 END 
+LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1                               duration = 300 STR_VAR item = amul15  spell = spwi114 END
+LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 0                               duration =   0 STR_VAR item = shldrng spell = spwi114 END
+LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1              probability =  4 duration =   7 STR_VAR item = firekis spell = spwi511 END 
+LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 0                               duration =   7 STR_VAR item = gauntid spell = spwi511 END 
+LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1 set_icon = 1                                 STR_VAR item = wandcor spell = spwi605 END // death fog
+LAF cd_items_casting_spells INT_VAR cast_at_level = 15 item_header = 2 set_icon = 1                                 STR_VAR item = wandcor spell = spwi708 END // acid storm
+LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1 set_icon = 1                                 STR_VAR item = wandfre spell = spwi318 END // icelance, 21 duration
+LAF cd_items_casting_spells INT_VAR cast_at_level =  4 item_header = 2 set_icon = 1                                 STR_VAR item = wandfre spell = spwi318 END // snowball swarm, 21 duration
+LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 3 set_icon = 1                                 STR_VAR item = wandfre spell = spwi318 END // ice storm, 21 duration
+LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1              probability = 12                STR_VAR item = zz05we  spell = sppr111 END 
 
 COPY_EXISTING ~shldrng.itm~ ~override~ // make these equipping effects, not time-limited
   LPF ALTER_EFFECT INT_VAR timing = 2 END
   BUT_ONLY
 
 ACTION_IF !game_is_iwd BEGIN
+
+  COPY_EXISTING ~amaunat.itm~ ~override~ // amaunator's legacy
+    LPF DELETE_EFFECT INT_VAR match_opcode = 247 END // delete existing beltyn
+    LPF DELETE_EFFECT INT_VAR match_opcode = 174 END
+    LPF DELETE_EFFECT INT_VAR match_opcode = 233 END
+    BUT_ONLY  
     
   COPY_EXISTING ~handgf.itm~ ~override~ // Hand of the Gloomfrost
     LPF DELETE_EFFECT INT_VAR check_globals = 0 header_type = 1 END // delete all melee effects
@@ -5379,7 +5428,8 @@ ACTION_IF !game_is_iwd BEGIN
     LPF DELETE_EFFECT INT_VAR match_opcode = 12 END // delete all CoC effects
     BUT_ONLY
 
-  LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1                           STR_VAR item = force   spell = spwi413 END
+  LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1 probability =  4 STR_VAR item = amaunat spell = spwi417 END
+  LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1                  STR_VAR item = force   spell = spwi413 END
   LAF cd_items_casting_spells INT_VAR cast_at_level = 10 item_header = 1 probability =  4 STR_VAR item = handgf  spell = spwi711 END
   LAF cd_items_casting_spells INT_VAR cast_at_level = 10 item_header = 1 probability =  2 STR_VAR item = tonggf  spell = spwi504 END
   

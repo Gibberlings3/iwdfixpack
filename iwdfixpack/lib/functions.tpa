@@ -190,6 +190,7 @@ DEFINE_ACTION_FUNCTION cd_items_casting_spells
           duration      = 0
           item_header   = "-1"
           probability   = 0 
+          set_icon      = 0
   STR_VAR item  = null
           spell = null
   BEGIN
@@ -217,6 +218,7 @@ DEFINE_ACTION_FUNCTION cd_items_casting_spells
           END  
         END
       END
+      READ_ASCII (base_off + 0x04) icon
       READ_SHORT (base_off + 0x1e) transfer_fx_num
       READ_SHORT (base_off + 0x20) abil_fx_idx 
       READ_ASCII (fx_off + (abil_fx_idx * 0x30)) transfer_effects (0x30 * transfer_fx_num) // read all effects in a massive block
@@ -237,6 +239,9 @@ DEFINE_ACTION_FUNCTION cd_items_casting_spells
         END 
         WRITE_SHORT  abil_fx_idx_off (THIS + fx_delta)         // update with previously inserted effects
         PATCH_IF index = item_header BEGIN                     // if we're in the correct header
+          PATCH_IF set_icon AND item_header BEGIN
+            WRITE_ASCIIE (abil_fx_idx_off - 0x1c) ~%icon%~ #8  // update icon, if indicated
+          END  
           SET fx_delta += transfer_fx_num                      // update delta
           READ_SHORT abil_fx_idx_off abil_fx_idx               // read updated index
           WRITE_SHORT abil_fx_num_off (THIS + transfer_fx_num) // update number of effects
