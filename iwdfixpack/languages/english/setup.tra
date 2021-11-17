@@ -83,6 +83,7 @@ Casting Time: 1
 Area of Effect: 1 creature
 Saving Throw: Neg. 
 This spell creates a 4-inch-diameter sphere that can be hurled unerringly to its target. The orb's effect depends on the level of the wizard: a 1st-level sphere inflicts 1-4 damage and blinds the target for one round. A 2nd-level sphere inflicts 1-6 damage and inflicts pain upon the victim. A 3rd-level sphere deals 1-8 damage and burns the victim. A 4th-level sphere deals 1-10 damage and blinds the target for four rounds. A 5th to 6th-level sphere deals 1-12 damage and stuns the target for three rounds. The 7th to 9th-level sphere deals 2-16 damage and paralyzes the victim for 13 rounds.~
+
 // vocalize only affects the caster
 @112182 = ~Vocalize (Alteration) 
 Level: 2
@@ -112,3 +113,22 @@ Not Usable By:
  Druid
  Mage 
  Thief~
+ 
+@124328 = ~This weapon was fashioned by your hands, guided by the dwarf, Tiernon.  Forged from ice taken from the walls of the Gloomfrost, this blade has taken some of the glacier and some of your strength into it, creating a formidable weapon. Though made of ice, the weapon is only slightly cold to the touch and does not melt, even when exposed to the hottest flames.
+
+STATISTICS:
+
+Damage:  1D10 + 4
+THAC0: +4
+Damage type:  Piercing
+Special: +10% Fire Resistance, +10% Cold Resistance, Storm Shell 1/Day, 3% chance of Cone of Cold on the target
+Weight: 6
+Speed Factor:  5
+Proficiency Type:  Halberd
+Type:  2-handed
+Not Usable By:
+ Druid
+ Cleric
+ Mage
+ Thief
+~

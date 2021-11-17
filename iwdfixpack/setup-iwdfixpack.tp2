@@ -96,7 +96,13 @@ ACTION_IF (("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) OR
     SAY 0x0c @115
     SAY 0x54 @116
     BUT_ONLY
+    
+  ACTION_IF !game_is_iwd BEGIN // how, totlm
+  
+    STRING_SET 24328 @124328 // Tongue of the Gloomfrost should do piercing, not slashing, damage
 
+  END
+  
 END
 
 // entrance point for wyrm's tooth from wmp
@@ -1301,6 +1307,12 @@ END ELSE BEGIN // how, totlm fixes
     COPY_EXISTING ~ar9717.are~ ~override~
       LPF ALTER_AREA_REGION INT_VAR cursor = 28 STR_VAR trig_name = "To9718" END
       BUT_ONLY
+
+    // give slimes a little extra space so they don't get stuck
+    COPY_EXISTING ~ar9718.are~ ~override~
+      LPF ALTER_AREA_ACTOR INT_VAR y_coord =  839 dest_y =  839 STR_VAR actor_name = "Olive Slime 4" END
+      LPF ALTER_AREA_ACTOR INT_VAR x_coord = 1119 dest_x = 1119 STR_VAR actor_name = "Olive Slime 9" END
+      BUT_ONLY
     
     // container icon, charges
     COPY_EXISTING ~ar9800.are~ ~override~
@@ -1819,6 +1831,17 @@ COPY_EXISTING ~ghost.cre~    ~override~
               ~yuantip.cre~  ~override~
   ADD_CRE_ITEM ~b1-6~ #0 #0 #0 ~NONE~ ~WEAPON1~ EQUIP
   BUT_ONLY
+  
+// giants need helmets
+COPY_EXISTING ~giantfg.cre~  ~override~ // frost giant guard
+              ~giantfi2.cre~ ~override~ // fire giant
+              ~giantfir.cre~ ~override~ // fire giant
+              ~giantfn.cre~  ~override~ // frost giant
+              ~giantfro.cre~ ~override~ // frost giant
+              ~gorg.cre~     ~override~ // frost giant guard
+              ~joril.cre~    ~override~ // joril
+  ADD_CRE_ITEM ~helm01~ #0 #0 #0 ~UNSTEALABLE&UNDROPPABLE~ ~HELMET~
+  BUT_ONLY
 
 // assign ring95 item
 COPY_EXISTING ~histach.cre~  ~override~
@@ -2094,12 +2117,14 @@ END
 /////                                                  \\\\\
 
 ACTION_FOR_EACH summon IN // no xp, gold, corpse, or items from summoned creatures
-  ad1sklm ad2sklm ad2sklr ad2zomb ad3sklm ad3sklr ad3zomb ad4sklr ad4zomb ad5zomb es12erth es12fire es16erth 
-  es16fire es20erth es20fire es24erth es24fire es8erth es8fire esmerth sumdoom sumstlk as1bear as1wolf as2cave 
-  as2dire as3polr as3wint berserk bknight gisbomb gisborb ms1fb ms1goba ms1gobm ms2bbtl ms2gobb ms2gobe ms2lizm 
-  ms3borb ms3ghl ms3hspi ms3orog ms3tliz ms4ghst ms4ogr ms4yeti ms5gspi ms5jzom ms5mino ms6crwl ms6pspi ms6salc 
-  ms6salf ms7bgrd ms7umbh msmcrwl msmpspi msmsalc msmsalf ss1gob1 ss1gob2 ss1gob3 ss1liz3 ss1liz4 ss1trl6 ss1trl7 
-  ss1trl8 ss2gob2 ss2gob3 ss2liz5 ss2liz6 ss2liz7 ss3trl7 ss3trl8 ss3umb8 ss3umb9 sshamb sumshad
+  ad1sklm ad2sklm ad2sklr ad2zomb ad3sklm ad3sklr ad3zomb ad4sklr ad4zomb ad5zomb as1bear as1wolf 
+  as2cave as2dire as3polr as3wint berserk bknight es12erth es12fire es16erth es16fire es20erth 
+  es20fire es24erth es24fire es8erth es8fire esmerth gisbomb gisborb lghast lghoul lm1hwaxy lm1hwmsy 
+  lm1hwpoy lm2hwlay lm2hwnay lm2hwtey lskarmms lskarmsw lwight lzombie lzombiej ms1fb ms1goba 
+  ms1gobm ms2bbtl ms2gobb ms2gobe ms2lizm ms3borb ms3ghl ms3hspi ms3orog ms3tliz ms4ghst ms4ogr 
+  ms4yeti ms5gspi ms5jzom ms5mino ms6crwl ms6pspi ms6salc ms6salf ms7bgrd ms7umbh msmcrwl msmpspi 
+  msmsalc msmsalf ss1gob1 ss1gob2 ss1gob3 ss1liz3 ss1liz4 ss1trl6 ss1trl7 ss1trl8 ss2gob1 ss2gob2 
+  ss2gob3 ss2liz5 ss2liz6 ss2liz7 ss3trl7 ss3trl8 ss3umb8 ss3umb9 sshambsumdoom sumshad sumstlk trolly 
 BEGIN
 
   COPY_EXISTING ~%summon%.cre~ ~override~
@@ -2119,7 +2144,7 @@ END
 ACTION_FOR_EACH file IN
   aldwin alpheus angaar beornen conlan digby dolan doogal emmerich emmrchh hjollder hjolldrh ilmadia iquinva jemel karrl kieran
   mercthf mercwar1 mercwar2 murdaugh orrick pshar purvis purvish quinn rawleigh roald skelserr vaarglan vexing whitcomb
-  BEGIN
+BEGIN
 
   ACTION_IF FILE_EXISTS_IN_GAME "%file%.cre" BEGIN
 
@@ -2591,6 +2616,11 @@ END
   
 COPY_EXISTING ~u1ham4b.itm~ ~override~
   WRITE_BYTE 0x20 (THIS | BIT0) // add fmt flag
+  BUT_ONLY
+
+// wand of corrosion should be bard/mage only
+COPY_EXISTING ~wandcor.itm~ ~override~ // Wand of Corrosion
+  WRITE_LONG 0x1e (BIT7 + BIT9 + BIT10 + BIT11 + BIT12 + BIT14 + BIT17 + BIT20 + BIT21 + BIT22 + BIT30)
   BUT_ONLY
 
 COPY_EXISTING ~zza7ch.itm~ ~override~
@@ -3698,11 +3728,6 @@ END ELSE BEGIN // how, totlm fixes
     LPF ALTER_EFFECT INT_VAR match_opcode = 261 opcode = 290 parameter2 = 0 STR_VAR resource = thrym END 
     BUT_ONLY
   
-  // wrong damage type
-  COPY_EXISTING ~tonggf.itm~ ~override~
-    LPF ALTER_ITEM_HEADER INT_VAR type = 1 damage_type = 3 END
-    BUT_ONLY
-  
   // missing magical cold resistance for vexed
   COPY_EXISTING ~vexed.itm~  ~override~
                 ~vexed2.itm~ ~override~
@@ -4233,9 +4258,15 @@ COPY_EXISTING ~sppr404.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR resist_dispel = 3 END
   BUT_ONLY
 
-// summons should always bypass spell protections
-COPY_EXISTING ~sppr410.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 240 power = 0 END
+// giant insect should last eight hours, summons should always bypass spell protections
+COPY_EXISTING ~sppr410.spl~ ~override~ // Giant Insect
+  LPF ALTER_EFFECT INT_VAR match_duration = 3360 duration = 2400 power = 0 END
+  BUT_ONLY
+
+// produce fire should only apply once per round
+COPY_EXISTING ~sppr411.spl~ ~override~ // Produce Fire
+  LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 206 duration = 7 END // if evaded, remain immune for a round; silent to avoid warning w/o how
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 duration = 7 STR_VAR resource = SPPR419 END // if affected, also remain immune for further damage until next round
   BUT_ONLY
 
 // summons should always bypass spell protections
@@ -4579,10 +4610,10 @@ COPY_EXISTING ~spwi306.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 206 resist_dispel = 2 END // iwd w/o how
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 290 resist_dispel = 2 END // how, totlm
   BUT_ONLY
-
-// summons should always bypass spell protections
-COPY_EXISTING ~spwi309.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 240 power = 0 END
+  
+// ms1 should summon 2d3 monsters, not 2d4, summons should always bypass spell protections
+COPY_EXISTING ~spwi309.spl~ ~override~ // Monster Summoning I
+  LPF ALTER_EFFECT INT_VAR match_opcode = 240 dicesize = 3 power = 0 END
   BUT_ONLY
 
 // self-sound should bypass spell protections
