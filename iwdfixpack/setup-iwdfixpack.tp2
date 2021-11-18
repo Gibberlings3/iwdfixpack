@@ -547,6 +547,15 @@ COPY_EXISTING ~shelfc1.bcs~  ~override~
     REPLACE_TEXTUALLY ~See(\[ENEMY\])~ ~False()~
   END
   BUT_ONLY 
+
+// shadowed clerics cannot use healing spells since they get blocked; can't get anything else to work :/
+COPY_EXISTING ~shelfcs1.bcs~ ~override~ // shadowed elven cleric
+              ~shelfps1.bcs~ ~override~ // shadowed elven priest
+              ~shorcsh1.bcs~ ~override~ // shadowed orc shaman
+  DECOMPILE_AND_PATCH BEGIN
+    REPLACE_TEXTUALLY ~HaveSpell(CLERIC_CURE_\(LIGHT\|MODERATE\)_WOUNDS)~ ~False()~
+  END
+  BUT_ONLY  
   
 // disable lich phylactery regions once destroyed
 COPY_EXISTING ~udtrap3.bcs~ ~override~
@@ -3016,6 +3025,12 @@ COPY_EXISTING ~fblade.itm~ ~override~ // Flame Blade
   LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 12 opcode = 206 parameter2 = 2 timing = 0 STR_VAR insert = below resource = fblade END // add block for non-undead
   LPF CLONE_EFFECT INT_VAR match_opcode = 206 parameter2 = 3 STR_VAR insert = first END // add fire-dwelling block at top of stack
   BUT_ONLY
+  
+// fire elemental attack has random damage save
+COPY_EXISTING ~fele1-8.itm~ ~override~ // fire elemental attack (normal)
+              ~felem.itm~   ~override~ // fire elemental attack (shapeshift)
+  LPF ALTER_EFFECT INT_VAR STR_VAR match_opcode = 12 savingthrow = 0 savebonus = 0 END
+  BUT_ONLY IF_EXISTS // felem is how item
 
 // string bypasses MR
 COPY_EXISTING ~fkiller.itm~ ~override~
@@ -3057,6 +3072,20 @@ COPY_EXISTING ~helm04.itm~ ~override~
   PATCH_FOR_EACH icon IN 25 17 16 BEGIN
     LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 142 target = 1 parameter2 = icon timing = 2 END
   END
+  BUT_ONLY
+
+// assign unique, unused bam to hunting helm; icon matches lore in descript
+COPY_EXISTING ~helmhun.itm~ ~override~
+  WRITE_ASCII 0x3a ~IHELM06~ #8 // inventory icon
+  WRITE_ASCII 0x22 ~H0~ #2 // paperdoll animation ID
+  LPF ALTER_EFFECT INT_VAR check_globals = 1 check_headers = 0 match_opcode = 7 match_parameter2 = 53 parameter1 = 67 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 1 check_headers = 0 match_opcode = 7 match_parameter2 = 48 parameter1 = 13 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 1 check_headers = 0 match_opcode = 7 match_parameter2 = 52 parameter1 = 49 END
+  BUT_ONLY
+
+// should require ID before use
+COPY_EXISTING ~hlydeck.itm~ ~override~ // Holy Chaos Deck
+  LPF ALTER_ITEM_HEADER INT_VAR identify = 1 END
   BUT_ONLY
 
 // power levels for holdfast's entangle
@@ -3422,6 +3451,13 @@ COPY_EXISTING ~umstr5a.itm~ ~override~
 COPY_EXISTING ~ushld2b.itm~ ~override~
   LPF ALTER_EFFECT INT_VAR match_opcode = 0 match_parameter2 = BIT1 parameter1 = 1 END // should be +1 vs missile, not +4
   LPF ALTER_EFFECT INT_VAR match_opcode = 89 opcode = 86 END // should resist slashing, not missile
+  BUT_ONLY
+
+// shadowed leathers are usable by only rangers and thieves
+COPY_EXISTING ~usltr01.itm~   ~override~ // Shadowed Studded Leather +1
+              ~usltr3a.itm~   ~override~ // Shadowed Studded Leather +2
+              ~usltr5a.itm~   ~override~ // Shadowed Studded Leather +4
+  WRITE_LONG 0x1e (THIS BAND `(BIT9 + BIT10)) // removes cleric-thief, cleric-ranger flags
   BUT_ONLY
 
 // needs fire, electrcity icons
@@ -4003,7 +4039,6 @@ ACTION_PHP_EACH cd_shapeshifts AS params => spell BEGIN
   COPY_EXISTING ~%params_1%.itm~ ~override/%params_2%.itm~ // create unique weapon for non-elemental shifts
     WRITE_BYTE 0x18 THIS | BIT6 // flag as magical
     WRITE_LONG 0x60 params_3    // enchantment
-    BUT_ONLY
     
   ACTION_IF ("%params_1%" STRING_COMPARE_CASE "%params_2%") BEGIN // if not the same
   
@@ -4057,6 +4092,17 @@ COPY_EXISTING ~spin121.spl~ ~override~
 COPY_EXISTING ~spin125.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR power = 0 END
   BUT_ONLY
+
+// deafness should protect against spells and abilities that rely on hearing
+COPY_EXISTING ~spin134.spl~ ~override~ // Mournful Wail
+              ~spin135.spl~ ~override~ // Death Knell
+              ~spin136.spl~ ~override~ // War Cry
+              ~spin137.spl~ ~override~ // Undying Lament
+              ~spin138.spl~ ~override~ // Great Roar
+              ~sppr102.spl~ ~override~ // Command
+              ~sppr518.spl~ ~override~ // Greater Command
+  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 206 parameter2 = 66 target = 2 duration = 1 STR_VAR resource = EVAL ~%SOURCE_RES%~ END
+  BUT_ONLY IF_EXISTS
 
 // visual shouldn't have min level
 COPY_EXISTING ~spin972.spl~ ~override~
@@ -4112,7 +4158,8 @@ COPY_EXISTING ~sppr102.spl~ ~override~
     insert_point = 2 dicenumber = 5 STR_VAR resource = "eff_p04" END
 
 // cure X spells, hp drain spells shouldn't work on undead/extraplanar, like the cause X spells
-COPY_EXISTING ~sppr103.spl~  ~override~ // Cure Light Wounds
+COPY_EXISTING ~spin109.spl~  ~override~ // lay on hands
+              ~sppr103.spl~  ~override~ // Cure Light Wounds
               ~sppr214.spl~  ~override~ // Cure Moderate Wounds
               ~sppr314.spl~  ~override~ // Cure Disease
               ~sppr315.spl~  ~override~ // Cause Disease
@@ -4245,10 +4292,11 @@ COPY_EXISTING ~sppr402.spl~ ~override~
 // remove charm, stun immunity from free action; have to remove all 261s and then re-add
 COPY_EXISTING ~sppr403.spl~  ~override~
   LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = 261 END
+//  LPF ALTER_EFFECT INT_VAR target = 2 END
   READ_SHORT 0x68 abil_num
   FOR (index = 1 ; index < (abil_num + 1) ; ++index) BEGIN
     PATCH_FOR_EACH addme IN 175 158 157 154 126 109 40 BEGIN
-      LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 261 target = 1 power = 4
+      LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 261 target = 2 power = 4
          parameter2 = "%addme%" header = index duration = (420 + (70 * index)) END
     END
   END
@@ -4895,6 +4943,27 @@ END ELSE BEGIN // how, totlm fixes
   COPY_EXISTING ~spin138.spl~ ~override~
     LPF ALTER_SPELL_EFFECT INT_VAR opcode = 142 duration = 140 savingthrow = 0 savebonus = 0 END
     BUT_ONLY
+
+  // bard song forces visibility
+  COPY_EXISTING ~spin144.spl~ ~override~ // The Tale of Curran Strongheart
+                ~spin145.spl~ ~override~ // Tymora's Melody
+                ~spin146.spl~ ~override~ // The Song of Kaudies
+                ~spin147.spl~ ~override~ // The Siren's Yearning
+                ~spin148.spl~ ~override~ // War Chant of Sith
+                ~spin151.spl~ ~override~ // The Ballad of Three Heroes 
+    READ_LONG  0x64 abil_off
+    READ_SHORT 0x68 abil_num
+    READ_LONG  0x6a fx_off
+    WRITE_SHORT 0x70 THIS + 1
+    INSERT_BYTES fx_off 0x30
+    WRITE_SHORT (fx_off + 0x00) 136 // force visible
+    WRITE_BYTE  (fx_off + 0x02)   1 // target: self
+    WRITE_BYTE  (fx_off + 0x0c)   1 // timing
+    WRITE_BYTE  (fx_off + 0x12) 100 // probability
+    FOR (index = 0 ; index < abil_num ; ++index) BEGIN
+      WRITE_SHORT (abil_off + 0x20 + (index * 0x28)) THIS + 1 // push back indices
+    END
+    BUT_ONLY  
   
   // string bypassing MR
   COPY_EXISTING ~spin147.spl~ ~override~
@@ -4969,6 +5038,11 @@ END ELSE BEGIN // how, totlm fixes
   COPY_EXISTING ~sppr517.spl~ ~override~
     LPF ALTER_SPELL_EFFECT INT_VAR dicesize = 0 END
     BUT_ONLY
+
+  // animal rage shouldn't persist through a rest - tried with both 254 and 276, both crash the game when resting
+  //COPY_EXISTING ~sppr517.spl~ ~override~ // Animal Rage
+  //  LPF ADD_SPELL_EFFECT INT_VAR opcode = 254 target = 2 duration = 105 timing = 4 STR_VAR resource = sppr517 END
+  //  BUT_ONLY
 
   // self-visuals and movement speed shouldn't be blocked
   COPY_EXISTING ~sppr610.spl~ ~override~
@@ -5049,6 +5123,11 @@ END ELSE BEGIN // how, totlm fixes
     BUT_ONLY
   
   ACTION_IF game_is_totlm THEN BEGIN
+  
+    // add harpy wail to song of kaudies' protection list
+    COPY_EXISTING ~spin146.spl~ ~override~ 
+      LPF CLONE_EFFECT INT_VAR match_opcode = 206 STR_VAR match_resource = spin134 resource = spin166 END
+      BUT_ONLY
 
     // seems unused, adding portrait icon anyway
     COPY_EXISTING ~spin164.spl~ ~override~
@@ -5083,18 +5162,43 @@ END
 ///// spell stacking                                   \\\\\
 /////                                                  \\\\\
 
-// many spells stack with themselves and should not - no existing 206
-COPY_EXISTING ~sppr111.spl~ ~override~ // curse
-              ~sppr210.spl~ ~override~ // resist fire/cold
-              ~sppr306.spl~ ~override~ // protection from fire (priest)
-              ~sppr417.spl~ ~override~ // cloud of pestilence
-              ~spwi412.spl~ ~override~ // greater malison
-              ~spwi620.spl~ ~override~ // trollish fortitude
-  LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 142 opcode = 254 parameter2 = 0 timing = 1 duration = 0 STR_VAR insert = first resource = EVAL "%SOURCE_RES%" END
-  BUT_ONLY IF_EXISTS // trollish fortitude is HoW
+ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_spell_stacking BEGIN // spells w/o an existing 206
+  sppr111 => 142 // curse
+  sppr201 => 142 // aid
+  sppr202 => 142 // barkskin
+  sppr210 => 142 // resist fire/cold
+  sppr216 =>   0 // alicorn lance
+  sppr306 => 142 // protection from fire
+  sppr310 => 142 // miscast magic
+  sppr407 => 142 // protection from lightning
+  sppr412 => 264 // static charge
+  sppr417 => 142 // cloud of pestilence
+  sppr519 => 142 // magic resistance
+  sppr609 =>   0 // entropy shield
+  sppr610 => 266 // blade barrier
+  sppr714 => 142 // symbol pain
+  spwi223 => 142 // cat's grace
+  spwi412 => 142 // greater malison
+  spwi417 => 247 // beltyn's burning blood
+  spwi419 => 142 // emotion courage
+  spwi421 => 142 // emotion hope
+  spwi511 => 278 // shroud of flame
+  spwi620 => 142 // trollish fortitude
+  spwi711 =>  54 // suffocate
+  spwi807 => 142 // iron body
+END 
+
+ACTION_PHP_EACH cd_spell_stacking AS spell => op BEGIN
+
+  COPY_EXISTING ~%spell%.spl~ ~override~ // suffocate - not in main batch because no op 142
+    LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = op opcode = 254 parameter2 = 0 timing = 1 duration = 0 STR_VAR insert = first resource = EVAL "%SOURCE_RES%" END
+    BUT_ONLY   
+    
+END
   
 // many spells stack with themselves and should not; convert existing 206 to 254
 COPY_EXISTING ~sppr406.spl~ ~override~ // defensive harmony
+              ~sppr415.spl~ ~override~ // blood rage
               ~spwi107.spl~ ~override~ // friends
               ~spwi114.spl~ ~override~ // shield
               ~spwi201.spl~ ~override~ // blur
@@ -5136,14 +5240,6 @@ COPY_EXISTING ~spin121.spl~ ~override~
     LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 142 opcode = 254 parameter2 = 0 timing = 1 duration = 0 STR_VAR insert = first resource = EVAL "%spell%" END
   END
   BUT_ONLY
-  
-ACTION_IF !game_is_iwd BEGIN 
-
-  COPY_EXISTING ~spwi711.spl~ ~override~ // suffocate - not in main batch because no op 142
-    LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 54 opcode = 254 parameter2 = 0 timing = 1 duration = 0 STR_VAR insert = first resource = EVAL "%SOURCE_RES%" END
-    BUT_ONLY 
-
-END
 
 /////                                                  \\\\\
 ///// store fixes                                      \\\\\

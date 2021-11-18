@@ -359,14 +359,3 @@ COPY_EXISTING ~aldeth.itm~   ~override~ // ring of free action, 2 new effects fr
               ~sw2h06.itm~   ~override~ // spider's bane, 2 new effects from cd_immunity_web_arrays
   LPF cd_apply_batch STR_VAR array_name = cd_immunity_web_arrays END
   BUT_ONLY IF_EXISTS
-  
-ACTION_IF !game_is_iwd BEGIN
-
-  // new fear effects misorder the tale of curran strongheart 206s
-  COPY_EXISTING ~spin144.spl~ ~override~
-    LPF CLONE_EFFECT INT_VAR match_opcode = 206 opcode = 290 STR_VAR insert = first END // copy 206 to top of stack as 290s
-    LPF DELETE_EFFECT INT_VAR match_opcode = 206 END // delete originals
-    LPF ALTER_EFFECT INT_VAR match_opcode = 290 opcode = 206 END // change 290s back to 206s
-    BUT_ONLY 
-  
-END

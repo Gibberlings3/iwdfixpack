@@ -115,6 +115,9 @@ END
 // marchon of waterdeep non-sequitir
 ALTER_TRANS DMARCH BEGIN 9 END BEGIN END
   BEGIN ~EPILOGUE~ ~GOTO 5~ END
+  
+// marketh's prematue EscapeArea can prevent Marketh_Gone being set
+REPLACE_ACTION_TEXT DMARKETH ~\(GiveItem("valiant",Protagonist)\)[ %TAB%%LNL%%MNL%%WNL%]*EscapeArea()~ ~\1~ // remove EscapeArea()
 
 // close mytos infinite xp loophole; add variable and dupe xp-granting replies
 ADD_TRANS_TRIGGER DMYTOS 7 ~Global("CDMytosDiplomacy","MYAREA",0)~ DO 1 2 3 4

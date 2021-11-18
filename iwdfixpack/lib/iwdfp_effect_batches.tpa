@@ -231,12 +231,12 @@ DEFINE_PATCH_MACRO ~cd_immunity_fear_arrays~ BEGIN
     261,  "-10",  24, "same",  "-10",  "-10", "last" => 1 // immunity to horror
   END
   DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN
-     23, "-10",     0,     "same",     1,     0, "first" => 1 // reset morale
-    161, "-10", "-10",     "same",     1,     0, "same"  => 1 // remove fear
-    254,     0,     0, "spin166", 1, 0, "same" => 1 // remove spell effects: horror, innate (removes visuals)
-    254,     0,     0, "spwi205", 1, 0, "same" => 1 // remove spell effects: horror, arcane (removes visuals)
-    254,     0,     0, "spwi420", 1, 0, "same" => 1 // remove spell effects: horror, innate (removes visuals)
-    254,     0,     0, "sppr409", 1, 0, "same" => 1 // remove spell effects: horror, arcane (removes visuals)
+     23, "-10",     0,     "same", 1, 0, "same" => 1 // reset morale
+    161, "-10", "-10",     "same", 1, 0, "same" => 1 // remove fear
+    254,     0,     0,  "spin166", 1, 0, "same" => 1 // remove spell effects: horror, innate (removes visuals)
+    254,     0,     0,  "spwi205", 1, 0, "same" => 1 // remove spell effects: horror, arcane (removes visuals)
+    254,     0,     0,  "spwi420", 1, 0, "same" => 1 // remove spell effects: horror, innate (removes visuals)
+    254,     0,     0,  "sppr409", 1, 0, "same" => 1 // remove spell effects: horror, arcane (removes visuals)
   END
   PATCH_IF cosmetic = 1 BEGIN
     DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN

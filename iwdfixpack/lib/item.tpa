@@ -23,13 +23,8 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_item BEGIN
   holysym, null, null, null, 1, null, null => holysym // Holy Symbol
   icegolem, 1, 4, null, null, null, null => icegolem // <invalid strref -1>
   ironman, 1, 4, null, null, null, null => ironman // iron golem weapon
-  joril, null, null, null, 1, null, null => joril // Joril's Badge
   kalabac, null, null, null, 1, null, null => kalabac // Kalabac's Journal
   king, 0, null, null, null, null, null => king // Winter King's Plate
-  krilag, null, null, null, 1, null, null => krilag // Krilag's Badge
-  maiden, null, null, null, 1, null, null => maiden // Maiden Ilmadia's Badge
-  malavon, null, null, null, 1, null, null => malavon // Malavon's Badge
-  marketh, null, null, null, 1, null, null => marketh // Marketh's Badge
   mielikk, null, null, null, null, 4, null => mielikk // Cradle of Mielikki
   mirror, null, null, null, 1, null, null => mirror // Mirror of Black Ice
   mirror2, null, null, null, 1, null, null => mirror2 // Mirror of Black Ice Amulet
@@ -37,7 +32,6 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_item BEGIN
   mjourn, null, null, null, 1, null, null => mjourn // Maluradek's Journal
   msword, 1, 2, null, null, null, null => msword // Mordenkainen's Sword
   mum1-12, 1, 2, null, null, null, null => mum1-12 // <invalid strref -1>
-  perdiem, null, null, null, 1, null, null => perdiem // Brother Perdiem's Badge
   poq2-16, 1, 5, null, null, null, null => poq2-16 // <invalid strref -1>
   portrait, null, null, null, null, null, 0 => portrait // Portrait of Marketh
   potatoes, null, null, null, 1, null, null => potatoes // Sack of Potatoes
