@@ -2321,7 +2321,8 @@ ACTION_PHP_EACH cd_iwdfixpack_item AS params => file BEGIN
       PATCH_IF (params_1 = 0)   BEGIN WRITE_BYTE 0x18 THIS & `BIT6 END // remove magical flag
       PATCH_IF (params_1 = 1)   BEGIN WRITE_BYTE 0x18 THIS | BIT6  END // add magical flag
     END  
-    PATCH_IF (IS_AN_INT params_5) BEGIN LPF ALTER_ITEM_HEADER INT_VAR type = 1 speed = params_5 END END // weapon speed
+    PATCH_IF (IS_AN_INT params_5) BEGIN LPF ALTER_ITEM_HEADER INT_VAR silent = 1 header_type = 1 speed = params_5 END 
+                                        LPF ALTER_ITEM_HEADER INT_VAR silent = 1 header_type = 2 speed = params_5 END END // weapon speed
     PATCH_IF (IS_AN_INT params_2) BEGIN WRITE_LONG 0x60 params_2     END // enchanment
     PATCH_IF (IS_AN_INT params_3) BEGIN WRITE_LONG 0x4c params_3     END // weight
     PATCH_IF (IS_AN_INT params_4) BEGIN WRITE_LONG 0x34 params_4     END // price
@@ -5464,6 +5465,154 @@ ACTION_IF !game_is_iwd BEGIN
   LAF cd_items_casting_spells INT_VAR cast_at_level = 10 item_header = 1 probability =  4 STR_VAR item = handgf  spell = spwi711 END
   LAF cd_items_casting_spells INT_VAR cast_at_level = 10 item_header = 1 probability =  2 STR_VAR item = tonggf  spell = spwi504 END
   
+END
+
+/////                                                  \\\\\
+///// magical weapons for tougher creatures            \\\\\
+/////                                                  \\\\\
+
+
+
+
+
+ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_creature_weapons BEGIN
+
+// creature, original weapon, enchantment => new weapon
+  as2cave,  s1-10,   2 => s1-10m2
+  as2dire,  p1-8,    1 => p1-8m1
+  as3polr,  s1-12,   3 => bearpolr
+  bbspir,   s2-16,   2 => s2-16m2
+  bearpold, s1-12,   3 => bearpolr
+  bearpolr, s1-12,   3 => bearpolr
+  beetrhin, s2-16,   2 => s2-16m2
+  beholder, p1-8,    1 => p1-8m1
+  beholdh,  p1-8,    1 => p1-8m1
+  bergclaw, s1-20,   3 => s1-20m3
+  biknight, s1-12,   2 => s1-12m2
+  bon8005,  b1-10,   2 => b1-10m2
+  bon8013,  b1-10,   2 => b1-10m2
+  bonegard, b1-10,   2 => b1-10m2
+  ckinvst,  s1-12,   3 => invstlk
+  crypthng, s1-8,    1 => s1-8m1
+  cybeetr,  s2-16,   2 => s2-16m2
+  cyearthe, b4-32,   4 => eelem
+  cyshamb,  b2-16,   2 => b2-16m2
+  cywatere, b4-32,   4 => welem
+  direb,    s1-20,   3 => s1-20m3
+  dlbnegrd, b1-10,   2 => b1-10m2
+  dlbonec,  s1-10,   2 => s1-10m2
+  dlcldhnd, b1-8,    1 => b1-8m1
+  dlfznbne, b1-10,   2 => b1-10m2
+  dlgolem,  b4-32,   4 => b4-32m4
+  dlicehnd, b1-8,    1 => b1-8m1
+  dlicetr,  s1-12,   2 => s1-12m2
+  dlscrag,  s2-16,   2 => s2-16m2
+  dlsnotr,  s1-10,   2 => s1-10m2
+  drowned,  s1-8,    1 => s1-8m1
+  eele8013, b4-32,   4 => eelem
+  elemeart, b4-32,   4 => eelem
+  elemwat,  b4-32,   4 => welem
+  es12erth, b4-32,   4 => eelem
+  es12watr, b4-32,   4 => welem
+  es16erth, b4-32,   4 => eelem
+  es16watr, b4-32,   4 => welem
+  es20erth, b4-32,   4 => eelem
+  es20watr, b4-32,   4 => welem
+  es24erth, b4-32,   4 => eelem
+  es24watr, b4-32,   4 => welem
+  es8erth,  b4-32,   4 => eelem
+  es8watr,  b4-32,   4 => welem
+  esmerth,  b4-32,   4 => eelem
+  ettin,    b2-16,   2 => b2-16m2
+  frostbit, b1-8,    1 => b1-8m1
+  frostbit, b2-16,   2 => b2-16m2
+  glbcat,   s2-16,   4 => s2-16m4
+  gorg,     b2-16,   2 => b2-16m2
+  hobartf,  s1-10,   2 => s1-10m2
+  hrpcat,   s1-12,   2 => s1-12m2
+  hrpmat,   s2-16,   2 => s2-16m2
+  icasa,    s2-16,   5 => icasa
+  invistrl, b1-8,    1 => b1-8m1
+  invstlk,  s1-12,   3 => invstlk
+  jklgtr,   s1-12,   2 => s1-12m2
+  jklldr,   s1-20,   3 => s1-20m3
+  jklwar,   s1-10,   2 => s1-10m2
+  kubear,   s1-10,   2 => s1-10m2
+  lwight,   s1-4,    1 => s1-4m1
+  ms5mino,  s1-8,    1 => s1-8m1
+  ms7bgrd,  b1-10,   2 => b1-10m2
+  ms7umbh,  s1-12,   3 => umberhlk
+  pbspir,   s5-20,   3 => s5-20m3
+  rakshasa, s1-10,   2 => s1-10m2
+  rakshinv, s1-10,   2 => s1-10m2
+  rbidrow,  s1-8,    1 => s1-8m1
+  rikasha,  s1-12,   2 => s1-12m2
+  rldumbh,  s1-12,   3 => umberhlk
+  rndcryp,  s1-8,    1 => s1-8m1
+  rndhrpc,  s1-12,   2 => s1-12m2
+  rndstrol, b1-8,    1 => b1-8m1
+  rndwwolf, p1-8,    1 => p1-8m1
+  rwtgice,  b1-8,    1 => b1-8m1
+  rwtwwolf, p1-8,    1 => p1-8m1
+  saablic,  s1-12,   3 => umberhlk
+  sagolem,  b2-16,   2 => b2-16m2
+  saumber,  s1-12,   3 => umberhlk
+  saumber2, s1-12,   3 => umberhlk
+  sdogre,   s1-10,   2 => s1-10m2
+  sevsoul,  s1-20,   3 => s1-20m3
+  shadsoul, s1-10,   2 => s1-10m2
+  shatsoul, s1-10,   2 => s1-10m2
+  shmblr,   b2-16,   2 => b2-16m2
+  skelblaz, s1-4,    1 => s1-4m1
+  ss3umb8,  s1-12,   3 => umberhlk
+  ss3umb9,  s1-12,   3 => umberhlk
+  sumstlk,  s1-12,   3 => invstlk
+  tanarri,  s2-16,   4 => yxun
+  trollice, s1-8,    1 => s1-8m1
+  trollsno, b1-8,    1 => b1-8m1
+  udwight,  s1-4,    1 => s1-4m1
+  uhlk8009, s1-12,   3 => umberhlk
+  uhlk8010, s1-12,   3 => umberhlk
+  umberhlk, s1-12,   3 => umberhlk
+  vexing2,  s2-16,   4 => s2-16m4
+  vexing3,  s2-16,   4 => s2-16m4
+  vexing4,  s2-16,   4 => s2-16m4
+  wight,    s1-4,    1 => s1-4m1
+  wight2,   s1-4,    1 => s1-4m1
+  wight3,   s1-4,    1 => s1-4m1
+  winwolf,  p1-8,    1 => p1-8m1
+  winwolfp, p1-8,    1 => p1-8m1
+  wspir,    s2-16,   2 => s2-16m2
+  wtettin,  b2-16,   2 => b2-16m2
+  wticetr1, b1-8,    1 => b1-8m1
+  wticetrl, b1-8,    1 => b1-8m1
+  wtsnotro, b1-8,    1 => b1-8m1
+  wylfdene, s2-16,   2 => s2-16m2
+  wyrm,     b1-12,   2 => b1-12m2
+END
+
+
+ACTION_PHP_EACH cd_creature_weapons AS params => item BEGIN
+
+  ACTION_IF !FILE_EXISTS_IN_GAME ~%item%.itm~ BEGIN
+  
+    COPY_EXISTING ~%params_1%.itm~ ~override/%item%.itm~
+      WRITE_BYTE 0x18 THIS | BIT6 // add magical flag
+      WRITE_LONG 0x60 params_2    // enchanment
+           
+  END 
+
+  COPY_EXISTING ~%params_0%.cre~ ~override~
+    READ_LONG 0x324 item_off
+    READ_LONG 0x328 item_num
+    FOR (index = 0 ; index < item_num ; ++index) BEGIN
+      READ_ASCII (item_off + 0x00 + (index * 0x14)) itemcheck
+      PATCH_IF ("%itemcheck%" STRING_COMPARE_CASE "%params_1%" = 0) BEGIN // if matched
+        WRITE_ASCIIE (item_off + 0x00 + (index * 0x14)) "%item%" #8
+      END
+    END
+    BUT_ONLY    
+
 END
 
 /////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
