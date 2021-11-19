@@ -9,6 +9,18 @@ ALWAYS
     ACTION_IF GAME_IS totlm BEGIN OUTER_SET game_is_totlm = 1 END ELSE BEGIN OUTER_SET game_is_totlm = 0 END
   END
   
+  ACTION_IF game_is_iwd BEGIN // iwd uses MAP_GROUP_X_HOSTILE, how/totlm uses MAP_GROUP_HOSTILEX
+    OUTER_SPRINT prefix ~MAP_GROUP_~
+    OUTER_SPRINT suffix ~_HOSTILE~
+  END ELSE BEGIN
+    OUTER_SPRINT prefix ~MAP_GROUP_HOSTILE~
+    OUTER_SPRINT suffix ~~
+  END
+  OUTER_FOR (index = 1 ; index < 10 ; ++index) BEGIN
+    OUTER_SPRINT var_name ~group_%index%_hostile~
+    OUTER_SPRINT EVAL ~%var_name%~ ~%prefix%%index%%suffix%~
+  END
+  
 END
 
 VERSION ~v7 Development Branch~
@@ -284,12 +296,12 @@ CLEAR_IDS_MAP
 /////                                                  \\\\\
 
 // fixes for all variants
-COMPILE ~iwdfixpack/dlg/all-fixes.d~
+COMPILE ~iwdfixpack/dlg/all-fixes.d~ EVALUATE_BUFFER
 
 ACTION_IF game_is_iwd THEN BEGIN // fixes for iwd without how & totlm
 
   COMPILE ~iwdfixpack/dlg/base-fixes.d~
-          ~iwdfixpack/dlg/valesti.d~
+          ~iwdfixpack/dlg/valesti.d~ 
 
 END ELSE BEGIN // fixes for how & totlm games
 
@@ -393,6 +405,13 @@ ACTION_FOR_EACH file IN 4001v8 5001v1 ar1102 ar2006 BEGIN
 
 END
 
+// prevent minions from attacking king
+COPY_EXISTING ~4001lmtr.bcs~ ~override~
+  DECOMPILE_AND_PATCH BEGIN
+    REPLACE_TEXTUALLY ~AttackReevaluate(LastSeenBy(Myself),75)~ ~AttackReevaluate(NearestEnemyOf(Myself),75)~
+  END
+  BUT_ONLY
+
 // villagers not leaving after liz king dead
 EXTEND_TOP ~4001vil.bcs~ ~iwdfixpack/baf/4001vil.baf~
 
@@ -432,6 +451,9 @@ COPY_EXISTING ~ar6010.bcs~ ~override~
     END
   END
   BUT_ONLY
+
+// turns group 2 (fire giants) hostile if ilmadia is killed before sounding the alarm  
+EXTEND_BOTTOM ~ar8011.bcs~ ~iwdfixpack/baf/ar8011.baf~ EVALUATE_BUFFER
 
 // extra check to keep marchon and party together, enemy-ally-wise
 EXTEND_TOP ~d4maratk.bcs~ ~iwdfixpack/baf/d4maratk.baf~
@@ -790,6 +812,26 @@ BEGIN
 
 END
 
+// several exterior areas flagged as dungeons
+COPY_EXISTING ~ar1200.are~ ~override~ // easthaven (prologue) - missing caravan - exterior
+              ~ar2000.are~ ~override~ // kuldahar pass
+              ~ar2001.are~ ~override~ // kuldahar pass - goblin area
+              ~ar3000.are~ ~override~ // vale of shadows - exterior
+              ~ar3600.are~ ~override~ // temple of the forgotten god - exterior
+              ~ar4000.are~ ~override~ // dragon's eye - exterior
+              ~ar5000.are~ ~override~ // severed hand - exterior
+              ~ar6000.are~ ~override~ // dorn's deep - exterior
+              ~ar7000.are~ ~override~ // wyrm's tooth glacier - entry pass
+              ~ar7005.are~ ~override~ // wyrm's tooth glacier - aquarium exterior
+              ~ar9300.are~ ~override~ // burial isle
+              ~ar9500.are~ ~override~ // gloomfrost
+              ~ar9600.are~ ~override~ // sea of moving ice
+              ~ar9700.are~ ~override~ // anauroch castle - outer courtyard (totl start area)
+              ~ar9709.are~ ~override~ // anauroch castle - western battlements
+              ~ar9710.are~ ~override~ // anauroch castle - eastern battlements
+  WRITE_SHORT 0x48 (THIS BAND `BIT5) // remove the Dungeon flag
+  BUT_ONLY IF_EXISTS
+
 // trapped but detected containers, ar3501 fixed by HoW
 ACTION_FOR_EACH file IN ar3501 ar3502 ar4005 ar6005 ar6006 ar9400 ar9714 BEGIN
 
@@ -838,6 +880,7 @@ COPY_EXISTING ~ar1201.are~ ~override~
 COPY_EXISTING ~ar2000.are~ ~override~
   WRITE_LONG 0x2c 0 // clear flags for old, unused area transition
   BUT_ONLY
+  
 // cursor fix
 COPY_EXISTING ~ar2000.are~ ~override~
               ~ar2002.are~ ~override~
@@ -1830,6 +1873,22 @@ COPY_EXISTING ~aldwin.cre~   ~override~
   REPLACE_CRE_ITEM ~sw1h08~ #0 #0 #0 ~NONE~ ~WEAPON1~ EQUIP // replaces undroppable sw1h14
   BUT_ONLY
 
+// add new construct item to constructs (see cdconstr.itm)
+COPY_EXISTING ~bknight.cre~  ~override~ // black knight
+              ~cyanimp1.cre~ ~override~ // animated plate
+              ~cyanimp2.cre~ ~override~ // animated plate
+              ~cyanimp3.cre~ ~override~ // animated plate
+              ~dlsgem.cre~   ~override~ // icasaracht's soul gem
+              ~idol.cre~     ~override~ // the idol
+              ~keanimph.cre~ ~override~ // animated plate
+              ~psentry.cre~  ~override~ // bronze sentry
+              ~sentry.cre~   ~override~ // cryshal sentry
+              ~tarnsen.cre~  ~override~ // tarnished sentry
+              ~voice.cre~    ~override~ // the voice of durdel anatha
+              ~wbishop.cre~  ~override~ // white bishop
+  ADD_CRE_ITEM ~cdconstr~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET BELT BOOTS GLOVES CLOAK ARMOR HELMET~
+  IF_EXISTS
+
 // rings/amulets
 COPY_EXISTING ~ghost.cre~   ~override~
   REMOVE_CRE_ITEM ~ghost~                                       // removes from weapons
@@ -1959,6 +2018,11 @@ ACTION_IF !game_is_iwd THEN BEGIN
     ADD_CRE_ITEM    ~chan01~ #0 #0 #0 ~NONE~ ~ARMOR~  // add back as armor
     ADD_CRE_ITEM    ~shld03~ #0 #0 #0 ~NONE~ ~SHIELD~ // add back as shield
     BUT_ONLY
+
+  // two ice golems use alternate weapons, so we just add the regular weapon in a slot to provide poison/disease immunity
+  COPY_EXISTING ~dlgolem.cre~ ~override~ // ice golem sentry
+                ~sagolem.cre~ ~override~ // ice golem sentry
+    ADD_CRE_ITEM ~icegolem~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET BELT BOOTS GLOVES CLOAK ARMOR HELMET~
 
   // have ring in quickslot/inventory
   COPY_EXISTING ~dlsgem.cre~  ~override~
@@ -3040,7 +3104,20 @@ COPY_EXISTING ~bwtalis.itm~ ~override~
 // sound, visual bypassing MR
 COPY_EXISTING ~carrio1.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 resist_dispel = 1 END
-  BUT_ONLY
+  BUT_ONLY  
+
+// create new construct immunity item; see bknight.cre et al
+COPY_EXISTING ~ring95.itm~ ~override/cdconstr.itm~ // create new immunity item for constructs
+  LPF DELETE_EFFECT END // delete all existing effects
+
+// golems, constructs should be immune to poison and disease; rounded out in immunity batches
+COPY_EXISTING ~cdconstr.itm~ ~override~ // new item for construct immunities
+              ~ironman.itm~  ~override~ // iwd iron golem weapon
+              ~icegolem.itm~ ~override~ // ice golem weapon
+  LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 287 target = 1 timing = 2 END // immunity to backstab
+  LPF CLONE_EFFECT INT_VAR match_opcode = 287 opcode = 261 parameter2 = 25 END // immunity to poison
+  LPF CLONE_EFFECT INT_VAR match_opcode = 287 opcode = 261 parameter2 = 78 END // immunity to disease
+  IF_EXISTS
 
 // mithril chain allows thieving, wonky spellcasting disable
 COPY_EXISTING ~chan06.itm~ ~override~
@@ -3425,14 +3502,17 @@ COPY_EXISTING ~swanarm.itm~ ~override~
     LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 142 target = 1 parameter2 = icon timing = 2 END
   END
   BUT_ONLY
-
+  
 // 'dead' trolls should not be killed by poison/disease; shouldn't save against anything
 COPY_EXISTING ~trollde.itm~ ~override~ // effects rounded out in immnity batches
+  LPF ALTER_EFFECT INT_VAR match_opcode = 89 parameter2 = 1 END // set missile resistance to 100, not increment
   LPF ADD_ITEM_EQEFFECT INT_VAR insert_point = 0 opcode = 261 target = 1 parameter2 = 25 timing = 2 END // immunity to poison
   LPF ADD_ITEM_EQEFFECT INT_VAR insert_point = 0 opcode = 261 target = 1 parameter2 = 78 timing = 2 END // immunity to disease
-  LPF ADD_ITEM_EQEFFECT INT_VAR insert_point = 0 opcode = 11 target = 1 timing = 1 END // cure any poison currently in effect
-  LPF ADD_ITEM_EQEFFECT INT_VAR insert_point = 0 opcode = 79 target = 1 timing = 1 END // cure any disease currently in effect
+  PATCH_FOR_EACH op IN 2 4 11 46 75 77 79 81 161 162 267 BEGIN // cure sleep, berserk, poison, stun, blind, feeblemind, disease, deafness, fear, paralysis, confusion
+    LPF ADD_ITEM_EQEFFECT INT_VAR insert_point = 0 opcode = op target = 1 timing = 1 END // cure any poison currently in effect
+  END  
   LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 261 opcode = 238 parameter1 = 20 parameter2 = 1 STR_VAR insert = last END // set all saves to 20
+  LPF ADD_ITEM_EQEFFECT INT_VAR insert_point = 0 opcode =  58 target = 1 parameter2 =  0 timing = 1 END // dispel all ongoing effects
   BUT_ONLY
 
 // no save for one sound effect

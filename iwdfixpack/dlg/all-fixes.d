@@ -18,10 +18,15 @@ REPLACE_ACTION_TEXT  ~dvera~    ~ForceAttack(protagonist, myself)~ ~~
 REPLACE_ACTION_TEXT  ~dwinona~  ~ChangeStat(Protagonist,CHA,\([0-9]+\),SET)~ ~ChangeStat(Protagonist,CHR,\1,SET)~
 REPLACE_ACTION_TEXT  ~dwinona~  ~GiveItemCreate("\([A-Za-z0-9]+\)",\([A-Za-z0-9]+\))~ ~GiveItemCreate("\1",\2,0,0,0)~
   
-// Amelia's backward journal entries
-ALTER_TRANS DAMELIA BEGIN 5 END BEGIN 0   END BEGIN ~JOURNAL~ ~#2057~ END // nice journal
-ALTER_TRANS DAMELIA BEGIN 5 END BEGIN 1   END BEGIN ~JOURNAL~ ~#2073~ END // evil journal
-ALTER_TRANS DAMELIA BEGIN 5 END BEGIN 2 3 END BEGIN ~JOURNAL~ ~~ END // remove from repeat
+// Amelia's journal entries - push entries back to state 8, but requires state 8 to be split evil/non-evil
+ALTER_TRANS DAMELIA BEGIN 5 END BEGIN END BEGIN ~JOURNAL~ ~~ END // remove all journal entries
+ALTER_TRANS DAMELIA BEGIN 8 END BEGIN END BEGIN ~JOURNAL~ ~#2057~ END // add 'good' journal here
+ADD_TRANS_TRIGGER DAMELIA 8 ~!Alignment(LastTalkedToBy,MASK_EVIL)~    // make these non-evil replies
+EXTEND_BOTTOM DAMELIA 8 // now copy state 8 replies for evil options with evil journal entry
+  IF ~Alignment(LastTalkedToBy,MASK_EVIL)~ THEN REPLY #1797 JOURNAL #2073 GOTO 10
+  IF ~Alignment(LastTalkedToBy,MASK_EVIL) Global("Kuldahar_Attack", "GLOBAL", 0)~ THEN REPLY #1798 JOURNAL #2073 GOTO 11
+  IF ~Alignment(LastTalkedToBy,MASK_EVIL)~ THEN REPLY #1799 JOURNAL #2073 EXIT
+END
 
 // goes to wrong state
 ALTER_TRANS DAPSEL BEGIN 13 END BEGIN 0 END // filename, state, trans
@@ -91,6 +96,9 @@ REPLACE_ACTION_TEXT DGRISELL ~GivePartyGold(5)~ ~~ // remove all
 ADD_TRANS_TRIGGER DGRISELL 12 ~Global("Grisella_Cash","GLOBAL",1)~ DO 4
 ADD_TRANS_ACTION DGRISELL BEGIN 12 END BEGIN 3 4 END ~GivePartyGold(5)~
 
+// when ilmadia goes hostile, also turn fire giants and her two lieutenants hostile
+REPLACE_ACTION_TEXT DILMADIA ~Enemy()~ ~SetGlobal("%group_2_hostile%","MYAREA",1) Enemy()~
+
 ADD_TRANS_ACTION DLARREL
 BEGIN 46 END
 BEGIN 4 END
@@ -135,6 +143,9 @@ END
 // question about legs going to wrong place
 ALTER_TRANS DNORL BEGIN 4 END BEGIN 1 END
   BEGIN EPILOGUE ~GOTO 3~ END
+
+// should be setting quest variable on all replies  
+ADD_TRANS_ACTION dogre BEGIN 0 END BEGIN 3 END ~SetGlobal("Ghereg_Head","GLOBAL",1)~
   
 // close xp exploit
 REPLACE_TRIGGER_TEXT DORRICK ~\([^!]PartyHasItem("bookmyt")\)~ ~\1 !Global("Orrick_Quest","GLOBAL",4)~

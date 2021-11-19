@@ -65,6 +65,7 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_item BEGIN
   wepwyv, 1, 2, null, null, null, null => wepwyv // ghoul hand
   wolfwi1, 1, 1, null, null, null, null => wolfwi1 // <invalid strref -1>
   wolfwi2, 1, 1, null, null, null, null => wolfwi2 // <invalid strref -1>
+  wylfins, null, null, null, 0, null, null => wylfins // Wylfdene's Tribal Insignia
   xstafhmg, null, 1, null, null, null, null => xstafhmg // Staff of the Hanged Men's Glee
   zz14in, null, 3, null, null, null, null => zz14in // Inconsequence
   zzf6al, null, null, null, null, 2, null => zzf6al // Alamion

@@ -175,7 +175,10 @@ COPY_EXISTING ~cibossb.itm~  ~override~ // ring, 1 new effects from cd_immunity_
   LPF cd_apply_batch STR_VAR array_name = cd_immunity_confusion_arrays END
   BUT_ONLY IF_EXISTS
   
-COPY_EXISTING ~spwi807.spl~  ~override~ // iron body, 2 new effects from cd_immunity_disease_arrays
+COPY_EXISTING ~cdconstr.itm~ ~override~ // new item for construct immunities
+              ~ironman.itm~  ~override~ // iwd iron golem weapon
+              ~icegolem.itm~ ~override~ // ice golem weapon
+              ~spwi807.spl~  ~override~ // iron body, 2 new effects from cd_immunity_disease_arrays
               ~trollde.itm~  ~override~ // troll immunity item
   LPF cd_apply_batch STR_VAR array_name = cd_immunity_disease_arrays END
   BUT_ONLY IF_EXISTS
@@ -261,8 +264,11 @@ COPY_EXISTING ~potn38.itm~   ~override~ // potion of mirrored eyes, 1 new effect
   BUT_ONLY IF_EXISTS
   
 COPY_EXISTING ~behamu.itm~   ~override~ // <invalid strref -1>, 2 new effects from cd_immunity_poison_arrays
+              ~cdconstr.itm~ ~override~ // new item for construct immunities
               ~cibossb.itm~  ~override~ // ring, 2 new effects from cd_immunity_poison_arrays
               ~cwszomb.itm~  ~override~ // attack, 2 new effects from cd_immunity_poison_arrays
+              ~ironman.itm~  ~override~ // iwd iron golem weapon
+              ~icegolem.itm~ ~override~ // ice golem weapon
               ~ring90.itm~   ~override~ // ring, 2 new effects from cd_immunity_poison_arrays
               ~ring91.itm~   ~override~ // ring, 2 new effects from cd_immunity_poison_arrays
               ~ring94.itm~   ~override~ // ring, 2 new effects from cd_immunity_poison_arrays
@@ -279,8 +285,11 @@ COPY_EXISTING ~behamu.itm~   ~override~ // <invalid strref -1>, 2 new effects fr
   BUT_ONLY IF_EXISTS
   
 COPY_EXISTING ~behamu.itm~   ~override~ // <invalid strref -1>, 1 new effects from cd_immunity_poison_resistance_arrays
+              ~cdconstr.itm~ ~override~ // new item for construct immunities
               ~cibossb.itm~  ~override~ // ring, 1 new effects from cd_immunity_poison_resistance_arrays
               ~cwszomb.itm~  ~override~ // attack, 2 new effects from cd_immunity_poison_resistance_arrays
+              ~ironman.itm~  ~override~ // iwd iron golem weapon
+              ~icegolem.itm~ ~override~ // ice golem weapon
               ~pest.itm~     ~override~ // pestilent dawn, 2 new effects from cd_immunity_poison_resistance_arrays
               ~ring90.itm~   ~override~ // ring, 1 new effects from cd_immunity_poison_resistance_arrays
               ~ring94.itm~   ~override~ // ring, 1 new effects from cd_immunity_poison_resistance_arrays
