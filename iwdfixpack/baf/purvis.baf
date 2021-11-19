@@ -1,0 +1,17 @@
+IF
+  Global("cd_purvis_ring_gone","GLOBAL",0)
+  !HasItem("ring09",Myself) // Ring of Free Action
+THEN
+  RESPONSE #100
+    SetGlobal("cd_purvis_ring_gone","GLOBAL",1)
+    Continue()
+END
+
+IF
+  Global("cd_purvis_ring_gone","GLOBAL",1)
+  HasItem("ring09",Myself) // Ring of Free Action
+THEN
+  RESPONSE #100
+    DestroyItem("ring09")
+    Continue()
+END

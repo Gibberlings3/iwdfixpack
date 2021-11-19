@@ -671,7 +671,12 @@ END ELSE BEGIN // how, totlm fixes
     DECOMPILE_AND_PATCH BEGIN
       REPLACE_TEXTUALLY ~"PURVIS5"~ ~"PURVIS_5"~
     END
-    BUT_ONLY
+    BUT_ONLY  
+    
+  // prevent multiple rofas from Purvis
+  OUTER_FOR (index = 1 ; index < 8 ; ++index) BEGIN
+    EXTEND_BOTTOM ~lwpurv%index%.bcs~ ~iwdfixpack/baf/purvis.baf~
+  END
 
   // broken variable check
   COPY_EXISTING ~lwpurv6.bcs~ ~override~
@@ -2281,15 +2286,37 @@ COPY_EXISTING ~wbishop.cre~ ~override~
   BUT_ONLY
 
 ACTION_IF !game_is_iwd THEN BEGIN // how, totlm fixes
- 
-  // no gold
-  COPY_EXISTING ~tiernon.cre~  ~override~
-    WRITE_LONG 0x1C 0 // gold
+  
+  // standardize to 100
+  COPY_EXISTING ~cyshamb.cre~ ~override~ // shambling mound
+                ~shmblr.cre~  ~override~ // shambling mound
+                ~sshamb.cre~  ~override~ // shambling mound
+    WRITE_BYTE 0x5b 100 // resist electricity
+    BUT_ONLY IF_EXISTS // only sshamb in how
+  
+  // standardize to 100
+  COPY_EXISTING ~cyiceg.cre~   ~override~ // ice golem sentry
+                ~dlgolem.cre~  ~override~ // ice golem sentry
+                ~golemic.cre~  ~override~ // ice golem sentry
+                ~rndigolm.cre~ ~override~ // ice golem sentry
+                ~sagolem.cre~  ~override~ // ice golem sentry
+    WRITE_BYTE 0x5a 100 // resist cold
+    WRITE_BYTE 0x5f 100 // resist magic cold
+    BUT_ONLY IF_EXISTS // cyiceg is totlm
+
+  // all other resists 100
+  COPY_EXISTING ~copspir.cre~  ~override~ // planar spirit
+    WRITE_BYTE 0x5d 100 // resist magic
     BUT_ONLY
   
   // should start ENEMY like her companions
   COPY_EXISTING ~pshar.cre~ ~override~
     WRITE_BYTE 0x2d8 255 // ENEMY
+    BUT_ONLY
+ 
+  // no gold
+  COPY_EXISTING ~tiernon.cre~  ~override~
+    WRITE_LONG 0x1C 0 // gold
     BUT_ONLY
 
   ACTION_IF game_is_totlm THEN BEGIN // totlm fixes
@@ -2576,6 +2603,59 @@ ACTION_FOR_EACH item IN bloodgf fanggf fistgf handgf king kissgf tonggf zzf6al B
   END
 
 END
+
+// potions should bypass user's MR and spell protections; skipping potions that target non-user, e.g. potion of explosions
+COPY_EXISTING ~adisease.itm~ ~override~ // mummy's tea
+//            ~coffee.itm~   ~override~ // berduskan black brew
+              ~elfwine.itm~  ~override~ // elven healing wine
+              ~extheal.itm~  ~override~ // potion of extra healing
+              ~philter.itm~  ~override~ // philter of purification
+              ~pnull.itm~    ~override~ // oil of null effect
+              ~potn02.itm~   ~override~ // potion of fire resistance
+              ~potn03.itm~   ~override~ // potion of hill giant strength
+              ~potn04.itm~   ~override~ // potion of frost giant strength
+              ~potn05.itm~   ~override~ // potion of fire giant strength
+              ~potn06.itm~   ~override~ // potion of cloud giant strength
+              ~potn07.itm~   ~override~ // potion of storm giant strength
+//            ~potn08.itm~   ~override~ // potion of healing
+              ~potn09.itm~   ~override~ // potion of heroism
+              ~potn10.itm~   ~override~ // potion of invisibility
+              ~potn11.itm~   ~override~ // potion of invulnerability
+              ~potn12.itm~   ~override~ // potion of stone giant strength
+              ~potn14.itm~   ~override~ // oil of speed
+              ~potn15.itm~   ~override~ // red potion
+              ~potn16.itm~   ~override~ // violet potion
+              ~potn17.itm~   ~override~ // elixir of health
+              ~potn18.itm~   ~override~ // potion of absorption 
+              ~potn19.itm~   ~override~ // potion of agility
+              ~potn20.itm~   ~override~ // antidote
+              ~potn21.itm~   ~override~ // potion of clarity
+              ~potn22.itm~   ~override~ // potion of cold resistance
+              ~potn23.itm~   ~override~ // oil of speed
+              ~potn24.itm~   ~override~ // potion of defense
+              ~potn25.itm~   ~override~ // potion of healing
+              ~potn28.itm~   ~override~ // potion of fortitude
+              ~potn29.itm~   ~override~ // potion of genius
+              ~potn30.itm~   ~override~ // potion of infravision
+              ~potn31.itm~   ~override~ // potion of insulation
+              ~potn32.itm~   ~override~ // antidote
+              ~potn33.itm~   ~override~ // potion of magic blocking
+              ~potn34.itm~   ~override~ // potion of magic protection
+              ~potn35.itm~   ~override~ // potion of magic shielding
+              ~potn36.itm~   ~override~ // potion of master thievery
+              ~potn37.itm~   ~override~ // potion of mind focusing
+              ~potn38.itm~   ~override~ // potion of mirrored eyes
+              ~potn39.itm~   ~override~ // potion of perception
+              ~potn40.itm~   ~override~ // potion of invulnerability
+              ~potn41.itm~   ~override~ // potion of power
+              ~potn42.itm~   ~override~ // potion of regeneration 
+              ~potn43.itm~   ~override~ // potion of insight 
+              ~potn44.itm~   ~override~ // potion of strength
+              ~potn45.itm~   ~override~ // potion of freedom
+              ~potn46.itm~   ~override~ // potion of stone form
+              ~potnclr1.itm~ ~override~ // potion of clear purpose
+  LPF ALTER_EFFECT INT_VAR silent = 1 check_globals = 0 match_resist_dispel = 1 resist_dispel = 3 power = 0 END
+  BUT_ONLY
 
 /////                                                  \\\\\
 ///// usability fixes                                  \\\\\
@@ -3272,6 +3352,12 @@ COPY_EXISTING ~ringmal.itm~ ~override~
 COPY_EXISTING ~s1-12.itm~ ~override/ms2lizm.itm~
   WRITE_ASCII 0x22 HB #2 // halberd animation
 
+// make un-petrify stuff destroy the gorgon ring, otherwise victim will just re-petrify on load; see spwi614.spl
+COPY_EXISTING ~scrlpet.itm~  ~override~ // stone to flesh scroll
+              ~scrlpet2.itm~ ~override~ // stone to flesh scroll
+  LPF CLONE_EFFECT INT_VAR match_opcode = 43 opcode = 112 timing = 1 STR_VAR resource = gorgon END
+  BUT_ONLY IF_EXISTS
+
 // timing modes for effects, add round of putting on oil
 COPY_EXISTING ~serpsca.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 timing = 1 duration = 0 END
@@ -3352,6 +3438,18 @@ COPY_EXISTING ~trollde.itm~ ~override~ // effects rounded out in immnity batches
 // no save for one sound effect
 COPY_EXISTING ~trnbolt.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 savingthrow = BIT0 END
+  BUT_ONLY
+
+// convert phasing damage from disease to straight magical damage
+COPY_EXISTING ~u1ham5a.itm~ ~override~ // War Hammer of Phasing +3
+              ~u2ham4b.itm~ ~override~ // War Hammer of Phasing +2
+              ~u2hax4a.itm~ ~override~ // Two-Handed Axe of Greater Phasing +2
+              ~ubswd2a.itm~ ~override~ // Phasing Bastard Sword +1
+              ~ubswd4b.itm~ ~override~ // Bastard Sword of Greater Phasing +3
+              ~udagg1b.itm~ ~override~ // Phase Dagger
+              ~umstr3c.itm~ ~override~ // Morning Star of Lesser Phasing +2
+              ~usswd2b.itm~ ~override~ // Short Sword of Lesser Phasing +1   
+  LPM cd_convert_phasing 
   BUT_ONLY
 
 // hammer has random heal
@@ -4104,6 +4202,30 @@ COPY_EXISTING ~spin134.spl~ ~override~ // Mournful Wail
   LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 206 parameter2 = 66 target = 2 duration = 1 STR_VAR resource = EVAL ~%SOURCE_RES%~ END
   BUT_ONLY IF_EXISTS
 
+// disintegrate, petrification should have MR checks
+COPY_EXISTING ~spin170.spl~ ~override~ // flesh to stone (beholder version)
+              ~spin171.spl~ ~override~ // disintegrate (beholder version)
+              ~spwi024.spl~ ~override~ // flesh to stone (trap)
+              ~spwi607.spl~ ~override~ // disintegrate (arcane)
+              ~spwi614.spl~ ~override~ // flesh to stone (wizard version)
+  LPF ALTER_EFFECT INT_VAR resist_dispel = 2 END
+  BUT_ONLY IF_EXISTS
+
+// cloud spells shouldn't affect golems
+COPY_EXISTING ~spin170.spl~ ~override~ // flesh to stone (beholder version)
+              ~sppr322.spl~ ~override~ // mold touch
+              ~sppr418.spl~ ~override~ // poison
+              ~sppr510.spl~ ~override~ // Insect Plague
+              ~spwi004.spl~ ~override~ // stinking cloud (trap)
+              ~spwi018.spl~ ~override~ // cloud kill (trap)
+              ~spwi024.spl~ ~override~ // flesh to stone (trap)
+              ~spwi213.spl~ ~override~ // stinking cloud
+              ~spwi417.spl~ ~override~ // dolorous decay
+              ~spwi503.spl~ ~override~ // cloud kill
+              ~spwi615.spl~ ~override~ // flesh to stone
+  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 206 target = 2 parameter2 = 27 STR_VAR resource = EVAL ~%SOURCE_RES%~ END // golems
+  BUT_ONLY IF_EXISTS
+
 // visual shouldn't have min level
 COPY_EXISTING ~spin972.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR dicesize = 0 END
@@ -4805,6 +4927,7 @@ COPY_EXISTING ~spwi601.spl~ ~override~
 // kill effect misorder prevents other effects
 COPY_EXISTING ~spwi606.spl~ ~override~ // death spell
               ~spwi607.spl~ ~override~ // disintegrate (actually fine in base iwd)
+              ~spwi903.spl~ ~override~ // power word kill
   LPF CLONE_EFFECT  INT_VAR match_opcode = 13 STR_VAR insert = last END // clone to last effect
   LPF DELETE_EFFECT INT_VAR match_opcode = 13 multi_match = 1 END       // delete original effect
   BUT_ONLY
@@ -4838,6 +4961,11 @@ COPY_EXISTING ~spwi611.spl~ ~override~
 // summons should always bypass spell protections
 COPY_EXISTING ~spwi613.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 248 power = 0 END
+  BUT_ONLY
+
+// make un-petrify stuff destroy the gorgon ring, otherwise victim will just re-petrify on load; see scrlpet, scrlpet2.itm
+COPY_EXISTING ~spwi614.spl~  ~override~ // stone to flesh
+  LPF CLONE_EFFECT INT_VAR match_opcode = 43 opcode = 112 timing = 1 STR_VAR resource = gorgon END
   BUT_ONLY
 
 // string, sound bypassing MR
@@ -5138,20 +5266,49 @@ END ELSE BEGIN // how, totlm fixes
     COPY_EXISTING ~spin166.spl~ ~override~
       LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
       BUT_ONLY
+
+    // beholder innates should match power, resistance of underlying spells
+    COPY_EXISTING ~spin168.spl~ ~override~ // Charm Person (beholder version)
+                  ~spin169.spl~ ~override~ // Sleep (beholder version)
+      LPF ALTER_EFFECT INT_VAR power = 1 END
+      BUT_ONLY
       
     // beholder sleep should be wake-on-damge 
     COPY_EXISTING ~spin169.spl~ ~override~ // Sleep (Beholder)
       LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 39 match_parameter2 = 1 parameter2 = 0 END
       BUT_ONLY
-    
-    // no save for visual
-    COPY_EXISTING ~spin171.spl~ ~override~
-      LPF ALTER_SPELL_EFFECT INT_VAR opcode = 233 savingthrow = BIT0 savebonus = "-3" END
+
+    // beholder innates should match power, resistance of underlying spells
+    COPY_EXISTING ~spin170.spl~ ~override~ // Flesh To Stone (beholder version)
+      LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = "-1" power = 6 resist_dispel = 1 END
       BUT_ONLY
-    
-    // kill effect bypassing MR
-    COPY_EXISTING ~spin175.spl~ ~override~
+
+    // beholder innates should match power, resistance of underlying spells; no save for visual
+    COPY_EXISTING ~spin171.spl~ ~override~ // Disintegrate (beholder version)
+      LPF ALTER_SPELL_EFFECT INT_VAR opcode = 233 savingthrow = BIT0 savebonus = "-3" END
+      LPF ALTER_EFFECT INT_VAR power = 6 END
+      LPF ALTER_SPELL_HEADER INT_VAR location = 4 END // location
+      BUT_ONLY
+      
+    // beholder innates should match power, resistance of underlying spells
+    COPY_EXISTING ~spin172.spl~ ~override~ // Fear (beholder version)
+      LPF ALTER_EFFECT INT_VAR power = 2 END
+      BUT_ONLY
+
+    // beholder innates should match power, resistance of underlying spells
+    COPY_EXISTING ~spin173.spl~ ~override~ // Slow (beholder version)
+      LPF ALTER_EFFECT INT_VAR power = 3 END
+      BUT_ONLY
+
+    // beholder innates should match power, resistance of underlying spells
+    COPY_EXISTING ~spin174.spl~ ~override~ // Cause Serious Wounds (beholder version)
+      LPF ALTER_EFFECT INT_VAR power = 4 END
+      BUT_ONLY
+
+    // beholder innates should match power, resistance of underlying spells; kill bypassing mr
+    COPY_EXISTING ~spin175.spl~ ~override~ // Death Ray (beholder version)
       LPF ALTER_SPELL_EFFECT INT_VAR resist_dispel = 1 END
+      LPF ALTER_EFFECT INT_VAR power = 7 END
       BUT_ONLY
       
   END
@@ -5161,6 +5318,11 @@ END
 /////                                                  \\\\\
 ///// spell stacking                                   \\\\\
 /////                                                  \\\\\
+
+
+COPY_EXISTING ~spwi212.spl~ ~override~ // Mirror Image (mage version)
+  LPF DELETE_EFFECT INT_VAR match_opcode = 261 END // delete the effect blocking more mirror images
+  BUT_ONLY
 
 ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_spell_stacking BEGIN // spells w/o an existing 206
   sppr111 => 142 // curse
@@ -5177,6 +5339,7 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_spell_stacking BEGIN // spells w/o an existin
   sppr609 =>   0 // entropy shield
   sppr610 => 266 // blade barrier
   sppr714 => 142 // symbol pain
+  spwi212 => 119 // mirror image
   spwi223 => 142 // cat's grace
   spwi412 => 142 // greater malison
   spwi417 => 247 // beltyn's burning blood
