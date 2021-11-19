@@ -38,7 +38,7 @@ Not usable by:~
    
    // a variation of 7398 - remove the part about flaws since this is the description of a "Flawless Waterstar Gem" 
    @132 = ~Waterstar is also called achroite or colorless tourmaline and is rare in the Realms.  This beautiful stone is flawless and hence is fit for cutting.~        
-   // change vocalize description to caster-only
+   @133 = ~High Quality Halberd~ // high quality halberd is just named "halberd" in the game
 
   @1000 = ~Game Text Update~
   @1001 = ~This is not available in your language.~
@@ -51,6 +51,7 @@ Not usable by:~
 /////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
 /////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
 
+// DECASTAVE DRAINING
 @106394 = ~Decastave
 (Evocation)
 Level: 2
@@ -60,6 +61,8 @@ Casting Time: 2
 Area of Effect: Caster
 Saving Throw: None
 This spell creates a staff of force in the caster's hand. It is treated as a magical weapon, doing 1-6 hit points of damage per hit, and it can hit creatures immune to normal weapons. It is a staff, however, so if the caster does not have a proficiency in staff weapons, then the Decastave is used at a penalty. The staff also has the power to drain a target of 1-2 hit points on every strike. These hit points are added to the caster's, but they can only heal damage the caster has taken; they will not raise his hit points beyond his normal maximum.~
+
+// thac0/damage bonus for hammer
 @109764 = ~This weapon was used by the human ranger Althax Grom.  Althax hated the giants that plagued his homeland and was trained to exterminate them from a young age.  Although Althax originally fought his foes using the sword and bow, he quickly decided that those weapons were too slow against his huge foes.  His druid friend, Eladan, enchanted this hammer for him.  The reputation of the weapon grew as legends of Althax grew.  Even though the warhammer has passed through many hands since Althax's untimely demise, Giant's Sleep will always be remembered as the weapon of that powerful warrior.
 
 STATISTICS:
@@ -75,6 +78,8 @@ Not Usable By:
  Druid
  Mage
  Thief~
+
+// four turns > rounds for chromatic orb
 @112174 = ~Chromatic Orb (Evocation)
 Level: 1
 Range: Sight of Caster
@@ -113,7 +118,11 @@ Not Usable By:
  Druid
  Mage 
  Thief~
- 
+
+// duplicate #22604, but remove any reference that this is a repeat (e.g. "again" was removed in English)
+@122605 = ~Tell me of this new *and* old king.~
+
+// Tongue of the Gloomfrost should do piercing, not slashing, damage
 @124328 = ~This weapon was fashioned by your hands, guided by the dwarf, Tiernon.  Forged from ice taken from the walls of the Gloomfrost, this blade has taken some of the glacier and some of your strength into it, creating a formidable weapon. Though made of ice, the weapon is only slightly cold to the touch and does not melt, even when exposed to the hottest flames.
 
 STATISTICS:

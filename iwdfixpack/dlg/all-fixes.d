@@ -17,6 +17,16 @@ REPLACE_TRIGGER_TEXT ~dsoth~    ~ClassEx(Protagonist, ?Priest)~ ~ClassEx(Protago
 REPLACE_ACTION_TEXT  ~dvera~    ~ForceAttack(protagonist, myself)~ ~~
 REPLACE_ACTION_TEXT  ~dwinona~  ~ChangeStat(Protagonist,CHA,\([0-9]+\),SET)~ ~ChangeStat(Protagonist,CHR,\1,SET)~
 REPLACE_ACTION_TEXT  ~dwinona~  ~GiveItemCreate("\([A-Za-z0-9]+\)",\([A-Za-z0-9]+\))~ ~GiveItemCreate("\1",\2,0,0,0)~
+
+// only 4/5 random lines can fire
+REPLACE_TRIGGER_TEXT dgntslav ~RandomNumLT(4,[ %TAB%]*5)~ ~RandomNum(5,4)~ // fixed bugged replies for this one first
+REPLACE_TRIGGER_TEXT_REGEXP ~\(^ddugslav$\)\|\(^dgenmoni$\)\|\(^dgntslav$\)~ ~RandomNum(4,[ %TAB%]*0)~ ~RandomNum(5,5)~ // random generates 1 - x, so this never fires
+REPLACE_TRIGGER_TEXT_REGEXP ~\(^ddugslav$\)\|\(^dgenmoni$\)\|\(^dgntslav$\)~ ~RandomNum(4,~   ~RandomNum(5,~ // refactor the other triggers
+
+// not strictly necessary, but will prevent dupe replies if player mods in a different race for their party members
+ALTER_TRANS DALDWIN BEGIN 0   END BEGIN 14 END BEGIN TRIGGER ~OR(3) Race(Protagonist,DWARF) Race(Protagonist,HALFLING) Race(Protagonist,GNOME) Global("Aldwin","GLOBAL",0)~ END
+ALTER_TRANS DALDWIN BEGIN 1 3 END BEGIN  3 END BEGIN TRIGGER ~OR(3) Race(Protagonist,DWARF) Race(Protagonist,HALFLING) Race(Protagonist,GNOME) Global("Aldwin","GLOBAL",0)~ END
+ALTER_TRANS DALDWIN BEGIN 2   END BEGIN  8 END BEGIN TRIGGER ~OR(3) Race(Protagonist,DWARF) Race(Protagonist,HALFLING) Race(Protagonist,GNOME) Global("Aldwin","GLOBAL",0)~ END
   
 // Amelia's journal entries - push entries back to state 8, but requires state 8 to be split evil/non-evil
 ALTER_TRANS DAMELIA BEGIN 5 END BEGIN END BEGIN ~JOURNAL~ ~~ END // remove all journal entries
@@ -96,6 +106,9 @@ REPLACE_ACTION_TEXT DGRISELL ~GivePartyGold(5)~ ~~ // remove all
 ADD_TRANS_TRIGGER DGRISELL 12 ~Global("Grisella_Cash","GLOBAL",1)~ DO 4
 ADD_TRANS_ACTION DGRISELL BEGIN 12 END BEGIN 3 4 END ~GivePartyGold(5)~
 
+// shouldn't be able to ask 'who's ilmadia' if you've already met her; see also dtarnelm
+ADD_TRANS_ACTION dilmadia BEGIN 0 END BEGIN END ~SetGlobal("cd_met_ilmadia","GLOBAL",1)~
+
 // when ilmadia goes hostile, also turn fire giants and her two lieutenants hostile
 REPLACE_ACTION_TEXT DILMADIA ~Enemy()~ ~SetGlobal("%group_2_hostile%","MYAREA",1) Enemy()~
 
@@ -103,6 +116,11 @@ ADD_TRANS_ACTION DLARREL
 BEGIN 46 END
 BEGIN 4 END
 ~TakePartyItem("EvaJour")~
+
+// kuldahar rumors include a random voiced line from arundel
+REPLACE_STATE_TRIGGER dkurum 11 ~False()~ // false out arundel line
+REPLACE_STATE_TRIGGER dkurum 15 ~RandomNum(15,12)~ // move in #16 into #12 slot
+REPLACE_TRIGGER_TEXT  dkurum ~RandomNum(16,~ ~RandomNum(15,~ // refactor into random-of-15 instead of random-of-16
   
 // close infinite garnet exploit for clerics
 ADD_TRANS_TRIGGER DKUTOWNG 40 ~Global("Priest_Gem","GLOBAL",0)~ DO 0
@@ -126,6 +144,11 @@ ALTER_TRANS DMARCH BEGIN 9 END BEGIN END
   
 // marketh's prematue EscapeArea can prevent Marketh_Gone being set
 REPLACE_ACTION_TEXT DMARKETH ~\(GiveItem("valiant",Protagonist)\)[ %TAB%%LNL%%MNL%%WNL%]*EscapeArea()~ ~\1~ // remove EscapeArea()
+
+// errors on marketh's replies w.r.t. ginafae
+ALTER_TRANS DMARKETH BEGIN 0 END BEGIN 2 END BEGIN ~TRIGGER~ ~Global("Ginafae_Eye","GLOBAL",1)~ END // checking wrong variable
+ALTER_TRANS DMARKETH BEGIN 2 END BEGIN 0 END BEGIN ~TRIGGER~ ~~ END                                 // wrong reply checking for variable' delete...
+ALTER_TRANS DMARKETH BEGIN 2 END BEGIN 1 END BEGIN ~TRIGGER~ ~Global("Ginafae_Eye","GLOBAL",1)~ END // .. and put it on the correct one
 
 // close mytos infinite xp loophole; add variable and dupe xp-granting replies
 ADD_TRANS_TRIGGER DMYTOS 7 ~Global("CDMytosDiplomacy","MYAREA",0)~ DO 1 2 3 4
@@ -155,6 +178,13 @@ ADD_STATE_TRIGGER DPERDIEM 15 ~Global("Crazy_Speech","GLOBAL",0)~
 
 // sheemish only sets journal entry in one branch
 ALTER_TRANS DSHEEMIS BEGIN 8 END BEGIN 1 2 END BEGIN ~JOURNAL~ ~#34198~ END
+
+// soth's journal entry about Dugmaren Brightmane comes one state too early
+ALTER_TRANS dsoth BEGIN 7 END BEGIN END BEGIN ~JOURNAL~ ~~ END // remove here
+ALTER_TRANS dsoth BEGIN 8 END BEGIN END BEGIN ~JOURNAL~ ~#34307~ END // and add it back
+
+// shouldn't be able to ask 'who's ilmadia' if you've already met her; see also dilmadia
+ADD_TRANS_TRIGGER dtarnelm 4 ~!Global("cd_met_ilmadia","GLOBAL",1) !Dead("Ilmadia")~ 16 DO 2
 
 // tarnelm looking for wrong item here
 REPLACE_TRIGGER_TEXT ~dtarnelm~ ~!PartyHasItem("Food")~ ~!PartyHasItem("potatoes")~

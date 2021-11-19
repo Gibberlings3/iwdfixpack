@@ -111,6 +111,7 @@ ACTION_IF (("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) OR
     
   ACTION_IF !game_is_iwd BEGIN // how, totlm
   
+    STRING_SET 22605 @122605 // for asking about wylfdene for the first time
     STRING_SET 24328 @124328 // Tongue of the Gloomfrost should do piercing, not slashing, damage
 
   END
@@ -1121,6 +1122,7 @@ COPY_EXISTING ~ar6003.are~ ~override~
 
 // container icons; bad party orientation on entrance
 COPY_EXISTING ~ar6005.are~ ~override~
+  LPF ALTER_AREA_REGION INT_VAR info_point = 3019 STR_VAR region_name = "Statues 3" END // info region lacking string
   FOR (index = 1 ; index < 26 ; ++index) BEGIN
     LPF ALTER_AREA_CONTAINER INT_VAR cont_icon = 7 STR_VAR cont_name = EVAL "Container %index%"  END
   END
@@ -1185,6 +1187,8 @@ COPY_EXISTING ~ar8003.are~ ~override~
 
 // shouldn't be in two teams
 COPY_EXISTING ~ar8004.are~ ~override~
+  LPF ALTER_AREA_REGION INT_VAR info_point = 19258 STR_VAR region_name = "Stone 2" END // info region lacking string
+  LPF ALTER_AREA_REGION INT_VAR info_point = 19258 STR_VAR region_name = "Stone 4" END // info region lacking string
   LPF ALTER_AREA_ACTOR STR_VAR actor_name = "Sleeping Svirfneblin 1" script_race = gnteam3 END
   LPF ALTER_AREA_ACTOR STR_VAR actor_name = "Sleeping Svirfneblin 2" script_race = gnteam3 END
   LPF ALTER_AREA_ACTOR STR_VAR actor_name = "Sleeping Svirfneblin 3" script_race = gnteam3 END
@@ -1200,6 +1204,7 @@ COPY_EXISTING ~ar8006.are~ ~override~
 // travel cursor
 COPY_EXISTING ~ar8007.are~ ~override~
   LPF ALTER_AREA_REGION INT_VAR cursor = 28 STR_VAR trig_name = "To8006" END
+  LPF ALTER_AREA_REGION INT_VAR info_point = 18532 STR_VAR region_name = "Banner 14" END // info region lacking string
   BUT_ONLY
 
 // dialogue for gnomes, charges for oil of null effect
@@ -3262,6 +3267,12 @@ COPY_EXISTING ~hqcbow.itm~ ~override~ // High Quality Composite Long Bow
   LPF ALTER_ITEM_HEADER STR_VAR icon = ibow12 END
   BUT_ONLY
 
+// high quality halberd is just called "halberd" in game
+COPY_EXISTING ~hqhalb.itm~ ~override~
+  SAY 0x08 @133
+  SAY 0x0c @133
+  BUT_ONLY
+
 // hq long bow, composite long bow icons swapped to match normal version icon swap  
 COPY_EXISTING ~hqlbow.itm~ ~override~ // High Quality Long Bow
   WRITE_ASCII 0x3a ~ibow11~ #8 
@@ -3326,6 +3337,11 @@ COPY_EXISTING ~plat05.itm~ ~override~
   LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 144 target = 1 parameter2 = 1 timing = 2 END
   BUT_ONLY
 
+// should use protection from fire icon, not protection from fire/cold
+COPY_EXISTING ~potn02.itm~ ~override~ // potion of fire resistance
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 142 match_parameter2 = 26 parameter2 = 16 END
+  BUT_ONLY
+
 // wrong damage, displays 'gulp' when thrown, power/dispel for sound effect
 COPY_EXISTING ~potn13.itm~ ~override~
   LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 12 END
@@ -3341,6 +3357,11 @@ COPY_EXISTING ~potn20.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 141 power = 4 END
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 233 power = 4 END
   BUT_ONLY
+
+// should use protection from cold icon, not protection from fire/cold
+COPY_EXISTING ~potn22.itm~ ~override~ // potion of cold resistance
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 142 match_parameter2 = 26 parameter2 = 25 END
+  BUT_ONLY 
 
 // extraneous header, power/MR for sound
 COPY_EXISTING ~potn27.itm~ ~override~
@@ -3376,6 +3397,7 @@ COPY_EXISTING ~potn38.itm~ ~override~
 
 // extraneous header, no save for sound effect
 COPY_EXISTING ~potn40.itm~ ~override~
+  WRITE_LONG 0x54 20729 // cursed potion of invulnerability not using the 'murky' identified description
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 savingthrow = BIT4 END
   BUT_ONLY
 

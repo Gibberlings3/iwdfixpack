@@ -23,6 +23,9 @@ EXTEND_TOP DEMMRCH 17 #0
         Global("ar9200_visited","GLOBAL",1)~ THEN REPLY #25711 GOTO 18
 END
 
+// shouldn't ask about wylfdene "again" when asking for the first time
+ALTER_TRANS DHJOLLDE BEGIN 6 END BEGIN 2 END BEGIN ~REPLY~ ~#22605~ END
+
 // hjollder's broken transition
 ALTER_TRANS DHJOLLDE BEGIN 65 END BEGIN 3 END // file, state, trans
   BEGIN EPILOGUE ~GOTO 68~ END // go to proper response
