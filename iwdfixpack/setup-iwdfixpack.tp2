@@ -1131,6 +1131,15 @@ COPY_EXISTING ~ar6005.are~ ~override~
   LPF ALTER_AREA_ENTRANCE INT_VAR orient = 9 STR_VAR entrance_name = "FR6013b" END
   LPF ALTER_AREA_ENTRANCE INT_VAR orient = 7 STR_VAR entrance_name = "FR6004c" END
   LPF ALTER_AREA_ENTRANCE INT_VAR orient = 7 STR_VAR entrance_name = "FR6013c" END
+  // random, magic ammo comes identified
+  READ_SHORT 0x76 item_num
+  READ_LONG  0x78 item_off
+  FOR (index = 0 ; index < item_num ; ++index) BEGIN
+    READ_ASCII (item_off +        (0x14 * index)) item
+    PATCH_IF ("%item%" STRING_COMPARE_CASE "rngp4" = 0) BEGIN
+      WRITE_LONG  (item_off + 0x10 + (0x14 * index)) (THIS BAND `BIT0) // removed idntified flag
+    END
+  END
   BUT_ONLY
 
 // container icons, made key required
@@ -3056,11 +3065,6 @@ COPY_EXISTING ~arow1-6.itm~ ~override~ // Arrow
   LPF ALTER_ITEM_HEADER INT_VAR projectile = 6 END
   BUT_ONLY
   
-// per descript, supposed to teleport archer next to target
-COPY_EXISTING ~arowtrn.itm~ ~override~
-  LPF ALTER_EFFECT INT_VAR match_opcode = 124 parameter2 = 1 END
-  BUT_ONLY
-  
 // summoned tough lizardmen using weapons without animations; see ms3tliz.cre et al
 COPY_EXISTING ~b1-12.itm~ ~override/ms3tliz.itm~
   WRITE_ASCII 0x22 CL #2 // club animation
@@ -3077,6 +3081,12 @@ COPY_EXISTING ~behwep.itm~ ~override~
       parameter1   = (4389 + (index * 10273)) // diseased, poisoned
     END
   END
+  BUT_ONLY
+
+// cosmetic: armor should be red on paperdoll, avatar
+COPY_EXISTING ~blood.itm~  ~override~ // Bathed-in-Blood
+  LPF ALTER_EFFECT INT_VAR check_headers = 0 match_opcode = 7 match_parameter2 = 5 parameter1 = 47 END // armor: dark red (was 33 magenta)
+  LPF ALTER_EFFECT INT_VAR check_headers = 0 match_opcode = 7 match_parameter2 = 0 parameter1 = 47 END // belt: dark red (was 33 magenta)
   BUT_ONLY
 
 // sound file wrong
@@ -3356,11 +3366,14 @@ COPY_EXISTING ~philter.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 power = 0 resist_dispel = 0 END
   BUT_ONLY
 
-// full plate +1 doesn't disable thieving button
+// full plate +1 doesn't disable thieving button; cosmetic: armor should be dark gray on paperdoll, avatar
 COPY_EXISTING ~plat05.itm~ ~override~
   LPF DELETE_ITEM_EQEFFECT INT_VAR opcode_to_delete = 144 END
   LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 144 target = 1 parameter2 = 0 timing = 2 END
   LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 144 target = 1 parameter2 = 1 timing = 2 END
+  LPF ALTER_EFFECT INT_VAR check_headers = 0 match_opcode = 7 match_parameter2 = 5 parameter1 = 65 END // armor: very dark gray (was 29 red-tinted black)
+  LPF ALTER_EFFECT INT_VAR check_headers = 0 match_opcode = 7 match_parameter2 = 4 parameter1 = 16 END // straps: silverish gold (was 23 light copper)
+  LPF ALTER_EFFECT INT_VAR check_headers = 0 match_opcode = 7 match_parameter2 = 0 parameter1 = 65 END // belt: very dark gray (was 29 red-tinted black)
   BUT_ONLY
 
 // should use protection from fire icon, not protection from fire/cold
@@ -3434,6 +3447,12 @@ COPY_EXISTING ~potn45.itm~ ~override~
   PATCH_FOR_EACH addme IN 175 158 157 154 126 109 40 BEGIN
     LPF ADD_ITEM_EFFECT INT_VAR opcode = 261 target = 1 power = 4 resist_dispel = 1 duration = 700 parameter2 = "%addme%" END
   END
+  BUT_ONLY
+
+// assign potion of null effect a unique, unused icon
+COPY_EXISTING ~pnull.itm~  ~override~
+  WRITE_ASCII 0x3a ~ipotn49~ #8 // inventory icon
+  LPF ALTER_ITEM_HEADER STR_VAR icon = ipotn49 END // extended header icon
   BUT_ONLY
 
 // range, enchantment, min str
@@ -4075,6 +4094,14 @@ END ELSE BEGIN // how, totlm fixes
     // min lev set on CHR bonus
     COPY_EXISTING ~stafhmg.itm~ ~override~
       LPF ALTER_ITEM_EFFECT INT_VAR equipped = 1 opcode = 6 dicesize = 0 END
+      BUT_ONLY
+
+    // totlm knight tale scrolls should be plot-critical items
+    COPY_EXISTING ~tale1.itm~ ~override~
+                  ~tale2.itm~ ~override~
+                  ~tale3.itm~ ~override~
+                  ~tale4.itm~ ~override~
+      WRITE_LONG 0x18 (THIS BOR BIT0) // set the plot critical flag
       BUT_ONLY
   
     // prob wrong for icon
