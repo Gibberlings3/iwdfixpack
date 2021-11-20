@@ -81,7 +81,11 @@ REPLACE_TRIGGER_TEXT ~dcapvil2~ ~Global("Talonites_Dead","GLOBAL",10)~ ~GlobalGT
 // bad random spread could cause no valid links error
 REPLACE_TRIGGER_TEXT ~dckquest~ ~RandomNum(5,0)~ ~RandomNum(5,5)~
 
-// remove xp exploit
+// don't use 'dainty llew' reply outside of the 'dainty llew' state
+ALTER_TRANS ddirtyll BEGIN 14 END BEGIN 2 END BEGIN ~REPLY~ ~#9945~ END
+
+// remove xp exploit, let elisia vanish in peace
+ADD_STATE_TRIGGER DELISIA 18 ~!Global("Elisia_Vanish","GLOBAL",1)~
 ADD_TRANS_ACTION DELISIA BEGIN 20 END BEGIN END ~SetInterrupt(FALSE)~
 
 // some of Llew's startstore calls using wrong resref

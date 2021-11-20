@@ -131,6 +131,7 @@ COPY_EXISTING ~axemino.itm~  ~override~ // axe of the minotaur lord, 0 new effec
   BUT_ONLY IF_EXISTS
   
 COPY_EXISTING ~behamu.itm~   ~override~ // <invalid strref -1>, 1 new effects from cd_immunity_charm_arrays
+              ~cdconstr.itm~ ~override~ // new item for construct immunities
               ~cibossb.itm~  ~override~ // ring, 1 new effects from cd_immunity_charm_arrays
               ~cigbard.itm~  ~override~ // ring of free action, 1 new effects from cd_immunity_charm_arrays
               ~ciigen.itm~   ~override~ // broken shield, 1 new effects from cd_immunity_charm_arrays
@@ -198,6 +199,7 @@ COPY_EXISTING ~aldeth.itm~   ~override~ // ring of free action, 2 new effects fr
   BUT_ONLY IF_EXISTS
 
 COPY_EXISTING ~behamu.itm~   ~override~ // <invalid strref -1>, 6 new effects from cd_immunity_fear_arrays
+              ~cdconstr.itm~ ~override~ // new item for construct immunities
               ~cibossb.itm~  ~override~ // ring, 6 new effects from cd_immunity_fear_arrays
               ~ciigen.itm~   ~override~ // broken shield, 6 new effects from cd_immunity_fear_arrays
               ~helmded.itm~  ~override~ // dead man's face, 8 new effects from cd_immunity_fear_arrays
@@ -245,7 +247,8 @@ COPY_EXISTING ~spitm05.spl~  ~override~ // righteous wrath of the faithful, 3 ne
   LPF cd_apply_batch STR_VAR array_name = cd_immunity_haste_arrays END
   BUT_ONLY IF_EXISTS
   
-COPY_EXISTING ~gvalor1.itm~  ~override~ // gauntlet of valor, 1 new effects from cd_immunity_hold_arrays
+COPY_EXISTING ~cdconstr.itm~ ~override~ // new item for construct immunities
+              ~gvalor1.itm~  ~override~ // gauntlet of valor, 1 new effects from cd_immunity_hold_arrays
               ~ring09.itm~   ~override~ // ring of free action, 1 new effects from cd_immunity_hold_arrays
               ~spitm05.spl~  ~override~ // righteous wrath of the faithful, 1 new effects from cd_immunity_hold_arrays
               ~sppr403.spl~  ~override~ // free action, 24 new effects from cd_immunity_hold_arrays
@@ -257,7 +260,8 @@ COPY_EXISTING ~gvalor1.itm~  ~override~ // gauntlet of valor, 1 new effects from
   LPF cd_apply_batch STR_VAR array_name = cd_immunity_hold_arrays END
   BUT_ONLY IF_EXISTS
   
-COPY_EXISTING ~potn38.itm~   ~override~ // potion of mirrored eyes, 1 new effects from cd_immunity_petrification_arrays
+COPY_EXISTING ~cdconstr.itm~ ~override~ // new item for construct immunities
+              ~potn38.itm~   ~override~ // potion of mirrored eyes, 1 new effects from cd_immunity_petrification_arrays
               ~scrl15.itm~   ~override~ // protection from petrification, 1 new effects from cd_immunity_petrification_arrays
               ~spwi108.spl~  ~override~ // protection from petrification, 30 new effects from cd_immunity_petrification_arrays
   LPF cd_apply_batch STR_VAR array_name = cd_immunity_petrification_arrays END
@@ -310,6 +314,7 @@ COPY_EXISTING ~spin146.spl~  ~override~ // the song of kaudies - resistant to so
   BUT_ONLY IF_EXISTS
   
 COPY_EXISTING ~behamu.itm~   ~override~ // <invalid strref -1>, 1 new effects from cd_immunity_sleep_arrays
+              ~cdconstr.itm~ ~override~ // new item for construct immunities
               ~cibossb.itm~  ~override~ // ring, 1 new effects from cd_immunity_sleep_arrays
               ~ciigen.itm~   ~override~ // broken shield, 1 new effects from cd_immunity_sleep_arrays
               ~cwreve.itm~   ~override~ // attack, 1 new effects from cd_immunity_sleep_arrays
@@ -345,6 +350,7 @@ COPY_EXISTING ~aldeth.itm~   ~override~ // ring of free action, 2 new effects fr
   
 COPY_EXISTING ~aldeth.itm~   ~override~ // ring of free action, 1 new effects from cd_immunity_stun_arrays
               ~behamu.itm~   ~override~ // <invalid strref -1>, 1 new effects from cd_immunity_stun_arrays
+              ~cdconstr.itm~ ~override~ // new item for construct immunities
               ~cibossb.itm~  ~override~ // ring, 1 new effects from cd_immunity_stun_arrays
               ~mage05.itm~   ~override~ // ring of free action, 1 new effects from cd_immunity_stun_arrays
               ~ring90.itm~   ~override~ // ring, 1 new effects from cd_immunity_stun_arrays

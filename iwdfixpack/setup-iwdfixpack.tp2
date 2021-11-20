@@ -1111,6 +1111,7 @@ COPY_EXISTING ~ar6001.are~ ~override~
 COPY_EXISTING ~ar6002.are~ ~override~
   LPF ALTER_AREA_ACTOR INT_VAR x_coord = 2194 y_coord = 1264 STR_VAR actor_name = "Neo Orog 8" END
   LPF ALTER_AREA_ACTOR STR_VAR dlg_file = "dgenmond" actor_name = "Phase Spider" END
+  LPF ALTER_AREA_ACTOR STR_VAR actor_name = ~Orc Elite 12~ script_default = udorcar END // lacks any combat scripting
   LPF ALTER_AREA_DOOR INT_VAR door_icon = 8 STR_VAR door_name = "AR6002PuzzleDoorTrigger" END
   LPF REPLACE_AREA_ITEM STR_VAR old_item = "zzu6cs" new_item = "u1hax4b" END
   BUT_ONLY
@@ -1382,6 +1383,11 @@ END ELSE BEGIN // how, totlm fixes
       LPF ALTER_AREA_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Rack 2" END
       LPF ALTER_AREA_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Book" END
       LPF REPLACE_AREA_ITEM INT_VAR charges1 = 10 STR_VAR old_item = ring03 new_item = ring03 END
+      BUT_ONLY
+
+    // move afatkmel below their normal bbcloud script so they use their clouds
+    COPY_EXISTING ~ar9801.are~ ~override~
+      LPF ALTER_AREA_ACTOR STR_VAR actor_name = ~Bombardier Beetle~ script_specifics = ~~ script_general = efatkmel END
       BUT_ONLY
 
     // minotaur trapped by door, unable to replicate but fixed anyway
@@ -1879,7 +1885,8 @@ COPY_EXISTING ~aldwin.cre~   ~override~
   BUT_ONLY
 
 // add new construct item to constructs (see cdconstr.itm)
-COPY_EXISTING ~bknight.cre~  ~override~ // black knight
+COPY_EXISTING ~bronsen.cre~  ~override~ // bronze sentry
+              ~bknight.cre~  ~override~ // black knight
               ~cyanimp1.cre~ ~override~ // animated plate
               ~cyanimp2.cre~ ~override~ // animated plate
               ~cyanimp3.cre~ ~override~ // animated plate
@@ -2644,6 +2651,7 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_item_icons BEGIN
   ushld3a =>  16 // fire resistance, reinforced large shield +2
   vexed   =>  25 // cursed, vexed
   zzc8hb  =>  16 // fire resistance, hell's bane
+  zzf6al  =>  16 // fire resistance, alamion
 END
 
 ACTION_PHP_EACH cd_item_icons AS item => icon BEGIN
@@ -2659,7 +2667,7 @@ ACTION_PHP_EACH cd_item_icons AS item => icon BEGIN
 END
 
 // stuff needs fire & cold portrait icons
-ACTION_FOR_EACH item IN bloodgf fanggf fistgf handgf king kissgf tonggf zzf6al BEGIN
+ACTION_FOR_EACH item IN bloodgf fanggf fistgf handgf king kissgf tonggf BEGIN
 
   ACTION_IF FILE_EXISTS_IN_GAME "%item%.itm" BEGIN
 
@@ -2890,6 +2898,17 @@ ACTION_PHP_EACH cd_scroll_ranges AS item => scroll_range BEGIN
   END
 
 END
+
+// protection from X scrolls should bypass MR 
+COPY_EXISTING ~scrl03.itm~ ~override~ // protection from acid
+              ~scrl04.itm~ ~override~ // protection from cold
+              ~scrl05.itm~ ~override~ // protection from electricity
+              ~scrl06.itm~ ~override~ // protection from fire
+              ~scrl08.itm~ ~override~ // protection from poison
+              ~scrl09.itm~ ~override~ // protection from undead
+              ~scrl09.itm~ ~override~ // protection from petrification
+  LPF ALTER_EFFECT INT_VAR resist_dispel = 3 END
+  BUT_ONLY
 
 // change unID'd name to match other pro scrolls
 COPY_EXISTING ~scrl05.itm~ ~override~
@@ -3122,6 +3141,13 @@ COPY_EXISTING ~cdconstr.itm~ ~override~ // new item for construct immunities
   LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 287 target = 1 timing = 2 END // immunity to backstab
   LPF CLONE_EFFECT INT_VAR match_opcode = 287 opcode = 261 parameter2 = 25 END // immunity to poison
   LPF CLONE_EFFECT INT_VAR match_opcode = 287 opcode = 261 parameter2 = 78 END // immunity to disease
+  IF_EXISTS
+
+// additional construct immunities 
+COPY_EXISTING ~cdconstr.itm~ ~override~ // new item for construct immunities
+  PATCH_FOR_EACH op IN 3 5 24 39 45 93 109 175 BEGIN // berserk, charm, fear, sleep, stun, fatigue, paralyzation, hold
+    LPF CLONE_EFFECT INT_VAR match_opcode = 261 match_parameter2 = 25 parameter2 = op END // immunity to x
+  END
   IF_EXISTS
 
 // mithril chain allows thieving, wonky spellcasting disable
@@ -3599,9 +3625,10 @@ COPY_EXISTING ~uarow2a.itm~ ~override~ // hammer arrow
   WRITE_SHORT 0x42 15 // lore 
   BUT_ONLY
 
-// remove min level on stun effect
-COPY_EXISTING ~uarow3b.itm~ ~override~
+// remove min level on stun effect, missing their 1d10 crushing damage
+COPY_EXISTING ~uarow3b.itm~ ~override~ // hammer arrows +1
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 45 dicesize = 0 END
+  LPF ADD_ITEM_EFFECT INT_VAR type = 2 opcode = 12 target = 2 dicenumber = 1 dicesize = 10 timing = 1 END
   BUT_ONLY
 
 // disease shouldn't have a save
@@ -3617,6 +3644,11 @@ COPY_EXISTING ~udart3b.itm~  ~override~ // blinding darts +2: 25% blind
 // remove min level on visuals
 COPY_EXISTING ~uhalb3c.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 233 dicesize = 0 END
+  BUT_ONLY
+
+// huge longbow should be damage type missile not piercing
+COPY_EXISTING ~ulbow1a.itm~ ~override~
+  LPF ALTER_ITEM_HEADER INT_VAR header_type = 4 damage_type = 4 END
   BUT_ONLY
 
 COPY_EXISTING ~ulbow2b.itm~ ~override~
@@ -3647,10 +3679,9 @@ COPY_EXISTING ~umstr5a.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 45 dicesize = 0 END
   BUT_ONLY
 
-// wrong AC, damage resistance
-COPY_EXISTING ~ushld2b.itm~ ~override~
-  LPF ALTER_EFFECT INT_VAR match_opcode = 0 match_parameter2 = BIT1 parameter1 = 1 END // should be +1 vs missile, not +4
-  LPF ALTER_EFFECT INT_VAR match_opcode = 89 opcode = 86 END // should resist slashing, not missile
+// item is actually correct, but using wrong description
+COPY_EXISTING  ~ushld2b.itm~ ~override~
+  WRITE_LONG 0x54 14639
   BUT_ONLY
 
 // shadowed leathers are usable by only rangers and thieves
@@ -4569,6 +4600,7 @@ COPY_EXISTING ~sppr510.spl~ ~override~
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 139 target = 2 power = 5 parameter1 = 14007 timing = 1
     resist_dispel = 1 dicenumber = 5 dicesize = 3 savingthrow = BIT0 END
   LPF ALTER_EFFECT INT_VAR match_dicesize = 3 match_dicenumber = 4 dicenumber = 5 END
+  LPF ALTER_EFFECT INT_VAR match_duration = 35 duration = 7 END // portrait durations wrong
   BUT_ONLY
 
 // summons should always bypass spell protections
@@ -4683,6 +4715,11 @@ COPY_EXISTING ~spwi021.spl~ ~override~
 // undead not being protected from horror trap
 COPY_EXISTING ~spwi025.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 206 duration = 70 STR_VAR resource = "spwi025" END
+  BUT_ONLY
+
+// armor should last nine hours
+COPY_EXISTING ~spwi102.spl~ ~override~
+  LPF ALTER_EFFECT INT_VAR match_duration = 3780 duration = 2700 END
   BUT_ONLY
 
 // crazy staggered damage to get 1d3+2/level (save for half) correct, rounding up 0.5s to 1s - had to sit down and do some math for this one
@@ -4826,22 +4863,18 @@ COPY_EXISTING ~spwi211.spl~ ~override~
   LPF ALTER_SPELL_HEADER INT_VAR type_new = 1 END
   BUT_ONLY
 
+// lasts 1.2 hours/level istead of 1/level
+COPY_EXISTING ~spwi214.spl~ ~override~ // Strength
+              ~spwi223.spl~ ~override~ // Cat's Grace
+  READ_SHORT  0x68 abil_num
+  FOR (index = 0 ; index < abil_num ; ++index) BEGIN
+    LPF ALTER_EFFECT INT_VAR header = index match_duration = ((index + 3) * 360) duration = ((index + 3) * 300) END
+  END
+  BUT_ONLY IF_EXISTS // cat's grace is how
+
 // wrong sound reference
 COPY_EXISTING ~spwi214.spl~ ~override~
-  READ_LONG   0x64 "abil_off"
-  READ_SHORT  0x68 "abil_num"
-  READ_LONG   0x6a "fx_off"
-  FOR (index = 0 ; index < abil_num ; index = index + 1) BEGIN // looks through headers
-    READ_SHORT ("%abil_off%" + 0x1e + ("%index%" * 0x28)) "abil_fx_num"
-    READ_SHORT ("%abil_off%" + 0x20 + ("%index%" * 0x28)) "abil_fx_idx"
-    FOR (index2 = 0 ; index2 < abil_fx_num ; index2 = index2 + 1) BEGIN // searches through fx for sound effect
-      READ_SHORT ("%fx_off%" +        (("%abil_fx_idx%" + "%index2%") * 0x30)) "opcode"
-      READ_ASCII ("%fx_off%" + 0x14 + (("%abil_fx_idx%" + "%index2%") * 0x30)) "sound"
-      PATCH_IF (("%opcode%" = 174) AND ("%sound%" STRING_COMPARE_CASE "eff_m12" = 0)) BEGIN // display icon
-        WRITE_ASCII ("%fx_off%" + 0x14 + (("%abil_fx_idx%" + "%index2%") * 0x30)) ~eff_e03~ #8
-      END
-    END
-  END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 174 STR_VAR match_resource = eff_m12 resource = eff_e03 END
   BUT_ONLY
 
 // caster pause shouldn't be blocked by spell protections
@@ -4859,9 +4892,10 @@ COPY_EXISTING ~spwi221.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 resist_dispel = 3 END
   BUT_ONLY
 
-// sound missing save
-COPY_EXISTING ~spwi222.spl~ ~override~
+// sound missing save, should last eight hours
+COPY_EXISTING ~spwi222.spl~ ~override~ // blindness
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 savingthrow = BIT0 END
+  LPF ALTER_EFFECT INT_VAR match_duration = 3360 duration = 2400 END
   BUT_ONLY
 
 // string bypasses MR
@@ -4887,6 +4921,15 @@ COPY_EXISTING ~spwi306.spl~ ~override~
 // ms1 should summon 2d3 monsters, not 2d4, summons should always bypass spell protections
 COPY_EXISTING ~spwi309.spl~ ~override~ // Monster Summoning I
   LPF ALTER_EFFECT INT_VAR match_opcode = 240 dicesize = 3 power = 0 END
+  BUT_ONLY
+
+// non-detection should be 7 turns/level
+COPY_EXISTING ~spwi310.spl~ ~override~
+  READ_SHORT  0x68 abil_num
+  PATCH_IF game_is_iwd BEGIN SET scale = 49 END ELSE BEGIN SET scale = 420 END
+  FOR (index = 0 ; index < abil_num ; ++index) BEGIN
+    LPF ALTER_EFFECT INT_VAR header = index match_duration = ((index + 5) * scale) duration = ((index + 5) * 490) END
+  END
   BUT_ONLY
 
 // self-sound should bypass spell protections
@@ -4980,9 +5023,10 @@ COPY_EXISTING ~spwi508.spl~ ~override~
 COPY_EXISTING ~spwi509.spl~ ~override~
   READ_BYTE 0x68 abil_num
   LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = 233 END
+  LPF ALTER_EFFECT INT_VAR match_savebonus = "-2" savebonus = "-4" END // chaos save should be -4 for >4HD, not -2
   FOR (index = 1 ; index < (abil_num + 1) ; ++index) BEGIN
     LPF ADD_SPELL_EFFECT INT_VAR opcode = 233 target = 2 power = 5 parameter2 = 13 timing = 1 resist_dispel = 1
-      savingthrow = BIT0 savebonus = "-2" dicesize = 5 insert_point = 99 header = index END
+      savingthrow = BIT0 savebonus = "-4" dicesize = 5 insert_point = 99 header = index END
     LPF ADD_SPELL_EFFECT INT_VAR opcode = 233 target = 2 power = 5 parameter2 = 13 timing = 1 resist_dispel = 1 
       dicenumber = 4 insert_point = 99 header = index END
   END
@@ -5208,6 +5252,12 @@ END ELSE BEGIN // how, totlm fixes
   // sunscorch now does extra damage to myconids in addition to undead
   COPY_EXISTING ~sppr113.spl~ ~override~ // Sunscorch
     LPF ALTER_EFFECT INT_VAR match_opcode = 206 match_parameter2 = 2 parameter2 = 32 END
+    BUT_ONLY
+
+  // stalker, cause disease should last eight hours 
+  COPY_EXISTING ~sppr315.spl~ ~override~
+                ~sppr723.spl~ ~override~
+    LPF ALTER_EFFECT INT_VAR match_duration = 2880 duration = 2400 END
     BUT_ONLY
   
   // self-visuals and movement speed shouldn't be blocked
