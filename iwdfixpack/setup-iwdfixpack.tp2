@@ -231,6 +231,21 @@ COPY_EXISTING ~lorebon.2da~ ~override~
   SET_2DA_ENTRY 15 1 2 ~3~
   BUT_ONLY_IF_IT_CHANGES
 
+// add new entries for area music - see music section in area fixes
+COPY_EXISTING ~music.2da~ ~override~   
+  SET music3603 = 0
+  REPLACE_EVALUATE ~^\([^ %TAB%]+\)~ BEGIN
+    PATCH_IF ("%MATCH1%" STRING_COMPARE_CASE "NO_MUSIC" = 0) BEGIN SET music3603 = 0 END ELSE BEGIN SET music3603 += 1 END
+  END ~%MATCH1%~
+  BUT_ONLY
+
+OUTER_SET music5103 = music3603 + 1
+OUTER_SET music5104 = music3603 + 2
+
+APPEND ~music.2da~ ~mx3603 mx3603.mus
+mx5103 mx5103.mus
+mx5104 mx5104.mus~
+
 // remove bad references from rndtreas.2da
 COPY_EXISTING ~rndtres.2da~ ~override~
   REPLACE_TEXTUALLY ~\bZZZ3BC\b~  ~ZZZ6BC~
@@ -782,6 +797,60 @@ END ELSE BEGIN // how, totlm fixes
   END
 
 END
+
+/////                                                  \\\\\
+///// area music fixes                                 \\\\\
+/////                                                  \\\\\
+
+// music.2da patched in music secion
+// adds 5103, 5104 music tracks; mx3603 is already present
+MKDIR ~music/mx5103~
+MKDIR ~music/mx5104~
+COPY ~iwdfixpack/music/mx5103.mus~  ~music~ 
+     ~iwdfixpack/music/mx5104.mus~  ~music~
+     ~iwdfixpack/music/mx5103a.acm~ ~music/mx5103~
+     ~iwdfixpack/music/mx5104a.acm~ ~music/mx5104~
+
+// areas with day music now have night music
+ACTION_FOR_EACH area IN 
+  1001 1004 1100 1201 2112 3000 3501 3503 3600 3601 4001 4005 5000 5001 6000 6001 6002 
+  6003 6005 7000 7001 7004 8001 8004 8009 8012 9103 9201 9300 9400 9500 9501 9502 9603
+BEGIN
+
+  COPY_EXISTING ~ar%area%.are~ ~override~
+    READ_LONG 0xbc song_off
+    READ_LONG  (song_off + 0x00) day // copy day song...
+    WRITE_LONG (song_off + 0x04) day // to night
+    BUT_ONLY IF_EXISTS
+  
+END
+
+// areas getting new and/or unused tracks
+ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_new_music BEGIN
+  ar2116 => 11 
+  ar3603 => ~%music3603%~ 
+  ar5103 => ~%music5103%~
+  ar5104 => ~%music5104%~
+  ar8005 => 33
+END
+
+ACTION_PHP_EACH cd_new_music AS area => music BEGIN
+
+  COPY_EXISTING ~%area%.are~ ~override~
+    READ_LONG 0xbc song_off
+    WRITE_LONG (song_off + 0x00) music
+    WRITE_LONG (song_off + 0x04) music
+    BUT_ONLY 
+
+END
+
+// add combat music for iwd finale
+COPY_EXISTING ~ar1105.are~ ~override~
+  READ_LONG 0xbc song_off
+  WRITE_LONG (song_off + 0x08) 40
+  WRITE_LONG (song_off + 0x0c) 40
+  WRITE_LONG (song_off + 0x10) 40
+  BUT_ONLY 
 
 /////                                                  \\\\\
 ///// area fixes                                       \\\\\
