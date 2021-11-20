@@ -23,6 +23,10 @@ REPLACE_TRIGGER_TEXT dgntslav ~RandomNumLT(4,[ %TAB%]*5)~ ~RandomNum(5,4)~ // fi
 REPLACE_TRIGGER_TEXT_REGEXP ~\(^ddugslav$\)\|\(^dgenmoni$\)\|\(^dgntslav$\)~ ~RandomNum(4,[ %TAB%]*0)~ ~RandomNum(5,5)~ // random generates 1 - x, so this never fires
 REPLACE_TRIGGER_TEXT_REGEXP ~\(^ddugslav$\)\|\(^dgenmoni$\)\|\(^dgntslav$\)~ ~RandomNum(4,~   ~RandomNum(5,~ // refactor the other triggers
 
+// albion sets journal entry too early
+ALTER_TRANS dalbion BEGIN 0 END BEGIN END BEGIN ~JOURNAL~ ~~ END // remove here
+ALTER_TRANS dalbion BEGIN 5 END BEGIN END BEGIN ~JOURNAL~ ~#3354~ END // and add it back
+
 // not strictly necessary, but will prevent dupe replies if player mods in a different race for their party members
 ALTER_TRANS DALDWIN BEGIN 0   END BEGIN 14 END BEGIN TRIGGER ~OR(3) Race(Protagonist,DWARF) Race(Protagonist,HALFLING) Race(Protagonist,GNOME) Global("Aldwin","GLOBAL",0)~ END
 ALTER_TRANS DALDWIN BEGIN 1 3 END BEGIN  3 END BEGIN TRIGGER ~OR(3) Race(Protagonist,DWARF) Race(Protagonist,HALFLING) Race(Protagonist,GNOME) Global("Aldwin","GLOBAL",0)~ END
@@ -41,6 +45,14 @@ END
 // goes to wrong state
 ALTER_TRANS DAPSEL BEGIN 13 END BEGIN 0 END // filename, state, trans
   BEGIN EPILOGUE ~GOTO 4~ END
+
+// arundel sets journal too early... more complicated fix
+ALTER_TRANS DARUNDEL BEGIN 42 END BEGIN END BEGIN ~JOURNAL~ ~~ END // remove all journal entries here
+ADD_TRANS_ACTION DARUNDEL BEGIN 42 END BEGIN 2 END ~SetGlobal("AddEntry16556","LOCALS",1)~ // add var for alternate journal
+ALTER_TRANS DARUNDEL BEGIN 46 END BEGIN END BEGIN ~JOURNAL~ ~#10626~ END // and add it back
+EXTEND_BOTTOM DARUNDEL 46                                                // add alternate path for other journal
+  IF ~Global("AddEntry16556","LOCALS",1)~ THEN JOURNAL #16556 EXIT
+END
 
 // fixes bandoth's random hostility
 ALTER_TRANS DBANDOTH BEGIN 26 END BEGIN 0 END
@@ -116,10 +128,13 @@ ADD_TRANS_ACTION dilmadia BEGIN 0 END BEGIN END ~SetGlobal("cd_met_ilmadia","GLO
 // when ilmadia goes hostile, also turn fire giants and her two lieutenants hostile
 REPLACE_ACTION_TEXT DILMADIA ~Enemy()~ ~SetGlobal("%group_2_hostile%","MYAREA",1) Enemy()~
 
-ADD_TRANS_ACTION DLARREL
-BEGIN 46 END
-BEGIN 4 END
-~TakePartyItem("EvaJour")~
+// jhonen sets journal entry too early
+ALTER_TRANS djhonen BEGIN 10 END BEGIN 1 END BEGIN ~JOURNAL~ ~~ END // remove here
+ALTER_TRANS djhonen BEGIN 13 END BEGIN END BEGIN ~JOURNAL~ ~#11408~ END // and add it back
+
+// kresselack sets journal entry too early
+ALTER_TRANS dkressel BEGIN 28 END BEGIN 0 END BEGIN ~JOURNAL~ ~~ END // remove here
+ALTER_TRANS dkressel BEGIN 30 END BEGIN END BEGIN ~JOURNAL~ ~#416~ END // and add it back
 
 // kuldahar rumors include a random voiced line from arundel
 REPLACE_STATE_TRIGGER dkurum 11 ~False()~ // false out arundel line
@@ -141,6 +156,11 @@ APPEND ~dkutowng~
     IF ~~ THEN REPLY #376 EXIT
   END
 END
+
+ADD_TRANS_ACTION DLARREL
+BEGIN 46 END
+BEGIN 4 END
+~TakePartyItem("EvaJour")~
 
 // marchon of waterdeep non-sequitir
 ALTER_TRANS DMARCH BEGIN 9 END BEGIN END
@@ -180,6 +200,12 @@ REPLACE_TRIGGER_TEXT DORRICK ~\([^!]PartyHasItem("bookmyt")\)~ ~\1 !Global("Orri
 // perdiem should only go through his post-rescue spiel once
 ADD_STATE_TRIGGER DPERDIEM 15 ~Global("Crazy_Speech","GLOBAL",0)~
 
+// perdiem sets journal entries too early
+ALTER_TRANS dperdiem BEGIN 0 END BEGIN END BEGIN ~JOURNAL~ ~~ END // remove here
+ALTER_TRANS dperdiem BEGIN 3 END BEGIN END BEGIN ~JOURNAL~ ~#34302~ END // and add it back
+ALTER_TRANS dperdiem BEGIN 8 15 END BEGIN END BEGIN ~JOURNAL~ ~~ END // remove here
+ALTER_TRANS dperdiem BEGIN 12 END BEGIN END BEGIN ~JOURNAL~ ~#34296~ END // and add it back
+
 // sheemish only sets journal entry in one branch
 ALTER_TRANS DSHEEMIS BEGIN 8 END BEGIN 1 2 END BEGIN ~JOURNAL~ ~#34198~ END
 
@@ -193,6 +219,18 @@ ADD_TRANS_TRIGGER dtarnelm 4 ~!Global("cd_met_ilmadia","GLOBAL",1) !Dead("Ilmadi
 // tarnelm looking for wrong item here
 REPLACE_TRIGGER_TEXT ~dtarnelm~ ~!PartyHasItem("Food")~ ~!PartyHasItem("potatoes")~
 
+// vera sets journal entry too early
+ALTER_TRANS dvera BEGIN 7 END BEGIN 1 END BEGIN ~JOURNAL~ ~~ END // remove here
+ALTER_TRANS dvera BEGIN 15 END BEGIN END BEGIN ~JOURNAL~ ~#34300~ END // and add it back
+
+// the voice sets journal entry too early
+ALTER_TRANS dvoiceda BEGIN 0 END BEGIN END BEGIN ~JOURNAL~ ~~ END // remove here
+ALTER_TRANS dvoiceda BEGIN 8 END BEGIN END BEGIN ~JOURNAL~ ~#34245~ END // and add it back
+
 // wrong journal entry
 ALTER_TRANS DWHITCOM BEGIN 8 END BEGIN END
   BEGIN ~JOURNAL~ ~#34499~ END
+
+// yxunomei adds journal entry before you ask the question
+ALTER_TRANS dyxun BEGIN 0 END BEGIN 4 END BEGIN ~JOURNAL~ ~~ END // remove here
+ALTER_TRANS dyxun BEGIN 7 END BEGIN END BEGIN ~JOURNAL~ ~#4358~ END // and add it back

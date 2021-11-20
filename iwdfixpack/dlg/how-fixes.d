@@ -8,6 +8,12 @@ REPLACE_TRIGGER_TEXT ~dkayless~ ~NumTimesTalkedGT(0)~ ~NumTimesTalkedToGT(0)~
 // fix for ambere (plainab)
 ADD_TRANS_TRIGGER ~dambere~ 11 ~Global("Screwed_Ambere", "GLOBAL", 0)~  DO 0
 
+// angaar sets journal entries too early
+ALTER_TRANS dangaar BEGIN 11 END BEGIN 2 END BEGIN ~JOURNAL~ ~~ END // remove here
+ALTER_TRANS dangaar BEGIN 19 END BEGIN END BEGIN ~JOURNAL~ ~#23549~ END // and add it back
+ALTER_TRANS dangaar BEGIN 11 END BEGIN 1 END BEGIN ~JOURNAL~ ~~ END // remove here
+ALTER_TRANS dangaar BEGIN 17 END BEGIN 0 END BEGIN ~JOURNAL~ ~#23550~ END // and add it back
+
 // shouldn't make 'not a fisherman' comment if edion never claimed to be a fisherman
 ADD_TRANS_TRIGGER DEDION 3 ~Global("EdionFisherman","LOCALS",1)~ DO 1
 ADD_TRANS_ACTION DEDION BEGIN 0 END BEGIN 1 3 END ~SetGlobal("EdionFisherman","LOCALS",1)~
@@ -25,6 +31,10 @@ END
 
 // shouldn't ask about wylfdene "again" when asking for the first time
 ALTER_TRANS DHJOLLDE BEGIN 6 END BEGIN 2 END BEGIN ~REPLY~ ~#22605~ END
+
+// hjollder sets journal entry too early
+ALTER_TRANS dhjollde BEGIN 41 47 END BEGIN 0 END BEGIN ~JOURNAL~ ~~ END // remove here
+ALTER_TRANS dhjollde BEGIN 48 END BEGIN END BEGIN ~JOURNAL~ ~#26299~ END // and add it back
 
 // hjollder's broken transition
 ALTER_TRANS DHJOLLDE BEGIN 65 END BEGIN 3 END // file, state, trans
