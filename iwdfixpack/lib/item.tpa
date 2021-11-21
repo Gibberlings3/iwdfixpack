@@ -71,9 +71,17 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_item BEGIN
   wolfwi2, 1, 1, null, null, null, null => wolfwi2 // <invalid strref -1>
   wylfins, null, null, null, 0, null, null => wylfins // Wylfdene's Tribal Insignia
   xstafhmg, null, 1, null, null, null, null => xstafhmg // Staff of the Hanged Men's Glee
-  zz14in, null, 3, null, null, null, null => zz14in // Inconsequence
-  zzf6al, null, null, null, null, 2, null => zzf6al // Alamion
+  zz05we, null, 2, null, null, null, null => zz05we // The Mace of Weal and Woe
+  zz57pj, null, 6, null, null, null, null => zz57pj // Pale Justice
+  zza7ch, null, 4, null, null, null, null => zza7ch // Conlan's Hammer
+  zzf6al, null, 5, null, null, 2, null => zzf6al // Alamion
   zzg7ts, null, null, null, null, 2, null => zzg7ts // Trollslayer
-  zzj6sp, null, null, null, null, 6, null => zzj6sp // Selune's Promise
+  zzh8gk, null, 4, null, null, null, null => zzh8gk // Giant Killer
+  zzj6sp, null, 3, null, null, 6, null => zzj6sp // Selune's Promise
+  zzm5mh, null, 4, null, null, null, null => zzm5mh // Misery's Herald
+  zzn6gc, null, 4, null, null, null, null => zzn6gc // Guktok's Chopper
+  zzs6sc, null, 4, null, null, null, null => zzs6sc // Evil Spider Crusher of Doom
+  zzu6cs, null, 5, null, null, null, null => zzu6cs // Axe of Caged Souls
+  zzz6bc, null, 3, null, null, null, null => zzz6bc // Bonecleaver
 
 END

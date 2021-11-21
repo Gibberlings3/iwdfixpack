@@ -513,6 +513,14 @@ COPY_EXISTING ~eepoqcng.bcs~ ~override~
                       ~\1 ActionOverride("Iron_Golem_1",Enemy()) ActionOverride("Iron_Golem_2",Enemy())~
   END
   BUT_ONLY
+  
+// ghoul touch should match its description: see spwi218.spl, ghoult.itm, and scrl1c.itm
+COPY_EXISTING ~kuorrick.bcs~ ~override~ // adjust scripts using ghoul touch to target caster instead
+              ~shshdwz1.bcs~ ~override~
+              ~wtkontik.bcs~ ~override~
+  DECOMPILE_AND_PATCH BEGIN
+    REPLACE_TEXTUALLY ~Spell(LastSeenBy(Myself),WIZARD_GHOUL_TOUCH)~ ~Spell(Myself,WIZARD_GHOUL_TOUCH)~ // kuorrick uses forcespell, but match still works
+  END IF_EXISTS
 
 // townperson can now open doors
 COPY_EXISTING ~kutown2.bcs~ ~override~
@@ -571,6 +579,17 @@ COPY_EXISTING ~ldnym.bcs~ ~override~
     APPEND_FILE ~iwdfixpack/baf/ldllew.baf~
     REPLACE_TEXTUALLY ~CDITEM~ ~beetshld~
   END
+
+// make floor traps more consistent
+COPY_EXISTING ~ldtrap1.bcs~ ~override~
+              ~ldtrap2.bcs~ ~override~
+              ~uddsrma.bcs~ ~override~
+              ~uddsrmb.bcs~ ~override~ 
+              ~uddsrmc.bcs~ ~override~
+  DECOMPILE_AND_PATCH BEGIN
+    REPLACE_TEXTUALLY ~Entered(~ ~IsOverMe(~
+  END  
+  BUT_ONLY
 
 // severed hand folks healing party
 COPY_EXISTING ~shelfc1.bcs~  ~override~
@@ -1050,6 +1069,7 @@ COPY_EXISTING ~ar4005.are~ ~override~
   LPF ALTER_AREA_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Pillow 1" END
   LPF ALTER_AREA_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Pillow 2" END
   LPF ALTER_AREA_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Pillow 3" END
+  LPF ALTER_AREA_CONTAINER INT_VAR coord_x = 554 coord_y = 421 STR_VAR container_name = "Chest 5" END // adjust chest activation point to prevent shuffling
   BUT_ONLY
 
 COPY_EXISTING ~ar5000.are~ ~override~
@@ -1324,6 +1344,11 @@ END ELSE BEGIN // how, totlm fixes
   COPY_EXISTING ~ar9102.are~ ~override~
     LPF ALTER_AREA_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Container 5"  END
     LPF REPLACE_AREA_ITEM INT_VAR charges1 = 1 STR_VAR old_item = clck13 new_item = clck13 END // un-IDs item
+    BUT_ONLY
+
+  // don't split party when coming up stairs
+  COPY_EXISTING ~ar9107.are~ ~override~
+    LPF ALTER_AREA_ENTRANCE INT_VAR x_coord = 509 y_coord = 570 STR_VAR entrance_name = FR9106 END 
     BUT_ONLY
 
   // remove dupe random item drops (extres4 also available in ar9601)
@@ -2999,9 +3024,10 @@ COPY_EXISTING ~scrl09.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 duration_high = 3600 END
   BUT_ONLY
 
-// ghoul touch cast from scroll paralyzes caster
-COPY_EXISTING ~scrl1c.itm~ ~override~
-  LPF ALTER_ITEM_HEADER INT_VAR header = 1 target = 1 END
+// ghoul touch should match its description: see spwi218.spl, ghoult.itm, and kuorrick.bcs et al
+COPY_EXISTING ~scrl1c.itm~ ~override~ // also need to adjust spell scroll to target self instead of others
+  LPF ALTER_ITEM_HEADER INT_VAR header = 1 target = 5 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 146 target = 1 END
   BUT_ONLY
 
 // ghost armor should be castable on others
@@ -3249,6 +3275,11 @@ COPY_EXISTING ~clck18.itm~ ~override~
   LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 33 target = 1 parameter1 = 1  timing = 2 END // +1 save vs. death
   BUT_ONLY
 
+// make the caravan contract a quest item
+COPY_EXISTING ~contract.itm~ ~override~
+  WRITE_LONG 0x18 (THIS BOR BIT0) // set the plot critical flag
+  BUT_ONLY
+
 // effects bypassing save
 COPY_EXISTING ~ctouch.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 savingthrow = 1 END
@@ -3322,6 +3353,11 @@ COPY_EXISTING ~ghoul1.itm~ ~override~
   LPF ALTER_EFFECT INT_VAR match_opcode = 174 match_timing = 4 duration = 30 END
   LPF ALTER_EFFECT INT_VAR match_opcode = 206 resist_dispel = 0 END // reset resist/dispel
   LPF CLONE_EFFECT INT_VAR match_opcode = 206 match_parameter2 = 15 parameter2 = 19 probability1 = 69 END // half-elf 70% chance to resist outright
+  BUT_ONLY
+
+// ghoul touch should match its description: see spwi218.spl, scrl1c.itm, and kuorrick.bcs et al
+COPY_EXISTING ~ghoult.itm~ ~override~
+  LPF ALTER_EFFECT INT_VAR match_duration = 30 duration = 42 END // bump up to six rounds
   BUT_ONLY
 
 // hp bonus should have 0 power
@@ -3832,10 +3868,10 @@ COPY_EXISTING ~wand10.itm~ ~override~
   LPF ALTER_EFFECT INT_VAR power = 0 END 
   BUT_ONLY
 
-// misordering prevents evasion (how, totlm); add lore; claim 6d8 damage, actually does 6d6
+// misordering prevents evasion (how, totlm); add lore; claim 6d8 damage, actually does 6d6; power level
 COPY_EXISTING ~wand11.itm~ ~override~
   WRITE_SHORT 0x42 50
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 12 dicesize = 8 END
+  LPF ALTER_EFFECT  INT_VAR match_opcode = 12 power = 5 dicesize = 8 END
   PATCH_IF !game_is_iwd BEGIN
     LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 206 END
     LPF ADD_ITEM_EFFECT INT_VAR insert_point = 0 opcode = 206 target = 2 parameter2 = 63 resist_dispel = 2 STR_VAR resource = "wand11" END
@@ -4978,9 +5014,12 @@ COPY_EXISTING ~spwi217.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 165 power = 0 END
   BUT_ONLY
 
-// sound bypassing MR
+// ghoul touch should match its description: see ghoult.itm, scrl1c.itm, and kuorrick.bcs et al
 COPY_EXISTING ~spwi218.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 resist_dispel = 1 END
+  LPF DELETE_EFFECT END // delete existing effects
+  LPF ALTER_SPELL_HEADER INT_VAR target = 5 END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 111 target = 1 power = 2 duration = 42 resist_dispel = 3 STR_VAR resource = GHOULT END // create ghoult as magical weapon
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 233 target = 1 power = 2 parameter2 = 4 timing = 1 resist_dispel = 3 END // sparklies
   BUT_ONLY
 
 // sound blocked by MR
@@ -5028,10 +5067,15 @@ COPY_EXISTING ~spwi310.spl~ ~override~
   END
   BUT_ONLY
 
-// self-sound should bypass spell protections
+// skull trap damage is incorrect 
 COPY_EXISTING ~spwi313.spl~ ~override~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 power = 0 END
-  BUT_ONLY
+  READ_SHORT 0x68 abil_num
+  FOR (index = 0 ; index < abil_num ; ++index) BEGIN
+    LPF ALTER_EFFECT INT_VAR header = index match_opcode = 12 match_savingthrow =    0 dicesize = 6 dicenumber = ((index + 6) / 2) END
+    LPF ALTER_EFFECT INT_VAR header = index match_opcode = 12 match_savingthrow = BIT1 dicesize = 6 dicenumber = ((index + 5) / 2) END
+  END
+  BUT_ONLY  
 
 // vamp touch shouldn't bypass MR
 COPY_EXISTING ~spwi314.spl~ ~override~
@@ -5674,6 +5718,12 @@ COPY_EXISTING ~ehtemple.sto~ ~override~
 // book45 references events 80 years in the future
 COPY_EXISTING ~kugerth.sto~ ~override~
   LPF DELETE_STORE_ITEM STR_VAR item_to_delete = book45 END
+  BUT_ONLY
+
+// conlan has separate instances of composite long bows for sale
+COPY_EXISTING ~kusmith.sto~ ~override~
+  REMOVE_STORE_ITEM ~bow01~ // remove both instances
+  ADD_STORE_ITEM ~bow01~ AFTER ~xbow01~ #0 #0 #0 ~NONE~ #1 ~UNLIMITED~ // re-add one back
   BUT_ONLY
 
 ACTION_IF !game_is_iwd THEN BEGIN

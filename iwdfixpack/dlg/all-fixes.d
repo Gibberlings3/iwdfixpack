@@ -23,9 +23,15 @@ REPLACE_TRIGGER_TEXT dgntslav ~RandomNumLT(4,[ %TAB%]*5)~ ~RandomNum(5,4)~ // fi
 REPLACE_TRIGGER_TEXT_REGEXP ~\(^ddugslav$\)\|\(^dgenmoni$\)\|\(^dgntslav$\)~ ~RandomNum(4,[ %TAB%]*0)~ ~RandomNum(5,5)~ // random generates 1 - x, so this never fires
 REPLACE_TRIGGER_TEXT_REGEXP ~\(^ddugslav$\)\|\(^dgenmoni$\)\|\(^dgntslav$\)~ ~RandomNum(4,~   ~RandomNum(5,~ // refactor the other triggers
 
-// albion sets journal entry too early
+// extend class-specific replies to mutliclasses
+ALTER_TRANS DACCALIA BEGIN 3 END BEGIN 2 END BEGIN "TRIGGER" ~ClassEx(Protagonist,DRUID)~ END // from druid
+ALTER_TRANS DACCALIA BEGIN 3 END BEGIN 3 END BEGIN "TRIGGER" ~ClassEx(Protagonist,RANGER)~ END // from ranger
+
+// albion sets journal entries too early
 ALTER_TRANS dalbion BEGIN 0 END BEGIN END BEGIN ~JOURNAL~ ~~ END // remove here
 ALTER_TRANS dalbion BEGIN 5 END BEGIN END BEGIN ~JOURNAL~ ~#3354~ END // and add it back
+ALTER_TRANS dalbion BEGIN 18 END BEGIN 0 1 END BEGIN ~JOURNAL~ ~~ END // remove here
+ALTER_TRANS dalbion BEGIN 23 END BEGIN END BEGIN ~JOURNAL~ ~#4343~ END // and add it back
 
 // not strictly necessary, but will prevent dupe replies if player mods in a different race for their party members
 ALTER_TRANS DALDWIN BEGIN 0   END BEGIN 14 END BEGIN TRIGGER ~OR(3) Race(Protagonist,DWARF) Race(Protagonist,HALFLING) Race(Protagonist,GNOME) Global("Aldwin","GLOBAL",0)~ END
@@ -132,6 +138,9 @@ REPLACE_ACTION_TEXT DILMADIA ~Enemy()~ ~SetGlobal("%group_2_hostile%","MYAREA",1
 ALTER_TRANS djhonen BEGIN 10 END BEGIN 1 END BEGIN ~JOURNAL~ ~~ END // remove here
 ALTER_TRANS djhonen BEGIN 13 END BEGIN END BEGIN ~JOURNAL~ ~#11408~ END // and add it back
 
+// block pathway to kerish asking you to kill vera if you've already been down it and accepted/declined
+ADD_TRANS_TRIGGER dkerish 6 ~Global("Kill_Vera","GLOBAL",0)~ DO 3
+
 // kresselack sets journal entry too early
 ALTER_TRANS dkressel BEGIN 28 END BEGIN 0 END BEGIN ~JOURNAL~ ~~ END // remove here
 ALTER_TRANS dkressel BEGIN 30 END BEGIN END BEGIN ~JOURNAL~ ~#416~ END // and add it back
@@ -157,10 +166,16 @@ APPEND ~dkutowng~
   END
 END
 
-ADD_TRANS_ACTION DLARREL
-BEGIN 46 END
-BEGIN 4 END
-~TakePartyItem("EvaJour")~
+// have larrel actually take the journal
+ADD_TRANS_ACTION DLARREL BEGIN 46 END BEGIN 4 END ~TakePartyItem("EvaJour")~
+
+// prevent dupe journal entries from lethias; essentially dupe replies of states 15 and 16
+ALTER_TRANS dlethias BEGIN 15 END BEGIN END BEGIN "TRIGGER" ~Global("cd_journal_14418","LOCALS",0)~ "ACTION" ~SetGlobal("cd_journal_14418","LOCALS",1)~ END
+ALTER_TRANS dlethias BEGIN 16 END BEGIN END BEGIN "TRIGGER" ~Global("cd_journal_14419","LOCALS",0)~ "ACTION" ~SetGlobal("cd_journal_14419","LOCALS",1)~ END
+EXTEND_BOTTOM dlethias 15 IF ~Global("cd_journal_14418","LOCALS",1)~ THEN REPLY #8535 GOTO 16 END
+EXTEND_BOTTOM dlethias 15 IF ~Global("cd_journal_14418","LOCALS",1)~ THEN REPLY #8539 EXIT END
+EXTEND_BOTTOM dlethias 16 IF ~Global("cd_journal_14419","LOCALS",1)~ THEN REPLY #8541 GOTO 4 END
+EXTEND_BOTTOM dlethias 16 IF ~Global("cd_journal_14419","LOCALS",1)~ THEN REPLY #8542 EXIT END
 
 // marchon of waterdeep non-sequitir
 ALTER_TRANS DMARCH BEGIN 9 END BEGIN END
