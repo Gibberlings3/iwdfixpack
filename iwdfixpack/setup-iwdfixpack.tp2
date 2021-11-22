@@ -1130,8 +1130,9 @@ COPY_EXISTING ~ar5004.are~ ~override~
   LPF ALTER_AREA_CONTAINER INT_VAR cont_icon = 5 STR_VAR cont_name = "Container 2" END
   BUT_ONLY
 
-// travel cursor
+// travel cursor, area type
 COPY_EXISTING ~ar5101.are~ ~override~
+  WRITE_SHORT 0x48 (THIS BOR (BIT0 + BIT1)) // add flags for outdoor and day/night
   LPF ALTER_AREA_REGION INT_VAR cursor = 28 STR_VAR trig_name = "To5004" END
   BUT_ONLY
 
@@ -1148,6 +1149,11 @@ COPY_EXISTING ~ar5301.are~ ~override~
 // container icon
 COPY_EXISTING ~ar5302.are~ ~override~
   LPF ALTER_AREA_CONTAINER INT_VAR cont_icon = 5 STR_VAR cont_name = "Container 2" END
+  BUT_ONLY
+
+COPY_EXISTING ~ar5304.are~ ~override~
+              ~ar5402.are~ ~override~
+  WRITE_SHORT 0x48 (THIS BOR BIT1) // add flags day/night
   BUT_ONLY
 
 // container icon
@@ -1230,6 +1236,7 @@ COPY_EXISTING ~ar6003.are~ ~override~
 
 // container icons; bad party orientation on entrance
 COPY_EXISTING ~ar6005.are~ ~override~
+  LPF ALTER_AREA_REGION INT_VAR cursor = 22 STR_VAR region_name = "Tombs 4" END // using wrong cursor
   LPF ALTER_AREA_REGION INT_VAR info_point = 3019 STR_VAR region_name = "Statues 3" END // info region lacking string
   FOR (index = 1 ; index < 26 ; ++index) BEGIN
     LPF ALTER_AREA_CONTAINER INT_VAR cont_icon = 7 STR_VAR cont_name = EVAL "Container %index%"  END
@@ -1313,6 +1320,10 @@ COPY_EXISTING ~ar8004.are~ ~override~
   LPF ALTER_AREA_ACTOR STR_VAR actor_name = "Sleeping Svirfneblin 5" script_race = gnteam3 END
   BUT_ONLY
 
+COPY_EXISTING ~ar8005.are~ ~override~
+  LPF ALTER_AREA_REGION INT_VAR cursor = 22 STR_VAR region_name = "Myco 5" END // using wrong cursor
+  BUT_ONLY
+
 // container icon
 COPY_EXISTING ~ar8006.are~ ~override~
   LPF ALTER_AREA_CONTAINER INT_VAR cont_icon = 3 STR_VAR cont_name = "Dresser 1"  END
@@ -1322,6 +1333,7 @@ COPY_EXISTING ~ar8006.are~ ~override~
 COPY_EXISTING ~ar8007.are~ ~override~
   LPF ALTER_AREA_REGION INT_VAR cursor = 28 STR_VAR trig_name = "To8006" END
   LPF ALTER_AREA_REGION INT_VAR info_point = 18532 STR_VAR region_name = "Banner 14" END // info region lacking string
+  LPF ALTER_AREA_REGION INT_VAR cursor = 22 STR_VAR region_name = "Thieves Tools 2" END // using wrong cursor
   BUT_ONLY
 
 // dialogue for gnomes, charges for oil of null effect
@@ -3334,9 +3346,17 @@ COPY_EXISTING ~dazer.itm~ ~override~
   LPF ALTER_EFFECT INT_VAR check_globals = 0 header_type = 1 probability1 = 4 END // one effect has prob=6, others all prob=5
   BUT_ONLY IF_EXISTS
 
-// visual power is wrong
-COPY_EXISTING ~decasta.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 power = 2 END
+// MR, power issues; prevent stacking; golems immune
+COPY_EXISTING ~decasta.itm~ ~override~ // darts of bone
+  LPF ALTER_EFFECT INT_VAR match_target = 2 resist_dispel = 1 power = 2 END // drain subject to MR
+  LPF CLONE_EFFECT INT_VAR match_opcode = 233 opcode = 206 parameter2 = 55 timing = 0 resist_dispel = 0 STR_VAR resource = decasta insert = first END // golems immune
+  BUT_ONLY
+
+// MR, saves, power issues; prevent stacking; golems immune
+COPY_EXISTING ~dobone.itm~ ~override~ // darts of bone
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 power = 6 resist_dispel = 1 savingthrow = BIT2 END // fix MR, saves, power
+  LPF CLONE_EFFECT INT_VAR match_opcode = 44 opcode = 254 timing = 0 duration = 0 parameter1 = 0 STR_VAR resource = dobone insert = first END // prevent stacking
+  LPF CLONE_EFFECT INT_VAR match_opcode = 254 opcode = 206 parameter2 = 55 savingthrow = 0 resist_dispel = 0 END // golems immune to str drain
   BUT_ONLY
 
 // play sound can be dispelled
@@ -3891,6 +3911,12 @@ COPY_EXISTING ~wand04.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 142 parameter2 = 44 END
   BUT_ONLY
 
+// wand of frost crashes game when used
+COPY_EXISTING ~wand06.itm~ ~override~
+  LPF ALTER_ITEM_HEADER INT_VAR projectile = 105 END // re-use winter wolf ice projectile
+  LPF ALTER_EFFECT INT_VAR parameter1 = 4 dicesize = 5 dicenumber = 4 END // should be 2x 4d6 damage; simulated as 2x 4d5+4 for the "ones counted as twos" rolling
+  BUT_ONLY
+
 // summons shouldn't have power levels
 COPY_EXISTING ~wand10.itm~ ~override~
   LPF ALTER_EFFECT INT_VAR power = 0 END 
@@ -3899,6 +3925,7 @@ COPY_EXISTING ~wand10.itm~ ~override~
 // misordering prevents evasion (how, totlm); add lore; claim 6d8 damage, actually does 6d6; power level
 COPY_EXISTING ~wand11.itm~ ~override~
   WRITE_SHORT 0x42 50
+  LPF ALTER_ITEM_HEADER INT_VAR target = 4 END // change to target area, not actor
   LPF ALTER_EFFECT  INT_VAR match_opcode = 12 power = 5 dicesize = 8 END
   PATCH_IF !game_is_iwd BEGIN
     LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 206 END
@@ -5370,14 +5397,19 @@ END ELSE BEGIN // how, totlm fixes
       sppr610.spl  =>  12 // blade barrier
       sppr983.spl  =>  12 // glyph of warding, trap
       sppr984.spl  =>  12 // chromatic orb, trap (flame strike?)
+      spwi001.spl  =>  12 // fireball, trap
       spwi002.spl  =>  12 // lightning bolt, trap
+      spwi021.spl  => 233 // color spray, trap
+      spwi023.spl  =>  12 // 4d6 fireball, trap
       wand06.itm   =>  12 // wand of frost
+      wandrea.itm  =>  12 // pomab's lightning attack
   END
 
   ACTION_PHP_EACH cd_evasion AS file => op BEGIN
 
     COPY_EXISTING ~%file%~ ~override~
-      LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = op opcode = 206 parameter2 = 63 timing = 0 duration = 0 savingthrow = 0 STR_VAR insert = first resource = EVAL ~%SOURCE_RES%~ END
+      LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = op opcode = 206 parameter2 = 63 timing = 0 duration = 0 savingthrow = 0 
+        dicesize = 0 dicenumber = 0 STR_VAR insert = first resource = EVAL ~%SOURCE_RES%~ END
       BUT_ONLY IF_EXISTS
       
   END
@@ -5691,9 +5723,11 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_spell_stacking BEGIN // spells w/o an existin
   sppr216 =>   0 // alicorn lance
   sppr306 => 142 // protection from fire
   sppr310 => 142 // miscast magic
+  sppr319 => 266 // circle of bones
   sppr407 => 142 // protection from lightning
   sppr412 => 264 // static charge
   sppr417 => 142 // cloud of pestilence
+  sppr512 => 126 // spike stones
   sppr519 => 142 // magic resistance
   sppr609 =>   0 // entropy shield
   sppr610 => 266 // blade barrier
