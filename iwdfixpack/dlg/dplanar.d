@@ -36,7 +36,7 @@ APPEND DPLANAR
   END
 
   IF ~~ THEN BEGIN cespy_vex SAY @111
-    IF ~~ THEN DO ~StartCutScene("cdvexcut")~ EXIT
+    IF ~~ THEN DO ~StartCutScene("gnDstSlf")~ EXIT
   END
 
   IF ~~ THEN BEGIN cespy_bye SAY @112

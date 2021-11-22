@@ -1,5 +1,4 @@
 // simple syntax errors
-REPLACE_TRIGGER_TEXT ~daccalia~ ~SetGlobal(~ ~Global(~
 REPLACE_TRIGGER_TEXT ~ddirtyll~ ~CheckStat\([GL]\)T(Protagonist,CHR,\([0-9]+\))~ ~CheckStat\1T(Protagonist,\2,CHR)~
 REPLACE_ACTION_TEXT  ~detemp~   ~AddXPVar("Level_1_Average")~ ~AddXPVar("Level_1_Average",18528)~
 REPLACE_TRIGGER_TEXT ~dfgg~     ~ClassEx(Protagonist,Priest)~ ~ClassEx(Protagonist,CLERIC)~
@@ -26,6 +25,9 @@ REPLACE_TRIGGER_TEXT_REGEXP ~\(^ddugslav$\)\|\(^dgenmoni$\)\|\(^dgntslav$\)~ ~Ra
 // extend class-specific replies to mutliclasses
 ALTER_TRANS DACCALIA BEGIN 3 END BEGIN 2 END BEGIN "TRIGGER" ~ClassEx(Protagonist,DRUID)~ END // from druid
 ALTER_TRANS DACCALIA BEGIN 3 END BEGIN 3 END BEGIN "TRIGGER" ~ClassEx(Protagonist,RANGER)~ END // from ranger
+// also has an action being used as a trigger
+ALTER_TRANS DACCALIA BEGIN 6 END BEGIN 1 END BEGIN "TRIGGER" ~~ END // removes SetGlobal("Jered_Stone","GLOBAL", 1)
+ADD_TRANS_ACTION DACCALIA BEGIN 6 END BEGIN 1 END ~SetGlobal("Jered_Stone","GLOBAL",1)~ // and add it as an action
 
 // albion sets journal entries too early
 ALTER_TRANS dalbion BEGIN 0 END BEGIN END BEGIN ~JOURNAL~ ~~ END // remove here
