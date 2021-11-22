@@ -117,30 +117,48 @@ ACTION_IF (("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) OR
   END
   
 END
-
-// entrance point for wyrm's tooth from wmp
-COPY_EXISTING ~worldmap.wmp~ ~override~
-  READ_LONG 0x0c "mos_off"
-  READ_LONG ("%mos_off%" + 0x20) "area_num"
-  READ_LONG ("%mos_off%" + 0x24) "area_off"
-  READ_LONG ("%mos_off%" + 0x28) "link_off"
-  FOR (index = 0 ; index < area_num ; index = index + 1) BEGIN
-    READ_ASCII ("%area_off%" + 0x08 + ("%index%" * 0xf0)) "area"
+  
+COPY_EXISTING ~worldmap.wmp~ ~override~ // inconsistent travel times
+  READ_LONG 0x0c mos_off
+  READ_LONG (mos_off + 0x20) area_num
+  READ_LONG (mos_off + 0x24) area_off
+  READ_LONG (mos_off + 0x28) link_off
+  FOR (index = 0 ; index < area_num ; ++index) BEGIN
+    READ_ASCII (area_off + 0x08 + (index * 0xf0)) area
+    PATCH_IF ("%area%" STRING_COMPARE_CASE "ar2100" = 0) BEGIN // kuldahar
+      SET kuld = index
+    END ELSE
+    PATCH_IF ("%area%" STRING_COMPARE_CASE "ar6000" = 0) BEGIN // dorn's deep
+      SET dorn = index
+    END ELSE
+    PATCH_IF ("%area%" STRING_COMPARE_CASE "ar5000" = 0) BEGIN // severed hand
+      SET hand = index
+    END ELSE
+    PATCH_IF ("%area%" STRING_COMPARE_CASE "ar4000" = 0) BEGIN // dragon's eye
+      SET deye = index
+    END ELSE
     PATCH_IF ("%area%" STRING_COMPARE_CASE "ar7000" = 0) BEGIN // wyrm's tooth
-      SET "wt" = "%index%"
-      SET "index" = "%area_num%" // kills loop
+      SET wyrm = index
     END
   END
-  // read links
-  FOR (index = 0 ; index < area_num ; index = index + 1) BEGIN
-    FOR (index2 = 0 ; index2 < 4 ; index2 = index2 + 1) BEGIN
-      READ_LONG ("%area_off%" + 0x50 + ("%index2%" * 0x08) + ("%index%" * 0xf0)) "link_idx"
-      READ_LONG ("%area_off%" + 0x54 + ("%index2%" * 0x08) + ("%index%" * 0xf0)) "link_num"
-      FOR (index3 = 0 ; index3 < link_num ; index3 = index3 + 1) BEGIN
-        READ_LONG ("%link_off%" +        (("%link_idx%" + "%index3%") * 0xd8)) "target"
-        PATCH_IF ("%target%" = "%wt%") BEGIN
-          WRITE_ASCII ("%link_off%" + 0x04 + (("%link_idx%" + "%index3%") * 0xd8)) ~FRWMap~ #32
-        END
+  FOR (index = 0 ; index < area_num ; ++index) BEGIN // loop through areas
+    FOR (index2 = 0 ; index2 < 4 ; ++index2) BEGIN // loop through four sets of links (n,s,e,w)
+      READ_LONG (area_off + 0x50 + (index2 * 0x08) + (index * 0xf0)) link_idx
+      READ_LONG (area_off + 0x54 + (index2 * 0x08) + (index * 0xf0)) link_num
+      FOR (index3 = 0 ; index3 < link_num ; ++index3) BEGIN // loop through actual links
+        READ_LONG (link_off +        ((link_idx + index3) * 0xd8)) target
+        PATCH_IF (target = wyrm) BEGIN // if link to wyrm's tooth, assign entrance point
+          WRITE_ASCII (link_off + 0x04 + ((link_idx + index3) * 0xd8)) ~FRWMap~ #32
+        END ELSE
+        PATCH_IF ((index = kuld) AND (target = dorn)) BEGIN // kuldahar to dorn's deep
+          WRITE_LONG (link_off + 0x24 + ((link_idx + index3) * 0xd8)) 14 // travel time
+        END ELSE  
+        PATCH_IF ((index = deye) AND (target = hand)) BEGIN // dragon's eye to severed hand
+          WRITE_LONG (link_off + 0x24 + ((link_idx + index3) * 0xd8)) 12 // travel time
+        END ELSE  
+        PATCH_IF ((index = wyrm) AND (target = hand)) BEGIN // wyrm's tooth to severed hand
+          WRITE_LONG (link_off + 0x24 + ((link_idx + index3) * 0xd8)) 72 // travel time
+        END   
       END
     END
   END
@@ -2064,6 +2082,16 @@ COPY_EXISTING ~ms3tliz.cre~ ~override~ // Tough Lizard Man (monster summoning)
               ~ss2liz6.cre~ ~override~ // Tough Lizard Man (summon shadow monsters)
               ~ss2liz7.cre~ ~override~ // Tough Lizard Man (summon shadow monsters)
   REPLACE_CRE_ITEM ms3tliz #0 #0 #0 NONE WEAPON1 EQUIP
+  BUT_ONLY
+  
+// salamander aura visuals
+COPY_EXISTING ~ms6salc.cre~ ~override~
+  ADD_CRE_ITEM ~CSALRING~ #0 #0 #0 ~NONE~ ~RING~
+  BUT_ONLY
+
+// salamander aura visuals  
+COPY_EXISTING ~ms6salf.cre~ ~override~
+  ADD_CRE_ITEM ~FSALRING~ #0 #0 #0 ~NONE~ ~RING~
   BUT_ONLY
 
 // has armor in cloak/quickslots/inventory
@@ -5144,8 +5172,9 @@ COPY_EXISTING ~spwi421.spl~ ~override~ // Emotion: Hope
   END
   BUT_ONLY
 
-// summons should always bypass spell protections
+// summons should always bypass spell protections; spell icon
 COPY_EXISTING ~spwi501.spl~ ~override~
+  WRITE_ASCII 0x3a ~spwi501c~
   LPF ALTER_SPELL_EFFECT INT_VAR opcode = 243 power = 0 END
   BUT_ONLY
 
@@ -5252,6 +5281,11 @@ COPY_EXISTING ~spwi613.spl~ ~override~
 // make un-petrify stuff destroy the gorgon ring, otherwise victim will just re-petrify on load; see scrlpet, scrlpet2.itm
 COPY_EXISTING ~spwi614.spl~  ~override~ // stone to flesh
   LPF CLONE_EFFECT INT_VAR match_opcode = 43 opcode = 112 timing = 1 STR_VAR resource = gorgon END
+  BUT_ONLY
+
+// tenser's transformation shouln't disable innate abilities 
+COPY_EXISTING ~spwi616.spl~ ~override~
+  LPF DELETE_EFFECT INT_VAR match_opcode = 145 match_parameter2 = 2 END
   BUT_ONLY
 
 // string, sound bypassing MR
