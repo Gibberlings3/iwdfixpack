@@ -22,7 +22,6 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_spell BEGIN
   sppr302, null,  null, 9 => sppr302 // Call Lightning
   sppr304, null,  null, 9 => sppr304 // Glyph of Warding
   sppr305, null, null, 5 => sppr305 // Hold Animal
-  sppr309, 12, 1, null => sppr309 // Invisibility Purge
   sppr310, null, null, 5 => sppr310 // Miscast Magic
   sppr314, 12, 1, 9 => sppr314 // Cure Disease
   sppr315, 12, 1, 9 => sppr315 // Cause Disease
@@ -73,5 +72,6 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_spell BEGIN
   spwi617, null, 2, null => spwi617 // Power Word Silence
   spwi704, null, 6, null => spwi704 // Mordenkainen's Sword
   spwi804, null,  null, 9 => spwi804 // Mind Blank
+
   
 END
