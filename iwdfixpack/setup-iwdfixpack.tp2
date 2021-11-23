@@ -176,8 +176,7 @@ ACTION_IF NOT MOD_IS_INSTALLED ~1pp/1pp.tp2~ ~101~ BEGIN
 
 END
 
-COPY ~iwdfixpack/wav/choke.wav~    ~override~ // missing sound for poison.itm
-     ~iwdfixpack/wav/itemhorn.wav~ ~override~ // used for merry shorthorn
+COPY ~iwdfixpack/wav/choke.wav~ ~override~ // missing sound for poison.itm
 
 /////                                                  \\\\\
 ///// ids fixes                                        \\\\\
@@ -2714,7 +2713,7 @@ BEGIN
   ACTION_IF (FILE_EXISTS_IN_GAME ~%file%.itm~) THEN BEGIN
 
     COPY_EXISTING ~%file%.itm~ ~override~
-      LPF ALTER_ITEM_EFFECT INT_VAR equipped = 1 timing = 2 power = 0 END
+      LPF ALTER_EFFECT INT_VAR check_headers = 0 timing = 2 power = 0 END
       BUT_ONLY
 
   END
@@ -2727,7 +2726,7 @@ ACTION_FOR_EACH file IN aldeth bclaw labelt lucky misc72 shadows tongue BEGIN
   ACTION_IF (FILE_EXISTS_IN_GAME ~%file%.itm~) THEN BEGIN
 
     COPY_EXISTING ~%file%.itm~ ~override~
-      LPF ALTER_ITEM_EFFECT INT_VAR equipped = 1 resist_dispel = 0 END
+      LPF ALTER_EFFECT INT_VAR check_headers = 0 resist_dispel = 0 END
       BUT_ONLY
 
   END
@@ -2738,60 +2737,26 @@ END
 ACTION_FOR_EACH file IN
   arow06 arow08 arow09 arow15 ax1h06 behwep bolt03 bolt05 clck07 clck08 cynicis dart03 dart04 dbolt
   dntshd2 dobone fbolt gasp hamm03 jhoswd3 poq2-16 potn13 potn26 potn27 revent1 ring20 schlum1
-  scrl03 scrl04 scrl05 scrl06 scrl08 scrl09 scrl15 scrl16 shadless shamme1 shamme2 shamme3 shille
+  scrl03 scrl04 scrl05 scrl06 scrl08 scrl09 scrl15 shadless shamme1 shamme2 shamme3 shille
   shillel sirine sw1h06 sw1h11 tiernon ubull4a vampire wisp wolfwi1
 BEGIN
 
-  ACTION_IF (FILE_EXISTS_IN_GAME ~%file%.itm~) THEN BEGIN
-
-    COPY_EXISTING ~%file%.itm~ ~override~
-      READ_LONG   0x64 "abil_off"
-      READ_SHORT  0x68 "abil_num"
-      READ_LONG   0x6a "fx_off"
-      FOR (index = 0 ; index < abil_num ; index = index + 1) BEGIN // looks through headers
-        READ_BYTE  ("%abil_off%" + 0x0c + ("%index%" * 0x38)) "target1"
-        PATCH_IF (("%target1%" != 5) AND ("%target1%" != 7)) BEGIN
-          READ_SHORT ("%abil_off%" + 0x1e + ("%index%" * 0x38)) "abil_fx_num"
-          READ_SHORT ("%abil_off%" + 0x20 + ("%index%" * 0x38)) "abil_fx_idx"
-          FOR (index2 = 0 ; index2 < abil_fx_num ; index2 = index2 + 1) BEGIN // cycle through effects
-            READ_BYTE ("%fx_off%" + 0x02 + (("%abil_fx_idx%" + "%index2%") * 0x30)) "target2"
-            PATCH_IF ("%target2%" != 1) BEGIN
-              WRITE_BYTE ("%fx_off%" + 0x03 + (("%abil_fx_idx%" + "%index2%") * 0x30)) 0 // power
-            END
-          END
-        END
-      END
-      BUT_ONLY
-
-  END
+  COPY_EXISTING ~%file%.itm~ ~override~
+    LPF ALTER_EFFECT INT_VAR check_globals = 0 match_target = 2 power = 0 END
+    BUT_ONLY IF_EXISTS
 
 END
 
 // remove durations from permanent effects
 ACTION_FOR_EACH file IN
   acidooz4 bknight cwreve extheal gberry goodber ipotn08 jellgr1 potn08 potn13 potn33 umstr2a
-  umstr3a umstr3c umstr4b umstr5a vexed2 wand05 wand4ca zz05we zzj6sp
+  umstr3a umstr3c umstr4b umstr5a vexed2 wand05 wand4ca zzj6sp
 BEGIN
 
-  ACTION_IF (FILE_EXISTS_IN_GAME ~%file%.itm~) THEN BEGIN
-
-    COPY_EXISTING ~%file%.itm~ ~override~
-      READ_LONG   0x64 "abil_off"
-      READ_SHORT  0x68 "abil_num"
-      READ_LONG   0x6a "fx_off"
-      FOR (index = 0 ; index < abil_num ; index = index + 1) BEGIN // looks through headers
-        READ_SHORT ("%abil_off%" + 0x1e + ("%index%" * 0x38)) "abil_fx_num"
-        READ_SHORT ("%abil_off%" + 0x20 + ("%index%" * 0x38)) "abil_fx_idx"
-        FOR (index2 = 0 ; index2 < abil_fx_num ; index2 = index2 + 1) BEGIN // cycle through effects
-          READ_BYTE ("%fx_off%" + 0x0c + (("%abil_fx_idx%" + "%index2%") * 0x30)) "timing"
-          PATCH_IF (("%timing%" = 1) OR ("%timing%" = 9)) BEGIN
-            WRITE_LONG ("%fx_off%" + 0x0e + (("%abil_fx_idx%" + "%index2%") * 0x30)) 0 // duration
-          END
-        END
-      END
-      BUT_ONLY
-
-  END
+  COPY_EXISTING ~%file%.itm~ ~override~
+    LPF ALTER_EFFECT INT_VAR silent = 1 check_globals = 0 match_timing = 1 duration = 0 END
+    LPF ALTER_EFFECT INT_VAR silent = 1 check_globals = 0 match_timing = 9 duration = 0 END
+    BUT_ONLY IF_EXISTS
 
 END
 
@@ -3162,10 +3127,12 @@ COPY_EXISTING ~scrl05.itm~ ~override~
   WRITE_LONG 0x08 18094
   BUT_ONLY
 
-// should last 12 hours
-COPY_EXISTING ~scrl09.itm~ ~override~
-              ~scrl15.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 duration_high = 3600 END
+COPY_EXISTING ~scrl09.itm~ ~override~ // protection from undead
+  LPF ALTER_EFFECT INT_VAR match_duration = 600 duration = 3600 END // should last 12 hours
+  BUT_ONLY
+
+COPY_EXISTING ~scrl15.itm~ ~override~ // protection from petrification
+  LPF ALTER_EFFECT INT_VAR match_duration = 1800 duration = 3600 END // should last 12 hours
   BUT_ONLY
 
 // ghoul touch should match its description: see spwi218.spl, ghoult.itm, and kuorrick.bcs et al
@@ -3176,7 +3143,7 @@ COPY_EXISTING ~scrl1c.itm~ ~override~ // also need to adjust spell scroll to tar
 
 // ghost armor should be castable on others
 COPY_EXISTING ~scrl1t.itm~ ~override~
-    LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 146 target = 2 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 146 target = 2 END
   BUT_ONLY
 
 // can't learn vocalize due to errors in file
@@ -3257,13 +3224,13 @@ COPY_EXISTING ~sper02.itm~ ~override~
 
 // power, dispel issues
 COPY_EXISTING ~adisease.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 power = 0 resist_dispel = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 174 power = 0 resist_dispel = 0 END
   BUT_ONLY
 
 // power, dispel issues
 COPY_EXISTING ~amul01.itm~   ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 power = 0 resist_dispel = 0 END
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 206 power = 0 resist_dispel = 2 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 174 power = 0 resist_dispel = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 206 power = 0 resist_dispel = 2 END
   BUT_ONLY
 
 // targeting fixes for cast spell
@@ -3273,7 +3240,7 @@ COPY_EXISTING ~amulbra.itm~ ~override~
 
 // power levels on equipped effects
 COPY_EXISTING ~antimag.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR equipped = 1 power = 0 END
+  LPF ALTER_EFFECT INT_VAR check_headers = 0 power = 0 END
   BUT_ONLY
 
 // icon changes
@@ -3311,7 +3278,7 @@ COPY_EXISTING ~b1-12.itm~ ~override/ms3tliz.itm~
 // belhifet's weapon not doing poison effect due to bad timing; strings are wrong; extend range
 COPY_EXISTING ~behwep.itm~ ~override~
   LPF ALTER_ITEM_HEADER INT_VAR range = 2 END
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 25 timing = 1 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 25 timing = 1 END
   LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 139 END // delete string opcodes
   FOR (index = 0 ; index < 2 ; ++index) BEGIN
     LPF ADD_ITEM_EFFECT INT_VAR type = 1 opcode = 139 target = 2 timing = 1 resist_dispel = 2
@@ -3330,7 +3297,7 @@ COPY_EXISTING ~blood.itm~  ~override~ // Bathed-in-Blood
 
 // sound file wrong
 COPY_EXISTING ~bolt03.itm~ ~override~
-  LPF ALTER_EFFECT STR_VAR match_resource = eff_m22c resource = eff_m22b END // sound doesn't exist, use different zap sound
+  LPF ALTER_EFFECT INT_VAR target = 2 STR_VAR match_resource = eff_m22c resource = eff_m22b END // sound doesn't exist, use different zap sound
   BUT_ONLY
 
 // remove haste icon for movement speed increases
@@ -3371,12 +3338,12 @@ COPY_EXISTING ~bull03.itm~ ~override~ // bullet +2
 
 // min level interfering with hp bonus?
 COPY_EXISTING ~bwtalis.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR equipped = 1 dicesize = 0 END
+  LPF ALTER_EFFECT INT_VAR check_headers = 0 dicesize = 0 END
   BUT_ONLY
 
 // sound, visual bypassing MR
 COPY_EXISTING ~carrio1.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 resist_dispel = 1 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 resist_dispel = 1 END
   BUT_ONLY  
 
 // create new construct immunity item; see bknight.cre et al
@@ -3426,7 +3393,7 @@ COPY_EXISTING ~contract.itm~ ~override~
 
 // effects bypassing save
 COPY_EXISTING ~ctouch.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 savingthrow = 1 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 savingthrow = BIT0 END
   BUT_ONLY
 
 // darts of stunning last 10 seonds too long
@@ -3436,12 +3403,12 @@ COPY_EXISTING ~dart03.itm~ ~override~
 
 // portrait can be dispelled
 COPY_EXISTING ~dart04.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 142  resist_dispel = 0 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 142  resist_dispel = 0 END
   BUT_ONLY
 
 // slow sould have power level
 COPY_EXISTING ~days.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 40 power = 3 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 40 power = 3 END
   BUT_ONLY
 
 // dazer has wrong percentage on one effect, so do manually - IF_EXISTS since xclub is a totlm copy
@@ -3465,7 +3432,7 @@ COPY_EXISTING ~dobone.itm~ ~override~ // darts of bone
 
 // play sound can be dispelled
 COPY_EXISTING ~elfwine.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 resist_dispel = 0 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 174 resist_dispel = 0 END
   BUT_ONLY
 
 // try to bring flame blade damage inline with descript, damage shouldn't bypass resistance
@@ -3484,18 +3451,13 @@ COPY_EXISTING ~fele1-8.itm~ ~override~ // fire elemental attack (normal)
 
 // string bypasses MR
 COPY_EXISTING ~fkiller.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 139 resist_dispel = 1 END
-  BUT_ONLY
-
-// remove power checks from cursed effects
-COPY_EXISTING ~gauntid.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR equipped = 1 power = 0 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 139 resist_dispel = 1 END
   BUT_ONLY
 
 // ghast attack missing strength bonus, some effects not dispellable/bypassing MR
 COPY_EXISTING ~ghast1.itm~ ~override~
   LPF ALTER_ITEM_HEADER INT_VAR flag_strength = 1 END
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 resist_dispel = 1 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 resist_dispel = 1 END
   BUT_ONLY
 
 // unparalyzed sound too late, no str bonus, stuff bypassing MR/not dispelling, half-elves not getting paralyzation resistance
@@ -3514,7 +3476,7 @@ COPY_EXISTING ~ghoult.itm~ ~override~
 
 // hp bonus should have 0 power
 COPY_EXISTING ~giving.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 17 power = 0 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 17 power = 0 END
   BUT_ONLY
 
 // range, thac0 bonus incorrect
@@ -3545,9 +3507,9 @@ COPY_EXISTING ~hlydeck.itm~ ~override~ // Holy Chaos Deck
 
 // power levels for holdfast's entangle
 COPY_EXISTING ~holdfst.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 154 power = 1 END
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 126 power = 1 END
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 power = 1 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 154 power = 1 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 126 power = 1 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 174 power = 1 END
 
 // jester bag produces 20 oils of speed
 COPY_EXISTING ~holding.itm~ ~override~
@@ -3590,7 +3552,7 @@ COPY_EXISTING ~kresssw.itm~ ~override~ // cold resistance
 
 // string always occurs, instead of on 20% of hits
 COPY_EXISTING ~kris.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 139 probability1 = 20 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 probability1 = 19 END // 139 is 100, rest are 20; correct all to 19
   BUT_ONLY
 
 // remove charm, stun immunity from free action; have to remove all 261s and then re-add
@@ -3604,11 +3566,11 @@ COPY_EXISTING ~labelt.itm~  ~override~
 
 // haste should bypass spell protections
 COPY_EXISTING ~mage06.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR equipped = 1 opcode = 16 power = 0 resist_dispel = 0 END
+  LPF ALTER_EFFECT INT_VAR check_headers = 0 power = 0 resist_dispel = 0 END
   BUT_ONLY
 
 COPY_EXISTING ~mhorn.itm~ ~override~ // the merry shorthorn
-  LPF ALTER_EFFECT STR_VAR match_resource = shorn resource = itemhorn END // use bg2's horn sound
+  LPF ALTER_EFFECT STR_VAR match_resource = shorn resource = s_horn END
   BUT_ONLY
 
 // icon corrections
@@ -3619,12 +3581,12 @@ COPY_EXISTING ~misc75.itm~ ~override~
 
 // remove min level from cast spell
 COPY_EXISTING ~moonbow.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 146 dicesize = 0 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 146 dicesize = 0 END
   BUT_ONLY
 
 // remove power, MR checks from sound effect
 COPY_EXISTING ~philter.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 power = 0 resist_dispel = 0 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 174 power = 0 resist_dispel = 0 END
   BUT_ONLY
 
 // full plate +1 doesn't disable thieving button; cosmetic: armor should be dark gray on paperdoll, avatar
@@ -3646,16 +3608,14 @@ COPY_EXISTING ~potn02.itm~ ~override~ // potion of fire resistance
 COPY_EXISTING ~potn13.itm~ ~override~
   LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 12 END
   LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 139 END
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 power = 0 resist_dispel = 0 timing = 1 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 174 power = 0 resist_dispel = 0 timing = 1 END
   LPF ADD_ITEM_EFFECT INT_VAR opcode = 12 target = 2 parameter2 = 0x00080000 timing = 1 resist_dispel = 1 dicenumber = 2 dicesize = 6 END
   LPF ADD_ITEM_EFFECT INT_VAR opcode = 12 target = 2 parameter2 = 0x00080000 timing = 1 resist_dispel = 1 dicenumber = 3 dicesize = 6 savingthrow = BIT1 END
   BUT_ONLY
 
 // effect with wrong dispel, power wrong
 COPY_EXISTING ~potn20.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 169 power = 4 resist_dispel = 1 END
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 141 power = 4 END
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 233 power = 4 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 power = 0 resist_dispel = 3 END
   BUT_ONLY
 
 // should use protection from cold icon, not protection from fire/cold
@@ -3665,7 +3625,7 @@ COPY_EXISTING ~potn22.itm~ ~override~ // potion of cold resistance
 
 // extraneous header, power/MR for sound
 COPY_EXISTING ~potn27.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 power = 0 resist_dispel = 0 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 174 power = 0 resist_dispel = 0 END
   BUT_ONLY
 
 // blocking levels 1-9 instead of 1-5; also tweak descript in GTU for dispel
@@ -3678,7 +3638,7 @@ COPY_EXISTING ~potn33.itm~ ~override~
 
 // extraneous header, power for immunities; description not even close to accurate, add some cosmetic/auditory cues
 COPY_EXISTING ~potn34.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 power = 0 duration_high = 70 END
+  LPF ALTER_EFFECT INT_VAR match_duration = 600 duration = 70 END
   LPF ADD_ITEM_EFFECT INT_VAR opcode = 141 target = 1 parameter2 = 14 timing = 4 duration = 1 resist_dispel = 1 END
   LPF ADD_ITEM_EFFECT INT_VAR opcode = 233 target = 1 parameter2 = 6 timing = 4 duration = 1 resist_dispel = 1 END
   LPF ADD_ITEM_EFFECT INT_VAR opcode = 174 target = 1 timing = 4 duration = 1  resist_dispel = 1 STR_VAR resource = eff_m02 END
@@ -3692,19 +3652,20 @@ COPY_EXISTING ~potn36.itm~ ~override~
 
 // extraneous header, power for immunities
 COPY_EXISTING ~potn38.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 206 power = 4 resist_dispel = 1 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 206 resist_dispel = 3 END
   BUT_ONLY
 
 // extraneous header, no save for sound effect
 COPY_EXISTING ~potn40.itm~ ~override~
   WRITE_LONG 0x54 20729 // cursed potion of invulnerability not using the 'murky' identified description
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 savingthrow = BIT4 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 174 savingthrow = BIT4 END
   BUT_ONLY
 
 // extraneous header; portrait icon duration wrong, remove charm & stun immunity from free action
 COPY_EXISTING ~potn45.itm~ ~override~
   LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 261 END
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 142 duration = 700 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 142 duration = 700 END // portrait icon is wrong
+//  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_timing =   1 duration =   0 END // remove durations from perm effects
   PATCH_FOR_EACH addme IN 175 158 157 154 126 109 40 BEGIN
     LPF ADD_ITEM_EFFECT INT_VAR opcode = 261 target = 1 power = 4 resist_dispel = 1 duration = 700 parameter2 = "%addme%" END
   END
@@ -3742,15 +3703,15 @@ COPY_EXISTING ~redemt.itm~ ~override~
   END
   BUT_ONLY
 
-// missing saves for sound, visual; prevent portrait icon for creatures ho can't be charmed
+// missing saves for sound, visual; prevent portrait icon for creatures who can't be charmed
 COPY_EXISTING ~ring03.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 savingthrow = BIT3 power = 2 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 savingthrow = BIT3 power = 2 END
   LPF CLONE_EFFECT INT_VAR parameter2 = 8 match_opcode = 5 opcode = 206 power = 0 timing = 0 duration = 0 resist_dispel = 0 STR_VAR insert = first resource = EVAL "%SOURCE_RES%" END
   BUT_ONLY
 
 // wrong power for equipped fx
 COPY_EXISTING ~ringmal.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR equipped = 1 power = 0 END
+  LPF ALTER_EFFECT INT_VAR check_headers = 0 power = 0 END
   BUT_ONLY
 
 // summoned lizardmen using weapons without animations; see ms2lizm.cre et al
@@ -3765,9 +3726,7 @@ COPY_EXISTING ~scrlpet.itm~  ~override~ // stone to flesh scroll
 
 // timing modes for effects, add round of putting on oil
 COPY_EXISTING ~serpsca.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 timing = 1 duration = 0 END
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 141 timing = 1 duration = 0 END
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 233 timing = 1 duration = 0 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_timing = 4 timing = 1 duration = 0 END
   LPF ADD_ITEM_EFFECT INT_VAR insert_point = 0 opcode = 165 target = 1 duration = 7 END
   BUT_ONLY
 
@@ -3778,12 +3737,12 @@ COPY_EXISTING ~serrate.itm~ ~override~
   
 // limited effect has permanent timing
 COPY_EXISTING ~shadless.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 233 timing = 0 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_timing = 1 duration = 0 END // op 233
   BUT_ONLY
 
 // shadows tried to play 'disease' string on themselves ratehr than target
 COPY_EXISTING ~shadow1.itm~ ~override~
-  LPF ALTER_EFFECT INT_VAR check_headers = 1 match_opcode = 139 target = 2 END
+  LPF ALTER_EFFECT INT_VAR check_check_globals = 0 match_opcode = 139 target = 2 END
   BUT_ONLY
 
 // wrong prof for shillelagh (IWD only), wrong thac0 bonus (all)
@@ -3808,11 +3767,6 @@ COPY_EXISTING ~shldbch.itm~ ~override~
   LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 0 target = 1 parameter1 = 3 timing = 2 END
   LPF ALTER_EFFECT INT_VAR match_opcode = 100 parameter1 = 114 parameter2 = 6 END // specifics = WATER_ELEMENTAL
   BUT_ONLY
-
-// add immunity to second projectile
-COPY_EXISTING ~shldrng.itm~ ~override~
-  LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 83 target = 1 parameter2 = 313 timing = 2 resist_dispel = 2 END
-  BUT_ONLY
   
 // give shadowed plate a non-generic name
 COPY_EXISTING ~shplate.itm~ ~override~ // Shadowed Plate +3
@@ -3821,7 +3775,7 @@ COPY_EXISTING ~shplate.itm~ ~override~ // Shadowed Plate +3
 
 // sound can be blocked
 COPY_EXISTING ~spirit.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 power = 0 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 174 power = 0 END
   BUT_ONLY
 
 // needs acid, electricity, fire, cold
@@ -3845,7 +3799,7 @@ COPY_EXISTING ~trollde.itm~ ~override~ // effects rounded out in immnity batches
 
 // no save for one sound effect
 COPY_EXISTING ~trnbolt.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 savingthrow = BIT0 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 savingthrow = BIT0 END
   BUT_ONLY
 
 // convert phasing damage from disease to straight magical damage
@@ -3867,7 +3821,7 @@ COPY_EXISTING ~u1ham5b.itm~  ~override~ // war hammer +4: defender: 20% heal
 
 // remove min level on stun effect
 COPY_EXISTING ~u1hax2a.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 45 dicesize = 0 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_dicesize = 6 dicesize = 0 END // op 45 and 139
   BUT_ONLY
 
 // poison icon expires too early
@@ -3883,7 +3837,7 @@ COPY_EXISTING ~u2ham3a.itm~ ~override~
 
 // probabilities overlap
 COPY_EXISTING ~u2hax4a.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 12 probability2 = 16 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 match_dicesize = 4 probability1 = 40 probability2 = 16 END // gets adjusted in bulk probability fixes
   BUT_ONLY
 
 // change berserk type
@@ -3907,7 +3861,7 @@ COPY_EXISTING ~uarow2a.itm~ ~override~ // hammer arrow
 
 // remove min level on stun effect, missing their 1d10 crushing damage
 COPY_EXISTING ~uarow3b.itm~ ~override~ // hammer arrows +1
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 45 dicesize = 0 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_dicesize = 6 dicesize = 0 END // op 45 and 139
   LPF ADD_ITEM_EFFECT INT_VAR type = 2 opcode = 12 target = 2 dicenumber = 1 dicesize = 10 timing = 1 END
   BUT_ONLY
 
@@ -3923,7 +3877,8 @@ COPY_EXISTING ~udart3b.itm~  ~override~ // blinding darts +2: 25% blind
 
 // remove min level on visuals
 COPY_EXISTING ~uhalb3c.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 233 dicesize = 0 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 139 dicesize = 0 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 233 dicesize = 0 END
   BUT_ONLY
 
 // huge longbow should be damage type missile not piercing
@@ -3937,7 +3892,7 @@ COPY_EXISTING ~ulbow2b.itm~ ~override~
   
 // hold fast only holds humanoids, but plays ancillary effects on everyone; add hold icon; fix sound target; add save on visuals
 COPY_EXISTING ~ulswd4a.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 233 savingthrow = BIT0 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 savingthrow = BIT0 END // op233 missing save
   LPF ADD_ITEM_EFFECT INT_VAR type = 1 insert_point = 0 opcode = 206 target = 2 power = 0 parameter2 = 6 duration = 1 STR_VAR resource = ulswd4a END
   LPF CLONE_EFFECT INT_VAR match_opcode = 175 opcode = 142 parameter2 = 13 END // add hold icon
   LPF ALTER_EFFECT INT_VAR match_opcode = 175 parameter1 = 0 parameter2 = 2 END // target this against all (humanoids now immune due to new 206)
@@ -3951,12 +3906,12 @@ COPY_EXISTING ~umstr4a.itm~ ~override~ // morning star of the gods
 
 // remove min level on slow effect
 COPY_EXISTING ~umstr4b.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 40 dicesize = 0 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 40 dicesize = 0 END
   BUT_ONLY
 
 // remove min level on stun effect
 COPY_EXISTING ~umstr5a.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 45 dicesize = 0 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_dicesize = 6 dicesize = 0 END // op 45 and 139
   BUT_ONLY
 
 // item is actually correct, but using wrong description
@@ -3991,12 +3946,12 @@ COPY_EXISTING ~uspot1a.itm~ ~override~
               ~uspot4c.itm~ ~override~
               ~uspot5a.itm~ ~override~
               ~uspot5b.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 power = 0 resist_dispel = 2 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 174 power = 0 resist_dispel = 2 END
   BUT_ONLY
 
 // one more effect for 4b
 COPY_EXISTING ~uspot4b.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 233 power = 0 resist_dispel = 2 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 power = 0 resist_dispel = 2 END // op233
   BUT_ONLY
   
 // supposed to be elctric damage 50%, stun 25%, but was actually 40% and 20%  
@@ -4007,16 +3962,16 @@ COPY_EXISTING ~utswd5a.itm~  ~override~ // static two handed sword +4: 50% elect
 
 // inconsistent saves, power, range, duration incorect for wand of fear
 COPY_EXISTING ~wand02.itm~ ~override~
-  LPF ALTER_ITEM_HEADER INT_VAR check_headers = 1 range = 100 END
+  LPF ALTER_ITEM_HEADER INT_VAR check_check_globals = 0 range = 100 END
   LPF ALTER_EFFECT INT_VAR match_duration = 100 duration = 105 END
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 power = 4 savingthrow = BIT0 savebonus = 2 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 power = 4 savingthrow = BIT0 savebonus = 2 END // ops 233, 141
   BUT_ONLY
 
 // inconsistent saves, power; wrong icon
 COPY_EXISTING ~wand04.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 power = 4 savingthrow = BIT3 savebonus = `3 END
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 233 power = 4 savingthrow = BIT3 savebonus = `3 END
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 142 parameter2 = 44 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 174 power = 4 savingthrow = BIT3 savebonus = `3 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 233 power = 4 savingthrow = BIT3 savebonus = `3 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 142 parameter2 = 44 END
   BUT_ONLY
 
 // wand of frost crashes game when used
@@ -4049,27 +4004,22 @@ COPY_EXISTING ~wand12.itm~ ~override~
 
 // wrong type of damage for mag missiles
 COPY_EXISTING ~wandmis.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 12 parameter2 = 0x00400000 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 parameter2 = (64 << 16) END // normal, magic damage
   BUT_ONLY
 
 // match power to lightning bolt spell
 COPY_EXISTING ~wandrea.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 power = 3 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 power = 3 END
   BUT_ONLY
 
 // power levels; don't throw in mass patch since it should be disspellable
 COPY_EXISTING ~wandtrp.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 146 power = 0 resist_dispel = 3 END
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 power = 0 resist_dispel = 3 END
   BUT_ONLY
 
 // dagger range
 COPY_EXISTING ~withery.itm~ ~override~
   LPF ALTER_ITEM_HEADER INT_VAR range = 0 END
-  BUT_ONLY
-
-// power level for curse effects
-COPY_EXISTING ~zz05we.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 23 power = 1 END
   BUT_ONLY
 
 // pale justice has its own icon
@@ -4098,30 +4048,30 @@ ACTION_IF game_is_iwd THEN BEGIN // iwd w/o how or totlm
 
   // fix for Girdle of Beatification (fixed in HoW)
   COPY_EXISTING ~beltbea.itm~   ~override~
-    LPF ALTER_ITEM_EFFECT INT_VAR equipped = 1 opcode = 130 parameter1 = 1 END
+    LPF ALTER_EFFECT INT_VAR check_headers = 0 match_opcode = 130 parameter1 = 1 END
     BUT_ONLY
 
 END ELSE BEGIN // how, totlm fixes
   
-  // save vs. spell for sound, min strength
+  // min strength; save is fixed in items vasting spells
   COPY_EXISTING ~amaunat.itm~ ~override~
     WRITE_SHORT 0x26 11 // min strength
-    LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 savingthrow = 0 END
     BUT_ONLY
   
-  // probability fixes
+  // probability, duration fixes
   COPY_EXISTING ~bess.itm~ ~override~
-    LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 232 probability1 = 10 END
+    LPF ALTER_EFFECT INT_VAR check_globals = 0 probability1 = 9 END
+    LPF ALTER_EFFECT INT_VAR check_globals = 0 match_duration = 30 duration = 16 END
     BUT_ONLY
   
   // probability fixes
   COPY_EXISTING ~bflaoil.itm~ ~override~
-    LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 206 STR_VAR resource = bflaoil END
+    LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 206 STR_VAR resource = bflaoil END
     BUT_ONLY
   
   // strings not bypassing MR, add round of putting on oil
   COPY_EXISTING ~chance.itm~ ~override~
-    LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 139 resist_dispel = 3 END
+    LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 139 resist_dispel = 3 END
     LPF ADD_ITEM_EFFECT INT_VAR insert_point = 0 opcode = 165 target = 1 duration = 7 END
     LPF ADD_ITEM_EFFECT INT_VAR opcode = 206 target = 1 power = 2 resist_dispel = 3 duration = 21 STR_VAR resource = spwi209 END
     LPF ADD_ITEM_EFFECT INT_VAR opcode = 206 target = 1 power = 2 resist_dispel = 3 duration = 21 STR_VAR resource = lucky END
@@ -4142,18 +4092,13 @@ END ELSE BEGIN // how, totlm fixes
 
   // fixed shield adds 0% missile reduction on 1/day ability; ac bonus can't be dispelled, power wrong
   COPY_EXISTING ~dntshd2.itm~ ~override~
-    LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 0 resist_dispel = 3 power = 1 END
+    LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 0 resist_dispel = 3 power = 1 END
     LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 89 parameter1 = 15 END // missile damage reduction set to 0, not 15
-    BUT_ONLY
-  
-  // wrong opcode for otiluke's-on-hit
-  COPY_EXISTING ~force.itm~ ~override~
-    LPF ALTER_ITEM_EFFECT INT_VAR opcode = 109 opcode_new = 185 END
     BUT_ONLY
   
   // remove power, MR checks from summons
   COPY_EXISTING ~garrow.itm~ ~override~
-    LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 259 power = 0 resist_dispel = 3 END
+    LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 259 power = 0 resist_dispel = 3 END
     BUT_ONLY
   
   // undroppable items should be undroppable
@@ -4210,14 +4155,14 @@ END ELSE BEGIN // how, totlm fixes
   
   // power levels, sound bypassing MR, add miscast icon
   COPY_EXISTING ~moonbla.itm~ ~override~
-    LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 60 power = 3 END
-    LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 resist_dispel = 1 END
+    LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 60 power = 3 END
+    LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 174 resist_dispel = 1 END
     LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 60 opcode = 142 parameter2 = 60 END
     BUT_ONLY
   
   // remove power, MR checks from summons
   COPY_EXISTING ~oblood.itm~ ~override~
-    LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 259 power = 0 resist_dispel = 3 END
+    LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 259 power = 0 resist_dispel = 3 END
     BUT_ONLY
 
   // pestilent dawn does not actually make bearer immune to disease
@@ -4242,7 +4187,7 @@ END ELSE BEGIN // how, totlm fixes
   // wrong ability range, no min lev for charisma bonus
   COPY_EXISTING ~sceptre.itm~ ~override~
     LPF ALTER_ITEM_HEADER INT_VAR header = 3 range = 40 END
-    LPF ALTER_ITEM_EFFECT INT_VAR equipped = 1 opcode = 6 dicesize = 0 END
+    LPF ALTER_EFFECT INT_VAR check_headers = 0 match_opcode = 6 dicesize = 0 END
     BUT_ONLY
   
   // change off generic icon, has random +10 to-hit
@@ -4266,9 +4211,8 @@ END ELSE BEGIN // how, totlm fixes
     LPF ALTER_ITEM_HEADER INT_VAR header = 3 range = 100 END
     BUT_ONLY
 
-  // sound should only play when effects kick in, missing resists & icons
+  // missing resists & icons - sound issue fixed in items casting spells section
   COPY_EXISTING ~talongf.itm~ ~override~
-    LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 type = 1 probability1 = 15 power = 1 END
     PATCH_FOR_EACH fx IN 85 84 30 28 BEGIN
       LPF ADD_ITEM_EQEFFECT INT_VAR opcode = fx target = 1 parameter1 = 10 timing = 2 END
     END
@@ -4316,7 +4260,7 @@ END ELSE BEGIN // how, totlm fixes
   
   // good/evil bonuses not actually working; thac0 can't work
   COPY_EXISTING ~zz14in.itm~ ~override~
-    LPF ALTER_ITEM_HEADER INT_VAR headers = 1 damage_bonus = 4 thac0_bonus = 3 END
+    LPF ALTER_ITEM_HEADER INT_VAR check_globals = 0 damage_bonus = 4 thac0_bonus = 3 END
     BUT_ONLY
   
   ACTION_IF game_is_totlm THEN BEGIN
@@ -4324,11 +4268,6 @@ END ELSE BEGIN // how, totlm fixes
     // ADHW ability not recharging on bracers of icelandic pearl
     COPY_EXISTING ~braceip.itm~ ~override~
       LPF ALTER_ITEM_HEADER INT_VAR flag_recharge = 1 END
-      BUT_ONLY
-
-    // wrong icon, icon bypassing MR
-    COPY_EXISTING ~cwreve.itm~ ~override~
-      LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 142  parameter2 = 44 resist_dispel = 1 END
       BUT_ONLY
 
     // flawless waterstar gem descripitong shouldn't refer to being riddled with flaws  
@@ -4345,23 +4284,15 @@ END ELSE BEGIN // how, totlm fixes
       BUT_ONLY
     
     // min lev set on CHR bonus
-    COPY_EXISTING ~helmct.itm~ ~override~
-      LPF ALTER_ITEM_EFFECT INT_VAR equipped = 1 opcode = 6 dicesize = 0 END
-      BUT_ONLY
-  
-    // bad sound ref
-    COPY_EXISTING ~mhorn.itm~ ~override~
-      LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 STR_VAR resource = s_horn END
+    COPY_EXISTING ~helmct.itm~   ~override~
+                  ~stafhmg.itm~  ~override~
+                  ~xstafhmg.itm~ ~override~
+      LPF ALTER_EFFECT INT_VAR check_headers = 0 dicesize = 0 END // for op6
       BUT_ONLY
   
     // wrong ability target
     COPY_EXISTING ~ringlur.itm~ ~override~
       LPF ALTER_ITEM_HEADER INT_VAR target = 5 END
-      BUT_ONLY
-  
-    // min lev set on CHR bonus
-    COPY_EXISTING ~stafhmg.itm~ ~override~
-      LPF ALTER_ITEM_EFFECT INT_VAR equipped = 1 opcode = 6 dicesize = 0 END
       BUT_ONLY
 
     // totlm knight tale scrolls should be plot-critical items
@@ -4370,16 +4301,6 @@ END ELSE BEGIN // how, totlm fixes
                   ~tale3.itm~ ~override~
                   ~tale4.itm~ ~override~
       WRITE_LONG 0x18 (THIS BOR BIT0) // set the plot critical flag
-      BUT_ONLY
-  
-    // prob wrong for icon
-    COPY_EXISTING ~xclub.itm~ ~override~
-      LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 142 probability1 = 5 END
-      BUT_ONLY
-  
-    // remove min level for CHR bonus
-    COPY_EXISTING ~xstafhmg.itm~ ~override~
-      LPF ALTER_ITEM_EFFECT INT_VAR equipped = 1 opcode = 6 dicesize = 0 END
       BUT_ONLY
     
     // dagger range
@@ -5150,7 +5071,7 @@ COPY_EXISTING ~spwi205.spl~ ~override~
 
 // should last 4 hours
 COPY_EXISTING ~spwi206.spl~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR duration_high = 1200 END
+  LPF ALTER_SPELL_EFFECT INT_VAR duration_high = 1200 END
   BUT_ONLY
 
 // knock should bypass MR
@@ -5971,7 +5892,7 @@ INCLUDE ~iwdfixpack/lib/batch_patches.tpa~
 COPY_EXISTING //~amaunat.itm~  ~override~ // amaunator's legacy: 5% beltyn's burning blood, fixed below
               ~axemino.itm~  ~override~ // axe of the minotaur lord: 25% stun 
 //            ~behwep.itm~   ~override~ // belhifet's weapon, fixed elsewhere
-              ~bess.itm~     ~override~ // the love of black bess: 10% bad luck
+//            ~bess.itm~     ~override~ // the love of black bess: 10% bad luck; fixed individually above
               ~biteme.itm~   ~override~ // spear of kerish: 5% cold damage
               ~blast.itm~    ~override~ // bracers of blasting: 10% chance to explode
               ~bloodgf.itm~  ~override~ // blood of the gloomfrost: 5% chance to heal
@@ -5995,7 +5916,7 @@ COPY_EXISTING //~amaunat.itm~  ~override~ // amaunator's legacy: 5% beltyn's bur
               ~icegolem.itm~ ~override~ // ice golem weapon: 10% stun
               ~kinetic.itm~  ~override~ // kinetic spear: 5% lance of disruption
               ~kissgf.itm~   ~override~ // kiss of the gloomfrost: 5% cold damage
-              ~kris.itm~     ~override~ // bone kris of black ichor: 20% poison 
+//            ~kris.itm~     ~override~ // bone kris of black ichor: 20% poison; fixed already in individual patch
               ~lizspear.itm~ ~override~ // no such index: 10% extra piercing damage 
               ~mae.itm~      ~override~ // flail of mae: 5% petrification 
               ~pest.itm~     ~override~ // pestilent dawn: 25% cause disease
@@ -6028,7 +5949,7 @@ COPY_EXISTING //~amaunat.itm~  ~override~ // amaunator's legacy: 5% beltyn's bur
               ~spwi518.spl~  ~override~ // lower resistance: 50% chance for MR to resist
               ~spwi706.spl~  ~override~ // prismatic spray: 1/6 chances for effects
               ~sw1h99.itm~   ~override~ // sword of chaos: slay lawful 10%
-              ~talongf.itm~  ~override~ // talon of the gloomfrost: 15% entangle
+//            ~talongf.itm~  ~override~ // talon of the gloomfrost: 15% entangle; fixed in items casting spells
               ~tonggf.itm~   ~override~ // tongue of the gloomfrost: 3% cone of cold 
               ~tongue.itm~   ~override~ // the salamander's tongue: 20% fire damage
               ~u1ham3a.itm~  ~override~ // corrosive hammer: 30% acid damage
@@ -6205,6 +6126,10 @@ LAF cd_items_casting_spells INT_VAR cast_at_level =  4 item_header = 2 set_icon 
 LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 3 set_icon = 1                                 STR_VAR item = wandfre spell = spwi318 END // ice storm, 21 duration
 LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1              probability = 12                STR_VAR item = zz05we  spell = sppr111 END 
 
+COPY_EXISTING ~gauntid.itm~ ~override~
+  LPF ALTER_EFFECT INT_VAR check_headers = 0 power = 0 END // remove power checks from cursed effects
+  BUT_ONLY
+  
 COPY_EXISTING ~shldrng.itm~ ~override~ // make these equipping effects, not time-limited
   LPF ALTER_EFFECT INT_VAR timing = 2 END
   BUT_ONLY
@@ -6217,18 +6142,23 @@ ACTION_IF !game_is_iwd BEGIN
     LPF DELETE_EFFECT INT_VAR match_opcode = 233 END
     BUT_ONLY  
     
-  COPY_EXISTING ~handgf.itm~ ~override~ // Hand of the Gloomfrost
+  COPY_EXISTING ~handgf.itm~ ~override~ //  hand of the gloomfrost
     LPF DELETE_EFFECT INT_VAR check_globals = 0 header_type = 1 END // delete all melee effects
     LPF ADD_ITEM_EFFECT INT_VAR type = 1 opcode = 233 target = 2 power = 7 parameter2 = 93 timing = 1 probability1 = 4 savingthrow = BIT0 END // re-add visual
+    BUT_ONLY  
+    
+  COPY_EXISTING ~talongf.itm~ ~override~ // talon of the gloomfrost
+    LPF DELETE_EFFECT INT_VAR check_globals = 0 header_type = 1 END // delete all melee effects
     BUT_ONLY
 
-  COPY_EXISTING ~tonggf.itm~ ~override~ // Tongue of the Gloomfrost +4
+  COPY_EXISTING ~tonggf.itm~ ~override~ // tongue of the gloomfrost
     LPF DELETE_EFFECT INT_VAR match_opcode = 12 END // delete all CoC effects
     BUT_ONLY
 
   LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1 probability =  4 STR_VAR item = amaunat spell = spwi417 END
   LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1                  STR_VAR item = force   spell = spwi413 END
   LAF cd_items_casting_spells INT_VAR cast_at_level = 10 item_header = 1 probability =  4 STR_VAR item = handgf  spell = spwi711 END
+  LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1 probability = 14 STR_VAR item = talongf spell = sppr105 END
   LAF cd_items_casting_spells INT_VAR cast_at_level = 10 item_header = 1 probability =  2 STR_VAR item = tonggf  spell = spwi504 END
   
 END
@@ -6236,10 +6166,6 @@ END
 /////                                                  \\\\\
 ///// magical weapons for tougher creatures            \\\\\
 /////                                                  \\\\\
-
-
-
-
 
 ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_creature_weapons BEGIN
 

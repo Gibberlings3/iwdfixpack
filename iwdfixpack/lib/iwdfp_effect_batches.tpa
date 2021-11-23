@@ -699,7 +699,7 @@ DEFINE_PATCH_FUNCTION ~cd_apply_batch~
                 PATCH_IF (matches_2 >= "-9") BEGIN WRITE_LONG                          (base + 0x08 + (0x10 * fx_type)) matches_2 END // parameter2
                 PATCH_IF ("%matches_3%" STRING_COMPARE_CASE "same") BEGIN WRITE_ASCIIE (base + 0x14 + (0x14 * fx_type)) ~%matches_3%~ #8 END // resref
                 PATCH_IF (matches_4 >= "-9") BEGIN WRITE_BYTE                          (base + 0x0c + (0x10 * fx_type)) matches_4 END // timing
-                PATCH_IF (matches_5 >= "-9") BEGIN WRITE_BYTE                          (base + 0x0e + (0x13 * fx_type)) matches_5 END // duration
+                PATCH_IF (matches_5 >= "-9") BEGIN WRITE_LONG                          (base + 0x0e + (0x13 * fx_type)) matches_5 END // duration
               SET new_fx  += 1
               SET counter += 1
               SET debug_message = 1 // something's changed!
