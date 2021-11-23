@@ -176,6 +176,9 @@ ACTION_IF NOT MOD_IS_INSTALLED ~1pp/1pp.tp2~ ~101~ BEGIN
 
 END
 
+COPY ~iwdfixpack/wav/choke.wav~    ~override~ // missing sound for poison.itm
+     ~iwdfixpack/wav/itemhorn.wav~ ~override~ // used for merry shorthorn
+
 /////                                                  \\\\\
 ///// ids fixes                                        \\\\\
 /////                                                  \\\\\
@@ -3193,11 +3196,11 @@ COPY_EXISTING ~sppr313c.itm~ ~override~
   LPF ALTER_ITEM_HEADER INT_VAR target = 5 END
   BUT_ONLY
 
-ACTION_IF !game_is_iwd THEN BEGIN
+ACTION_IF !game_is_iwd THEN BEGIN  
 
   // referring to non-existent spell
   COPY_EXISTING ~sppr113x.itm~ ~override~
-    LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 146 STR_VAR resource = "sppr113" END
+    LPF ALTER_EFFECT STR_VAR match_resource = sppr113a resource = sppr113 END // scroll did nothing
     BUT_ONLY
 
 END
@@ -3327,7 +3330,7 @@ COPY_EXISTING ~blood.itm~  ~override~ // Bathed-in-Blood
 
 // sound file wrong
 COPY_EXISTING ~bolt03.itm~ ~override~
-  LPF ALTER_ITEM_EFFECT INT_VAR headers = 1 opcode = 174 STR_VAR resource = "eff_m22a" END
+  LPF ALTER_EFFECT STR_VAR match_resource = eff_m22c resource = eff_m22b END // sound doesn't exist, use different zap sound
   BUT_ONLY
 
 // remove haste icon for movement speed increases
@@ -3602,6 +3605,10 @@ COPY_EXISTING ~labelt.itm~  ~override~
 // haste should bypass spell protections
 COPY_EXISTING ~mage06.itm~ ~override~
   LPF ALTER_ITEM_EFFECT INT_VAR equipped = 1 opcode = 16 power = 0 resist_dispel = 0 END
+  BUT_ONLY
+
+COPY_EXISTING ~mhorn.itm~ ~override~ // the merry shorthorn
+  LPF ALTER_EFFECT STR_VAR match_resource = shorn resource = itemhorn END // use bg2's horn sound
   BUT_ONLY
 
 // icon corrections
@@ -5013,7 +5020,7 @@ COPY_EXISTING ~spwi021.spl~ ~override~
 
 // undead not being protected from horror trap
 COPY_EXISTING ~spwi025.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 206 duration = 70 STR_VAR resource = "spwi025" END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 206 STR_VAR resource = "spwi025" END
   BUT_ONLY
 
 // armor should last nine hours
