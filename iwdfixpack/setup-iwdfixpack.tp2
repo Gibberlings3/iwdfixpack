@@ -2037,28 +2037,14 @@ ACTION_FOR_EACH crefile IN kaylessa rshorcb sdgobbw1 sdgobbw2 sdorcbw1 sdorcbw2 
 END
 
 // weapons exist but not equipped
-ACTION_FOR_EACH crefile IN bearcav belhif digby dolan doogal gaspar hjollder hjolldrh hrpinf jemel karrl kieran msmcrwl
-  orrick pomab purvis purvish quinn rawleigh roald tiernon towniem1 towniem2 towniem3 towniem4 towniem5 whitcomb xactile
+ACTION_FOR_EACH crefile IN belhif digby dolan doogal gaspar hjollder hjolldrh hrpinf jemel karrl kieran msmcrwl
+  orrick pomab purvis purvish quinn rawleigh roald tiernon towniem1 towniem2 towniem3 towniem4 towniem5 whitcomb 
   BEGIN
-
-  ACTION_IF FILE_EXISTS_IN_GAME ~%crefile%.cre~ BEGIN
-
-    // equip weapon
-    COPY_EXISTING ~%crefile%.cre~ ~override~
-      READ_LONG 0x320 slot_off
-      READ_SHORT (slot_off + 0x4c) equipped
-      PATCH_IF (equipped = 0xffff) BEGIN // if no weapon selected
-        FOR (index = 0 ; index < 4 ; ++index) BEGIN
-          READ_SHORT (slot_off + 0x12 + (index * 0x02)) item
-          PATCH_IF (item != 0xffff) BEGIN // if legit item
-            WRITE_SHORT (slot_off + 0x4c) index
-            SET index = 4
-          END
-        END
-      END
-      BUT_ONLY
-
-  END
+  
+  // equip weapon
+  COPY_EXISTING ~%crefile%.cre~ ~override~
+    LPF cd_equip_weapon END
+    BUT_ONLY IF_EXISTS
 
 END
 
@@ -2066,6 +2052,17 @@ END
 COPY_EXISTING ~aldwin.cre~   ~override~
   REPLACE_CRE_ITEM ~sw1h08~ #0 #0 #0 ~NONE~ ~WEAPON1~ EQUIP // replaces undroppable sw1h14
   BUT_ONLY
+  
+COPY_EXISTING ~bearcav.cre~ ~override~ // cave bear
+              ~kubear.cre~  ~override~ // cave bear
+  LPF cd_equip_item STR_VAR item = "s1-10" slot = "weapon" END // has s1-10 in inventory, no weapon
+  BUT_ONLY
+
+COPY_EXISTING ~beholder.cre~ ~override~ // beholder
+              ~beholdh.cre~  ~override~ // beholder
+              ~mcs1.cre~     ~override~ // crypt servant
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = ~blank~ END // remove blank item reference
+  BUT_ONLY IF_EXISTS // beholders are totlm
 
 // add new construct item to constructs (see cdconstr.itm)
 COPY_EXISTING ~bronsen.cre~  ~override~ // bronze sentry
@@ -2083,11 +2080,37 @@ COPY_EXISTING ~bronsen.cre~  ~override~ // bronze sentry
               ~wbishop.cre~  ~override~ // white bishop
   ADD_CRE_ITEM ~cdconstr~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET BELT BOOTS GLOVES CLOAK ARMOR HELMET~
   IF_EXISTS
+  
+COPY_EXISTING ~bronsen.cre~ ~override~ // bronze sentry
+              ~psentry.cre~ ~override~ // bronze sentry
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = ax1h04 END // already has ax1h01
+  BUT_ONLY IF_EXISTS // psentry is how
+  
+COPY_EXISTING ~es8erth.cre~  ~override~ // earth elemental
+              ~es12erth.cre~ ~override~ // earth elemental
+              ~es16erth.cre~ ~override~ // earth elemental
+              ~es20erth.cre~ ~override~ // earth elemental
+              ~es24erth.cre~ ~override~ // earth elemental
+              ~es8fire.cre~  ~override~ // fire elemental
+              ~es12fire.cre~ ~override~ // fire elemental
+              ~es16fire.cre~ ~override~ // fire elemental
+              ~es20fire.cre~ ~override~ // fire elemental
+              ~es24fire.cre~ ~override~ // fire elemental
+              ~es8watr.cre~  ~override~ // water elemental
+              ~es12watr.cre~ ~override~ // water elemental
+              ~es16watr.cre~ ~override~ // water elemental
+              ~es20watr.cre~ ~override~ // water elemental
+              ~es24watr.cre~ ~override~ // water elemental
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = immune2 END // delete unassigned immunity item
+  BUT_ONLY
+
+COPY_EXISTING ~ettin.cre~ ~override~ // ettin
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = b1-10 END // already has b2-16 equipped
+  BUT_ONLY
 
 // rings/amulets
 COPY_EXISTING ~ghost.cre~   ~override~
-  REMOVE_CRE_ITEM ~ghost~                                       // removes from weapons
-  ADD_CRE_ITEM    ~ghost~  #0 #0 #0 ~NONE~ ~AMULET RRING LRING~ // add ghost.itm back to amulet/ring
+  LPF cd_equip_item INT_VAR move = 1 STR_VAR item = "ghost" slot = "jewelry" END // move from weapon to ring
   BUT_ONLY
 
 // no weapons
@@ -2110,24 +2133,46 @@ COPY_EXISTING ~giantfg.cre~  ~override~ // frost giant guard
               ~joril.cre~    ~override~ // joril
   ADD_CRE_ITEM ~helm01~ #0 #0 #0 ~UNSTEALABLE&UNDROPPABLE~ ~HELMET~
   BUT_ONLY
-
-// assign ring95 item
-COPY_EXISTING ~histach.cre~  ~override~
-              ~shadowb.cre~  ~override~
-  REMOVE_CRE_ITEM ~ring95~                                      // removes from creature
-  ADD_CRE_ITEM    ~ring95~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as ring/amulet
+  
+COPY_EXISTING ~histach.cre~ ~override~ // histachii
+  LPF cd_equip_item STR_VAR item = "ring95" slot = "jewelry" END // assign standard undead ring
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = b1-12 END // already has mum1-12 equipped
   BUT_ONLY
 
-// no weapon
-COPY_EXISTING ~kubear.cre~   ~override~
-  REMOVE_CRE_ITEM ~s1-10~                              // removes
-  ADD_CRE_ITEM ~s1-10~ #0 #0 #0 ~NONE~ ~WEAPON1~ EQUIP // add and equip
+COPY_EXISTING ~kaorog.cre~  ~override~ // Neo Orog, has sw2h01 equipped
+              ~kaoroge.cre~ ~override~ // Neo Orog Marauder, has sw2h01 equipped
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = ~ax1h04~ END
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = ~bow05~  END
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = ~sw1h04~ END
+  BUT_ONLY
+
+COPY_EXISTING ~lskarmsw.cre~ ~override~ // armored skeleton, has sw1h04 (iwd) or blun06 (how) eqipped
+              ~skarmsw.cre~  ~override~ // armored skeleton, has sw1h04 eqipped
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = ~ax1h04~ END
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = ~bow05~  END
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = ~sw2h01~ END
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = ~hamm01~ END
+  ADD_CRE_ITEM ~ring95~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add as equipped jewelry
   BUT_ONLY
 
 // have ring in quickslot/inventory
 COPY_EXISTING ~malavon.cre~  ~override~
-  REMOVE_CRE_ITEM ~ringmal~                                      // removes from quickslot
-  ADD_CRE_ITEM    ~ringmal~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as ring/amulet
+  LPF cd_equip_item INT_VAR move = 1 STR_VAR item = "ringmal" slot = "jewelry" END // move from quickslot to ring
+  BUT_ONLY
+
+COPY_EXISTING ~malavons.cre~ ~override~ // malavon (simulacrum)
+              ~msk1.cre~     ~override~ // skeleton
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = ~misc50~ END // remove skull
+  BUT_ONLY
+
+COPY_EXISTING ~manticor.cre~ ~override~ // manticor
+              ~mordeswd.cre~ ~override~ // mordenkainen's sword
+              ~rldmycr.cre~  ~override~ // red myconid, has b4-32 assigned
+              ~rudorog.cre~  ~override~ // neo orog avenger, has hq2hswd
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = ~ax1h04~ END
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = ~bow05~  END
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = ~sw1h04~ END
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = ~sw2h01~ END
   BUT_ONLY
   
 // summoned lizardmen using weapons without animations; see ms2lizm.itm
@@ -2145,6 +2190,14 @@ COPY_EXISTING ~ms3tliz.cre~ ~override~ // Tough Lizard Man (monster summoning)
               ~ss2liz7.cre~ ~override~ // Tough Lizard Man (summon shadow monsters)
   REPLACE_CRE_ITEM ms3tliz #0 #0 #0 NONE WEAPON1 EQUIP
   BUT_ONLY
+
+COPY_EXISTING ~ms5jzom.cre~  ~override~ // ju-ju zombie (summon)
+              ~ms7mumy.cre~  ~override~ // mummy (summon)
+              ~rndstrol.cre~ ~override~ // snow troll (others dont' have immune1)
+              ~trollice.cre~ ~override~ // ice troll (others dont' have immune1)
+              ~trollsno.cre~ ~override~ // snow troll (others dont' have immune1)
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = ~immune1~ END // delete immunity item
+  BUT_ONLY IF_EXISTS // rndstrol is how
   
 // salamander aura visuals
 COPY_EXISTING ~ms6salc.cre~ ~override~
@@ -2156,47 +2209,57 @@ COPY_EXISTING ~ms6salf.cre~ ~override~
   ADD_CRE_ITEM ~FSALRING~ #0 #0 #0 ~NONE~ ~RING~
   BUT_ONLY
 
+COPY_EXISTING ~orcsham.cre~ ~override~ // orc shaman
+  LPF cd_equip_item STR_VAR item = "misc07" slot = "inventory" END // move gold to inventory
+  BUT_ONLY
+
 // has armor in cloak/quickslots/inventory
 COPY_EXISTING ~orrick.cre~  ~override~
-  REMOVE_CRE_ITEM ~clck16~                         // removes from cloak slot
-  ADD_CRE_ITEM    ~clck16~ #0 #0 #0 ~NONE~ ~ARMOR~ // add back as armor
-  REMOVE_CRE_ITEM ~wand04~                         // remove
-  ADD_CRE_ITEM    ~wand04~ #10 #0 #0 ~NONE~ ~QITEM1 QITEM2 QITEM3~ // add back with charges
+  LPF cd_equip_item INT_VAR move = 1 STR_VAR item = "clck16" slot = "armor" END // move from cloak to armor
+  REPLACE_CRE_ITEM ~wand04~ #10 #0 #0 ~NONE~ ~QITEM2~ // add back with charges
   BUT_ONLY
 
 // add charges
 COPY_EXISTING ~oswald.cre~ ~override~
-  REMOVE_CRE_ITEM ~amul01~                                        // removes
-  ADD_CRE_ITEM    ~amul01~ #5 #0 #0 ~NONE~ ~AMULET~ // add back with charges
+  REPLACE_CRE_ITEM ~amul01~ #5 #0 #0 ~NONE~ ~AMULET~ // add back with charges
+  LPF cd_equip_item STR_VAR item = "potn13" END // has 3/5 potions assigned
+  BUT_ONLY
+
+COPY_EXISTING ~sdelfbw1.cre~  ~override~ // shadowed elven archer
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = ~p1-4~ END // already has shlgbow2 equipped
   BUT_ONLY
 
 // equip sword
 COPY_EXISTING ~shadow.cre~ ~override~
   REPLACE_CRE_ITEM ~shadow1~ #0 #0 #0 ~NONE~ ~WEAPON1~ EQUIP
-  REMOVE_CRE_ITEM ~immune1~                                      // removes from quickslot
-  ADD_CRE_ITEM    ~immune1~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as ring/amulet
+  LPF cd_equip_item INT_VAR move = 1 STR_VAR item = "immune1" slot = "jewelry" END // move from quickslot to ring
   BUT_ONLY
 
 // add transparency to buff shadows
 COPY_EXISTING ~shadowb.cre~ ~override~
-  ADD_CRE_ITEM ~trans~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as ring/amulet
+  LPF cd_equip_item STR_VAR item = "ring95" slot = "jewelry" END // assign standard undead ring
+  ADD_CRE_ITEM ~trans~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add as ring/amulet
+  BUT_ONLY
+
+COPY_EXISTING ~shelfsw3.cre~  ~override~ // shadowed elven swordsman
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = ~shcomlb2~ END // already has shlswrd2 equipped
   BUT_ONLY
 
 // assign fsalring item
 COPY_EXISTING ~shikata.cre~  ~override~
-  REMOVE_CRE_ITEM ~fsalring~                                      // removes from creature
-  ADD_CRE_ITEM    ~fsalring~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as ring/amulet
+  LPF cd_equip_item INT_VAR STR_VAR item = "fsalring" slot = "jewelry" END // assign missing cosmetics
   BUT_ONLY
 
-// add, equip undead item
-COPY_EXISTING ~skarmsw.cre~ ~override~
-  ADD_CRE_ITEM ~ring95~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add  as equipped jewelry
+COPY_EXISTING ~svirfneb.cre~ ~override~ // Svirfneblin
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = ~ax1h04~ END
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = ~bow05~  END
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = ~sw1h04~ END
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = ~sw2h01~ END
+  LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = ~hamm01~ END
   BUT_ONLY
 
-// assign potn14 item
-COPY_EXISTING ~tanarri.cre~  ~override~
-  REMOVE_CRE_ITEM ~potn14~                                        // removes from creature
-  ADD_CRE_ITEM    ~potn14~ #0 #0 #0 ~NONE~ ~QITEM1 QITEM2 QITEM3~ // add back as quickslot
+COPY_EXISTING ~tanarri.cre~ ~override~ // yxunomei
+  LPF cd_equip_item STR_VAR item = "potn14" slot = quickslot END // not assigned
   BUT_ONLY
 
 ACTION_IF !game_is_iwd THEN BEGIN
@@ -2205,23 +2268,19 @@ ACTION_IF !game_is_iwd THEN BEGIN
   COPY_EXISTING ~alpheus.cre~  ~override~
                 ~alpheusd.cre~ ~override~
                 ~presapp.cre~  ~override~
-    REMOVE_CRE_ITEM ~clck10~                         // removes from cloak slot
-    ADD_CRE_ITEM    ~clck10~ #0 #0 #0 ~NONE~ ~ARMOR~ // add back as armor
+    LPF cd_equip_item INT_VAR move = 1 STR_VAR item = "clck10" slot = "armor" END // move from cloak to armor
     BUT_ONLY
 
   // have ring in quickslot/inventory
   COPY_EXISTING ~alpheusd.cre~  ~override~
-    REMOVE_CRE_ITEM ~lwring~                                      // removes from quickslot
-    ADD_CRE_ITEM    ~lwring~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as ring/amulet
+    LPF cd_equip_item INT_VAR move = 1 STR_VAR item = "lwring" slot = "jewelry" END // move from inventory to ring
     BUT_ONLY
 
   // has shield in armor slot, armor not assigned
   COPY_EXISTING ~angaar.cre~  ~override~
                 ~beornen.cre~ ~override~
-    REMOVE_CRE_ITEM ~shld03~                          // removes from armor slot
-    REMOVE_CRE_ITEM ~chan01~                          // removes from creature
-    ADD_CRE_ITEM    ~chan01~ #0 #0 #0 ~NONE~ ~ARMOR~  // add back as armor
-    ADD_CRE_ITEM    ~shld03~ #0 #0 #0 ~NONE~ ~SHIELD~ // add back as shield
+    LPF cd_equip_item INT_VAR move = 1 STR_VAR item = "shld03" slot = "shield" END // move shield from armor to shield slot...
+    LPF cd_equip_item STR_VAR item = "chan01" slot = "armor" END // ...so that we can add unassigned armor to slot
     BUT_ONLY
 
   // two ice golems use alternate weapons, so we just add the regular weapon in a slot to provide poison/disease immunity
@@ -2231,13 +2290,23 @@ ACTION_IF !game_is_iwd THEN BEGIN
 
   // have ring in quickslot/inventory
   COPY_EXISTING ~dlsgem.cre~  ~override~
-    REMOVE_CRE_ITEM ~ring91~                                      // removes from quickslot
-    ADD_CRE_ITEM    ~ring91~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as ring/amulet
+    LPF cd_equip_item INT_VAR move = 1 STR_VAR item = "ring91" slot = "jewelry" END // move from quickslot to ring
     BUT_ONLY
 
   // one snow troll missing item for knockdown/revive sequence
   COPY_EXISTING ~dlsnotr.cre~ ~override~
     ADD_CRE_ITEM ~reg1hp2~ #0 #0 #0 NONE ~LRING RRING~ // missing don't die item, which might help
+    BUT_ONLY
+
+  COPY_EXISTING ~druidee.cre~ ~override~ // druid earth elemental transformation
+                ~druidwe.cre~ ~override~ // druid water elemental transformation
+    LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = immune2 END // delete unassigned immunity item
+    LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = b4-32 END   // already has elemental weapon
+    BUT_ONLY
+    
+  COPY_EXISTING ~druidfe.cre~ ~override~ // druid fire elemental transformation
+    LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = immune2 END // delete unassigned immunity item
+    LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = fele1-8 END // already has elemental weapon
     BUT_ONLY
 
   // keep mebdinga alive until she speaks 1/2; see dmebd.dlg
@@ -2247,74 +2316,65 @@ ACTION_IF !game_is_iwd THEN BEGIN
 
   // move and equip sword
   COPY_EXISTING ~murdaugh.cre~ ~override~
-    REMOVE_CRE_ITEM  ~ulswd3d~
-    REPLACE_CRE_ITEM ~ulswd3d~ #0 #0 #0 ~NONE~ ~WEAPON1~ EQUIP
+    LPF cd_equip_item INT_VAR move = 1 STR_VAR item = "ulswd3d" slot = "weapon" END // move from quickslot to weapon
+    LPF cd_equip_weapon END
     BUT_ONLY
 
   // has armor in cloak/quickslots/inventory
   COPY_EXISTING ~saeguard.cre~ ~override~
-    REMOVE_CRE_ITEM ~shark~                         // removes from cloak slot
-    ADD_CRE_ITEM    ~shark~ #0 #0 #0 ~NONE~ ~ARMOR~ // add back as armor
+    LPF cd_equip_item INT_VAR move = 1 STR_VAR item = "shark" slot = "armor" END // move from cloak to armor
     BUT_ONLY
 
   // has armor in cloak/quickslots/inventory
   COPY_EXISTING ~sagrdm.cre~   ~override~ // equippable items in inventory: shark2.itm
                 ~sarguard.cre~ ~override~ // Equippable items in inventory: shark2.itm
-    REMOVE_CRE_ITEM ~shark2~                         // removes from cloak slot
-    ADD_CRE_ITEM    ~shark2~ #0 #0 #0 ~NONE~ ~ARMOR~ // add back as armor
+    LPF cd_equip_item INT_VAR move = 1 STR_VAR item = "shark2" slot = "armor" END // move from cloak/quickslot to armor
     BUT_ONLY
 
   // have incorrect equipped weapon reference
   COPY_EXISTING ~sawar.cre~   ~override~
-    REMOVE_CRE_ITEM ~s1-4~                                 // removes from creature
-    ADD_CRE_ITEM    ~s1-4~ #0 #0 #0 ~NONE~ ~WEAPON2~ EQUIP // add back as equipped weapon
+    LPF cd_equip_weapon END // has s1-4 in weapon2 slot, but weapon1 is selected
     BUT_ONLY
 
   // add charges
   COPY_EXISTING ~seercut.cre~ ~override~
-    REMOVE_CRE_ITEM ~aport~                                        // removes
-    ADD_CRE_ITEM    ~aport~ #1 #0 #0 ~NONE~ ~QITEM1 QITEM2 QITEM3~ // add back with charges
-    REMOVE_CRE_ITEM ~adis~                                         // removes
-    ADD_CRE_ITEM    ~adis~  #1 #0 #0 ~NONE~ ~QITEM1 QITEM2 QITEM3~ // add back with charges
+    REPLACE_CRE_ITEM ~aport~ #1 #0 #0 ~NONE~ ~QITEM1~ // add back with charges
+    REPLACE_CRE_ITEM ~adis~  #1 #0 #0 ~NONE~ ~QITEM2~ // add back with charges
     BUT_ONLY
   
   // add charges
   COPY_EXISTING ~tiernon.cre~ ~override~
-    REMOVE_CRE_ITEM ~tiernon~                                      // removes (inv)
-    ADD_CRE_ITEM    ~tiernon~ #1 #1 #3 ~NONE~ ~INV7~ // add back with charges
+    REPLACE_CRE_ITEM ~tiernon~ #1 #1 #3 ~NONE~ ~INV7~ // add back with charges
     BUT_ONLY
 
   // has armor in cloak/quickslots/inventory
   COPY_EXISTING ~vaarglan.cre~ ~override~
                 ~vaarglnd.cre~ ~override~
-    REMOVE_CRE_ITEM ~clck16~                         // removes from cloak slot
-    ADD_CRE_ITEM    ~clck16~ #0 #0 #0 ~NONE~ ~ARMOR~ // add back as armor
+    LPF cd_equip_item INT_VAR move = 1 STR_VAR item = "clck16" slot = "armor" END // move from cloak to armor
     BUT_ONLY
   
   // have ring in quickslot/inventory
   COPY_EXISTING ~vexing.cre~ ~override~
-    REMOVE_CRE_ITEM ~immune2~                                      // removes from quickslot
-    ADD_CRE_ITEM    ~immune2~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET BOOTS GLOVES~ // add back as ring/amulet
+    LPF cd_equip_item STR_VAR item = "immune2" slot = "belt" END // jewelry already full
     BUT_ONLY
   
   // have ring in quickslot/inventory
   COPY_EXISTING ~werewlf.cre~ ~override~
-    REMOVE_CRE_ITEM ~immune1~                                      // removes from quickslot
-    ADD_CRE_ITEM    ~immune1~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as ring/amulet
+    LPF cd_equip_item STR_VAR item = "immune1" slot = "jewelry" END // assign to jewelry
     BUT_ONLY
 
   // has armor in cloak/quickslots/inventory
   COPY_EXISTING ~xactile.cre~  ~override~ // Equippable items in inventory: SHARK3.itm
-    REMOVE_CRE_ITEM ~shark3~                         // removes from cloak slot
-    ADD_CRE_ITEM    ~shark3~ #0 #0 #0 ~NONE~ ~ARMOR~ // add back as armor
+    LPF DELETE_CRE_ITEM_V9 STR_VAR item_to_delete = ~s1-8~ END // remove generic weapon
+    LPF cd_equip_item INT_VAR move = 1 STR_VAR item = "blun05" slot = "weapon" END // move from quickslot to weapon
+    LPF cd_equip_item INT_VAR move = 1 STR_VAR item = "shark3" slot = "armor" END // move from cloak to armor
     BUT_ONLY
 
   ACTION_IF game_is_totlm THEN BEGIN // totlm fixes
   
     // equip item
     COPY_EXISTING ~corcat.cre~ ~override~
-      REMOVE_CRE_ITEM ~spawn~                                        // removes (unassigned)
-      ADD_CRE_ITEM    ~spawn~ #0 #0 #0 ~NONE~ ~QITEM1 QITEM2 QITEM3~ // add back as quick item
+      LPF cd_equip_item STR_VAR item = "spawn" slot = "quickslot" END // assign to jewelry
       BUT_ONLY
       
     // have ring in quickslot/inventory
@@ -2324,8 +2384,7 @@ ACTION_IF !game_is_iwd THEN BEGIN
                   ~jkldog.cre~  ~override~ //: equippable items in inventory: immune2.itm
                   ~jklgtr.cre~  ~override~ //: equippable items in inventory: immune2.itm
                   ~rikasha.cre~ ~override~ //: equippable items in inventory: immune2.itm
-      REMOVE_CRE_ITEM ~immune2~                                      // removes from quickslot
-      ADD_CRE_ITEM    ~immune2~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as ring/amulet
+      LPF cd_equip_item INT_VAR move = 1 STR_VAR item = "immune2" slot = "jewelry" END // move from inventory to equipped
       BUT_ONLY
     
     // add item referenced in scripting
@@ -2345,50 +2404,42 @@ ACTION_IF !game_is_iwd THEN BEGIN
                   ~lordm.cre~    ~override~
                   ~rakshasa.cre~ ~override~
                   ~rakshinv.cre~ ~override~
-      REMOVE_CRE_ITEM ~ciraksh~                                      // removes (inv)
-      ADD_CRE_ITEM    ~ciraksh~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET BELT~ // add back as equipped jewelry
+      LPF cd_equip_item INT_VAR move = 1 STR_VAR item = "ciraksh" slot = "jewelry" END // move from quickslot to jewelry
       BUT_ONLY
   
     // have ring in quickslot/inventory
     COPY_EXISTING ~hrpfnd.cre~ ~override~ //: equippable items in inventory: immune1.itm
                   ~jklwar.cre~ ~override~ //: equippable items in inventory: immune1.itm
-      REMOVE_CRE_ITEM ~immune1~                                      // removes from quickslot
-      ADD_CRE_ITEM    ~immune1~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as ring/amulet
+      LPF cd_equip_item INT_VAR move = 1 STR_VAR item = "immune1" slot = "jewelry" END // move from quickslot to jewelry
       BUT_ONLY
     
     // have ring in quickslot/inventory
     COPY_EXISTING ~jklldr.cre~ ~override~ //: equippable items in inventory: immune3.itm
-      REMOVE_CRE_ITEM ~immune3~                                      // removes from quickslot
-      ADD_CRE_ITEM    ~immune3~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as ring/amulet
+      LPF cd_equip_item INT_VAR move = 1 STR_VAR item = "immune3" slot = "jewelry" END // move from quickslot to jewelry
       BUT_ONLY
 
     // equip item
     COPY_EXISTING ~olvslime.cre~ ~override~
                   ~rndoslm.cre~  ~override~
-      REMOVE_CRE_ITEM ~ciigen~                                      // removes (inv)
-      ADD_CRE_ITEM    ~ciigen~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as equipped jewelry
+      LPF cd_equip_item INT_VAR move = 1 STR_VAR item = "ciigen" slot = "jewelry" END // move from inventory to jewelry
       BUT_ONLY
 
     // equip item (see also ar9714.are, rndrevn.cre, cdtrolg.bcs)
     COPY_EXISTING ~revnant.cre~ ~override~
                   ~rndrevn.cre~ ~override~
-      REMOVE_CRE_ITEM ~cireve~                                      // removes (inv)
-      ADD_CRE_ITEM    ~cireve~ #0 #0 #0 ~NONE~ ~LRING RRING AMULET~ // add back as equipped jewelry
+      LPF cd_equip_item INT_VAR move = 1 STR_VAR item = "cireve" slot = "jewelry" END // move from inventory to jewelry
       BUT_ONLY
   
     // rings/amulets
     COPY_EXISTING ~rndghos.cre~ ~override~
-      REMOVE_CRE_ITEM ~ghost~                                       // removes from weapons
-      ADD_CRE_ITEM    ~ghost~  #0 #0 #0 ~NONE~ ~AMULET RRING LRING~ // add ghost.itm back to amulet/ring
-      ADD_CRE_ITEM    ~b1-6~ #0 #0 #0 ~NONE~ ~WEAPON1~ EQUIP
+      LPF cd_equip_item INT_VAR move = 1 STR_VAR item = "ghost" slot = "jewelry" END // move from weapon to jewelry
+      ADD_CRE_ITEM    ~b1-6~ #0 #0 #0 ~NONE~ ~WEAPON1~ EQUIP // so we can assign actual weapon
       BUT_ONLY
 
     // equip items
     COPY_EXISTING ~trgbard.cre~  ~override~
-      REMOVE_CRE_ITEM ~ciigen~                          // removes (inv)
-      ADD_CRE_ITEM    ~ciigen~ #0 #0 #0 ~NONE~ ~GLOVES~ // add back
-      REMOVE_CRE_ITEM ~seeall~                          // removes (inv)
-      ADD_CRE_ITEM    ~seeall~ #0 #0 #0 ~NONE~ ~BOOTS~  // add back
+      LPF cd_equip_item INT_VAR move = 1 STR_VAR item = "ciigen" slot = "gloves" END // move from quickslot to gloves (jewelry slots full)
+      LPF cd_equip_item INT_VAR move = 1 STR_VAR item = "seeall" slot = "boots" END  // move from quickslot to boots (jewelry slots full)
       BUT_ONLY
   
   END
