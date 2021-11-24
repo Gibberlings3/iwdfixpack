@@ -4409,15 +4409,15 @@ END
 /////                                                  \\\\\
 
 // spells using wrong power level
-ACTION_FOR_EACH file IN sppr103 sppr105 sppr311 sppr314 sppr401 sppr504 sppr514 
- sppr611 spwi111 spwi118 spwi215 spwi410 spwi414 spwi417 spwi606 spwi610
+ACTION_FOR_EACH file IN sppr103 sppr105 sppr311 sppr314 sppr401 sppr504 sppr514 sppr611 
+  spwi107 spwi108 spwi111 spwi118 spwi215 spwi410 spwi414 spwi417 spwi606 spwi610
 BEGIN
 
   ACTION_IF (FILE_EXISTS_IN_GAME ~%file%.spl~) THEN BEGIN
 
     COPY_EXISTING ~%file%.spl~ ~override~
       READ_LONG  0x34 "level"    ELSE 0
-      LPF ALTER_SPELL_EFFECT INT_VAR power = level END
+      LPF ALTER_EFFECT INT_VAR power = level END
       BUT_ONLY
 
   END
@@ -4442,25 +4442,10 @@ ACTION_FOR_EACH file IN
   spwi987 spwi988 spwi990 spwi991 spwi992 spwi993
 BEGIN
 
-  ACTION_IF (FILE_EXISTS_IN_GAME ~%file%.spl~) THEN BEGIN
-  
-    COPY_EXISTING ~%file%.spl~ ~override~
-      READ_LONG   0x64 "abil_off"
-      READ_SHORT  0x68 "abil_num"
-      READ_LONG   0x6a "fx_off"
-      FOR (index = 0 ; index < abil_num ; index = index + 1) BEGIN // looks through headers
-        READ_SHORT ("%abil_off%" + 0x1e + ("%index%" * 0x28)) "abil_fx_num"
-        READ_SHORT ("%abil_off%" + 0x20 + ("%index%" * 0x28)) "abil_fx_idx"
-        FOR (index2 = 0 ; index2 < abil_fx_num ; index2 = index2 + 1) BEGIN // cycle through effects
-          READ_BYTE ("%fx_off%" + 0x0c + (("%abil_fx_idx%" + "%index2%") * 0x30)) "timing"
-          PATCH_IF (("%timing%" = 1) OR ("%timing%" = 9)) BEGIN
-            WRITE_LONG ("%fx_off%" + 0x0e + (("%abil_fx_idx%" + "%index2%") * 0x30)) 0 // duration
-          END
-        END
-      END
-      BUT_ONLY
-
-  END
+  COPY_EXISTING ~%file%.spl~ ~override~
+    LPF ALTER_EFFECT INT_VAR silent = 1 check_globals = 0 match_timing = 1 duration = 0 END
+    LPF ALTER_EFFECT INT_VAR silent = 1 check_globals = 0 match_timing = 9 duration = 0 END
+    BUT_ONLY IF_EXISTS
 
 END
 
@@ -4525,6 +4510,20 @@ COPY_EXISTING ~pself0.spl~  ~override~
 ///// other spell fixes                                \\\\\
 /////                                                  \\\\\
 
+// cure X spells, hp drain spells shouldn't work on undead/extraplanar, like the cause X spells
+COPY_EXISTING ~spin109.spl~  ~override~ // lay on hands
+              ~sppr103.spl~  ~override~ // Cure Light Wounds
+              ~sppr214.spl~  ~override~ // Cure Moderate Wounds
+              ~sppr314.spl~  ~override~ // Cure Disease
+              ~sppr315.spl~  ~override~ // Cause Disease
+              ~sppr401.spl~  ~override~ // Cure Serious Wounds
+              ~sppr502.spl~  ~override~ // Cure Critical Wounds
+              ~sppr607.spl~  ~override~ // Heal
+              ~spwi119.spl~  ~override~ // larloch's minor drain
+              ~spwi314.spl~  ~override~ // vampiric touch
+  LPF CLONE_EFFECT INT_VAR match_opcode = 233 opcode = 290 parameter2 = 55 timing = 0 duration = 1 resist_dispel = 0 STR_VAR insert = first resource = EVAL ~%SOURCE_RES%~ END 
+  BUT_ONLY IF_EXISTS // cause disease not in iwd
+
 // no portrait icon for creatures that can't be charmed
 COPY_EXISTING ~spin119.spl~ ~override~
   LPF CLONE_EFFECT INT_VAR parameter2 = 6 match_opcode = 5 opcode = 206 power = 0 timing = 0 duration = 0 resist_dispel = 0 STR_VAR insert = first resource = EVAL "%SOURCE_RES%" END
@@ -4532,12 +4531,12 @@ COPY_EXISTING ~spin119.spl~ ~override~
 
 // targeting prevents effects
 COPY_EXISTING ~spin121.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR target = 1 END
+  LPF ALTER_EFFECT INT_VAR target = 1 END
   BUT_ONLY
 
 // power issues for innate
 COPY_EXISTING ~spin125.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR power = 0 END
+  LPF ALTER_EFFECT INT_VAR power = 0 END
   BUT_ONLY
 
 // deafness should protect against spells and abilities that rely on hearing
@@ -4577,7 +4576,7 @@ COPY_EXISTING ~spin170.spl~ ~override~ // flesh to stone (beholder version)
 
 // visual shouldn't have min level
 COPY_EXISTING ~spin972.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR dicesize = 0 END
+  LPF ALTER_EFFECT INT_VAR dicesize = 0 END
   BUT_ONLY
 
 // add string, portrait for panic effect
@@ -4588,7 +4587,7 @@ COPY_EXISTING ~spin975.spl~ ~override~
 
 // visual shouldn't have min level, power
 COPY_EXISTING ~spin980.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR power = 0 dicesize = 0 END
+  LPF ALTER_EFFECT INT_VAR power = 0 dicesize = 0 END
   BUT_ONLY
 
 // change berserk type, name spell
@@ -4606,7 +4605,7 @@ COPY_EXISTING ~spin992.spl~ ~override~
 
 // string bypasses MR
 COPY_EXISTING ~spitm02.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR resist_dispel = 3 END
+  LPF ALTER_EFFECT INT_VAR resist_dispel = 3 END
   BUT_ONLY
   
 // mantle of hells' furnace should only charm fire elementals (elves handled in batch patches)
@@ -4617,7 +4616,7 @@ COPY_EXISTING ~spitm99.spl~ ~override~
 
 // string should bypass MR
 COPY_EXISTING ~sppr101.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR resist_dispel = 3 END
+  LPF ALTER_EFFECT INT_VAR resist_dispel = 3 END
   BUT_ONLY
 
 // low level creature can't save; sound effect missing max level
@@ -4628,20 +4627,6 @@ COPY_EXISTING ~sppr102.spl~ ~override~
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 174 target = 2 power = 1 timing = 1 resist_dispel = 1
     insert_point = 2 dicenumber = 5 STR_VAR resource = "eff_p04" END
 
-// cure X spells, hp drain spells shouldn't work on undead/extraplanar, like the cause X spells
-COPY_EXISTING ~spin109.spl~  ~override~ // lay on hands
-              ~sppr103.spl~  ~override~ // Cure Light Wounds
-              ~sppr214.spl~  ~override~ // Cure Moderate Wounds
-              ~sppr314.spl~  ~override~ // Cure Disease
-              ~sppr315.spl~  ~override~ // Cause Disease
-              ~sppr401.spl~  ~override~ // Cure Serious Wounds
-              ~sppr502.spl~  ~override~ // Cure Critical Wounds
-              ~sppr607.spl~  ~override~ // Heal
-              ~spwi119.spl~  ~override~ // larloch's minor drain
-              ~spwi314.spl~  ~override~ // vampiric touch
-  LPF CLONE_EFFECT INT_VAR match_opcode = 233 opcode = 290 parameter2 = 55 timing = 0 duration = 1 resist_dispel = 0 STR_VAR insert = first resource = EVAL ~%SOURCE_RES%~ END 
-  BUT_ONLY IF_EXISTS // cause disease not in iwd
-
 // because entangle and grease both set movement speeds, can actually escape an entangle if grease is cast
 COPY_EXISTING ~sppr105.spl~ ~override~ // Entangle
   LPF CLONE_EFFECT INT_VAR check_globals = 0 match_opcode = 126 opcode = 206 parameter1 = 0 parameter2 = 0 STR_VAR resource = spwi101 END // Grease
@@ -4649,49 +4634,38 @@ COPY_EXISTING ~sppr105.spl~ ~override~ // Entangle
 
 // power, MR issues
 COPY_EXISTING ~sppr108.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 254 power = 1 END // only for totlm
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode =  23 resist_dispel = 3 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 254 power = 1 END // only for totlm
+  LPF ALTER_EFFECT INT_VAR match_opcode =  23 resist_dispel = 3 END
   BUT_ONLY
 
 // curse not affecting victim saves, string bypasses MR
 COPY_EXISTING ~sppr111.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 139 resist_dispel = 1 END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 238 target = 2 power = 1 resist_dispel = 1 duration = 42 parameter1 = "-1" END
   BUT_ONLY
 
 // barkskin not improving AC as it should
 COPY_EXISTING ~sppr202.spl~ ~override~
-  READ_LONG  0x6a fx_off
-  READ_LONG  0x64 abil_off
   READ_SHORT 0x68 abil_num
-  FOR (index2 = 0 ; index2 < abil_num ; ++index2) BEGIN // looks through headers
-    READ_SHORT (abil_off + 0x10 + (index2 * 0x28)) min_lev
-    READ_SHORT (abil_off + 0x1e + (index2 * 0x28)) abil_fx_num
-    READ_SHORT (abil_off + 0x20 + (index2 * 0x28)) abil_fx_idx
-    PATCH_IF (min_lev = 1) BEGIN SET min_lev = 3 END
-    FOR (index = 0 ; index < abil_fx_num ; index = index + 1) BEGIN
-      READ_SHORT (fx_off +        ((abil_fx_idx + index) * 0x30)) opcode
-      PATCH_IF (opcode = 0) BEGIN
-        WRITE_LONG  (fx_off + 0x04 + ((index + abil_fx_idx) * 0x30)) (6 - (min_lev / 4))
-      END
-    END
-  END
+  LPF ALTER_EFFECT INT_VAR header = 0 match_opcode = 0 parameter1 = 6 END
+  FOR (index = 1 ; index < abil_num ; ++index) BEGIN
+    LPF ALTER_EFFECT INT_VAR header = index match_opcode = 0 parameter1 = (6 - ((index + 3) / 4)) END
+  END  
   BUT_ONLY
 
 // chant's caster effects should bypass protections
 COPY_EXISTING ~sppr203.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 145 power = 0 END
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 126 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_target = 1 power = 0 END
   BUT_ONLY
 
 // delayed sound bypasses save
 COPY_EXISTING ~sppr204.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 savingthrow = BIT0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 174 savingthrow = BIT0 END
   BUT_ONLY
 
-// find traps blocked by spell protections
+// 146 doesn't need power, since the subspell has it
 COPY_EXISTING ~sppr205.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 146 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 146 power = 0 END
   BUT_ONLY
 
 // goodberries last 1 day/caster level
@@ -4706,25 +4680,23 @@ COPY_EXISTING ~sppr207.spl~ ~override~
 // some effects bypass MR; duration for hold person should be two rounds/level
 COPY_EXISTING ~sppr208.spl~ ~override~
   READ_SHORT  0x68 abil_num
-  FOR (index = 1 ; index < (abil_num + 1) ; ++index) BEGIN
-    LPF ALTER_SPELL_EFFECT INT_VAR header = index duration_high = ((index * 14) + 28) resist_dispel = 1 END
+  FOR (index = 0 ; index < abil_num ; ++index) BEGIN
+    LPF ALTER_EFFECT INT_VAR header = index match_duration = ((index * 7) + 21) duration = ((index * 14) + 42) resist_dispel = 1 END
   END
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 206 resist_dispel = 2 duration = 1 END // base iwd
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 290 resist_dispel = 2 duration = 1 END // how/totlm
-  LPF ALTER_EFFECT INT_VAR match_opcode = 175 parameter1 = 0 parameter2 = 2 END
   BUT_ONLY
 
 // minor reliability corrections
 COPY_EXISTING ~sppr208.spl~ ~override~ // Hold Person (divine version)
               ~sppr305.spl~ ~override~ // Hold Animal
               ~spwi306.spl~ ~override~ // Hold Person (arcane version)
-  LPF ALTER_EFFECT INT_VAR match_opcode = 290 duration = 1 END
+  LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 206 duration = 1 END
+  LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 290 duration = 1 END
   LPF ALTER_EFFECT INT_VAR match_opcode = 175 parameter1 = 0 parameter2 = 2 END
   BUT_ONLY
 
 // sound bypasses save
 COPY_EXISTING ~sppr211.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 savingthrow = BIT0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 174 savingthrow = BIT0 END
   BUT_ONLY
 
 // animate dead should last 12 hours, summons should always bypass spell protections
@@ -4734,14 +4706,14 @@ COPY_EXISTING ~sppr301.spl~ ~override~
 
 // string bypassing MR
 COPY_EXISTING ~sppr303.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 139 resist_dispel = 1 END
   BUT_ONLY
 
 // sound bypassing save, string/visual bypassing MR
 COPY_EXISTING ~sppr305.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 233 resist_dispel = 1 END
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 savingthrow = BIT0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 139 resist_dispel = 1 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 233 resist_dispel = 1 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 174 savingthrow = BIT0 END
   BUT_ONLY
   
 // sound plays on wrong target, wrong school
@@ -4751,19 +4723,19 @@ COPY_EXISTING ~sppr309.spl~ ~override~ // invisibility purge
 
 // sound bypassing save, string/visual bypassing MR
 COPY_EXISTING ~sppr310.spl~ ~override~ // miscast magic
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 savingthrow = BIT0 savebonus = "-2" END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 174 savingthrow = BIT0 savebonus = "-2" END
   LPF CLONE_EFFECT INT_VAR match_opcode = 60 parameter2 = 1 END // clone arcane miscast into divine
   BUT_ONLY
 
 // summons should always bypass spell protections
 COPY_EXISTING ~sppr398.spl~ ~override~
               ~sppr399.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 246 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 246 power = 0 END
   BUT_ONLY
 
 // summons should always bypass spell protections
 COPY_EXISTING ~sppr402.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 240 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 240 power = 0 END
   BUT_ONLY
 
 // remove charm, stun immunity from free action; have to remove all 261s and then re-add
@@ -4781,7 +4753,7 @@ COPY_EXISTING ~sppr403.spl~  ~override~
 
 // neutralize poison should bypass MR
 COPY_EXISTING ~sppr404.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR resist_dispel = 3 END
+  LPF ALTER_EFFECT INT_VAR resist_dispel = 3 END
   BUT_ONLY
 
 // giant insect should last eight hours, summons should always bypass spell protections
@@ -4797,14 +4769,12 @@ COPY_EXISTING ~sppr411.spl~ ~override~ // Produce Fire
 
 // summons should always bypass spell protections
 COPY_EXISTING ~sppr501.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 240 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 240 power = 0 END
   BUT_ONLY
 
 // bad caster effects shouldn't be blocked
 COPY_EXISTING ~sppr507.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode =  93 power = 0 END
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode =  60 power = 0 END
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 145 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_target = 1 power = 0 END
   BUT_ONLY
 
 // per their descript, chaotic commands & impervious sanctity should prevent sleep; add to immunity batches to round out
@@ -4815,8 +4785,8 @@ COPY_EXISTING ~sppr508.spl~ ~override~ // Chaotic Commands
 
 // sound/damage bypassing MR; strings for low HD effects; panic from insect plague should affect creatures up to *and including* 5 HD
 COPY_EXISTING ~sppr510.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode =  12 resist_dispel = 1 END
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 resist_dispel = 1 END
+  LPF ALTER_EFFECT INT_VAR match_opcode =  12 resist_dispel = 1 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 174 resist_dispel = 1 END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 139 target = 2 power = 5 parameter1 = 14007 timing = 1
     resist_dispel = 1 dicenumber = 2 END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 139 target = 2 power = 5 parameter1 = 14007 timing = 1
@@ -4832,12 +4802,12 @@ COPY_EXISTING ~sppr512.spl~ ~override~ // spike stones
 
 // summons should always bypass spell protections
 COPY_EXISTING ~sppr602.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 240 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 240 power = 0 END
   BUT_ONLY
 
 // summons should always bypass spell protections
 COPY_EXISTING ~sppr605.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 246 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 246 power = 0 END
   BUT_ONLY
 
 // entropy shield blocks 'missile-based' attacks; missing protections from
@@ -4854,12 +4824,12 @@ COPY_EXISTING ~sppr609.spl~ ~override~ // entropy shield
 
 // summons should always bypass spell protections
 COPY_EXISTING ~sppr702.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 246 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 246 power = 0 END
   BUT_ONLY
 
 // summons should always bypass spell protections
 COPY_EXISTING ~sppr704.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 240 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 240 power = 0 END
   BUT_ONLY
 
 // fire storm damage wrong at level 15
@@ -4869,10 +4839,10 @@ COPY_EXISTING ~sppr705.spl~ ~override~
 
 // blindness via sunray should be 1d3 rounds, not a fixed two; string bypassing MR
 COPY_EXISTING ~sppr707.spl~ ~override~ // Sunray
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 139 resist_dispel = 1 END
   LPF ALTER_EFFECT INT_VAR match_duration = 14 duration = 7 probability1 = 33 END
-  LPF CLONE_EFFECT INT_VAR match_duration =  7 duration = 14 probability1 =  66 probability2 = 34 END
   LPF CLONE_EFFECT INT_VAR match_duration =  7 duration = 21 probability1 = 100 probability2 = 67 END
+  LPF CLONE_EFFECT INT_VAR match_duration =  7 duration = 14 probability1 =  66 probability2 = 34 END
   BUT_ONLY
 
 // range corrections
@@ -4889,22 +4859,22 @@ COPY_EXISTING ~sppr715.spl~ ~override~ // Symbol: Hopelessness
 
 // sounds have wrong target
 COPY_EXISTING ~sppr716.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 target = 1 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 174 target = 1 END
   BUT_ONLY
 
 // let sound always play for trap spell
 COPY_EXISTING ~sppr984.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 power = 0 resist_dispel = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 174 power = 0 resist_dispel = 0 END
   BUT_ONLY
 
 // no save for sound
 COPY_EXISTING ~sppr988.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 savingthrow = BIT0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 174 savingthrow = BIT0 END
   BUT_ONLY
 
 // portrait icon has no power
 COPY_EXISTING ~sppr989.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 142 power = 2 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 142 power = 2 END
   BUT_ONLY
 
 // like suffocate, cloud kill and stinking cloud shouldn't work on 'non-breathing' creatures
@@ -4925,18 +4895,18 @@ COPY_EXISTING ~spwi006.spl~ ~override~
 
 // trap arrow damage targets self
 COPY_EXISTING ~spwi007.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 12 target = 2 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 12 target = 2 END
   BUT_ONLY
 
 // trap kill effect bypassing MR
 COPY_EXISTING ~spwi020.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 13 resist_dispel = 1 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 13 resist_dispel = 1 END
   BUT_ONLY
 
 // self-sound should bypass MR/save, visual bypassing MR
 COPY_EXISTING ~spwi021.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 power = 0 resist_dispel = 0 savingthrow = 0 END
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 233 resist_dispel = 1 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 174 power = 0 resist_dispel = 0 savingthrow = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 233 resist_dispel = 1 END
   BUT_ONLY
 
 // undead not being protected from horror trap
@@ -4953,7 +4923,7 @@ COPY_EXISTING ~spwi102.spl~ ~override~
 // caster pause shouldn't be blocked by spell protections
 COPY_EXISTING ~spwi103.spl~ ~override~
   LPF DELETE_EFFECT INT_VAR match_opcode = 12 END
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 165 power = 0 dicesize = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 165 power = 0 dicesize = 0 END
   FOR (index = 1 ; index < 11 ; ++index) BEGIN
     // always damage
     LPF ADD_SPELL_EFFECT INT_VAR insert_point = 99 header = index opcode = 12 target = 2 power = 1 timing = 1 parameter2 = 524288 resist_dispel = 1
@@ -4970,18 +4940,13 @@ COPY_EXISTING ~spwi103.spl~ ~override~
 
 // caster pause shouldn't be blocked by spell protections, visual bypassing MR
 COPY_EXISTING ~spwi105.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 165 power = 0 END
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 233 resist_dispel = 1 END
-  BUT_ONLY
-
-// string has 0 power
-COPY_EXISTING ~spwi107.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 power = 1 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 165 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 233 resist_dispel = 1 END
   BUT_ONLY
 
 // visual has 0 power
 COPY_EXISTING ~spwi108.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 233 power = 2 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 233 power = 2 END
   BUT_ONLY
 
 // per descript, infravision lasts 8 hours
@@ -4996,14 +4961,14 @@ COPY_EXISTING ~spwi113.spl~ ~override~
 
 // shield blocks direct targeting from mordy missiles, but not the splash; 139 has 0 power; block wand of magic missiles
 COPY_EXISTING ~spwi114.spl~ ~override~ // Shield
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 power = 1 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 139 power = 1 END
   LPF CLONE_EFFECT INT_VAR check_globals = 0 multi_match = 1 match_opcode = 83 parameter2 = 36 STR_VAR insert = below END // Wand of Magic Missiles
   LPF CLONE_EFFECT INT_VAR match_opcode = 142 opcode = 206 parameter2 = 0 STR_VAR resource = spwi422 insert = below END // mordy force missiles
   BUT_ONLY
 
 // sound, visual not restricted to HD
 COPY_EXISTING ~spwi116.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR dicenumber = 4 END
+  LPF ALTER_EFFECT INT_VAR dicenumber = 4 END
   BUT_ONLY
   
 // chromatic orb causes double blindness messages at level 4; lev 7+ portrait icon bypassing MR
@@ -5059,29 +5024,25 @@ COPY_EXISTING ~spwi118.spl~ ~override~
   END
   BUT_ONLY_IF_IT_CHANGES
 
-// horror duration should be one turn not four rounds
+// horror duration should be one turn not four rounds; undocumented save bonus
 COPY_EXISTING ~spwi205.spl~ ~override~ // Horror
-  LPF ALTER_EFFECT INT_VAR match_duration = 28 duration = 70 END
-  BUT_ONLY
-
-// undocumented save bonus
-COPY_EXISTING ~spwi205.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR savebonus = 0 END
+  LPF ALTER_EFFECT INT_VAR match_duration = 28 duration = 70 savebonus = 0 END
+  LPF ALTER_EFFECT INT_VAR savebonus = 0 END
   BUT_ONLY
 
 // should last 4 hours
 COPY_EXISTING ~spwi206.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR duration_high = 1200 END
+  LPF ALTER_EFFECT INT_VAR match_duration = 1680 duration = 1200 END
   BUT_ONLY
 
 // knock should bypass MR
 COPY_EXISTING ~spwi207.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR resist_dispel = 3 END
+  LPF ALTER_EFFECT INT_VAR resist_dispel = 3 END
   BUT_ONLY
 
 // shouldn't bypass MR
 COPY_EXISTING ~spwi208.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR resist_dispel = 1 END
+  LPF ALTER_EFFECT INT_VAR resist_dispel = 1 END
   BUT_ONLY
 
 // melf acid arrow lacks casting sound, header corrections
@@ -5106,7 +5067,7 @@ COPY_EXISTING ~spwi214.spl~ ~override~
 
 // caster pause shouldn't be blocked by spell protections
 COPY_EXISTING ~spwi217.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 165 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 165 power = 0 END
   BUT_ONLY
 
 // ghoul touch should match its description: see ghoult.itm, scrl1c.itm, and kuorrick.bcs et al
@@ -5119,18 +5080,18 @@ COPY_EXISTING ~spwi218.spl~ ~override~
 
 // sound blocked by MR
 COPY_EXISTING ~spwi221.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 resist_dispel = 3 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 174 resist_dispel = 3 END
   BUT_ONLY
 
 // sound missing save, should last eight hours
 COPY_EXISTING ~spwi222.spl~ ~override~ // blindness
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 savingthrow = BIT0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 174 savingthrow = BIT0 END
   LPF ALTER_EFFECT INT_VAR match_duration = 3360 duration = 2400 END
   BUT_ONLY
 
 // string bypasses MR
 COPY_EXISTING ~spwi302.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 139 resist_dispel = 1 END
   BUT_ONLY
 
 // change haste to visual range
@@ -5141,11 +5102,12 @@ COPY_EXISTING ~spwi305.spl~ ~override~
 // duration for hold person should be two rounds/level; sound/visual bypassing MR
 COPY_EXISTING ~spwi306.spl~ ~override~
   READ_SHORT  0x68 abil_num
-  FOR (index = 1 ; index < (abil_num + 1) ; ++index) BEGIN
-    LPF ALTER_SPELL_EFFECT INT_VAR header = index resist_dispel = 1 uration_high = ((index * 14) + 56) END
+  FOR (index = 0 ; index < abil_num ; ++index) BEGIN
+    LPF ALTER_EFFECT INT_VAR header = index match_duration = ((index * 7) + 35) duration = ((index * 14) + 70) END
   END
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 206 resist_dispel = 2 END // iwd w/o how
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 290 resist_dispel = 2 END // how, totlm
+  LPF ALTER_EFFECT INT_VAR resist_dispel = 1 END // 
+  LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 206 resist_dispel = 2 END // iwd w/o how
+  LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 290 resist_dispel = 2 END // how, totlm
   BUT_ONLY
   
 // ms1 should summon 2d3 monsters, not 2d4, summons should always bypass spell protections
@@ -5164,7 +5126,7 @@ COPY_EXISTING ~spwi310.spl~ ~override~
 
 // skull trap damage is incorrect 
 COPY_EXISTING ~spwi313.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 174 power = 0 END
   READ_SHORT 0x68 abil_num
   FOR (index = 0 ; index < abil_num ; ++index) BEGIN
     LPF ALTER_EFFECT INT_VAR header = index match_opcode = 12 match_savingthrow =    0 dicesize = 6 dicenumber = ((index + 6) / 2) END
@@ -5174,17 +5136,17 @@ COPY_EXISTING ~spwi313.spl~ ~override~
 
 // vamp touch shouldn't bypass MR
 COPY_EXISTING ~spwi314.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 241 resist_dispel = 1 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 241 resist_dispel = 1 END
   BUT_ONLY
 
 // color set should bypass MR
 COPY_EXISTING ~spwi317.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 7 resist_dispel = 3 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 7 resist_dispel = 3 END
   BUT_ONLY
 
 // summons should always bypass spell protections
 COPY_EXISTING ~spwi407.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 240 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 240 power = 0 END
   BUT_ONLY
   
 // stoneskin should be 1d4 skins +1 skin per 2 levels; was defaulting to 2 +1 skin per 2 levels
@@ -5200,28 +5162,28 @@ COPY_EXISTING ~spwi408.spl~ ~override~ // Stoneskin
 
 // string bypassing MR
 COPY_EXISTING ~spwi411.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 139 resist_dispel = 1 END
   BUT_ONLY
 
 // missing save
 COPY_EXISTING ~spwi413.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR save = BIT0 END
+  LPF ALTER_EFFECT INT_VAR savingthrow = BIT0 END
   BUT_ONLY
 
 // spirit armor damage shouldn't dispel
 COPY_EXISTING ~spwi414.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 12 resist_dispel = 2 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 12 resist_dispel = 2 END
   BUT_ONLY
 
 // summons should always bypass spell protections
 COPY_EXISTING ~spwi418.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 248 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 248 power = 0 END
   BUT_ONLY
 
 // effects should bypass MR; emotions courage and fear should cancel each other
 COPY_EXISTING ~spwi419.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR resist_dispel = 3 END
-  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 254 target = 2 STR_VAR resource = spwi420 END // remove Emotion: Fear
+  LPF ALTER_EFFECT INT_VAR resist_dispel = 3 END
+  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 254 target = 2 power = 4 timing = 1 resist_dispel = 3 STR_VAR resource = spwi420 END // remove Emotion: Fear
   BUT_ONLY
 
 // add panic string to spell; emotions courage and fear should cancel each other
@@ -5242,17 +5204,17 @@ COPY_EXISTING ~spwi421.spl~ ~override~ // Emotion: Hope
 // summons should always bypass spell protections; spell icon
 COPY_EXISTING ~spwi501.spl~ ~override~
   WRITE_ASCII 0x3a ~spwi501c~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 243 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 243 power = 0 END
   BUT_ONLY
 
 // summons should always bypass spell protections
 COPY_EXISTING ~spwi505.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 240 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 240 power = 0 END
   BUT_ONLY
 
 // string bypassing MR
 COPY_EXISTING ~spwi508.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 139 resist_dispel = 1 END
   BUT_ONLY
 
 // visual effects not following min/max levels
@@ -5270,40 +5232,40 @@ COPY_EXISTING ~spwi509.spl~ ~override~
 
 // per descript feeblemind is permanent, not 20 rounds; string bypassing MR
 COPY_EXISTING ~spwi510.spl~ ~override~ // Feeblemind
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 139 resist_dispel = 1 END
   LPF ALTER_EFFECT INT_VAR match_duration = 140 duration = 3600000 END
   BUT_ONLY
 
 // summons should always bypass spell protections
 COPY_EXISTING ~spwi512.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 248 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 248 power = 0 END
   BUT_ONLY
 
 // summons should always bypass spell protections
 COPY_EXISTING ~spwi513.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 246 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 246 power = 0 END
   BUT_ONLY
 
 // summons should always bypass spell protections
 COPY_EXISTING ~spwi514.spl~ ~override~
               ~spwi515.spl~ ~override~
               ~spwi516.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 246 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 246 power = 0 END
   BUT_ONLY
 
 // summons should always bypass spell protections
 COPY_EXISTING ~spwi598.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 246 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 246 power = 0 END
   BUT_ONLY
 
 // summons should always bypass spell protections
 COPY_EXISTING ~spwi599.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 243 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 243 power = 0 END
   BUT_ONLY
 
 // dispel needs power 0
 COPY_EXISTING ~spwi601.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 58 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 58 power = 0 END
   BUT_ONLY
   
 // kill effect misorder prevents other effects
@@ -5317,12 +5279,12 @@ COPY_EXISTING ~spwi606.spl~ ~override~ // death spell
 // casting speed, fade should bypass MR
 COPY_EXISTING ~spwi606.spl~ ~override~
   LPF ALTER_SPELL_HEADER INT_VAR speed = 6 END
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 232 resist_dispel = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 232 resist_dispel = 0 END
   BUT_ONLY
 
 // visual bypassing save
 COPY_EXISTING ~spwi607.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 233 savingthrow = BIT0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 233 savingthrow = BIT0 END
   BUT_ONLY
 
 // invisble stalker is 2 hours = 10 turns = 100 rounds; summons should always bypass spell protections
@@ -5337,12 +5299,12 @@ COPY_EXISTING ~spwi610.spl~ ~override~
 
 // summons should always bypass spell protections
 COPY_EXISTING ~spwi611.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 240 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 240 power = 0 END
   BUT_ONLY
 
 // summons should always bypass spell protections
 COPY_EXISTING ~spwi613.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 248 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 248 power = 0 END
   BUT_ONLY
 
 // make un-petrify stuff destroy the gorgon ring, otherwise victim will just re-petrify on load; see scrlpet, scrlpet2.itm
@@ -5357,37 +5319,37 @@ COPY_EXISTING ~spwi616.spl~ ~override~
 
 // string, sound bypassing MR
 COPY_EXISTING ~spwi617.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR resist_dispel = 1 END
+  LPF ALTER_EFFECT INT_VAR resist_dispel = 1 END
   BUT_ONLY
 
 // kill opcode bypassing MR
 COPY_EXISTING ~spwi702.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 13 resist_dispel = 1 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 13 resist_dispel = 1 END
   BUT_ONLY
 
 // summons should always bypass spell protections
 COPY_EXISTING ~spwi703.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 240 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 240 power = 0 END
   BUT_ONLY
 
 // visual should target self
 COPY_EXISTING ~spwi704.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 233 target = 1 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 233 target = 1 END
   BUT_ONLY
 
 // visual should bypass MR
 COPY_EXISTING ~spwi706.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 233 resist_dispel = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 233 resist_dispel = 0 END
   BUT_ONLY
 
 // self-visual should bypass spell protections
 COPY_EXISTING ~spwi707.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 233 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 233 power = 0 END
   BUT_ONLY
 
 // summons should always bypass spell protections
 COPY_EXISTING ~spwi803.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 240 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 240 power = 0 END
   BUT_ONLY
 
 // mind blank blocks command, but should also block greater command; duration fix
@@ -5399,12 +5361,12 @@ COPY_EXISTING ~spwi804.spl~ ~override~ // mind blank
 
 // summons should always bypass spell protections
 COPY_EXISTING ~spwi899.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 240 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 240 power = 0 END
   BUT_ONLY
 
 // summons should always bypass spell protections
 COPY_EXISTING ~spwi902.spl~ ~override~
-  LPF ALTER_SPELL_EFFECT INT_VAR opcode = 240 power = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 240 power = 0 END
   BUT_ONLY
 
 ACTION_IF game_is_iwd THEN BEGIN // iwd w/o how
@@ -5449,7 +5411,7 @@ END ELSE BEGIN // how, totlm fixes
 
   // sound effect bypasses MR
   COPY_EXISTING ~spin127.spl~ ~override~
-    LPF ALTER_SPELL_EFFECT INT_VAR resist_dispel = 1 END
+    LPF ALTER_EFFECT INT_VAR resist_dispel = 1 END
     BUT_ONLY
   
   // poison effect using acid visual
@@ -5459,20 +5421,20 @@ END ELSE BEGIN // how, totlm fixes
   
   // cosmetic effects using different parameters
   COPY_EXISTING ~spin130.spl~ ~override~
-    LPF ALTER_SPELL_EFFECT INT_VAR power = 7 resist_dispel = 1 savingthrow = BIT0 END
+    LPF ALTER_EFFECT INT_VAR check_globals = 0 power = 7 resist_dispel = 1 savingthrow = BIT0 END
     BUT_ONLY
 
   // pause caster shouldn't be blocked; string lacks save
   COPY_EXISTING ~spin131.spl~ ~override~
-    LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 savingthrow = BIT0 END
-    LPF ALTER_SPELL_EFFECT INT_VAR opcode = 165 power = 0 END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 139 savingthrow = BIT0 END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 165 power = 0 END
     BUT_ONLY
   
   // effects bypassing MR
   COPY_EXISTING ~spin132.spl~ ~override~
-    LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
-    LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 resist_dispel = 1 END
-    LPF ALTER_SPELL_EFFECT INT_VAR opcode = 233 resist_dispel = 1 END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 139 resist_dispel = 1 END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 174 resist_dispel = 1 END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 233 resist_dispel = 1 END
     BUT_ONLY
     
   // hope should cancel hopelessness and vice versa; see sppr715, spwi411, spwi421
@@ -5480,9 +5442,9 @@ END ELSE BEGIN // how, totlm fixes
     LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 254 target = 2 STR_VAR resource = spwi421 END // remove Emotion: Hope
     BUT_ONLY
   
-  // effects bypassing MR
+  // effects bypassing MR, mismatched durations
   COPY_EXISTING ~spin138.spl~ ~override~
-    LPF ALTER_SPELL_EFFECT INT_VAR opcode = 142 duration = 140 savingthrow = 0 savebonus = 0 END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 44 duration = 35 savingthrow = BIT0 savebonus = `4 END
     BUT_ONLY
 
   // bard song forces visibility
@@ -5508,12 +5470,12 @@ END ELSE BEGIN // how, totlm fixes
   
   // string bypassing MR
   COPY_EXISTING ~spin147.spl~ ~override~
-    LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 139 resist_dispel = 1 END
     BUT_ONLY
 
   // power issues for innate
   COPY_EXISTING ~spin159.spl~ ~override~
-    LPF ALTER_SPELL_EFFECT INT_VAR power = 0 END
+    LPF ALTER_EFFECT INT_VAR power = 0 END
     BUT_ONLY
 
   // sunscorch now does extra damage to myconids in addition to undead
@@ -5529,8 +5491,7 @@ END ELSE BEGIN // how, totlm fixes
   
   // self-visuals and movement speed shouldn't be blocked
   COPY_EXISTING ~sppr319.spl~ ~override~
-    LPF ALTER_SPELL_EFFECT INT_VAR opcode = 233 power = 0 END
-    LPF ALTER_SPELL_EFFECT INT_VAR opcode = 266 power = 0 END
+    LPF ALTER_EFFECT INT_VAR match_target = 1 power = 0 END
     BUT_ONLY
   
   // 2d3 damage to cold/fire creatures should be at 100%, not 50
@@ -5559,7 +5520,7 @@ END ELSE BEGIN // how, totlm fixes
   
   // add portrait icons, string bypasses MR
   COPY_EXISTING ~sppr421.spl~ ~override~
-    LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 139 resist_dispel = 1 END
     LPF ADD_SPELL_EFFECT INT_VAR opcode = 142 target = 2 power = 4 resist_dispel = 1 duration = 7
       parameter2 = 44 probability1 = 30 probability2 = 6 savingthrow = BIT1 END
     LPF ADD_SPELL_EFFECT INT_VAR opcode = 142 target = 2 power = 4 resist_dispel = 1 duration = 14
@@ -5573,17 +5534,17 @@ END ELSE BEGIN // how, totlm fixes
   
   // sound bypassing MR
   COPY_EXISTING ~sppr515.spl~ ~override~
-    LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 resist_dispel = 1 END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 174 resist_dispel = 1 END
     BUT_ONLY
   
   // self visual blocked by spell protections
   COPY_EXISTING ~sppr516.spl~ ~override~
-    LPF ALTER_SPELL_EFFECT INT_VAR opcode = 233 power = 0 END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 233 power = 0 END
     BUT_ONLY
   
   // min levels set for rage and hp bonus; stop visuals and other stuff on non-allies
   COPY_EXISTING ~sppr517.spl~ ~override~
-    LPF ALTER_SPELL_EFFECT INT_VAR dicesize = 0 END
+    LPF ALTER_EFFECT INT_VAR dicesize = 0 END
     LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 279 opcode = 206 parameter2 = 50 timing = 0 duration = 0 savingthrow = 0 STR_VAR insert = first resource = EVAL ~%SOURCE_RES%~ END
     BUT_ONLY
 
@@ -5594,23 +5555,22 @@ END ELSE BEGIN // how, totlm fixes
 
   // self-visuals and movement speed shouldn't be blocked
   COPY_EXISTING ~sppr610.spl~ ~override~
-    LPF ALTER_SPELL_EFFECT INT_VAR opcode = 233 power = 0 END
-    LPF ALTER_SPELL_EFFECT INT_VAR opcode = 266 power = 0 END
+    LPF ALTER_EFFECT INT_VAR match_target = 1 power = 0 END
     BUT_ONLY
   
   // string bypassing MR
   COPY_EXISTING ~sppr611.spl~ ~override~
-    LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 139 resist_dispel = 1 END
     BUT_ONLY
   
   // immunity should bypass MR, power
   COPY_EXISTING ~sppr612.spl~ ~override~
-    LPF ALTER_SPELL_EFFECT INT_VAR opcode = 290 resist_dispel = 2 power = 0 END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 290 resist_dispel = 2 power = 0 END
     BUT_ONLY
   
   // sound bypassing MR
   COPY_EXISTING ~sppr717.spl~ ~override~
-    LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 resist_dispel = 1 END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 174 resist_dispel = 1 END
     BUT_ONLY
 
   // had two extraneous sleep effects
@@ -5625,15 +5585,15 @@ END ELSE BEGIN // how, totlm fixes
   
   // summons should always bypass spell protections
   COPY_EXISTING ~sppr723.spl~ ~override~
-    LPF ALTER_SPELL_EFFECT INT_VAR opcode = 259 power = 0 END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 259 power = 0 END
     BUT_ONLY
 
   // luck fixes, 4/4 (see spwi209.spl (x2), chance.itm, and lucky.itm)
   COPY_EXISTING ~spwi209.spl~ ~override~
     LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = 73 END
-    LPF ALTER_SPELL_EFFECT INT_VAR opcode = 54 opcode_new = 133 END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 54 opcode = 133 END
     PATCH_FOR_EACH op IN 59 90 91 92 BEGIN
-      LPF ALTER_SPELL_EFFECT INT_VAR opcode = op parameter1 = 5 END
+      LPF ALTER_EFFECT INT_VAR match_opcode = op parameter1 = 5 END
     END
     LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 power = 2 resist_dispel = 3 duration = 21 STR_VAR resource = chance END
     LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 2 power = 2 resist_dispel = 3 duration = 21 STR_VAR resource = spwi209 END
@@ -5645,24 +5605,23 @@ END ELSE BEGIN // how, totlm fixes
 
   // caster pause shouldn't be blocked by spell protections, deafness string bypassing save
   COPY_EXISTING ~spwi423.spl~ ~override~
-    LPF ALTER_SPELL_EFFECT INT_VAR opcode = 165 power = 0 END
-    LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 savingthrow = BIT0 END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 165 power = 0 END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 139 savingthrow = BIT0 END
     BUT_ONLY
 
   // summons should always bypass spell protections, cosmetics on wrong target
   COPY_EXISTING ~spwi517.spl~ ~override~
-    LPF ALTER_SPELL_EFFECT INT_VAR opcode = 259 power = 0 END
-    LPF ALTER_SPELL_EFFECT INT_VAR target = 1 END
+    LPF ALTER_EFFECT INT_VAR power = 0 target = 1 END
     BUT_ONLY
 
   // caster pause shouldn't be blocked by spell protections
   COPY_EXISTING ~spwi806.spl~ ~override~
-    LPF ALTER_SPELL_EFFECT INT_VAR opcode = 165 power = 0 END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 165 power = 0 END
     BUT_ONLY
   
   // sound should be self-targeted
   COPY_EXISTING ~spwi807.spl~ ~override~
-    LPF ALTER_SPELL_EFFECT INT_VAR opcode = 174 target = 1 END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 174 target = 1 END
     BUT_ONLY
   
   // add portrait icon for blindness
@@ -5684,7 +5643,7 @@ END ELSE BEGIN // how, totlm fixes
   
     // string bypassing MR
     COPY_EXISTING ~spin166.spl~ ~override~
-      LPF ALTER_SPELL_EFFECT INT_VAR opcode = 139 resist_dispel = 1 END
+      LPF ALTER_EFFECT INT_VAR match_opcode = 139 resist_dispel = 1 END
       BUT_ONLY
 
     // beholder innates should match power, resistance of underlying spells
@@ -5705,7 +5664,7 @@ END ELSE BEGIN // how, totlm fixes
 
     // beholder innates should match power, resistance of underlying spells; no save for visual
     COPY_EXISTING ~spin171.spl~ ~override~ // Disintegrate (beholder version)
-      LPF ALTER_SPELL_EFFECT INT_VAR opcode = 233 savingthrow = BIT0 savebonus = "-3" END
+      LPF ALTER_EFFECT INT_VAR match_opcode = 233 savingthrow = BIT0 savebonus = "-3" END
       LPF ALTER_EFFECT INT_VAR power = 6 END
       LPF ALTER_SPELL_HEADER INT_VAR location = 4 END // location
       BUT_ONLY
@@ -5727,8 +5686,7 @@ END ELSE BEGIN // how, totlm fixes
 
     // beholder innates should match power, resistance of underlying spells; kill bypassing mr
     COPY_EXISTING ~spin175.spl~ ~override~ // Death Ray (beholder version)
-      LPF ALTER_SPELL_EFFECT INT_VAR resist_dispel = 1 END
-      LPF ALTER_EFFECT INT_VAR power = 7 END
+      LPF ALTER_EFFECT INT_VAR resist_dispel = 1 power = 7 END
       BUT_ONLY
       
   END
@@ -5738,7 +5696,6 @@ END
 /////                                                  \\\\\
 ///// spell stacking                                   \\\\\
 /////                                                  \\\\\
-
 
 COPY_EXISTING ~spwi212.spl~ ~override~ // Mirror Image (mage version)
   LPF DELETE_EFFECT INT_VAR match_opcode = 261 END // delete the effect blocking more mirror images
@@ -5771,60 +5728,70 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_spell_stacking BEGIN // spells w/o an existin
   spwi620 => 142 // trollish fortitude
   spwi711 =>  54 // suffocate
   spwi807 => 142 // iron body
+  // spells with existing 206 blocks
+  sppr406 => 142 // defensive harmony
+  sppr415 => 142 // blood rage
+  spwi107 => 142 // friends
+  spwi114 => 142 // shield
+  spwi201 =>  65 // blur
+  spwi214 => 142 // strength
+  // patched here, get additional touchups below
+  spwi209 => 142 // luck
+  spin173 => 142 // beholder slow
+  spwi312 => 142 // slow
+  spin121 => 142 // protection from evil
+  sppr107 => 142 // protection from evil
+  sppr408 => 142 // protection from evil 10'
+  spwi113 => 142 // protection from evil
 END 
 
 ACTION_PHP_EACH cd_spell_stacking AS spell => op BEGIN
 
   COPY_EXISTING ~%spell%.spl~ ~override~ // suffocate - not in main batch because no op 142
-    LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = op opcode = 254 parameter2 = 0 timing = 1 duration = 0 STR_VAR insert = first resource = EVAL "%SOURCE_RES%" END
+    LPF cd_spell_stacking INT_VAR cloneop = op END
     BUT_ONLY   
     
 END
   
-// many spells stack with themselves and should not; convert existing 206 to 254
-COPY_EXISTING ~sppr406.spl~ ~override~ // defensive harmony
-              ~sppr415.spl~ ~override~ // blood rage
-              ~spwi107.spl~ ~override~ // friends
-              ~spwi114.spl~ ~override~ // shield
-              ~spwi201.spl~ ~override~ // blur
-              ~spwi214.spl~ ~override~ // strength
-  LPF CLONE_EFFECT  INT_VAR multi_match = 1 match_opcode = 206 match_parameter2 = 0 opcode = 254 timing = 1 duration = 0 
-                    STR_VAR insert = first match_resource = EVAL "%SOURCE_RES%" resource = EVAL "%SOURCE_RES%" END
-  LPF DELETE_EFFECT INT_VAR match_opcode = 206 match_parameter2 = 0 STR_VAR match_resource = EVAL "%SOURCE_RES%" resource = EVAL "%SOURCE_RES%" END
-  BUT_ONLY
-  
 // iwd: no chance, no 206; how: chance exists, but no 206; totlm: has 2x 206 vs. self and chance
-COPY_EXISTING ~spwi209.spl~ ~override~ // luck
-  LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 142 opcode = 254 parameter2 = 0 timing = 1 duration = 0 STR_VAR insert = first resource = EVAL "%SOURCE_RES%" END
-  PATCH_IF !game_is_iwd BEGIN
-    LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 142 opcode = 254 parameter2 = 0 timing = 1 duration = 0 STR_VAR insert = first resource = chance END
-    PATCH_IF game_is_totlm BEGIN
-      LPF DELETE_EFFECT INT_VAR match_opcode = 206 match_parameter2 = 0 STR_VAR match_resource = EVAL "%SOURCE_RES%" resource = EVAL "%SOURCE_RES%" END // delete, handled by 254
-    END ELSE BEGIN
+ACTION_IF !game_is_iwd BEGIN
+
+  COPY_EXISTING ~spwi209.spl~ ~override~ // luck
+    LPF CLONE_EFFECT INT_VAR match_opcode = 254 STR_VAR insert = below match_resource = spwi209 resource = chance END // dispel chance, too
+    PATCH_IF !game_is_totlm BEGIN
       LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 142 opcode = 206 parameter2 = 0 STR_VAR insert = last resource = chance END // add 206 vs. chance
+    END  
+    BUT_ONLY
+
+END
+ 
+ACTION_IF game_is_totlm BEGIN
+
+  ACTION_FOR_EACH spell IN spin173 spwi312 BEGIN // slow cross-dispelling
+   
+     COPY_EXISTING ~%spell%.spl~ ~override~
+       PATCH_FOR_EACH spell2 IN spin173 spwi312 BEGIN
+         PATCH_IF ("%spell%" STRING_COMPARE_CASE "%spell2%") BEGIN // dont' add another self-dispel
+           LPF CLONE_EFFECT INT_VAR match_opcode = 254 STR_VAR insert = below match_resource = EVAL ~%spell%~ resource = EVAL ~%spell2%~ END
+         END
+       END
+       BUT_ONLY   
+
+  END   
+    
+END
+ 
+ACTION_FOR_EACH spell IN spin121 sppr107 sppr408 spwi113 BEGIN // pfe cross-dispelling
+ 
+  COPY_EXISTING ~%spell%.spl~ ~override~
+    PATCH_FOR_EACH spell2 IN spin121 sppr107 sppr408 spwi113 BEGIN
+      PATCH_IF ("%spell%" STRING_COMPARE_CASE "%spell2%") BEGIN // dont' add another self-dispel
+        LPF CLONE_EFFECT INT_VAR match_opcode = 254 STR_VAR insert = below match_resource = EVAL ~%spell%~ resource = EVAL ~%spell2%~ END
+      END
     END
-  END    
-  BUT_ONLY
-  
-// stacking: slow spells should cancel all other slow spells before applying themselves
-COPY_EXISTING ~spin173.spl~  ~override~
-              ~spwi312.spl~  ~override~
-  LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 142 opcode = 254 parameter2 = 0 timing = 1 duration = 0 STR_VAR insert = first resource = spwi312 END
-  PATCH_IF game_is_totlm BEGIN
-    LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 142 opcode = 254 parameter2 = 0 timing = 1 duration = 0 STR_VAR insert = first resource = spin173 END
-  END  
-  BUT_ONLY IF_EXISTS 
-  
-// stacking: protection from evil spells should remove self and each other before applying themselves
-COPY_EXISTING ~spin121.spl~ ~override~
-              ~sppr107.spl~ ~override~
-              ~sppr408.spl~ ~override~
-              ~spwi113.spl~ ~override~
-  LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = 206 END
-  PATCH_FOR_EACH spell IN spin121 sppr107 sppr408 spwi113 BEGIN
-    LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 142 opcode = 254 parameter2 = 0 timing = 1 duration = 0 STR_VAR insert = first resource = EVAL "%spell%" END
-  END
-  BUT_ONLY
+    BUT_ONLY   
+
+END   
 
 /////                                                  \\\\\
 ///// store fixes                                      \\\\\

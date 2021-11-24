@@ -340,6 +340,65 @@ DEFINE_PATCH_MACRO cd_convert_phasing BEGIN
   
 END
 
+// do spell stacking via function; basically we want to insert the 254 *after* any of IWD's 206/290 protections, e.g.
+// you don't want the dispel running ahead of an evasion check or, say, an undead immunity
+
+DEFINE_PATCH_FUNCTION cd_spell_stacking
+  INT_VAR cloneop = "-1"
+  BEGIN
+  
+  PATCH_IF ("%SOURCE_FILE%" STRING_COMPARE_REGEXP "^.+\.itm" = 0) BEGIN SET abil_length = 0x38 END ELSE BEGIN SET abil_length = 0x28 END
+  READ_SHORT 0x68 abil_num
+  READ_LONG  0x64 abil_off
+  READ_LONG  0x6a fx_off
+  SET delta = 0 
+  FOR (index = 0 ; index < abil_num; ++index) BEGIN
+    READ_SHORT  (abil_off + 0x1e + (index * abil_length)) abil_fx_num
+    WRITE_SHORT (abil_off + 0x20 + (index * abil_length)) (THIS + delta)
+    READ_SHORT  (abil_off + 0x20 + (index * abil_length)) abil_fx_idx
+    SET insert_point_check = 0
+    SET inserted = 0
+    SET insert_point = (fx_off + 0x00 + (abil_fx_idx * 0x30)) 
+    FOR (index2 = 0 ; index2 < abil_fx_num ; ++index2) BEGIN
+      READ_SHORT (fx_off + 0x00 + ((abil_fx_idx + index2) * 0x30)) op
+      READ_ASCII (fx_off + 0x14 + ((abil_fx_idx + index2) * 0x30)) resref
+      PATCH_IF (((op = 206) OR (op = 290)) AND ("%SOURCE_RES%" STRING_COMPARE_CASE "%resref%" = 0) AND (!insert_point_check)) BEGIN // blocking effects via 206 or 290
+        SET insert_point = (fx_off + 0x00 + ((abil_fx_idx + index2 + 1) * 0x30)) 
+      END ELSE BEGIN
+        SET insert_point_check = 1
+      END     
+      PATCH_IF (((op = 206) OR (op = 290)) AND ("%SOURCE_RES%" STRING_COMPARE_CASE "%resref%" = 0) AND (insert_point_check)) BEGIN // blocking effects via 206 or 290
+        READ_LONG (fx_off + 0x08 + ((abil_fx_idx + index2) * 0x30)) param2
+        PATCH_IF !param2 BEGIN
+          DELETE_BYTES (fx_off + 0x00 + ((abil_fx_idx + index2) * 0x30)) 0x30 // delete effect    
+          SET abil_fx_num -= 1   
+          SET delta -= 1
+          SET index2 -= 1
+        END
+      END        
+      PATCH_IF ((op = cloneop) AND (!inserted)) BEGIN // if op to clone
+        SET inserted = 1
+        READ_ASCII (fx_off + 0x00 + ((abil_fx_idx + index2) * 0x30)) clone (0x30)
+        INSERT_BYTES insert_point 0x30
+        WRITE_ASCIIE insert_point ~%clone%~ #48
+        WRITE_SHORT  (insert_point + 0x00) 254 // opcode: dispel specific spell   
+        WRITE_LONG   (insert_point + 0x04)   0 // blank parameter1   
+        WRITE_LONG   (insert_point + 0x08)   0 // dispel all effects      
+        WRITE_BYTE   (insert_point + 0x0c)   1 // timing: instant/perm
+        WRITE_LONG   (insert_point + 0x0e)   0 // duration     
+        WRITE_ASCIIE (insert_point + 0x14) ~%SOURCE_RES%~ #8 // self-ref   
+        WRITE_LONG   (insert_point + 0x1c)   0 // dice num     
+        WRITE_LONG   (insert_point + 0x20)   0 // dice size     
+        SET abil_fx_num += 1   
+        SET delta += 1
+        SET index2 += 1
+      END  
+    END
+    WRITE_SHORT  (abil_off + 0x1e + (index * abil_length)) abil_fx_num // update 
+  END
+
+END  
+
 /////                                                  \\\\\
 ///// miscellaneous creature inventory macros          \\\\\
 /////                                                  \\\\\
@@ -570,3 +629,4 @@ BEGIN
   END    
   
 END
+
