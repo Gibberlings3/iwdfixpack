@@ -1,5 +1,5 @@
 BACKUP ~iwdfixpack/backup~ // location to store files for
-SUPPORT ~camagna@gmail.com~ // email address displayed if install fails\
+SUPPORT ~https://www.gibberlings3.net/forum/152-icewind-dale-mod-roundup/~ // email address displayed if install fails\
 
 ALWAYS
 
@@ -84,6 +84,7 @@ LANGUAGE
 
 BEGIN @100
 REQUIRE_PREDICATE ((GAME_IS ~iwd how totlm~) AND (NOT FILE_EXISTS_IN_GAME ~cdi00001.g3~)) @113
+LABEL ~cd_iwd_fixpack~
   
 // patch functions
 INCLUDE ~iwdfixpack/lib/functions.tpa~
@@ -6286,6 +6287,7 @@ BEGIN @1000 DESIGNATED 100
 REQUIRE_PREDICATE GAME_IS ~iwd how totlm~ @113
 REQUIRE_PREDICATE ((FILE_EXISTS ~iwdfixpack/languages/%LANGUAGE%/gtu.tra~) AND
                    (FILE_EXISTS ~iwdfixpack/languages/%LANGUAGE%/gtu.tpa~)) @1001
+LABEL ~cd_iwd_fixpack_gtu~
 
 // key
 //
