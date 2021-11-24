@@ -35,7 +35,7 @@ COPY_EXISTING ~clck07.itm~  ~override~
 //            ~spwi316.spl~ ~override~ // dire charm (already has protection)
 //            ~spwi806.spl~ ~override~ // great shout
   LPF cd_elven_sleep_charm_resistance_iwd END
-  BUT_ONLY 
+  BUT_ONLY IF_EXISTS
   
 /////
 ///// immunity batches
