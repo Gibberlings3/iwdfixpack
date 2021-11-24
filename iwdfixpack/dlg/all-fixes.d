@@ -34,11 +34,6 @@ ALTER_TRANS dalbion BEGIN 0 END BEGIN END BEGIN ~JOURNAL~ ~~ END // remove here
 ALTER_TRANS dalbion BEGIN 5 END BEGIN END BEGIN ~JOURNAL~ ~#3354~ END // and add it back
 ALTER_TRANS dalbion BEGIN 18 END BEGIN 0 1 END BEGIN ~JOURNAL~ ~~ END // remove here
 ALTER_TRANS dalbion BEGIN 23 END BEGIN END BEGIN ~JOURNAL~ ~#4343~ END // and add it back
-
-// not strictly necessary, but will prevent dupe replies if player mods in a different race for their party members
-ALTER_TRANS DALDWIN BEGIN 0   END BEGIN 14 END BEGIN TRIGGER ~OR(3) Race(Protagonist,DWARF) Race(Protagonist,HALFLING) Race(Protagonist,GNOME) Global("Aldwin","GLOBAL",0)~ END
-ALTER_TRANS DALDWIN BEGIN 1 3 END BEGIN  3 END BEGIN TRIGGER ~OR(3) Race(Protagonist,DWARF) Race(Protagonist,HALFLING) Race(Protagonist,GNOME) Global("Aldwin","GLOBAL",0)~ END
-ALTER_TRANS DALDWIN BEGIN 2   END BEGIN  8 END BEGIN TRIGGER ~OR(3) Race(Protagonist,DWARF) Race(Protagonist,HALFLING) Race(Protagonist,GNOME) Global("Aldwin","GLOBAL",0)~ END
   
 // Amelia's journal entries - push entries back to state 8, but requires state 8 to be split evil/non-evil
 ALTER_TRANS DAMELIA BEGIN 5 END BEGIN END BEGIN ~JOURNAL~ ~~ END // remove all journal entries
@@ -90,7 +85,8 @@ END
 REPLACE_TRIGGER_TEXT ~dcallian~ ~Global("Talonite_Dead","GLOBAL",4)~ ~GlobalGT("Talonite_Dead","GLOBAL",9)~
 ADD_TRANS_TRIGGER dcallian 2 ~!Global("Egenia_Talked","GLOBAL",1)~ DO 0 2
 ADD_STATE_TRIGGER dcallian 8 ~!Global("Egenia_Talked","GLOBAL",1)~ 
-REPLACE_STATE_TRIGGER dcallian 7 ~NumTimesTalkedToGT(0) OR(2) Global("Know_Egenia","GLOBAL",0) Global("Egenia_Talked","GLOBAL",1)~	
+// because of OR(), check how- or base-fixes
+//REPLACE_STATE_TRIGGER dcallian 7 ~NumTimesTalkedToGT(0) OR(2) Global("Know_Egenia","GLOBAL",0) Global("Egenia_Talked","GLOBAL",1)~	
 
 // prisoners not realizing they're free due to bad DV checks
 REPLACE_TRIGGER_TEXT ~dcapkid2~ ~GlobalLT("Talonites_Dead","GLOBAL"~ ~GlobalLT("Talonite_Dead","GLOBAL"~

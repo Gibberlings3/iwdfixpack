@@ -569,21 +569,6 @@ COPY_EXISTING ~kutown2.bcs~ ~override~
   END
   BUT_ONLY
 
-// guard tower should not shoot invisible creatures; fix messages
-COPY_EXISTING ~ldbat.bcs~ ~override~
-  DECOMPILE_AND_PATCH BEGIN
-    REPLACE_TEXTUALLY ~[ %TAB%]Global("8001_FENGLA_REMOVE","GLOBAL",0)~ ~False()~
-    REPLACE_TEXTUALLY ~False()[ %TAB%%LNL%%MNL%%WNL]+Global("ARROW_MESSAGE","MYAREA",1)~ 
-      ~Global("8001_FENGLA_REMOVE","GLOBAL",0) OR(2) IsOverMe([0.0.SVIRFNEBLIN]) IsOverMe([PC]) !StateCheck(LastTrigger,STATE_INVISIBLE)~
-    REPLACE_TEXTUALLY ~SetGlobal("ARROW_MESSAGE","MYAREA",0)~ ~ReallyForceSpell(LastTrigger,TRAP_ARROW)~
-    PATCH_IF game_is_iwd BEGIN
-      REPLACE_TEXTUALLY ~FloatMessage(~ ~DisplayString(~ // TomsStringDisplayer is an HoW action
-    END ELSE BEGIN
-      REPLACE_TEXTUALLY ~FloatMessage(Myself,~ ~TomsStringDisplayer(~
-    END  
-  END
-  BUT_ONLY
-
 // blind & unconscous gnomes should leave after malavon's death
 COPY_EXISTING ~lddgnom3.bcs~ ~override~
               ~lddgnom4.bcs~ ~override~
@@ -671,7 +656,13 @@ ACTION_IF game_is_iwd THEN BEGIN // fixes for iwd without how & totlm
 
   // get aspel's wuff to leave peacably if charmed, just like HoW games
   EXTEND_BOTTOM ~ar1010.bcs~ ~iwdfixpack/baf/ar1010.baf~
-
+  
+  // ldd guard tower shouldn't shoot invisible creatures; no OR() trigger in base IWD
+  OUTER_SPRINT trigger ~IsOverMe([PC])~ OUTER_SPRINT stringdisplay ~DisplayString(Myself,~
+  COMPILE ~iwdfixpack/baf/ldbat.baf~ EVALUATE_BUFFER
+  OUTER_SPRINT trigger ~IsOverMe([0.0.SVIRFNEBLIN])~
+  EXTEND_BOTTOM ~ldbat.bcs~ ~iwdfixpack/baf/ldbat.baf~ EVALUATE_BUFFER
+  
 END ELSE BEGIN // how, totlm fixes
 
   // more robust opening cutscene (not needed for IWD w/o HoW)
@@ -727,6 +718,10 @@ END ELSE BEGIN // how, totlm fixes
       REPLACE_TEXTUALLY ~BARBARIAN_0~ ~BARBARIAN_8~ 
     END
     BUT_ONLY  
+  
+  // ldd guard tower shouldn't shoot invisible creatures; no OR() trigger in base IWD
+  OUTER_SPRINT trigger ~OR(2) IsOverMe([0.0.SVIRFNEBLIN]) IsOverMe([PC])~ OUTER_SPRINT stringdisplay ~TomsStringDisplayer(~
+  COMPILE ~iwdfixpack/baf/ldbat.baf~ EVALUATE_BUFFER
 
   // broken variable name
   COPY_EXISTING ~lddgnom4.bcs~ ~override~
@@ -1622,7 +1617,7 @@ ACTION_PHP_EACH cd_anim_fixes AS file => anim BEGIN
 
   COPY_EXISTING ~%file%.cre~ ~override~
     WRITE_LONG 0x28 anim
-    BUT_ONLY
+    BUT_ONLY IF_EXISTS
     
 END
 
@@ -3231,7 +3226,9 @@ COPY_EXISTING ~adisease.itm~ ~override~
 // power, dispel issues
 COPY_EXISTING ~amul01.itm~   ~override~
   LPF ALTER_EFFECT INT_VAR match_opcode = 174 power = 0 resist_dispel = 0 END
-  LPF ALTER_EFFECT INT_VAR match_opcode = 206 power = 0 resist_dispel = 2 END
+  PATCH_IF !game_is_iwd BEGIN
+    LPF ALTER_EFFECT INT_VAR match_opcode = 206 power = 0 resist_dispel = 2 END // how/totlm
+  END 
   BUT_ONLY
 
 // targeting fixes for cast spell
@@ -3422,13 +3419,6 @@ COPY_EXISTING ~dazer.itm~ ~override~
 COPY_EXISTING ~decasta.itm~ ~override~ // darts of bone
   LPF ALTER_EFFECT INT_VAR match_target = 2 resist_dispel = 1 power = 2 END // drain subject to MR
   LPF CLONE_EFFECT INT_VAR match_opcode = 233 opcode = 206 parameter2 = 55 timing = 0 resist_dispel = 0 STR_VAR resource = decasta insert = first END // golems immune
-  BUT_ONLY
-
-// MR, saves, power issues; prevent stacking; golems immune
-COPY_EXISTING ~dobone.itm~ ~override~ // darts of bone
-  LPF ALTER_EFFECT INT_VAR check_globals = 0 power = 6 resist_dispel = 1 savingthrow = BIT2 END // fix MR, saves, power
-  LPF CLONE_EFFECT INT_VAR match_opcode = 44 opcode = 254 timing = 0 duration = 0 parameter1 = 0 STR_VAR resource = dobone insert = first END // prevent stacking
-  LPF CLONE_EFFECT INT_VAR match_opcode = 254 opcode = 206 parameter2 = 55 savingthrow = 0 resist_dispel = 0 END // golems immune to str drain
   BUT_ONLY
 
 // play sound can be dispelled
@@ -4086,6 +4076,13 @@ END ELSE BEGIN // how, totlm fixes
     LPF DELETE_ITEM_HEADER INT_VAR header_type = 3 END
     BUT_ONLY
 
+  // MR, saves, power issues; prevent stacking; golems immune
+  COPY_EXISTING ~dobone.itm~ ~override~ // darts of bone
+    LPF ALTER_EFFECT INT_VAR check_globals = 0 power = 6 resist_dispel = 1 savingthrow = BIT2 END // fix MR, saves, power
+    LPF CLONE_EFFECT INT_VAR match_opcode = 44 opcode = 254 timing = 0 duration = 0 parameter1 = 0 STR_VAR resource = dobone insert = first END // prevent stacking
+    LPF CLONE_EFFECT INT_VAR match_opcode = 254 opcode = 206 parameter2 = 55 savingthrow = 0 resist_dispel = 0 END // golems immune to str drain
+    BUT_ONLY
+
   // broken tiernon shield missing missile damage reduction
   COPY_EXISTING ~dntshd1.itm~ ~override~
     LPF CLONE_EFFECT INT_VAR match_opcode = 88 opcode = 89 parameter2 = 13 END // add missile damage reduction
@@ -4481,7 +4478,7 @@ ACTION_PHP_EACH cd_shapeshifts AS params => spell BEGIN
       
     COPY_EXISTING ~%params_2%.cre~ ~override~
       REPLACE_CRE_ITEM ~%params_2%~ #0 #0 #0 NONE WEAPON1 EQUIP
-      BUT_ONLY 
+      BUT_ONLY IF_EXISTS
 
   END
   

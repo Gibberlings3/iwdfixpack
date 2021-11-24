@@ -5,6 +5,11 @@ REPLACE_ACTION_TEXT  ~dwylf~    ~SetGlobal(Looked_Mirror","GLOBAL", 1)~ ~SetGlob
 REPLACE_TRIGGER_TEXT ~dfengla~  ~GlobaGT("8002_Archers_Dead","GLOBAL",4)~ ~GlobalGT("8002_Archers_Dead","GLOBAL",4)~
 REPLACE_TRIGGER_TEXT ~dkayless~ ~NumTimesTalkedGT(0)~ ~NumTimesTalkedToGT(0)~
 
+// not strictly necessary, but will prevent dupe replies if player mods in a different race for their party members; here because base has no OR()
+ALTER_TRANS DALDWIN BEGIN 0   END BEGIN 14 END BEGIN TRIGGER ~OR(3) Race(Protagonist,DWARF) Race(Protagonist,HALFLING) Race(Protagonist,GNOME) Global("Aldwin","GLOBAL",0)~ END
+ALTER_TRANS DALDWIN BEGIN 1 3 END BEGIN  3 END BEGIN TRIGGER ~OR(3) Race(Protagonist,DWARF) Race(Protagonist,HALFLING) Race(Protagonist,GNOME) Global("Aldwin","GLOBAL",0)~ END
+ALTER_TRANS DALDWIN BEGIN 2   END BEGIN  8 END BEGIN TRIGGER ~OR(3) Race(Protagonist,DWARF) Race(Protagonist,HALFLING) Race(Protagonist,GNOME) Global("Aldwin","GLOBAL",0)~ END
+
 // fix for ambere (plainab)
 ADD_TRANS_TRIGGER ~dambere~ 11 ~Global("Screwed_Ambere", "GLOBAL", 0)~  DO 0
 
@@ -13,6 +18,9 @@ ALTER_TRANS dangaar BEGIN 11 END BEGIN 2 END BEGIN ~JOURNAL~ ~~ END // remove he
 ALTER_TRANS dangaar BEGIN 19 END BEGIN END BEGIN ~JOURNAL~ ~#23549~ END // and add it back
 ALTER_TRANS dangaar BEGIN 11 END BEGIN 1 END BEGIN ~JOURNAL~ ~~ END // remove here
 ALTER_TRANS dangaar BEGIN 17 END BEGIN 0 END BEGIN ~JOURNAL~ ~#23550~ END // and add it back
+
+// sister calliana not recognizing egenia's return - continuation of all-fixes.d
+REPLACE_STATE_TRIGGER dcallian 7 ~NumTimesTalkedToGT(0) OR(2) Global("Know_Egenia","GLOBAL",0) Global("Egenia_Talked","GLOBAL",1)~	
 
 // shouldn't make 'not a fisherman' comment if edion never claimed to be a fisherman
 ADD_TRANS_TRIGGER DEDION 3 ~Global("EdionFisherman","LOCALS",1)~ DO 1

@@ -1,0 +1,42 @@
+IF
+	Global("8001_FENGLA_REMOVE","GLOBAL",0)
+	%trigger%
+	!StateCheck(LastTrigger,STATE_INVISIBLE)
+	GlobalTimerExpired("ARROW_TIMER","MYAREA")
+THEN
+	RESPONSE #100
+		%stringdisplay%18610)  // "Hey, stupid, get out of here!"
+		ReallyForceSpell(LastTrigger,TRAP_ARROW)  // SPWI005.SPL (No such index)
+		SetGlobalTimer("ARROW_TIMER","MYAREA",3)
+		Continue()
+	RESPONSE #100
+		%stringdisplay%18611)  // "Ha ha!  Idiot!  Take that!"
+		ReallyForceSpell(LastTrigger,TRAP_ARROW)  // SPWI005.SPL (No such index)
+		SetGlobalTimer("ARROW_TIMER","MYAREA",3)
+		Continue()
+	RESPONSE #100
+		%stringdisplay%19564)  // "How'd you like a gut full of arrows, friend?"
+		ReallyForceSpell(LastTrigger,TRAP_ARROW)  // SPWI005.SPL (No such index)
+		SetGlobalTimer("ARROW_TIMER","MYAREA",3)
+		Continue()
+	RESPONSE #100
+		%stringdisplay%19565)  // "Wooo!  Ha ha ha!"
+		ReallyForceSpell(LastTrigger,TRAP_ARROW)  // SPWI005.SPL (No such index)
+		SetGlobalTimer("ARROW_TIMER","MYAREA",3)
+		Continue()
+	RESPONSE #100
+		%stringdisplay%19605)  // "Why don't you try to come storm the tower, moron?"
+		ReallyForceSpell(LastTrigger,TRAP_ARROW)  // SPWI005.SPL (No such index)
+		SetGlobalTimer("ARROW_TIMER","MYAREA",3)
+		Continue()
+	RESPONSE #100
+		%stringdisplay%19606)  // "Hee hee ha ha!"
+		ReallyForceSpell(LastTrigger,TRAP_ARROW)  // SPWI005.SPL (No such index)
+		SetGlobalTimer("ARROW_TIMER","MYAREA",3)
+		Continue()
+	RESPONSE #100
+		%stringdisplay%19607)  // "This is easier than shooting deep gnomes in a cattle pen!"
+		ReallyForceSpell(LastTrigger,TRAP_ARROW)  // SPWI005.SPL (No such index)
+		SetGlobalTimer("ARROW_TIMER","MYAREA",3)
+		Continue()
+END
