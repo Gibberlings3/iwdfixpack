@@ -112,6 +112,7 @@ ACTION_IF (("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) OR
     
   ACTION_IF !game_is_iwd BEGIN // how, totlm
   
+    STRING_SET 21478 @121478 // cause disease is abjuration school but necromantic sphere--like its inverse, cure disease
     STRING_SET 22605 @122605 // for asking about wylfdene for the first time
     STRING_SET 24328 @124328 // Tongue of the Gloomfrost should do piercing, not slashing, damage
 
@@ -4103,6 +4104,11 @@ END ELSE BEGIN // how, totlm fixes
   COPY_EXISTING ~gasp.itm~  ~override~
     WRITE_BYTE 0x18 THIS & `BIT2
     BUT_ONLY
+    
+  // blocks haste, but should be blocking hold person
+  COPY_EXISTING ~gvalor1.itm~ ~override~ // gauntlets of valor
+    LPF ALTER_EFFECT STR_VAR match_resource = spwi305 resource = spwi306 END 
+    BUT_ONLY
 
   // helm of shouting missing its listed AC bonus
   COPY_EXISTING ~helmsh.itm~ ~override~
@@ -4869,10 +4875,12 @@ COPY_EXISTING ~sppr984.spl~ ~override~
 COPY_EXISTING ~sppr988.spl~ ~override~
   LPF ALTER_EFFECT INT_VAR match_opcode = 174 savingthrow = BIT0 END
   BUT_ONLY
-
-// portrait icon has no power
-COPY_EXISTING ~sppr989.spl~ ~override~
-  LPF ALTER_EFFECT INT_VAR match_opcode = 142 power = 2 END
+  
+// block ancillary hold effects from creatures not held
+COPY_EXISTING ~sppr989.spl~ ~override~ // trap_hold_person
+  LPF CLONE_EFFECT INT_VAR match_opcode = 175 opcode = 290 parameter1 = 0 parameter2 = 6 timing = 0 duration = 0 STR_VAR insert = first resource = sppr989 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 175 parameter1 = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 142 power = 2 END // portrait icon has no power
   BUT_ONLY
 
 // like suffocate, cloud kill and stinking cloud shouldn't work on 'non-breathing' creatures
@@ -5173,6 +5181,11 @@ COPY_EXISTING ~spwi414.spl~ ~override~
   LPF ALTER_EFFECT INT_VAR match_opcode = 12 resist_dispel = 2 END
   BUT_ONLY
 
+// BBB not always checking MR correctly  
+COPY_EXISTING ~spwi417.spl~ ~override~
+  LPF ALTER_EFFECT INT_VAR match_resist_dispel = 1 resist_dispel = 3 END
+  BUT_ONLY
+
 // summons should always bypass spell protections
 COPY_EXISTING ~spwi418.spl~ ~override~
   LPF ALTER_EFFECT INT_VAR match_opcode = 248 power = 0 END
@@ -5187,7 +5200,7 @@ COPY_EXISTING ~spwi419.spl~ ~override~
 // add panic string to spell; emotions courage and fear should cancel each other
 COPY_EXISTING ~spwi420.spl~ ~override~
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 139 target = 2 power = 4 parameter1 = 14007 timing = 1 resist_dispel = 1 savingthrow = BIT0 END
-  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 254 target = 2 STR_VAR resource = spwi419 END // remove Emotion: Courage
+  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 254 target = 2 resist_dispel = 1 savingthrow = BIT0 STR_VAR resource = spwi419 END // remove Emotion: Courage
   BUT_ONLY
 
 // hope should cancel hopelessness and vice versa; see spin134, sppr715, spwi411

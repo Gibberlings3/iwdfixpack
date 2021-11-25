@@ -119,6 +119,17 @@ Not Usable By:
  Mage 
  Thief~
 
+// cause disease is abjuration school but necromantic sphere--like its inverse, cure disease
+@121478 = ~Cause Disease (Abjuration)
+Level: 3
+Sphere: Necromantic
+Range: Touch
+Duration: 8 hours
+Casting Time: 1 round
+Area of Effect: 1 creature
+Saving Throw: Neg.
+This spell afflicts one creature the priest touches with a disease that saps the target of 5-20 points of strength.  A saving throw vs. spell will negate the effects.  This spell has no affect on undead, constructs, or extraplanar creatures.  Cause Disease cannot be cast by good characters.~
+
 // duplicate #22604, but remove any reference that this is a repeat (e.g. "again" was removed in English)
 @122605 = ~Tell me of this new *and* old king.~
 
