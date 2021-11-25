@@ -5522,11 +5522,16 @@ END ELSE BEGIN // how, totlm fixes
     LPF ADD_SPELL_EFFECT INT_VAR opcode = 139 target = 2 power = 3 parameter1 = 10039 timing = 1
       resist_dispel = 1 savingthrow = BIT0 END
     BUT_ONLY
-  
-  // add blinded string
-  COPY_EXISTING ~sppr417.spl~ ~override~
+
+  COPY_EXISTING ~sppr415.spl~  ~override~ // blood rage
+    LPF CLONE_EFFECT INT_VAR match_opcode = 261 match_parameter2 = 17 parameter2 = 98 END // also block regeneration
+    LPF CLONE_EFFECT INT_VAR match_opcode = 261 match_parameter2 = 17 parameter2 = 18 END // and max hp bonus effects
+    BUT_ONLY  
+    
+  COPY_EXISTING ~sppr417.spl~ ~override~ // cloud of pestilence
+    LPF ALTER_EFFECT INT_VAR match_duration = 100 duration = 0 END // catches 206, 290s
     LPF ADD_SPELL_EFFECT INT_VAR opcode = 139 target = 2 power = 4 timing = 1 resist_dispel = 1
-      parameter1 = 14674 savingthrow = BIT1 END
+      parameter1 = 14674 savingthrow = BIT1 END // add blinded string
     BUT_ONLY
   
   // add portrait icons, string bypasses MR
@@ -5577,6 +5582,10 @@ END ELSE BEGIN // how, totlm fixes
   // immunity should bypass MR, power
   COPY_EXISTING ~sppr612.spl~ ~override~
     LPF ALTER_EFFECT INT_VAR match_opcode = 290 resist_dispel = 2 power = 0 END
+    BUT_ONLY
+
+  COPY_EXISTING ~sppr613.spl~  ~override~ // whirlwind
+    LPF ALTER_EFFECT INT_VAR resist_dispel = 1 match_savingthrow = BIT1 END // stun et al
     BUT_ONLY
   
   // sound bypassing MR
@@ -5721,10 +5730,12 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_spell_stacking BEGIN // spells w/o an existin
   sppr306 => 142 // protection from fire
   sppr310 => 142 // miscast magic
   sppr319 => 266 // circle of bones
+  sppr323 =>  28 // storm shell
   sppr407 => 142 // protection from lightning
   sppr412 => 264 // static charge
   sppr417 => 142 // cloud of pestilence
   sppr512 => 126 // spike stones
+  sppr517 => 142 // animal rage
   sppr519 => 142 // magic resistance
   sppr609 =>   0 // entropy shield
   sppr610 => 266 // blade barrier
@@ -5741,7 +5752,7 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_spell_stacking BEGIN // spells w/o an existin
   spwi807 => 142 // iron body
   // spells with existing 206 blocks
   sppr406 => 142 // defensive harmony
-  sppr415 => 142 // blood rage
+//sppr415 => 142 // blood rage - keep 206 so that bad effects will apply
   spwi107 => 142 // friends
   spwi114 => 142 // shield
   spwi201 =>  65 // blur
