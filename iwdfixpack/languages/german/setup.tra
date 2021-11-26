@@ -42,6 +42,8 @@ EIGENSCHAFTEN:
 Gewicht: 0~
 */
 @133 = ~Erstklassige Hellebarde~
+@134  = ~^\( *Initiativefaktor:? *\)[0-9]+~ // borrowed from BG2 Fixpack
+@135  = ~^\( *Gewicht:? *\)[0-9]+~          // borrowed from BG2 Fixpack
 
 
 /////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\

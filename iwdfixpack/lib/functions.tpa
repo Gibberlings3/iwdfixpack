@@ -185,6 +185,40 @@ END
 ///// items casting spells                             \\\\\
 /////                                                  \\\\\
 
+DEFINE_PATCH_FUNCTION cd_weapon_speed // updates weapon speed and item description
+  INT_VAR speed = "-1"
+  BEGIN
+  
+  PATCH_IF speed >= 0 BEGIN // must have speed set in function
+    READ_LONG  0x64 abil_off
+    READ_SHORT 0x68 abil_num
+    FOR (index = 0 ; index < abil_num ; ++index) BEGIN
+      READ_BYTE (abil_off + 0x00 + (index * 0x38)) abil_type
+      PATCH_IF ((abil_type = 1) OR (abil_type = 2) OR (abil_type = 4)) BEGIN // melee, ranged, launcher
+        WRITE_SHORT (abil_off + 0x12 + (index * 0x38)) speed // set new speed in-game
+      END
+    END
+    FOR (index = 0x54 ; index > 0x4f ; index -= 0x04) BEGIN // only if no identified descript to match and update, go after normal descript (blun04)
+      READ_LONG index desc_strref
+      PATCH_IF ((desc_strref >= 0) AND (desc_strref < 999999)) BEGIN
+        READ_STRREF index desc
+        INNER_PATCH_SAVE desc ~%desc%~ BEGIN
+          REPLACE_TEXTUALLY ~%text_match_speed%~ ~\1%speed%~
+        END
+        INNER_ACTION BEGIN
+          STRING_SET_EVALUATE desc_strref ~%desc%~
+        END
+        SET index = 0 // kill loop (if identified updated, don't mess with unidentified)
+      END
+    END
+  END  
+
+END
+  
+/////                                                  \\\\\
+///// items casting spells                             \\\\\
+/////                                                  \\\\\
+
 DEFINE_ACTION_FUNCTION cd_items_casting_spells
   INT_VAR cast_at_level = 1
           duration      = 0

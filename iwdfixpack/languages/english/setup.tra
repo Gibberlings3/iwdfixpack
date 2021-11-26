@@ -39,6 +39,8 @@ Not usable by:~
    // a variation of 7398 - remove the part about flaws since this is the description of a "Flawless Waterstar Gem" 
    @132 = ~Waterstar is also called achroite or colorless tourmaline and is rare in the Realms.  This beautiful stone is flawless and hence is fit for cutting.~        
    @133 = ~High Quality Halberd~ // high quality halberd is just named "halberd" in the game
+   @134 = ~^\( *Speed [Ff]actor:? *\)[0-9]+~
+   @135 = ~^\( *Weight:? *\)[0-9]+~
 
   @1000 = ~Game Text Update~
   @1001 = ~This is not available in your language.~

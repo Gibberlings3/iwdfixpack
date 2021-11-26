@@ -2667,6 +2667,8 @@ END
 // gender, sex, alignment, general, race, class fixes
 INCLUDE ~iwdfixpack/lib/item.tpa~
 
+OUTER_SPRINT text_match_speed @134
+
 // file, magical, enchant, weight, price, mspeed, prof => file
 ACTION_PHP_EACH cd_iwdfixpack_item AS params => file BEGIN
 
@@ -2675,12 +2677,11 @@ ACTION_PHP_EACH cd_iwdfixpack_item AS params => file BEGIN
       PATCH_IF (params_1 = 0)   BEGIN WRITE_BYTE 0x18 THIS & `BIT6 END // remove magical flag
       PATCH_IF (params_1 = 1)   BEGIN WRITE_BYTE 0x18 THIS | BIT6  END // add magical flag
     END  
-    PATCH_IF (IS_AN_INT params_5) BEGIN LPF ALTER_ITEM_HEADER INT_VAR silent = 1 header_type = 1 speed = params_5 END 
-                                        LPF ALTER_ITEM_HEADER INT_VAR silent = 1 header_type = 2 speed = params_5 END END // weapon speed
     PATCH_IF (IS_AN_INT params_2) BEGIN WRITE_LONG 0x60 params_2     END // enchanment
     PATCH_IF (IS_AN_INT params_3) BEGIN WRITE_LONG 0x4c params_3     END // weight
     PATCH_IF (IS_AN_INT params_4) BEGIN WRITE_LONG 0x34 params_4     END // price
     PATCH_IF (IS_AN_INT params_6) BEGIN WRITE_SHORT 0x1c params_6    END // proficiency
+    PATCH_IF (IS_AN_INT params_5) BEGIN LPF cd_weapon_speed INT_VAR speed = params_5 END END // weapon speed
     BUT_ONLY IF_EXISTS
 
 END
@@ -4026,6 +4027,12 @@ COPY_EXISTING ~withery.itm~ ~override~
   LPF ALTER_ITEM_HEADER INT_VAR range = 0 END
   BUT_ONLY
 
+// thac0/damage bonus not working vs. lawful; can fix damage at least
+COPY_EXISTING ~zz05we.itm~ ~override~
+  LPF ADD_ITEM_EFFECT INT_VAR type = 1 insert_point = 999 opcode = 206 target = 2 parameter2 = 60 STR_VAR resource = zz05we END // block the following damage effect from non-lawfuls
+  LPF ADD_ITEM_EFFECT INT_VAR type = 1 insert_point = 999 opcode = 12 target = 2 parameter1 = 1 timing = 1 END // add 1 point of crushing damage
+  BUT_ONLY
+
 // pale justice has its own icon
 COPY_EXISTING ~zz57pj.itm~ ~override~
   WRITE_ASCII 0x3a ~izz57pj~ #8
@@ -4274,10 +4281,8 @@ END ELSE BEGIN // how, totlm fixes
       probability1 = 100 probability2 = 67 STR_VAR resource = "spin135" END
     BUT_ONLY
   
-  // good/evil bonuses not actually working; thac0 can't work
-  COPY_EXISTING ~zz14in.itm~ ~override~
-    LPF ALTER_ITEM_HEADER INT_VAR check_globals = 0 damage_bonus = 4 thac0_bonus = 3 END
-    BUT_ONLY
+  // thac0/damage bonus not working vs. good/evil; wrong file name means it's targeting the wrong neutrals; see waukeen.sto
+  COPY_EXISTING ~zz14in.itm~ ~override/zz44in.itm~ // inconsequence
   
   ACTION_IF game_is_totlm THEN BEGIN
 
@@ -5868,6 +5873,11 @@ ACTION_IF !game_is_iwd THEN BEGIN
     ADD_STORE_ITEM + ~lucky~ #1 #1 #1 ~IDENTIFIED~ #1
     BUT_ONLY
 
+  // inconsequence not working due to bad filename; see zz44in.itm
+  COPY_EXISTING ~waukeen.sto~ ~override~ // the golden lodge
+    LPF REPLACE_STORE_ITEM INT_VAR number_in_stock = 1 STR_VAR old_item = zz14in new_item = zz44in flags = IDENTIFIED END // keeps identified flags, 1 in stock 
+    BUT_ONLY
+
   ACTION_IF game_is_totlm THEN BEGIN
 
     // now has no mummy tea in this store
@@ -6107,13 +6117,18 @@ COPY_EXISTING ~amul15.itm~  ~override~ // shield amulet cn cast shield
               ~force.itm~   ~override~ // force bullets causing ORS on-hit
               ~wandcor.itm~ ~override~ // wand of corrosion casts death fog or acid storm
               ~wandfre.itm~ ~override~ // wand of freezing death
-              ~zz05we.itm~  ~override~ // The Mace of Weal and Woe +1 casting curse on-hit
   LPF DELETE_EFFECT INT_VAR check_globals = 0 END // delete all effects
   BUT_ONLY IF_EXISTS //force is a how item
 
 COPY_EXISTING ~gauntid.itm~ ~override~ // Gauntlets of Infernal Damnation casting shroud of flame on-equip
               ~shldrng.itm~ ~override~ // shield ring has shield spell active while equipped
   LPF DELETE_EFFECT INT_VAR check_headers = 0 END // delete all equipping effects
+  BUT_ONLY
+  
+COPY_EXISTING ~zz05we.itm~  ~override~ // The Mace of Weal and Woe +1 casting curse on-hit
+  PATCH_FOR_EACH op IN 54 9 23 174 233 142 BEGIN // delete leftover curse stuff
+    LPF DELETE_EFFECT INT_VAR check_globals = 0 match_opcode = op END // delete all effects
+  END  
   BUT_ONLY
 
 LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1                               duration = 300 STR_VAR item = amul15  spell = spwi114 END
