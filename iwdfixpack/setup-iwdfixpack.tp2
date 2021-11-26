@@ -115,6 +115,7 @@ ACTION_IF (("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) OR
     STRING_SET 21478 @121478 // cause disease is abjuration school but necromantic sphere--like its inverse, cure disease
     STRING_SET 22605 @122605 // for asking about wylfdene for the first time
     STRING_SET 24328 @124328 // Tongue of the Gloomfrost should do piercing, not slashing, damage
+    STRING_SET 25818 @125818 // storm bow is usable by thieves
 
   END
   
@@ -441,6 +442,20 @@ ACTION_FOR_EACH file IN 4001v8 5001v1 ar1102 ar2006 BEGIN
   
   END
 
+END
+
+// items from random treasure table with differing charges need to be re-added with charges
+ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_rndtres_charges BEGIN
+  wandtrp, 5, "Uligar"           => ar2004 // orctres
+  arowtrn, 8, "Pileo'Stuff"      => ar4003 // de3tres
+  trnbolt, 8, "Pileo'Stuff"      => ar4003 // de3tres
+  boneam,  5, "SerratedSkeleton" => ar5003 // sh1tres
+END
+
+ACTION_PHP_EACH cd_rndtres_charges AS params => area BEGIN
+
+  EXTEND_BOTTOM ~%area%.bcs~ ~iwdfixpack/baf/rndtres_charges.baf~ EVALUATE_BUFFER
+  
 END
 
 // prevent minions from attacking king
@@ -1435,6 +1450,11 @@ END ELSE BEGIN // how, totlm fixes
       END
     END
     BUT_ONLY
+    
+  // 3/0/0 > 1/1/1 charges for beltbon/helmsh/stomper 
+  COPY_EXISTING ~ar9200.are~ ~override~
+    LPF REPLACE_AREA_ITEM INT_VAR charges1 = 1 charges2 = 1 STR_VAR old_item = extres1 new_item = extres1 END 
+    BUT_ONLY
 
   // ambient lists two sounds, but only one
   COPY_EXISTING ~ar9300.are~ ~override~
@@ -1449,6 +1469,10 @@ END ELSE BEGIN // how, totlm fixes
   COPY_EXISTING ~ar9600.are~ ~override~
     LPF ALTER_AREA_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Container 1"  END
     LPF ALTER_AREA_DOOR INT_VAR lock_diff = 100 STR_VAR door_name = "AR9600_Door1" END
+    BUT_ONLY
+
+  COPY_EXISTING ~ar9601.are~ ~override~
+    LPF REPLACE_AREA_ITEM INT_VAR charges1 = 3 STR_VAR old_item = extres4 new_item = extres4 END // 3 charges for ogien or cloakin 
     BUT_ONLY
 
   // container icon

@@ -150,5 +150,21 @@ Not Usable By:
  Druid
  Cleric
  Mage
- Thief
-~
+ Thief~
+
+// storm bow is usable by thieves
+@125818 = ~This weapon is holy to warriors in the service of Talos, god of storms and destruction, and has seen decades of use in their capable hands.  A short bow made of many composite layers of wood, the Storm Bow has been used against the myriad enemies of the church of Talos.  Most recently, the bow was in the possession of a Storm Knight named Kalassan Brevered, who was killed after striking down a number of rangers and druids on the Moonshae Isles.
+
+STATISTICS:
+
+Damage:  +3
+THACO:  +2
+Special:  User can invoke a Storm Shell on himself or herself 1/Day
+Weight:  3
+Speed Factor:  3
+Proficiency Type:  Bow Weapons
+Type:  2-handed
+Not Usable By:
+ Druid
+ Cleric
+ Mage~
