@@ -1,208 +1,164 @@
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-/////        Wiadomoœci   Setupu                       \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
 
-     @0 = ~Poprawki dla NPC~
-     @1 = ~To mo¿e chwilê potrwaæ ...~
-     @2 = ~Ten komponent wymaga komponentu "Torby Przechowywyania dla BG1".~
-     @3 = ~Ten komponent wymaga komponentu "Pozwól na rzucanie czarów maga w zbrojach"~
-     @4 = ~Poprawki udogadniaj¹ce grê~
-     @5 = ~Ten komponent wymaga komponentu "Egzotyczne przedmioty".~
-     @6 = ~Ten komponent wymaga komponentu "Pozwól na u¿ywanie zdolnoœci z³odziejskich w ciê¿kich pancerzach"~
-     @7 = ~Ten komponent nie jest dostêpny w tym jêzyku.~
-     @8 = ~Ten komponent jest tylko dla BGT.~
-     @9 = ~Zmiana zasad~
-    @10 = ~Ten komponent nie jest dostêpny dla Tutu.~
-    @11 = ~Zmiany wygl¹du~
-    @12 = ~Ten komponent wymaga Serca Zimy.~
-    @13 = ~Zmiany zawartoœci~
-    @14 = ~Ten komponent jest tylko dla Tutu lub BGT.~
-    @15 = ~Ten komponent jest tylko dla Tutu.~
-    @16 = ~Komponent ten byl juz zawarty w innym, zainstalowanym juz modzie.~
-    @17 = ~Wymagane poprawki konsekwentnego umagicznienia broni.~
-    @18 = ~Ten komponent zostal usuniety.~
     
    @100 = ~Mieszane poprawki~
-   @101 = ~Broñ ta jest szczególna, gdy¿ poza mistrzowskim wykonaniem, zosta³a ona pokryta niewielkimi runami mocy - ponadto jarzy siê delikatnym, niebieskim œwiat³em. Z pewnoœci¹ wiele wysi³ku w³o¿ono w stworzenie tak wspania³ej broni.
+
+// everything below this was automatically generated from iwdee; translators please review
+   
+   
+@102 = ~Aha, a jesli natraficie na jakiekolwiek przedmioty, które moglyby pomóc w odtworzeniu arboretum, to bylbym wdzieczny, gdybyscie mi je dostarczyli. Do zobaczenia, przyjaciele.~
+@103 = ~Zegnaj.~
+@104 = ~Arboretum zostalo przywrócone do swojej poprzedniej chwaly, przyjaciele. Czuje, ze teraz, kiedy moja praca zostala juz ukonczona, czas ruszyc dalej. Dziekuje wam. Do zobaczenia.~
+@105 = ~Do zobaczenia, Valestisie.~
+@106 = ~Drobiazg. Zegnaj.~
+@117 = ~Zbroja Kaylessy +3~
+@118 = ~Cienista zbroja plytowa +3~
+@119 = ~W powietrzu unosi sie obrzydliwy smród. Od czasu do czasu znajdujesz duze czarne pióra, zrzucone najprawdopodobniej przez jakas ptasia bestie. Na ziemi leza ponadto odchody, wskazujace na obecnosc wiwern. Slady zadrapan na murach sugeruja, ze niektóre partie tego obszaru moga byc równiez zamieszkale przez wyjatkowo duze owady.~
+@120 = ~W powietrzu unosi sie obrzydliwy smród. Od czasu do czasu znajdujesz duze czarne pióra, zrzucone najprawdopodobniej przez jakas ptasia bestie. ~
+@121 = ~Na ziemi leza odchody, wskazujace na obecnosc wiwern w okolicy.~
+@122 = ~Jakiekolwiek istoty zyly niegdys w tej okolicy, albo wyginely, albo dawno juz stad odeszly. Znajdujesz jednakze na ziemi kosmyki zwierzecej siersci, nalezace prawdopodobnie do jakiegos kotowatego stworzenia.~
+@123 = ~Kilkoro drzwi na tym obszarze wydaje sie byc niedawno uzywanych, ale nie widac w poblizu zadnych sladów swiadczacych, by ktos przez nie tak naprawde przechodzil. Wyglada to niemal tak, jak gdyby drzwi byly otwierane i zamykane przez jakas zewnetrzna sile.~
+@124 = ~Okolica cuchnie stechlizna i zepsuciem, sugerujac, iz byl to swego czasu jakis grobowiec. Od czasu do czasu dostrzegasz na ziemi kilka poniewierajacych sie kosci czy podartych lachów. ~
+@125 = ~W powietrzu unosi sie dziwny zapach podrobów, wskazujacy na obecnosc orogów lub minotaurów, a byc moze i obu tych stworzen. Zadrapania na niektórych scianach swiadcza, ze w poblizu moga przebywac takze trolle i umbrowe kolosy. Czujesz ponadto bardzo delikatna grzybowa nute. ~
+@126 = ~W powietrzu unosi sie dziwny zapach podrobów, wskazujacy na obecnosc orogów lub minotaurów, a byc moze i obu tych stworzen. Zadrapania na niektórych scianach swiadcza, ze w poblizu moze przebywac takze kilka trolli i umbrowych kolosów. Sporadycznie dostrzegasz tez lajno, pochodzace od przypominajacych wiwerny istot.~
+@127 = ~Twoje zdolnosci tropiciela niewiele mówia ci o tej lokacji. Z trudem jednak rozrózniasz slady dziwnej sluzowatej substancji, zdajacej sie pokrywac ciemniejsze fragmenty sufitu. ~
+@128 = ~Najczesciej napotykane w okolicy tropy zdaja sie nalezec do duzych psowatych. Wyglada na to, ze w kilku miejscach mieszaja sie one z odciskami ludzkich stóp. Zwisajace resztki niespotykanie duzych pajeczyn i walajace sie wszedzie odpadki pozwalaja sadzic, ze pólnocno-wschodnie czesci jaskin moga byc zamieszkiwane przez nienaturalnie wyrosniete pajaki. Ponadto, pólnocna czesc tego obszaru pelna jest gnijacej roslinnosci. W powietrzu unosi sie tez slaby zapach siarki.~
+@129 = ~Najczesciej napotykane w okolicy tropy zdaja sie nalezec do duzych psowatych. Wyglada na to, ze w kilku miejscach mieszaja sie one z odciskami ludzkich stóp. Zwisajace resztki niespotykanie duzych pajeczyn i walajace sie wszedzie odpadki pozwalaja sadzic, ze pólnocne czesci jaskin moga byc zamieszkiwane przez nienaturalnie wyrosniete pajaki. Od czasu do czasu znajdujesz duze czarne pióra, zrzucone najprawdopodobniej przez jakas ptasia bestie. Ponadto, w powietrzu unosi sie dziwny zapach podrobów, jednoczesnie ludzki i zwierzecy. Moze on pochodzic od jakiegos mieszanca.~
+@130 = ~Zbroja pokuty +5~
+/* original string; see English setup.tra for needed modifications
+@131 = ~Ano, zaginelo ostatnio wiele osób – jedna z nich byl syn Conlana, Sheemish. Nastepnego ranka cale miasto szukalo chlopca, ale na prózno. Po prostu zniknal. Przepadl bez sladu. Po nim zaginela matka Egenia z tego kosciola, oberzysta Eidan, Maegan Potts – i inni. Nie zostal po nich zaden slad. NIC.~
+*/
+/* original string; see English setup.tra for needed modifications
+@132 = ~Rzadko spotykany w Krainach achroit zwany jest takze bezbarwnym turmalinem. Ten kamien jest pelen skaz i pekniec, wiec tylko niewielka jego czesc nadaje sie do obróbki.
+PARAMETRY:
+Waga: 0~
+*/
+@133 = ~Halabarda wysokiej jakosci~
+/* original string; see English setup.tra for needed modifications
+@106394 = ~Laska mocy
+(Wywolywanie)
+Poziom: 2
+Zasieg: 0
+Czas dzialania: 3 rundy + 1 runda/poziom
+Czas rzucania: 2
+Obszar dzialania: rzucajacy czar
+Rzut obronny: brak
+Zaklecie to tworzy w reku czarujacego laske mocy. Zadaje ona 1k6 obrazen i jest traktowana jak magiczna bron +1, na potrzeby okreslenia istot, które moze zranic. Bron ta nalezy do kategorii kijów, tak wiec jesli czarujacy nie posiada bieglosci w walce tym typem broni, wówczas Laska mocy uzywana jest z modyfikatorem ujemnym. Bron ta posiada równiez moc wysysania z ofiary 1k2 punktów zycia po kazdym trafieniu. Punkty te sa dodawane do puli czarujacego, ale moga one jedynie uleczyc odniesione przez niego obrazenia i nie moga podniesc ilosci punktów zycia ponad ustalone dla niego maksimum.~
+*/
+/* original string; see English setup.tra for needed modifications
+@109764 = ~Broni tej uzywal czlowiek, lowca Althax Grom. Althax nienawidzil olbrzymów, które nawiedzaly jego ziemie i od malego byl uczony na ich zabójce. Chociaz Althax pierwotnie walczyl ze swymi wrogami, uzywajac miecza i luku, szybko zauwazyl, ze nie sa one zbyt skuteczne w walce z tak olbrzymimi wrogami. Jego przyjaciel Eladan, druid, umagicznil dla niego ten wielki mlot. Jego reputacja rosla razem z reputacja Althaxa. Mimo ze od przedwczesnej smierci Althaxa mlot ten mial wielu wlascicieli, Sen olbrzymów zawsze bedzie kojarzyl sie z tym poteznym wojownikiem.
+PARAMETRY:
+Obrazenia: 1k4 +3
+TraK0: +4
+Typ obrazen: obuchowe
+Opóznienie: 1
+Rodzaj bieglosci: mlot bojowy
+Typ broni: 1-reczna
+Wymagania:
+– Sila: 9
+Waga: 5~
+*/
+/* original string; see English setup.tra for needed modifications
+@112174 = ~Zmiennobarwna kula
+(Wywolywanie)
+Poziom: 1
+Zasieg: pole widzenia rzucajacego czar
+Czas dzialania: specjalny
+Czas rzucania: 1
+Obszar dzialania: 1 istota
+Rzut obronny: neguje
+Zaklecie to sprawia, ze w reku maga pojawia sie kula o srednicy pól metra. Efekt dzialania kuli zalezy od poziomu maga, który ja stworzyl:
+1. poziom: zadaje 1k4 obrazenia i oslepia ofiare na jedna runde. 
+2. poziom: zadaje 1k6 obrazen od ognia i wywoluje u ofiary ból (modyfikator -1 do Klasy Pancerza i TraK0 przez jedna runde). 
+3. poziom: zadaje 1k8 magicznych obrazen i podpala ofiare, zadajac jej dodatkowe 1k3 obrazen od ognia. 
+4. poziom: zadaje 1k10 magicznych obrazen i oslepia ofiare na cztery rundy. 
+5-6. poziom: zadaje 1k12 magicznych obrazen i oglusza ofiare na trzy rundy. 
+7. poziom i wyzej: zadaje 2k8 magicznych obrazen i paralizuje ofiare na trzynascie rund. 
+Rzut obronny przeciw czarom neguje wszystkie efekty.~
+*/
+/* original string; see English setup.tra for needed modifications
+@112182 = ~Tarcza 
+(Wywolywanie)
+Poziom: 1
+Zasieg: 0
+Czas dzialania: 5 rund/poziom
+Czas rzucania: 1
+Obszar dzialania: rzucajacy czar
+Rzut obronny: brak
+Po rzuceniu tego czaru, przed czarodziejem pojawia sie niewidzialna bariera, zapewniajaca mu KP 4 przeciw broniom do walki wrecz i KP 2 przeciw pociskom, a takze niewrazliwosc na dzialanie wszelkich magicznych pocisków. ~
+*/
+/* original string; see English setup.tra for needed modifications
+@114959 = ~Ten mlot bojowy, podobnie jak inne rodzaje mlotów, zostal wykonany w calosci ze stali, a na jego niemal pólmetrowym trzonku osadzono miazdzacy kosci obuch. Zostal on równiez obdarzony pewnymi wlasciwosciami magicznymi, co czyni go skuteczniejszym w walce.
+PARAMETRY:
+Specjalne:
+– 15% szans na dodatkowe 1k4 obrazen od zimna, po trafieniu
+– 10% szans na przenikniecie ofiary (3 obrazenia co sekunde przez dziesiec sekund), po trafieniu
+– Oba powyzsze efekty wzajemnie sie wykluczaja
+Obrazenia: 1k4 +3
+TraK0: +2
+Typ obrazen: obuchowe
+Opóznienie: 3
+Rodzaj bieglosci: mlot bojowy
+Typ broni: 1-reczna
+Wymagania:
+– Sila: 9
+Waga: 6~
+*/
+/* original string; see English setup.tra for needed modifications
+@121478 = ~Wywolanie choroby
+(Nekromancja)
+Poziom: 3
+Sfera: Leczenie
+Zasieg: dotyk
+Czas dzialania: 8 godzin
+Czas rzucania: 9
+Obszar dzialania: 1 istota
+Rzut obronny: neguje
+Zaklecie to wywoluje u dotknietej przez kaplana istoty chorobe, która oslabia ja, obnizajac jej Sile o 5k4 punktów. Rzut obronny przeciw czarom neguje ten efekt. Zaklecie to nie dziala na nieumarlych, konstrukty oraz istoty pozaplanarne. Nie moze byc uzywane przez istoty o dobrym charakterze.~
+*/
+/* original string; see English setup.tra for needed modifications
+@122605 = ~Mozesz mi jeszcze raz opowiedziec o tym nowym I starym królu?~
+*/
+/* original string; see English setup.tra for needed modifications
+@124328 = ~Bron ta zostala uformowana twoimi rekoma, prowadzonymi przez krasnoluda Tiernona. Wykuto ja z lodu zdjetego ze scian Posepnego Mrozu. Stad bron ta ma w sobie cos z wlasciwosci lodowca i przejela tez czesc twoich sil, stajac sie bronia budzaca groze. Mimo ze wykonana zostala z lodu, jest tylko troche chlodna w dotyku i nie topi sie, nawet jezeli wystawiona jest na dzialanie najgoretszych plomieni.
+PARAMETRY:
+Specjalne:
+– Odpornosc na ogien: +10%
+– Odpornosc na zimno: +10%
+– 3% szans na rzucenie na cel Stozka zimna, po trafieniu (10k4 +10 obrazen od zimna, polowa po rzucie obronnym przeciw czarom)
+Wlasciwosci ladunków:
+– Oslona przed burza, raz dziennie
+Odpornosc na ogien, zimno i elektrycznosc: +50%
+Czas dzialania: 1 tura
+Obszar dzialania: uzytkownik
+Obrazenia: 1k10 +4
+TraK0: +4
+Typ obrazen: klute
+Opóznienie: 5
+Rodzaj bieglosci: halabarda
+Typ broni: 2-reczna
+Wymagania:
+– Sila: 13
+Waga: 6~
+*/
+/* original string; see English setup.tra for needed modifications
+@125818 = ~Ta bron to swietosc dla wojowników w sluzbie Talosa, boga burz i zniszczenia. W ich sprawnych dloniach sluzy im od dziesiecioleci. Jest to krótki luk wykonany z wielu róznych warstw drewna. Uzywany byl przeciwko miriadom wrogów kosciola Talosa. Ostatnio luk byl w posiadaniu Rycerza Burzy o imieniu Kalassan Brevered, który zostal zabity po tym, jak powalil kilku lowców i druidów na Wyspach Moonshae.
 
 PARAMETRY:
 
-Obra¿enia: 2K4+3
-TraK0: +3
-Typ obra¿eñ: ciête
-Specjalne:
- +15% odpornoœci na ogieñ
- 50% szans na dodatkowe 1K8 obra¿eñ od ognia
- 10% szans na og³uszenie
-Waga: 10
-OpóŸnienie: 8
-Rodzaj bieg³oœci: Wielki miecz
-Typ: 1-rêczny
-Nie mo¿e u¿ywaæ:
- Druid
- Kap³an
- Mag
- Z³odziej~
+Wlasciwosci ladunków:
+– Oslona przed burza, raz dziennie
+Odpornosc na ogien, zimno i elektrycznosc: +50%
+Czas dzialania: 1 tura
+Obszar dzialania: uzytkownik
 
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Komponenty Zmian Wygl¹du                         \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+Obrazenia: +3
+TraK0: +2
+Opóznienie: 3
+Rodzaj bieglosci: krótki luk
+Typ broni: 2-reczna
 
-  @1000 = ~Usuñ animacje he³mów~
+Wymagania:
+– Sila: 15
 
-  @2000 = ~Poprawki animacji bronii~
-
-  @3000 = ~Wyglad rzucania zaklec z Baldur's Gate II (Andyr)~
-
-  @4000 = ~Przywrócenie ekranów wczytywania z IWD~
-
-  @5000 = ~Wy³¹cz zmiany w portretach zwi¹zane z przedmiotami~
-
-  @6000 = ~Poprawki Ikon~
-
-  @7000 = ~Wszyskie dialogi zatrzymuj¹ grê~
-    
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Komponenty Zmian Zawartoœci                      \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-
-@101000 = ~Dodaj Torby Przechowywania~
-@101001 = ~Pasy na amunicje~
-@101002 = ~Ten pas na ramiê jest idealny do przechowywania pocisków do procy, strza³ i be³tów.
-
-STATYSTYKI:
-
-Objêtoœæ: w sumie 2,000 pocisków do procy, strza³ i be³tów.
-Waga: 2~
-/*
-@101003 = ~Torba na mikstury~
-@101004 = ~Zwykle noszona przez podru¿uj¹cych uzdrawiaczy, ta skórzana torba ma wiele ma³ych kieszeni w których mo¿na bezpiecznie umieœciæ delikatne fiolki z miksturami sla ich bezpieczeñstwa w czasie podró¿y. Niezale¿nie od tego ile mikstur znajduje siê w torbie zawsze wa¿y ona tyle samo.
-
-STATYSTYKI:
-
-Objêtoœæ: 100 butelek
-Waga: 2~
+Waga: 3~
 */
-
-@102000 = ~Sklepy sprzedaj¹ wiêksze stosy przedmiotów~
-
-@103000 = ~Klejnoty i mikstury mymagaja identyfikacji~
-@103001 = ~Klejnot jest to minera³ a odpowiednio pociêty i wypolerowny mozê slu¿yæ jako bi¿uteria.~
-    
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Komponenty Zmieniaj¹ce Zasady                    \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-
-@201000 = ~Dwurêczne miecze pó³torarêczne~
-
-@202000 = ~Maczugi dla Wszystkich~
-
-@202100 = ~Wprowadzenie opisów dla Maczug dla wszystkich~
-@202101 = ~Wymaga komponentu maczugi dla wszystkich~
-
-@203000 = ~Usuñ ograniczenie doœwiadczenia~
-
-@204000 = ~Pozwól na u¿ywanie umiejêtnoœci z³odziejskich w ciê¿kich pancerzach~
-
-@205000 = ~Pozwól rzucaæ czary maga w Ciê¿kich Pancerzach~
-
-@206000 = ~Noszenie wielu magicznych przedmiotów z prmi¹ do KP~
-@206001 = ~Ograniczenie jak w papierowym AD&D~
-
-@206100 = ~Brak Ograniczeñ~
-
-@207000 = ~Rzucaj czary ze zwojów(i innych przedmiotów) na poziomie postaci~
-
-@208000 = ~Wielkie Mistrzostwo dla Wieloklasowców (Weimer)~
-
-@209000 = ~Wielkie mistrzostwo z BG2~
-
-@210000 = ~Zmiana wagi Magicznych Broni do 0~
-
-@211000 = ~Nieograniczone tabele trafienia~
-
-@212000 = ~Alternatywna tabela zaklec Maga~
-@212001 = ~Tabela nieograniczona (Blucher)~
-
-@212100 = ~Tabela podrecznikowa~
-
-@213000 = ~Zmiana tabeli zaklec Barda~
-
-@214000 = ~Zmiana tabeli zaklec Kaplana~
-
-@215000 = ~Druidzi u¿ywaj¹ rozwoju czarów Kleryków~
-
-@216000 = ~3-edycyjne ograniczenia charakteru dla Druidow (ND, PN, N, CN, NZ)~
-
-@217000 = ~Usuniecie ograniczen przedmiotow dla multi- i dwuklasowych Druidow i Kaplanow~
-    
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Udogodnienia gry                                 \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-
-@300000 = ~Wiêksza iloœæ punktów zdrowia prz awansie~
-@300001 = ~Maximum~
-
-@300100 = ~Tak jak w NWN ~
-
-@301000 = ~Maxymalna iloœæ punktów zdrowia dla NPC(the bigg)~
-
-@302000 = ~Wszystkie przedmioty zidentyfikowane~
-
-@303000 = ~£atwa Nauka Czarów~
-@303001 = ~100% Szansa Nauczenia Czaru~
-
-@303100 = ~100% Szansa Nauczenia Czaru oraz brak maksymalnej iloœci czarów~
-
-@304000 = ~Uczyñ Torby Przechowywania Bezdennymi~
-
-@305000 = ~Obni¿ki dla grup o niskiej reputacji (Sabre)~
-@305001 = ~Zmiana wplywu Reputacji na ceny w sklepach~
-
-@305100 = ~Reputacja nic nie zmienia, ceny w sklepach ustalone na poziomie 100% (Luiz)~
-
-@305200 = ~Reputacja nic nie zmienia, ceny w sklepach ustalone na poziomie 80% (Luiz)~
-
-@305300 = ~Reputacja nic nie zmienia, ceny w sklepach ustalone na poziomie 60% (Luiz)~
-
-@306000 = ~Nieograniczone stackowanie amunicji~
-
-@307000 = ~Nieograniczone stackowanie kamieni i bi¿uterii~
-
-@308000 = ~Nieograniczone stackowanie mikstur~
-
-@309000 = ~Nieograniczone stackowanie zwojów~
-
-@310000 = ~Brak pu³apek i zamków(Weimer)~
-
-@311000 = ~Odpoczywaj gdziekolwiek(Japheth)~
-
-@312000 = ~Mo¿liwoœæ sprzedawania kijów, maczug i proc (Icelus)~
-    
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Poprawki NPC                                     \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\

@@ -1,57 +1,48 @@
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Setup Messages                                   \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
 
-     @0 = ~NPC Tweaks~
-     @1 = ~Dieser Schritt kann einen Moment dauern...~
-     @2 = ~Der Zusatz "Nimmervoller Beutel für BG" wird fuer diese Komponente vorausgesetzt.~
-     @3 = ~Setzt die "Magierzauber in Schwerer Ruestung erlauben" Komponente voraus~
-     @4 = ~Annehmlichkeit Kniffe/Mogeleien~
-     @5 = ~Das "Exotische Gegenstände"-Pack wird fuer diese Komponente vorausgesetzt.~
-     @6 = ~Setzt die "Diebesfertigkeiten und Schleichen in Schwerer Ruestung erlauben" Komponente voraus.~
-     @7 = ~Diese Komponente ist nicht in Eurer Sprache verfuegbar.~
-     @8 = ~Diese Komponente ist nur fuer BGT.~
-     @9 = ~Regelaenderungen~
-    @10 = ~Diese Komponente ist nicht fuer Tutu verfuegbar.~
-    @11 = ~Kosmetische Aenderungen~
-    @12 = ~Thron von Bhaal wird fuer diese Komponente vorausgesetzt.~
-    @13 = ~Inhaltsaenderungen~
-    @14 = ~Diese Komponente ist nur für Tutu oder BGT.~
-    @15 = ~Diese Komponente ist nur für Tutu.~
-    @16 = ~Die Funktionalitaet dieses Bestandteils ist entweder bereits eingeschlossen oder durch einen Eurer Mods bereits ersetzt worden.~
-    @17 = ~Erfordert die Installation von "Einheitliche Waffen +x/+y"~
-    @18 = ~Diese Komponenet wurde verworfen. ~
     
    @100 = ~Zahlreiche Verbesserungen~
-   @101 = ~Die kunstvolle Verarbeitung wird durch kleine Runen gekrönt, die überall auf der Oberfläche eingraviert sind. Die Herstellung hat sicher sehr viel Zeit und Mühe erfordert; bei genauerer Betrachtung sieht man auch, dass die Runen leicht hellblau schimmern.
 
-STATISTIK:
+// @102 - @106 this was automatically generated; translators please review
+@102 = ~Ach ja, wenn ihr noch irgendetwas findet, das zum Wiederaufbau des Arboretums nützlich sein könnte, wäre ich euch sehr dankbar. Lebt wohl, meine Freunde.~
+@103 = ~Lebt wohl.~
+@104 = ~Das Arboretum erstrahlt wieder in altem Glanz, meine Freunde. Ich denke, jetzt ist meine Arbeit hier getan und es ist Zeit, weiterzuziehen. Ich danke euch. Lebt wohl.~
+@105 = ~Lebt wohl, Valestis.~
+@106 = ~Denkt Euch nichts dabei. Lebt wohl.~
 
-Schaden: 2-8 + 3
-ETW0: +3
-Schadenstyp: durch Klinge
-Besonderheit:
-+ 15% Feuerresistenz
-50 % +1-8 Schadenspunkte durch Feuer
-10 % Chance, dass Zielwesen betäubt wird
-Gewicht: 10
-Initiative: 8
-Waffenfertigkeit: Größere Schwerter
-Typ:  Einhändig
-Kann nicht verwendet werden von:
-Druiden
-Klerikern
-Magiern
-Dieben~
 @113 = ~Diese Mod ist fuer 'Eiswindtal', mit oder ohne den Erweiterungen 'Herz des Winters' und 'Die Herausforderungen des Meisters der Verlockung'.
 Vor Installation dieser Mod muss die Komponente 'Verschiedene Verbesserungen' des Icewind Dale TweakPack deinstalliert werden.~
 @115 = ~Trank der geringeren Magieabwehr~
 //10 rounds
 @116 = ~Dieses machtvolle Elixier verleiht dem Trinkenden Immunität gegen jegliche Zauber des 1. und 2. Grades. Da die Wirkung jedoch nur für 10 Runden anhält, sollte der Zeitpunkt der Einnahme sorgfältig gewählt werden~
+
+
+// @117 - @133 this was automatically generated; translators please review
+@117 = ~Kaylessas Rüstung~
+@118 = ~Schattierte Plattenrüstung~
+@119 = ~Es liegt ein fauliger Gestank in der Luft. Ihr findet gelegentlich große, schwarze Federn, die von einer Bestie mit Flügeln zu stammen scheinen. Darüber hinaus gibt es Kot auf dem Boden, der den Schluss nahelegt, dass sich Lindwürmer in der Nähe aufhalten. Kratzspuren an den Wänden deuten darauf hin, dass in Teilen dieses Areals ungewöhnlich große Insekten hausen.~
+@120 = ~Es liegt ein fauliger Gestank in der Luft. Ihr findet gelegentlich große, schwarze Federn, die von einer Bestie mit Flügeln zu stammen scheinen.~
+@121 = ~Ihr findet Kot auf dem Boden, der den Schluss nahelegt, dass sich Lindwürmer in der Nähe aufhalten. ~
+@122 = ~Welche Kreaturen auch immer in dieser Gegend gelebt haben, sie sind offenbar tot oder längst fort. Ihr findet jedoch kleine Mengen von Tierhaaren auf dem Boden, möglicherweise könnten diese Haare von einer Art Katze stammen.~
+@123 = ~Mehrere Türen in dieser Gegend wirken, als seien sie erst vor kurzem benutzt worden, jedoch lassen sich keine Fußspuren finden, die anzeigen, dass sie tatsächlich durchschritten wurden. Es ist fast so, als seien die Türen von einer Art äußeren Kraft manipuliert worden.~
+@124 = ~Dieser Bereich riecht nach Staub und Verfall. Möglicherweise war hier einmal eine Art Gruft oder etwas in der Art. Hin und wieder entdeckt ihr ein paar vereinzelte Knochen und einige zerrissene Lumpen auf dem Boden.~
+@125 = ~Ein strenger Geruch nach Innereien und Geschlachtetem legt nahe, dass in dieser Gegend entweder Orogs oder Minotauren oder sogar beide ihr Unwesen treiben. Kratzspuren an einigen Wänden belegen zudem das Vorhandensein von Erdkolossen und Trollen. Darüber hinaus nehmt ihr auch einen schwachen Pilzgeruch wahr.~
+@126 = ~Ein strenger Geruch nach Innereien und Geschlachtetem legt nahe, dass in dieser Gegend entweder Orogs oder Minotauren oder sogar beide ihr Unwesen treiben. Kratzspuren an einigen Wänden belegen zudem das Vorhandensein von Erdkolossen und Trollen. Gelegentlich findet ihr auch den Kot von Lindwürmern oder ähnlichen Kreaturen.
+~
+@127 = ~Eure Fähigkeiten des Spurenlesens verraten Euch nur sehr wenig über diese Gegend. Ihr könnt jedoch vage Spuren einer merkwürdigen, schleimigen Substanz ausmachen, die offenbar die dunklen Flecken an der Decke überzieht.~
+@128 = ~Die meisten Spuren in diesem Areal scheinen von großen, hundeartigen Gestaltwandlern zu stammen. An mehreren Stellen scheinen sie in menschliche Fußabdrücke überzugehen. Spuren von außergewöhnlich großen Netzen und eine Menge Abfall führen Euch zu dem Schluss, dass es unnatürlich große Spinnen in den nordöstlichen Teilen der Höhlen geben muss. Darüber hinaus findet Ihr große Haufen verrotteter Vegetation in allen nördlichen Teilen des Gebiets verstreut. Es liegt auch ein schwacher Geruch von Schwefel in der Luft.~
+@129 = ~Die meisten Spuren in diesem Areal scheinen von großen, hundeartigen Gestaltwandlern zu stammen. An mehreren Stellen scheinen sie in menschliche Fußabdrücke überzugehen. Spuren von außergewöhnlich großen Netzen und eine Menge Abfall führen Euch zu dem Schluss, dass es unnatürlich große Spinnen in den nördlichen Bereichen der Höhlen geben muss. Darüber hinaus findet Ihr große, schwarze Federn, die scheinbar von einer großen geflügelten Kreatur stammen. Zusätzlich ist die Luft von einem Geruch nach organischen Abfällen erfüllt. Es scheinen sowohl menschliche, als auch tierische Abfälle zu sein. Es handelt sich wohl um eine Art Hybrid-Monster.
+~
+@130 = ~Rüstung der Buße~
+/* original string; see English setup.tra for needed modifications
+@131 = ~Ja, in letzter Zeit sind viele Leute verschwunden. Einer von ihnen war Conlans Sohn, Sheemish. Am nächsten Morgen hat die ganze Stadt den Jungen gesucht, aber nichts gefunden. Er war ganz einfach weg. Spurlos verschwunden. Dann verschwand Mutter Egenia von der Kirche, Eidan, der Wirt, Maegan Potts - und noch ein paar. Keine Spur von ihnen. *Nichts.*~
+*/
+/* original string; see English setup.tra for needed modifications
+@132 = ~Der Wasserstern wird auch als Achroit oder farbloser Turmalin bezeichnet und ist ein seltener Edelstein in den Reichen. Der Stein enthält viele Unreinheiten und Einschlüsse. Daher eignet sich nur ein kleiner Teil zum Schleifen.
+EIGENSCHAFTEN:
+Gewicht: 0~
+*/
+@133 = ~Erstklassige Hellebarde~
+
 
 /////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
 /////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
@@ -64,46 +55,12 @@ Vor Installation dieser Mod muss die Komponente 'Verschiedene Verbesserungen' de
 @1000 = ~Textverbesserungen~
 @1001 = ~Diese Auswahl ist in Deiner Sprache nicht verfuegbar.~
 
-  @2000 = ~Aennderungen von Waffenanimationen~
 
-  @3000 = ~Zaubergrafiken von Icewind Dale (Andyr)~
 
-  @4000 = ~Wiederhergestellte IWD Bilder während des Ladens~
+// everything below this was automatically generated from iwdee; translators please review
 
-  @5000 = ~Ausgeblendete Portaitsymbole fuer Ausruestungsgegenstaende~
-
-  @6000 = ~Symbol Verbesserungen~
-
-  @7000 = ~Alle Dialoge pausieren das Spiel~
-    
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Content Changes Components                       \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-
-@101000 = ~Nimmervollen Beutel hinzufügen~
-@101001  = ~Munitionsgürtel~
-@101002  = ~Der Schultergürtel ist ideal dafür geeignet, Schleudersteine, Wurfpfeile, Pfeile oder Bolzen aufzubewahren.
-
-SPEZIFISCHE EIGENSCHAFTEN:
-
-Kapazität: insgesamt 2.000 Schleuderkugeln, Wurfpfeile, Pfeile oder Bolzen
-Gewicht: 2~
-@101003 = ~Nimmervoller Beutel~
-@101004 = ~Auch dieser magische Beutel wirkt, wie alle magischen Beutel, wie ein einfacher Stoffsack von ungefähr 60 x 120 cm Größe. Der Nimmervolle Beutel öffnet sich in einen außerdimensionalen Raum und ist innen wesentlich größer als außen. Unabhängig davon, was man hineintut, wiegt der Beutel immer das Gleiche.
-
-STATISTIK:
-
-Gewicht: 5~
-
-@102000 = ~Geschaefte verkaufen groessere Stapel von Gegenstaenden~
-
-@103000 = ~Edelsteine und Traenke muessen erst identifiziert werden~
-@103001 = ~Ein Edelstein ist ein Mineral, das, wenn es geschnitten oder in Facetten geschliffen und poliert ist, gesammelt oder für Schmuck verwendet werden kann.~
- @1006394 = ~Dekastab
+/* original string; see English setup.tra for needed modifications
+@106394 = ~Dekastab
 (Hervorrufung)
 Grad: 2
 Reichweite: Anwender
@@ -111,133 +68,91 @@ Wirkungsdauer: 1 Runde pro Stufe
 Zeitaufwand: 2
 Wirkungsbereich: Anwender
 Rettungswurf: Nein
-Dieser Zauberspruch erzeugt einen Kraftstab in der Hand des Anwenders. Als magische Waffe geltend, kann er auch Wesen verletzen, die gegen normale Waffen immun sind. Jeder Treffer verursacht 1-6 Schadenspunkte. Zur wirkungsvollen Benutzung der Waffe sind Fertigkeiten im Umgang mit Stabwaffen erforderlich, andernfalls wird die Verwendung des Dekastabs durch Strafpunkte erschwert.
-Der Stab hat außerdem die Macht, seinem Ziel 1-2 Trefferpunkte pro Treffer zu entziehen und damit die aktuellen Trefferpunkte des Anwenders zu erhöhen. Es wird allerdings nur Schaden geheilt; die Trefferpunkte werden nicht über die normale Höchstgrenze hinaus erhöht.~
-
-@1009764 = ~Diese Waffe wurde von dem Waldläufer Althax Grom verwendet. Althax hasste die Riesen, die in seiner Heimat ihr Unwesen trieben, und war von Kindesbeinen an dazu angeleitet worden, sie auszurotten. Obwohl Althax seine Feinde anfangs mit dem Schwert und dem Bogen bekämpfte, merkte er bald, dass diese Waffen zu langsam waren, um etwas gegen die riesigen Feinde auszurichten. Aus diesem Grunde verzauberte sein Freund Eladan, ein Druide, für ihn diesen Hammer. Der Ruf dieser Waffe nahm zu, je mehr Legenden sich um Althax rankten. Obwohl der Kriegshammer nach Althaxs frühem Ableben durch viele Hände ging, wird "Schlaf des Riesen" für immer als Waffe dieses mächtigen Kriegers in Erinnerung bleiben.
-
-STATISTIK:
-
-Schaden: 1-4 + 4
-ETW0: +3
-Schadenstyp: durch Wucht
+Dieser Zauberspruch legt einen Kraftstab in die Hand des Anwenders. Dieser wird als magische Waffe benutzt, die 1-6 Schadenspunkte pro Treffer verursacht; außerdem kann er Wesen treffen, die gegen normale Waffen immun sind. Es handelt sich jedoch um einen Stab, für den Fertigkeiten im Umgang mit Stabwaffen erforderlich sind. Andernfalls führt die Verwendung des Dekastabs zu Strafpunkten. Der Stab kann seinem Ziel auch 1-2 Trefferpunkte auf einen Schlag entziehen. Diese Punkte gehen auf das Konto des Anwenders, können aber nur Schaden heilen; die Trefferpunkte werden nicht über die normale Höchstzahl hinaus erhöht.~
+*/
+/* original string; see English setup.tra for needed modifications
+@109764 = ~Diese Waffe wurde von dem Waldläufer Althax Grom verwendet. Althax hasste die Riesen, die in seiner Heimat ihr Unwesen trieben, und war von Kindesbeinen an dazu angeleitet worden, sie auszurotten. Obwohl Althax seine Feinde anfangs mit dem Schwert und dem Bogen bekämpfte, merkte er bald, dass diese Waffen zu langsam waren, um etwas gegen die riesigen Feinde auszurichten. Aus diesem Grunde verzauberte sein Freund Eladan, ein Druide, für ihn diesen Hammer. Der Ruf dieser Waffe nahm zu, je mehr Legenden sich um Althax rankten. Obwohl der Kriegshammer nach Althaxs frühem Ableben durch viele Hände ging, wird "Schlaf des Riesen" für immer als Waffe dieses mächtigen Kriegers in Erinnerung bleiben.
+EIGENSCHAFTEN:
+Schaden: 1W4 +4 (Wucht)
+ETW0-Bonus: -3
 Gewicht: 5
-Initiative: 1
-Waffenfertigkeit: Hammer
-Typ: Einhändig
-Kann nicht verwendet werden von:
-Druiden
-Magiern
-Dieben~
+Initiativefaktor: 1
+Mindeststärke: 9
+Fertigkeit: Kriegshammer
+Typ: 1-händig~
+*/
+/* original string; see English setup.tra for needed modifications
 @112174 = ~Farbkugel
 (Hervorrufung)
 Grad: 1
 Reichweite: Sichtweite des Anwenders
 Wirkungsdauer: Speziell
-Zeitaufwand: 1
+Zeitaufwand: 1 
+Wirkungsbereich: 1 Wesen
+Rettungswurf: keine Wirkung 
+Dieser Zauber erzeugt eine Kugel von 10 Zentimeter Durchmesser, die mit absoluter Treffsicherheit auf ihr Ziel geworfen werden kann. Die Wirkung der Kugel hängt von der Stufe des Anwenders ab: Eine Kugel der 1. Stufe fügt 1-4 Schadenspunkte zu und blendet das Ziel eine Runde lang. Eine Kugel der 2. Stufe verursacht 1-6 Schadenspunkte und fügt dem Opfer Schmerzen zu. Eine Kugel der 3. Stufe fügt dem Opfer 1-8 Schadenspunkte und Verbrennungen zu. Eine Kugel der 4. Stufe verursacht 1-10 Schadenspunkte und lässt das Ziel vier Phasen lang erblinden. Eine Kugel der 5. bis 6. Stufe bewirkt 1-12 Schadenspunkte und betäubt das Ziel drei Runden lang. Eine Kugel der 7. bis 9. Stufe verursacht 2-16 Schadenspunkte und lähmt das Opfer 13 Runden lang. Eine Kugel der 10. bis 11. Stufe verwandelt das Ziel zu Stein, wenn es keinen Rettungswurf ausführt, und verlangsamt es 5 Runden lang, wenn der Rettungswurf gelingt. Eine Kugel der 12. Stufe bewirkt den Tod des Ziels, falls ihm kein Rettungswurf gelingt, oder lähmt es 4 Runden lang. Soweit die obige Beschreibung nichts Gegenteiliges besagt, annulliert ein Rettungswurf gegen diese Zauber sowohl den erlittenen Schaden als auch alle anderen Auswirkungen.~
+*/
+/* original string; see English setup.tra for needed modifications
+@112182 = ~Schild (Hervorrufung)
+Grad: 1
+Reichweite: Anwender
+Wirkungsdauer: 5 Runden/Stufe
+Zeitaufwand: 1 
+Wirkungsbereich: Anwender
+Rettungswurf: Nein
+Wenn dieser Zauber angewendet wird, baut sich vor dem Zauberer eine unsichtbare Barriere auf. Diese setzt die Rüstungsklasse des Anwenders gegen normale Waffen auf 4 und gegen Geschosswaffen auf 2; außerdem macht sie den Zauberer immun gegen alle magischen Geschosse, die auf ihn abgefeuert werden.~
+*/
+/* original string; see English setup.tra for needed modifications
+@114959 = ~Wie andere Waffen seines Typs besteht dieser Kriegshammer vollständig aus Stahl; am Ende des 45 Zentimeter langen Stiels sitzt ein Hammerkopf, dessen Wucht selbst Knochen zertrümmern kann. Dieses Exemplar wurde zusätzlich mit ein paar magischen Attributen ausgestattet, die seine Wirksamkeit im Kampf weiter steigern.
+STATISTIK:
+Schaden: 1-4 + 3
+ETW0: +2 Bonus
+Schadenstyp: durch Wucht
+Besonderheit:
+  10 % Chance, dass Zielwesen von Krankheit befallen wird
+  15 % Chance +1-4 Schadenspunkte durch Kälte
+Gewicht:  6
+Initiative:  3
+Waffenfertigkeit: Hammer
+Typ: Einhändig~
+*/
+/* original string; see English setup.tra for needed modifications
+@121478 = ~Krankheit verursachen (Nekromantie)
+Grad: 3
+Heilzyklus
+Reichweite: Berührung
+Wirkungsdauer: 8 Stunden
+Zeitaufwand: 1 Runde
 Wirkungsbereich: 1 Wesen
 Rettungswurf: keine Wirkung
-Dieser Zauber erzeugt eine Kugel von 10 Zentimeter Durchmesser, die mit absoluter Treffsicherheit auf ihr Ziel geworfen werden kann. Die Wirkung der Kugel hängt von der Stufe des Anwenders ab: Eine Kugel der 1. Stufe fügt 1-4 Schadenspunkte zu und blendet das Ziel eine Runde lang. Eine Kugel der 2. Stufe verursacht 1-6 Schadenspunkte und fügt dem Opfer Schmerzen zu. Eine Kugel der 3. Stufe fügt dem Opfer 1-8 Schadenspunkte und Verbrennungen zu. Eine Kugel der 4. Stufe verursacht 1-10 Schadenspunkte und lässt das Ziel vier Runden lang erblinden. Eine Kugel der 5. bis 6. Stufe bewirkt 1-12 Schadenspunkte und betäubt das Ziel drei Runden lang. Eine Kugel der 7. bis 9. Stufe verursacht 2-16 Schadenspunkte und lähmt das Opfer 13 Runden lang. Eine Kugel der 10. bis 11. Stufe verwandelt das Ziel zu Stein, wenn es keinen Rettungswurf ausführt, und verlangsamt es 5 Runden lang, wenn der Rettungswurf gelingt. Eine Kugel der 12. Stufe bewirkt den Tod des Ziels, falls ihm kein Rettungswurf gelingt, oder lähmt es 4 Runden lang. Soweit die obige Beschreibung nichts Gegenteiliges besagt, annulliert ein Rettungswurf gegen diese Zauber sowohl den erlittenen Schaden als auch alle anderen Auswirkungen.~
+Dieser Zauber schlägt ein Wesen, das der Priester berührt, mit einer Krankheit, die dem Opfer 5-20 Punkte Stärke entzieht. Durch einen Rettungswurf wird der Zauber unwirksam. Dieser Zauber hat keine Auswirkungen auf Untote, Konstrukte oder außerplanare Wesen. Der Zauber "Krankheit verursachen" kann nicht von guten Charakteren angewendet werden.~
+*/
+/* original string; see English setup.tra for needed modifications
+@122605 = ~Erzählt mir noch einmal von diesem neuen *und* alten König.~
+*/
+/* original string; see English setup.tra for needed modifications
+@124328 = ~Diese Waffe haben eure eigenen Hände unter Anleitung des Zwergs Tiernon gefertigt. Diese Klinge ist aus Eis von den Wänden des Finsterfrosts geschmiedet und vereint nun einen Teil des Gletschers sowie einen Teil eurer Kraft in sich, was sie zu einer gewaltigen Waffe macht. Obwohl die Waffe aus Eis besteht, fühlt sie sich nur leicht kalt an und schmilzt selbst dann nicht, wenn sie den heißesten Flammen ausgesetzt ist.
+STATISTIK:
+Schaden:  1-10 + 4
+ETW0: +4
+Schaden: durch Klinge
+Besonderheit:  +10 % Resistenz gegen Feuer, +10 % Resistenz gegen Kälte, 1x/Tag Sturm-Schutzhülle, 3 % Wahrscheinlichkeit, "Kältekegel" auf Ziel anzuwenden
+Gewicht: 6
+Initative:  5
+Waffenfertigkeit:  Hellebarde
+Typ:  Zweihändig~
+*/
+/* original string; see English setup.tra for needed modifications
+@125818 = ~Diese Waffe ist den Kriegern im Dienst des Talos, des Gottes der Stürme und der Zerstörung, heilig und hat ihnen bereits Jahrzehnte lang gute Dienste geleistet. Der Sturmbogen ist ein kurzer Bogen, der aus vielen Schichten Holz hergestellt ist, und er kam gegen die unzähligen Feinde der Kirche von Talos zum Einsatz. Zuletzt gehörte der Bogen einem Sturmritter namens Kalassan Brevered, der getötet wurde, nachdem er auf den Mondscheininseln eine Anzahl Waldläufer und Druiden getötet hatte.
 
-   
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Rule Changes Components                          \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+EIGENSCHAFTEN:
 
-@201000 = ~Zweihaendige Bastardschwerter~
-
-@202000 = ~Keulen fuer alle Charakterklassen~
-
-@202100 = ~Aktualisierte Beschreibungen für die "Keulen fuer alle Charakterklassen" Komponente~
-@202101 = ~Erfordert die Installation von "Keulen fuer alle Charakterklassen"~
-
-@203000 = ~Entfernen der für Erfahrungspunkt-Grenze~
-
-@204000 = ~Diebesfertigkeiten und Schleichen in Schwerer Ruestung erlauben~
-
-@205000 = ~Magierzauber in Schwerer Ruestung erlauben~
-
-@206000 = ~Mehrere Schutzgegenstaende gleichzeitig tragen~
-@206001 = ~P&P Einschraenkungen~
-
-@206100 = ~Keine Einschraenkungen~
-
-@207000 = ~Zauber von Schriftrollen (und anderen Gegenstaenden) auf der Stufe des Charakters wirken ~
-
-@208000 = ~Grossmeister-Waffenfertigkeiten fuer Mehrklassige Charaktere (Weimer)~
-
-@209000 = ~Regeltreue Grossmeisterschaft (Baldurdash)~
-
-@210000 = ~Durch Zauber erschaffene Waffen wiegen nichts~
-
-@211000 = ~Regeltreue ETW0 Tabelle~
-
-@212000 = ~Geänderte Magierzauber Fortschritt-Tabelle~
-@212001 = ~Regeltreue Tabelle (Blucher)~
-
-@212100 = ~PnP-Tabelle~
-
-@213000 = ~Geänderte Bardenzauber Fortschritt-Tabelle~
-
-@214000 = ~Geänderte Klerikerzauber Fortschritt-Tabelle~
-
-@215000 = ~Druiden benutzen Stufen- und Zaubertabellen von Klerikern~
-    
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Convenience Tweaks                               \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-
-@300000 = ~Mehr Trefferpunkte beim Stufenaufstieg~
-@300001 = ~Maximale Trefferpunkte beim Stufenaufstieg~
-
-@300100 = ~NWN Stil~
-
-@301000 = ~Maximale Trefferpunkte für NPCs (the bigg)~
-
-@302000 = ~Alle Gegenstaende identifizieren~
-
-@303000 = ~Einfaches Erlernen von Zauberspruechen~
-@303001 = ~100%-iges Erlernen von Zauberspruechen~
-
-@303100 = ~100%-iges Erlernen von Zaubersprüchen ohne Höchstgrenze~
-
-@304000 = ~Nimmervoller Beutel ohne Kapazitaetsgrenze~
-
-@305000 = ~Preisnachlass bei schlechtem Ruf (Sabre)~
-@305001 = ~Ändere die AusWirkung des Rufs auf die Ladenpreise~
-
-@305100 = ~Ruf hat keine Ausirkung, Ladenpreise fest bei 100 % (Luiz)~
-
-@305200 = ~Ruf hat keine Ausirkung, Ladenpreise fest bei 80 % (Luiz)~
-
-@305300 = ~Ruf hat keine Ausirkung, Ladenpreise fest bei 60 % (Luiz)~
-
-@306000 = ~Unbegrenzte Munitionsstapel~
-
-@307000 = ~Unbegrenzte Stapel bei Edelsteinen und Schmuck~
-
-@308000 = ~Unbegrenzte Traenkestapel~
-
-@309000 = ~Unbegrenzte Schriftrollenstapel~
-
-@310000 = ~Keine Fallen und Schloesser (Weimer)~
-
-@311000 = ~Ueberall Rasten (Japheth)~
-
-@312000 = ~Verkaeufliche Staebe, Knueppel und Schleudern (Icelus)~
-    
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// NPC Tweaks                                       \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+Schaden:  +3
+ETW0-Bonus:  -2
+Sturm-Schutzhülle (1x täglich)
+Gewicht:  3
+Initiativefaktor:  3
+Mindeststärke: 15
+Fertigkeit:  Kurzbogen
+Typ:  2-händig~
+*/
