@@ -1431,29 +1431,8 @@ END ELSE BEGIN // how, totlm fixes
     LPF ALTER_AREA_ENTRANCE INT_VAR x_coord = 509 y_coord = 570 STR_VAR entrance_name = FR9106 END 
     BUT_ONLY
 
-  // remove dupe random item drops (extres4 also available in ar9601)
   COPY_EXISTING ~ar9200.are~ ~override~
     LPF ALTER_AREA_AMBIENT INT_VAR sounds = 1 STR_VAR ambient_name = "Banner 1" END // ambient lists two sounds, but only one
-    READ_LONG  0x70 cont_off
-    READ_SHORT 0x74 cont_num
-    READ_LONG  0x78 item_off
-    FOR (index = 0 ; index < cont_num ; ++index) BEGIN
-      READ_LONG (cont_off + 0x40 + (index * 0xc0)) item_idx
-      READ_LONG (cont_off + 0x44 + (index * 0xc0)) item_num
-      FOR (index2 = 0 ; index2 < item_num ; ++index2) BEGIN
-        READ_ASCII (item_off +        ((index2 + item_idx) * 0x14)) item
-        PATCH_IF ("%item%" STRING_COMPARE_CASE "EXTRES4" = 0) BEGIN // extres4 also available in ar9601
-          WRITE_ASCII (item_off +        ((index2 + item_idx) * 0x14)) ~EXTRES1~ #8
-          SET index2 = item_num
-          SET index = cont_num // kill both loops
-        END
-      END
-    END
-    BUT_ONLY
-    
-  // 3/0/0 > 1/1/1 charges for beltbon/helmsh/stomper 
-  COPY_EXISTING ~ar9200.are~ ~override~
-    LPF REPLACE_AREA_ITEM INT_VAR charges1 = 1 charges2 = 1 STR_VAR old_item = extres1 new_item = extres1 END 
     BUT_ONLY
 
   // ambient lists two sounds, but only one
@@ -1471,8 +1450,9 @@ END ELSE BEGIN // how, totlm fixes
     LPF ALTER_AREA_DOOR INT_VAR lock_diff = 100 STR_VAR door_name = "AR9600_Door1" END
     BUT_ONLY
 
+  // remove dupe random item drops (extres4 also available in ar9200)
   COPY_EXISTING ~ar9601.are~ ~override~
-    LPF REPLACE_AREA_ITEM INT_VAR charges1 = 3 STR_VAR old_item = extres4 new_item = extres4 END // 3 charges for ogien or cloakin 
+    LPF REPLACE_AREA_ITEM INT_VAR charges1 = 1 charges2 = 1 STR_VAR old_item = extres4 new_item = extres1 END // 1/1 charges for ogien or cloakin 
     BUT_ONLY
 
   // container icon
