@@ -3302,6 +3302,19 @@ COPY_EXISTING ~blood.itm~  ~override~ // Bathed-in-Blood
 COPY_EXISTING ~bolt03.itm~ ~override~
   LPF ALTER_EFFECT INT_VAR target = 2 STR_VAR match_resource = eff_m22c resource = eff_m22b END // sound doesn't exist, use different zap sound
   BUT_ONLY
+  
+// movement changes which should *not* be blocked by free action
+COPY_EXISTING ~boot01.itm~   ~override~ // boots of speed
+              ~bootdriz.itm~ ~override~ // boots of speed (unused drizzt copy)
+              ~bootfox.itm~  ~override~ // boots of the fox
+              ~ciboot.itm~   ~override~ // undroppable, used to adjust minotaur speed
+              ~move20.itm~   ~override~ // used to slow down norl to 20%
+              ~sppr203.spl~  ~override~ // chant, effect to slow down caster
+              ~sppr415.spl~  ~override~ // blood rage
+              ~sppr517.spl~  ~override~ // animal rage
+              ~sqrlspd.itm~  ~override~ // squirrel gang rise up
+  LPF ALTER_EFFECT INT_VAR match_opcode = 126 opcode = 266 END
+  BUT_ONLY IF_EXISTS // sqrlspd/sppr415/sppr517 is how; ciboot is totlm
 
 // remove haste icon for movement speed increases
 COPY_EXISTING ~bootfox.itm~ ~override~
