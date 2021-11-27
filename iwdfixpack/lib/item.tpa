@@ -15,6 +15,8 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_item BEGIN
   blun01, null, null, null, 2, null, null => blun01 // Club
   boneam, null, null, 3, null, null, null => boneam // Bone Talisman
   book39, null, null, 2, null, null, null => book39 // History of the Drow II
+  boot01, null, 2, null, null, null, null => boot01 // Boots of Speed
+  boot06, null, 4, null, null, null, null => boot06 // Worn Out Boots
   bow02, null, 1, null, null, null, null => bow02 // Composite Long Bow +1
   bow04, null, 1, null, null, null, null => bow04 // Long Bow +1
   bow06, null, 1, null, null, null, null => bow06 // Short Bow +1
@@ -22,6 +24,7 @@ ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_item BEGIN
   bow08, null, 2, null, null, null, null => bow08 // Eagle Bow
   bowmess, null, 1, null, null, 6, null => bowmess // Messenger of Sseth
   cairn, null, null, null, null, 6, null => cairn // Cairn Blade
+  clck13, null, 4, null, null, null, null => clck13 // Traveler's Robe
   club6-24, 1, 2, null, null, null, null => club6-24 // <invalid strref -1>
   cwmjell, 1, 1, null, null, null, null => cwmjell // attack
   cwojell, 1, 1, null, null, null, null => cwojell // attack
