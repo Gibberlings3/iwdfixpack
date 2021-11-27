@@ -64,6 +64,60 @@ Area of Effect: Caster
 Saving Throw: None
 This spell creates a staff of force in the caster's hand. It is treated as a magical weapon, doing 1-6 hit points of damage per hit, and it can hit creatures immune to normal weapons. It is a staff, however, so if the caster does not have a proficiency in staff weapons, then the Decastave is used at a penalty. The staff also has the power to drain a target of 1-2 hit points on every strike. These hit points are added to the caster's, but they can only heal damage the caster has taken; they will not raise his hit points beyond his normal maximum.~
 
+// damage bonus +3 > +4 from being composite long bow
+@108712 = ~This bow belonged to Kaylessa, weapons master of the Seldarine's Hand.  Her prowess in archery only bested by her beauty, Kaylessa was devoted to hone the battle skills of any elf under her.  If there were any heroes at the Battle of Seldarine's Hand, Kaylessa was one of them.  She was a shining example of courage in the face of impending doom as she fearlessly led her people against orc and goblin hordes.  Even after the fall of the Hand, her commitment to battle and her people remained strong.  Her last wish was to die in glorious battle.
+
+STATISTICS:
+
+Damage: +4
+To Hit Bonus: +3
+Dexterity: +1 Bonus
+Weight: 3
+Speed Factor: 7
+Proficiency Type: Bow
+Type: 2-handed
+Minimum Strength of 15 required
+Not Usable By:
+ Thief
+ Cleric
+ Mage
+ Druid~
+
+// damage bonus +2 > +3 from being composite long bow
+@108663 = ~Made during the golden age between the elves of the Seldarine's Hand and the dwarves of Dorn's Deep.
+
+STATISTICS:
+Damage: +3 (missile)
+THAC0: +2
+Weight: 3
+Speed Factor: 7
+Proficiency Type: Bow
+Type: 2-Handed
+Minimum Strength of 15 required
+Not Usable By:
+ Thief
+ Cleric
+ Mage
+ Druid~
+
+// damage bonus +2 > +3 
+@108911 = ~Not much is known about the owner of this weapon, save that sages believe it is from another world, called "Eibrancha."  Plane-traveling wizards who have investigated life on "Eibrancha" report that it is dull, commonplace, and ordinary in the extreme, a place where heroes are rare and the populace is, by and large, incredibly average.  This might explain the virtually non-existent body of recorded information about the place.  The only thing known about the weapon's owner is that he was an educated man. The purple wood that the crossbow is constructed from is believed to be from a unique type of tree in Eibrancha.
+
+STATISTICS:
+
+Damage: +3
+THAC0: +5 bonus
+Weight: 7
+Speed Factor:  2
+Proficiency Type:  Crossbow
+Type:  2-handed
+Not Usable By:
+ Druid
+ Cleric
+ Mage
+ Thief
+~
+
 // thac0/damage bonus for hammer
 @109764 = ~This weapon was used by the human ranger Althax Grom.  Althax hated the giants that plagued his homeland and was trained to exterminate them from a young age.  Although Althax originally fought his foes using the sword and bow, he quickly decided that those weapons were too slow against his huge foes.  His druid friend, Eladan, enchanted this hammer for him.  The reputation of the weapon grew as legends of Althax grew.  Even though the warhammer has passed through many hands since Althax's untimely demise, Giant's Sleep will always be remembered as the weapon of that powerful warrior.
 
@@ -100,6 +154,24 @@ Casting Time: 2
 Area of Effect: Caster
 Saving Throw: None 
 The wizard can cast spells with a verbal component without having to make any noise, so long as the casting takes place entirely within the duration of the Vocalize spell. This spell has no effect on other noises or speech - it simply removes a spell's verbal component. This spell is a great counter for Silence 15' Radius.~
+
+// 1d6+1 > 1d6+2 for base flail damage
+@114357 = ~The flail is a sturdy wooden handle attached to an iron rod, a wooden rod with spikes, or a spiked iron ball. Between the handle and its implement is either a hinge or chain link.  The weapon was originally used as a tool for threshing grain.  
+
+STATISTICS:
+
+Damage:  1D6 +2
+THAC0: +1
+Damage type:  Crushing
+Special: 50% chance +1D4 piercing damage
+Weight: 15
+Speed Factor: 6
+Proficiency Type: Flails
+Type:  1-handed
+Not Usable By:
+ Druid
+ Mage 
+ Thief~
 
 // War Hammer of Phasing +2 descript, says hammer causes disease when it causes phasing
 @114959 = ~Like others of its type, this warhammer is made entirely of steel, with a bone-crushing hammer mounted upon an 18" shaft.  It has also been bestowed with a small number of magical properties, however, thus making it more effective in combat.
@@ -154,12 +226,12 @@ Not Usable By:
  Mage
  Thief~
 
-// storm bow is usable by thieves
+// storm bow is usable by thieves; remove +1 damage since it's not a long bow
 @125818 = ~This weapon is holy to warriors in the service of Talos, god of storms and destruction, and has seen decades of use in their capable hands.  A short bow made of many composite layers of wood, the Storm Bow has been used against the myriad enemies of the church of Talos.  Most recently, the bow was in the possession of a Storm Knight named Kalassan Brevered, who was killed after striking down a number of rangers and druids on the Moonshae Isles.
 
 STATISTICS:
 
-Damage:  +3
+Damage:  +2
 THACO:  +2
 Special:  User can invoke a Storm Shell on himself or herself 1/Day
 Weight:  3
@@ -170,3 +242,23 @@ Not Usable By:
  Druid
  Cleric
  Mage~
+
+// 1d6+4 > 1d6+5 for base flail damage
+@127373 = ~Skullflail, or "The Flail of Teeth" as it is more commonly known, was constructed in 1035 DR for the barbarian warlord Wychgar. During a battle in the northern wastes which became known as Hallowed Pass, Wychgar lost his three brothers to the orc army led by Kraag the Mighty. Wychgar was distraught and during the night he wandered the battlefield looking for their bodies to take away for proper burial. He stumbled across them and was visited by the brothers' spirits who were trapped between the land of the living and the land of the dead. Unable to help them leave he had their souls stored in the flail with the help of a shaman.
+
+The three heads of the flail are his brother's skulls, which are attached to the shaft by silver chains. The three skull-heads grin maniacally at their new life. When the flail is used in combat the three heads bite the target, tearing and rendering flesh.
+
+STATISTICS:
+
+Damage:  1D6 +5, and +1D4 piercing from the biting skulls
+THAC0:  +4
+Damage Type:  Crushing
+Special: 10% chance of an additional 1D6 piercing damage
+Weight:  4
+Speed Factor:  3
+Proficiency Type:  Flail
+Type:  1-Handed
+Not Usable By:
+ Druid
+ Mage
+ Thief~

@@ -94,9 +94,13 @@ ACTION_IF (("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) OR
            ("%LANGUAGE%" STRING_COMPARE_CASE "russian" = 0)) THEN BEGIN
 
   STRING_SET  6394 @106394 // DECASTAVE DRAINING
+              8663 @108663 // clbhand: damage bonus +2 > +3 from being composite long bow
+              8712 @108712 // kaybow: damage bonus +3 > +4 from being composite long bow
+              8911 @108911 // lxbowbm: damage bonus +2 > +3 
               9764 @109764 // thac0/damage bonus for hammer
              12174 @112174 // four turns > rounds for chromatic orb
              12182 @112182 // vocalize only affects the caster
+             14357 @114357 // uflal2a: 1d6+1 > 1d6+2 for base flail damage
              14959 @114959 // disease > phase for descript of War Hammer of Phasing +3
 
   // description not even close to accurate
@@ -110,7 +114,13 @@ ACTION_IF (("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) OR
     STRING_SET 21478 @121478 // cause disease is abjuration school but necromantic sphere--like its inverse, cure disease
     STRING_SET 22605 @122605 // for asking about wylfdene for the first time
     STRING_SET 24328 @124328 // Tongue of the Gloomfrost should do piercing, not slashing, damage
-    STRING_SET 25818 @125818 // storm bow is usable by thieves
+    STRING_SET 25818 @125818 // storm bow is usable by thieves; remove +1 damage since it's not a long bow
+    
+    ACTION_IF !game_is_how BEGIN // totlm
+    
+      STRING_SET 27373 @127373 // 1d6+4 > 1d6+5 for base flail damage
+
+    END
 
   END
   
@@ -3387,6 +3397,10 @@ COPY_EXISTING ~chan06.itm~ ~override~
   LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 145 target = 1 timing = 2 END
   BUT_ONLY
 
+COPY_EXISTING ~clbhand.itm~ ~override~ // composite long bow of the hand
+  LPF ALTER_ITEM_HEADER INT_VAR damage_bonus = 3 END // missing +1 from being composite long bow
+  BUT_ONLY
+
 // robe of electrical resistance not providing electrical resistance
 COPY_EXISTING ~clck11.itm~ ~override~
   LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 29 target = 1 parameter1 = 20 timing = 2 END
@@ -3543,6 +3557,10 @@ COPY_EXISTING ~hqlbow.itm~ ~override~ // High Quality Long Bow
 COPY_EXISTING ~idart01.itm~ ~override~ // ApR
   LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 1 target = 1 parameter1 = 3 parameter2 = 1 timing = 2 END
   BUT_ONLY 
+
+COPY_EXISTING ~kaybow.itm~ ~override~ // kaylessa's composite long bow of the hand
+  LPF ALTER_ITEM_HEADER INT_VAR damage_bonus = 4 END // missing +1 from being composite long bow
+  BUT_ONLY
   
 // name Kaylessa's Armor 
 COPY_EXISTING ~kaychai.itm~ ~override~ // Kaylessa's Armor
@@ -3567,6 +3585,10 @@ COPY_EXISTING ~labelt.itm~  ~override~
   PATCH_FOR_EACH addme IN 175 158 157 154 126 109 40 BEGIN
     LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 261 target = 1 timing = 2 parameter2 = "%addme%" END
   END
+  BUT_ONLY
+
+COPY_EXISTING ~lxbowbm.itm~ ~override~ // bren muller's crossbow
+  LPF ALTER_ITEM_HEADER INT_VAR damage_bonus = 3 END // 1 damage short for +3 lt xbow
   BUT_ONLY
 
 // haste should bypass spell protections
@@ -3884,6 +3906,11 @@ COPY_EXISTING ~udart3b.itm~  ~override~ // blinding darts +2: 25% blind
 COPY_EXISTING ~uhalb3c.itm~ ~override~
   LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 139 dicesize = 0 END
   LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 233 dicesize = 0 END
+  BUT_ONLY
+
+COPY_EXISTING ~uhxbw2a.itm~ ~override~ // finest heavy crossbow
+              ~xbow01.itm~  ~override~ // heavy crossbow
+  WRITE_SHORT 0x26 11 // min str
   BUT_ONLY
 
 // huge longbow should be damage type missile not piercing
@@ -4234,6 +4261,10 @@ END ELSE BEGIN // how, totlm fixes
     LPF ALTER_ITEM_HEADER INT_VAR header = 3 range = 100 END
     BUT_ONLY
 
+  COPY_EXISTING ~storm.itm~ ~override~ // storm bow
+    LPF ALTER_ITEM_HEADER INT_VAR damage_bonus = 2 END // as a short bow, shouldn't get long bow's +1 damage
+    BUT_ONLY
+
   // missing resists & icons - sound issue fixed in items casting spells section
   COPY_EXISTING ~talongf.itm~ ~override~
     PATCH_FOR_EACH fx IN 85 84 30 28 BEGIN
@@ -4283,6 +4314,10 @@ END ELSE BEGIN // how, totlm fixes
   
   // thac0/damage bonus not working vs. good/evil; wrong file name means it's targeting the wrong neutrals; see waukeen.sto
   COPY_EXISTING ~zz14in.itm~ ~override/zz44in.itm~ // inconsequence
+
+  COPY_EXISTING ~zzg7ts.itm~ ~override~ // trollslayer
+    LPF ALTER_ITEM_HEADER INT_VAR dicenumber = 2 END // only doing 1d4+1, not 2d4+1 base
+    BUT_ONLY
   
   ACTION_IF game_is_totlm THEN BEGIN
 
@@ -4294,6 +4329,10 @@ END ELSE BEGIN // how, totlm fixes
     // flawless waterstar gem descripitong shouldn't refer to being riddled with flaws  
     COPY_EXISTING ~dgem05.itm~ ~override~
       SAY 0x54 @132
+      BUT_ONLY
+
+    COPY_EXISTING ~flailsk.itm~ ~override~ // SkullFlail
+      LPF ALTER_ITEM_HEADER INT_VAR damage_bonus = 5 END // missing +1 from being a flail
       BUT_ONLY
     
     // remove charm, stun immunity from free action; have to remove all 261s and then re-add
