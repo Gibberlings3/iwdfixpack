@@ -93,7 +93,8 @@ ACTION_IF (("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) OR
            ("%LANGUAGE%" STRING_COMPARE_CASE "german" = 0) OR
            ("%LANGUAGE%" STRING_COMPARE_CASE "russian" = 0)) THEN BEGIN
 
-  STRING_SET  6394 @106394 // DECASTAVE DRAINING
+  STRING_SET  3028 @103028 // zz05we: doesn't actually have bonus thac0 vs lawful
+              6394 @106394 // DECASTAVE DRAINING
               8663 @108663 // clbhand: damage bonus +2 > +3 from being composite long bow
               8712 @108712 // kaybow: damage bonus +3 > +4 from being composite long bow
               8911 @108911 // lxbowbm: damage bonus +2 > +3 
@@ -102,6 +103,7 @@ ACTION_IF (("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) OR
              12182 @112182 // vocalize only affects the caster
              14357 @114357 // uflal2a: 1d6+1 > 1d6+2 for base flail damage
              14959 @114959 // disease > phase for descript of War Hammer of Phasing +3
+             17716 @117716 // zzh8gk: doesn't provide any thac0 bonus vs. giants; damage vs. giants is actually +5, not +4
 
   // description not even close to accurate
   COPY_EXISTING ~potn34.itm~ ~override~
@@ -119,6 +121,7 @@ ACTION_IF (("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) OR
     ACTION_IF !game_is_how BEGIN // totlm
     
       STRING_SET 27373 @127373 // 1d6+4 > 1d6+5 for base flail damage
+                 27377 @127377 // zz36dgd: +5 > +6 damage vs. good
 
     END
 
@@ -2694,7 +2697,7 @@ ACTION_PHP_EACH cd_iwdfixpack_item AS params => file BEGIN
     PATCH_IF (IS_AN_INT params_5) BEGIN LPF cd_weapon_speed INT_VAR speed = params_5 END END // weapon speed
     BUT_ONLY IF_EXISTS
 
-END
+END   
 
 // global item effects not being applied due to incorrect timing mode
 // all of these are for cosmetic effects, except:
@@ -6365,7 +6368,7 @@ ACTION_PHP_EACH cd_creature_weapons AS params => item BEGIN
   END
 
 END
-
+  
 /////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
 /////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
 /////                                                  \\\\\

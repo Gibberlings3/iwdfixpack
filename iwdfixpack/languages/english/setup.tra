@@ -53,6 +53,27 @@ Not usable by:~
 /////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
 /////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
 
+// zz05we: doesn't actually have bonus thac0 vs lawful
+@103028 = ~Even without magical enchantment, this particular piece of weaponry could fetch a healthy price for its exquisite craftsmanship.  The shaft of the mace is a bronze cylinder reinforced with a steel bar down the center and six thin bands of polished steel, three above the haft and three below the head.  The head itself is egg-shaped and made of red-stained cherry wood reinforced by decorative arcing bronze bands.  Steel flanges stick out from the head in an asymmetrical pattern.  The two largest flanges bear extensive etching.  One is a classical image of Tymora with the word "WEAL" in Thorass.  The other is an image of Beshaba with the word "WOE."  Despite the delicate materials used in the mace's construction, it is exceptionally sturdy.  The history of the mace is largely a mystery.
+
+STATISTICS:
+
+Damage:  1D6 + 2, +3 vs. Lawful Creatures
+THAC0:  +1
+Damage type:  Crushing
+Special:  +1 to all Saving Throws, 13% of all hits cause Curse
+Weight:  7
+Speed Factor:  5
+Proficiency Type:  Mace
+Type:  1-handed
+Not Usable By:
+ Lawful Characters
+ Paladin
+ Druid
+ Mage
+ Thief
+~
+
 // DECASTAVE DRAINING
 @106394 = ~Decastave
 (Evocation)
@@ -118,7 +139,7 @@ Not Usable By:
  Thief
 ~
 
-// thac0/damage bonus for hammer
+// gsleep: thac0/damage bonus for hammer
 @109764 = ~This weapon was used by the human ranger Althax Grom.  Althax hated the giants that plagued his homeland and was trained to exterminate them from a young age.  Although Althax originally fought his foes using the sword and bow, he quickly decided that those weapons were too slow against his huge foes.  His druid friend, Eladan, enchanted this hammer for him.  The reputation of the weapon grew as legends of Althax grew.  Even though the warhammer has passed through many hands since Althax's untimely demise, Giant's Sleep will always be remembered as the weapon of that powerful warrior.
 
 STATISTICS:
@@ -173,7 +194,7 @@ Not Usable By:
  Mage 
  Thief~
 
-// War Hammer of Phasing +2 descript, says hammer causes disease when it causes phasing
+// u2ham4b War Hammer of Phasing +2 descript, says hammer causes disease when it causes phasing
 @114959 = ~Like others of its type, this warhammer is made entirely of steel, with a bone-crushing hammer mounted upon an 18" shaft.  It has also been bestowed with a small number of magical properties, however, thus making it more effective in combat.
 
 STATISTICS:
@@ -185,13 +206,27 @@ Special:
   10% chance of target being Phased
   15% chance +1D4 cold damage
 Weight:  6
-Speed Factor:  3
+Speed Factor:  2
 Proficiency Type:  Hammer
 Type:  1-handed
 Not Usable By:
  Druid
  Mage 
  Thief~
+
+// zzh8gk: doesn't provide any thac0 bonus vs. giants; damage vs. giants is actually +5, not +4
+@117716 = ~A halfling warrior named Kim Marchwatch used this potent weapon against the giants that frequently plagued his homeland, hitting them in the head with so many rocks that they fell over in pain or ran away.  When Kim was replaced as shire-reeve of his homeland, he became a reluctant adventurer.  He is believed to have been swallowed up by the dreaded Fen Mists of Acallo in 760 DR.
+
+STATISTICS:
+
+Damage:  +1
+THAC0:  +1, +5 vs. Giants
+Weight:  0
+Speed Factor:  1
+Proficiency Type:  Missile Weapons
+Type:  1-handed
+Not Usable By:
+~
 
 // cause disease is abjuration school but necromantic sphere--like its inverse, cure disease
 @121478 = ~Cause Disease (Abjuration)
@@ -235,7 +270,7 @@ Damage:  +2
 THACO:  +2
 Special:  User can invoke a Storm Shell on himself or herself 1/Day
 Weight:  3
-Speed Factor:  3
+Speed Factor:  4
 Proficiency Type:  Bow Weapons
 Type:  2-handed
 Not Usable By:
@@ -262,3 +297,23 @@ Not Usable By:
  Druid
  Mage
  Thief~
+
+// zz36dgd: +5 > +6 damage vs. good
+@127377 = ~The story of the ascension of Bane, Bhaal, and Myrkul, the gods of strife, murder, and death, is well known among learned men across the face of Faerun. Despite this, most theologians know very little about what happened to the unfortunate dying god whom the malefic trio consumed prior to their encounter with Jergal. What is known is that a small portion of the dead god's essence found its way to the Astral Plane, where it coalesced into one of the smallest islands of slain divinity. This small hunk of rock and odd ore was captured hundreds of years later by an enchanter named Merdros. Merdros' duergar servants created this blade for the wizard's most powerful warrior ally. Owners of the blade claimed that they could feel the dead god's final memories flowing through the weapon when they held it.
+
+STATISTICS:
+
+Damage:  2D4 +4, +6 vs. Good
+THAC0:  +4, +6 vs. Good
+Special:
+  Can cast Emotion: Fear 3/day
+  Symbol of Pain 1/day
+Weight:  4
+Speed Factor:  0
+Proficiency Type:  Large Swords
+Type:  1-handed
+Not Usable By:
+ Good Creatures
+ Druid
+ Cleric
+ Mage~
