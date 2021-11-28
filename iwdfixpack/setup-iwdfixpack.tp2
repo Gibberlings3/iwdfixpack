@@ -194,10 +194,15 @@ COPY ~iwdfixpack/wav/choke.wav~ ~override~ // missing sound for poison.itm
 /////                                                  \\\\\
 
 // bitch queen's envoy blocks *all* elementals, not just water 1/2; see also shldbch.itm and general bulk creature changes
+// tribe and barbarian entries so that barbs can be properly raced as human, but scripting will still work
+// find_traps is for find trap spell shenanigans
 APPEND ~specific.ids~ ~114 WATER_ELEMENTAL
 115 TRIBE_ELK
 116 TRIBE_WYRM
-117 BARBARIAN~
+117 BARBARIAN
+118 FIND_TRAPS~
+
+APPEND ~spell.ids~ ~1299 CLERIC_FIND_TRAPS_INTERNAL~ // find trap spell shenanigans
 
 // new state needed for fixing Dead(object) triggers
 APPEND ~state.ids~ ~0x00000fc0 STATE_REALLY_DEAD~ UNLESS ~0x00000fc0 STATE_REALLY_DEAD~
@@ -1334,6 +1339,16 @@ COPY_EXISTING ~ar6013.are~ ~override~
   LPF ALTER_AREA_DOOR INT_VAR door_icon = 2 STR_VAR door_name = "AR6013Forge1" END
   BUT_ONLY
 
+// door shows up as trapped, but shouldn't
+COPY_EXISTING ~ar7000.are~ ~override~
+  LPF ALTER_AREA_DOOR INT_VAR flag_detectable = 0 STR_VAR door_name = AR7000Door1 END
+  BUT_ONLY  
+  
+// door shows up as trapped, but shouldn't
+COPY_EXISTING ~ar7002.are~ ~override~
+  LPF ALTER_AREA_DOOR INT_VAR flag_detectable = 0 STR_VAR door_name = AR7002Door1 END
+  BUT_ONLY  
+
 // container icon, charges for blur deck
 COPY_EXISTING ~ar7004.are~ ~override~
   LPF ALTER_AREA_CONTAINER INT_VAR cont_icon = 8 STR_VAR cont_name = "Hut 2"  END
@@ -1587,6 +1602,78 @@ END ELSE BEGIN // how, totlm fixes
     // minotaur trapped by door, unable to replicate but fixed anyway
     COPY ~iwdfixpack/bmp/ar9717sr.bmp~ ~override~
   
+  END
+
+END
+
+/////                                                  \\\\\
+///// find traps shenanigans                           \\\\\
+/////                                                  \\\\\
+
+// keep this after script, area fixes
+COPY_EXISTING_REGEXP ~^.+\.are$~ ~override~
+  READ_SHORT 0x5a trig_num
+  READ_LONG  0x5c trig_off
+  SET local = 0 
+  FOR (index = 0 ; index < trig_num ; ++index) BEGIN
+    READ_SHORT (trig_off + 0x20 + (index * 0xc4)) type
+    PATCH_IF type = 0 BEGIN // ignore info, travel triggers
+      READ_LONG  (trig_off + 0x60 + (index * 0xc4)) flags
+      READ_SHORT (trig_off + 0x68 + (index * 0xc4)) detect_diff
+      PATCH_IF (((flags & BIT3) = BIT3) AND (detect_diff != 100)) BEGIN 
+        READ_ASCII   (trig_off + 0x7c + (index * 0xc4)) script_old
+        WRITE_ASCIIE (trig_off + 0x7c + (index * 0xc4)) ~%SOURCE_RES%%local%~ #8 // writes e.g. ar30001
+        WRITE_ASCII  (trig_off + 0x7c + (index * 0xc4)) ~c!~ #2                  // changes to  c!30001
+        READ_ASCII   (trig_off + 0x7c + (index * 0xc4)) script_new
+        SET local += 1
+        DEFINE_ASSOCIATIVE_ARRAY cd_new_trap_scripts BEGIN ~%script_new%~,~%SOURCE_RES%_region%index%_%script_old%~ => ~%script_old%~ END
+      END // actual trap check
+    END // proximity trigger check
+  END // end region loop   
+  /* trapped containers do not show up with find traps
+  READ_LONG  0x70 cont_off
+  READ_SHORT 0x74 cont_num
+  FOR (index = 0 ; index < cont_num ; ++index) BEGIN
+    READ_SHORT (cont_off + 0x30 + (index * 0xc0)) trapped
+    PATCH_IF trapped BEGIN // if trapped
+      READ_SHORT (cont_off + 0x2c + (index * 0xc0)) detect_diff
+      PATCH_IF detect_diff != 100 BEGIN 
+        READ_ASCII   (cont_off + 0x48 + (index * 0xc0)) script_old
+        WRITE_ASCIIE (cont_off + 0x48 + (index * 0xc0)) ~%SOURCE_RES%%local%~ #8 // writes e.g. ar30001
+        WRITE_ASCIIE (cont_off + 0x48 + (index * 0xc0)) ~c!~ #2                  // changes to  c!30001
+        READ_ASCII   (cont_off + 0x48 + (index * 0xc0)) script_new
+        SET local += 1
+        DEFINE_ASSOCIATIVE_ARRAY cd_new_trap_scripts BEGIN ~%script_new%~,~%SOURCE_RES%_cont%index%_%script_old%~ => ~%script_old%~ END
+      END // actual trap check
+    END // trapped check
+  END // end container loop  
+  */  
+  READ_LONG  0xa4 door_num
+  READ_LONG  0xa8 door_off
+  FOR (index = 0 ; index < door_num ; ++index) BEGIN
+    READ_SHORT (door_off + 0x70 + (index * 0xc8)) trapped
+    PATCH_IF trapped BEGIN // if trapped
+      READ_LONG  (door_off + 0x28 + (index * 0xc8)) flags
+      READ_SHORT (door_off + 0x6c + (index * 0xc8)) detect_diff
+      PATCH_IF (((flags & BIT3) = BIT3) AND (detect_diff != 100)) BEGIN 
+        READ_ASCII   (door_off + 0x80 + (index * 0xc8)) script_old
+        WRITE_ASCIIE (door_off + 0x80 + (index * 0xc8)) ~%SOURCE_RES%%local%~ #8 // writes e.g. ar30001
+        WRITE_ASCIIE (door_off + 0x80 + (index * 0xc8)) ~c!~ #2                  // changes to  c!30001
+        READ_ASCII   (door_off + 0x80 + (index * 0xc8)) script_new
+        SET local += 1
+        DEFINE_ASSOCIATIVE_ARRAY cd_new_trap_scripts BEGIN ~%script_new%~,~%SOURCE_RES%_door%index%_%script_old%~ => ~%script_old%~ END
+      END // actual trap check
+    END // trapped check
+  END // end container loop   
+  BUT_ONLY
+    
+ACTION_PHP_EACH cd_new_trap_scripts AS params => source BEGIN
+
+  ACTION_IF FILE_EXISTS_IN_GAME ~%source%.bcs~ BEGIN
+  
+    COPY_EXISTING ~%source%.bcs~ ~override/%params_0%.bcs~
+    EXTEND_BOTTOM ~%params_0%.bcs~ ~iwdfixpack/baf/sppr205.baf~ EVALUATE_BUFFER
+    
   END
 
 END
@@ -2523,6 +2610,10 @@ COPY_EXISTING ~biknight.cre~ ~override~
               ~pomimg.cre~   ~override~
   WRITE_LONG 0x1C 0 // gold
   BUT_ONLY
+
+// add generic override script for PCs
+COPY_EXISTING ~charbase.cre~ ~override~
+  WRITE_ASCII 0x248 cdplayer
 
 // allegiance fix
 COPY_EXISTING ~dver.cre~ ~override~
@@ -4726,9 +4817,21 @@ COPY_EXISTING ~sppr204.spl~ ~override~
   LPF ALTER_EFFECT INT_VAR match_opcode = 174 savingthrow = BIT0 END
   BUT_ONLY
 
-// 146 doesn't need power, since the subspell has it
-COPY_EXISTING ~sppr205.spl~ ~override~
-  LPF ALTER_EFFECT INT_VAR match_opcode = 146 power = 0 END
+// clone find traps into internal version used by traps themselves
+COPY_EXISTING ~sppr205.spl~ ~override/sppr299.spl~ // find traps
+  WRITE_ASCII 0x3a ~~ #8
+  WRITE_SHORT 0x22 0
+  LPF ALTER_SPELL_HEADER INT_VAR speed = 0 END
+  PATCH_FOR_EACH op IN 142 9 146 174 233 BEGIN
+    LPF DELETE_EFFECT INT_VAR match_opcode = op END
+  END  
+
+// delayed 146s actually induce casting sequence, so change caster to specifics 118; 
+// nearby traps detect this and reveal themselves by casting sppr299 from their trap scripts
+COPY_EXISTING ~sppr205.spl~  ~override~ // find traps
+  LPF DELETE_EFFECT INT_VAR match_opcode = 146 END
+  LPF DELETE_EFFECT INT_VAR match_opcode = 150 END
+  LPF CLONE_EFFECT INT_VAR match_opcode = 142 opcode = 72 power = 0 parameter1 = 118 parameter2 = 4 END
   BUT_ONLY
 
 // goodberries last 1 day/caster level
