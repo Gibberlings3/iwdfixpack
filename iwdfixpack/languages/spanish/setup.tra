@@ -1,253 +1,165 @@
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Setup Messages                                   \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
 
-     @0 = ~Retoques a los NPCs~
-     @1 = ~Esto puede llevar unos momentos ...~
-     @2 = ~Este componente requiere "Agregar bolsas contenedoras al BG1"~
-     @3 = ~Requiere el componente 'Permitir lanzar hechizos arcanos con armadura'~
-     @4 = ~Retoques/Trucos de conveniencia~
-     @5 = ~El Exotic Item Pack se requiere para este componente.~
-     @6 = ~Requiere el componente 'Permitir robar y actividades de ladron en armadura pesada'~
-     @7 = ~Este componente no esta disponible en tu idioma.~
-     @8 = ~Este componete es solo para BGT.~
-     @9 = ~Cambio de Reglas~
-    @10 = ~Este componente no es necesario para tutu~
-    @11 = ~Cambios Cosméticos~
-    @12 = ~Se requiere Heart of Winter para este componente.~
-    @13 = ~Cambio de Contenidos~
-    @14 = ~Este componente es solo para Tutu o BGT.~
-    @15 = ~Este componente es solo para Tutu.~
-    @16 = ~La funcionalidad de este componente está ya incluída en algún mod instalado previamente.~
-    @17 = ~Este componente requiere el hacer consistentes las armas +x/+y.~
-    @18 = ~Este componente está desactualizado.~
 
    @100 = ~Otros Arreglos~
-   @101 = ~Además de la gran calidad de su creación, se aprecian runas
-de
-poder por toda la superficie. Es obvio que se ha invertido mucho tiempo
-en la creación de este aparato y aunque no se aprecia al principio, un
-brillo azul emana de las runas.
-
-CARACTERÍSTICAS:
-
-Daño:  2D4 +3
-THAC0: +3
-Tipo de Daño:  Cortante
-Especial:
-  +15% Resistencia al Fuego
-  50% posibilidad de +1D8 daño por fuego
-  10% posibilidad de que el objetivo sea atontado
-Peso: 10
-Factor de velocidad: 8
-Tipo de talento: Espada grande
-Tipo :  1-puño
-No Usable por:
- Druida
- Clerigo
- Mago
- Ladrón~
    @102 = ~Oh, y si encuentras otros objetos que puedan ayudar a arreglar el invernadero, estaría agradecido. Adiós, amigos.~
    @103 = ~Adiós.~
    @104 = ~El invernadero ha sido restaurado a su antigua gloria, amigos. Siento que el trabajo aquí está terminado, es hora de continuar. Gracias. Adiós.~
    @105 = ~Adiós, Valestis.~
    @106 = ~No pasa nada.~
-   @107 = ~Una elección excelente. Regresa en tres días y tu escudo estará listo.~
-   @108 = ~Piel Pétrea (Alteración)
-Nivel: 4
-Rango: Lanzador
-Duración: Special
-Tiempo de lanzamiento: 1
-Area de efecto: Lanzador
+
+// everything below this was automatically generated from iwdee; translators please review
+   
+@117 = ~Armadura de Kaylessa +3~
+@118 = ~Armadura ensombrecida +3~
+@119 = ~Hiede. Podéis ver grandes plumas negras que deben haber sido descartadas por alguna bestia aviar. Además hay excrementos que indican la presencia de dracos. Las marcas en las paredes también avisan la presencia de grandes insectos.~
+@120 = ~Hiede. Podéis ver grandes plumas negras que deben haber sido descartadas por alguna bestia aviar.~
+@121 = ~Hay excrementos que indican la presencia de dracos.~
+@122 = ~Las críaturas que solían vivir en el área están muertas o se han ido hace tiempo. De todas formas, encontráis pelos en el suelo, indicativos de algún felino.~
+@123 = ~Varias puertas parecen haber sido utilizadas hace poco, pero no se ven marcas indicando que alguien haya pasado por ellas. Es como si las puertas hubieran sido manipuladas por una fuerza externa.~
+@124 = ~El área huele a polvo y podredumbre; debe haber sido algún tipo de tumba. En ocasión podéis ver huesos y retazos de tela por el suelo.~
+@125 = ~Hay un extraño olor a despojos en el aire, indicativo de la presencia de orogs o minotauros, o posiblemente ambos. Las marcas en los muros indican la presencia de moles sombrías y trolls. Además de todo esto, podéis oler setas.~
+@126 = ~Hay un extraño olor a despojos en el aire, indicativo de la presencia de orogs o minotauros, o posiblemente ambos. Las marcas en los muros indican la presencia de moles sombrías y trolls. Ocasionalmente podéis ver excrementos de dracos.~
+@127 = ~Vuestra habilidad de rastreo no revela demasiado. Sin embargo, podéis ver restos de una sustancia viscosa en el techo.~
+@128 = ~Las huellas más comunes en el área parecen ser de grandes caninos. En varios sitios aparecen mezcladas con huellas humanas. Se aprecian también telas de araña inusualmente grandes en la parte noroeste de la cueva. Además, véis vegetación pudriéndose en la parte norte. Huele a azufre.~
+@129 = ~Las huellas más comunes en el área parecen ser de grandes caninos. En varios sitios aparecen mezcladas con huellas humanas. Se aprecian también telas de araña inusualmente grandes en la parte noroeste de la cueva. Podéis ver grandes plumas negras que deben haber sido descartadas por alguna bestia aviar. Hay un extraño olor a despojos en el aire, que indican una bestia humana y animal, tal vez un híbrido.~
+@130 = ~Armor of Penance +5~
+/* original string; see English setup.tra for needed modifications
+@131 = ~Resulta que recientemente ha desaparecido mucha gente... el chaval de Conlan, Shemish, ha sido uno de ellos. A la mañana siguiente, todo el pueblo buscó al chico pero sin resultado. Simplemente ya no estaba. Se desvaneció sin dejar rastro. Y después fueron la Madre Egenia de la iglesia, Eidan el posadero y Migan Potts... junto a otros. Ni un solo rastro de ninguno de ellos. *Nada*.~
+*/
+/* original string; see English setup.tra for needed modifications
+@132 = ~La estrella de agua también se llama acroíta o turmalina incolora y es poco común en los Reinos. Esta piedra está plagada de imperfecciones e inclusiones y, por lo tanto, solo se puede tallar una pequeña parte.~
+*/
+@133 = ~Alabarda de gran calidad~
+/* original string; see English setup.tra for needed modifications
+@106394 = ~Decaestaca
+(Evocación)
+Nivel: 2
+Alcance: El lanzador
+Duración: 1 asalto por nivel
+Tiempo de lanzamiento: 2 asaltos
+Área de efecto: El lanzador
 Tirada de salvación: Ninguna
-Uno de los mejores hechizos de protección jamás creados, Piel pétrea hace que la criatura afectada sea virtualmente inmune a cualquier corte, proyectil o similar (aunque los hechizos y el daño de los hechizos afectarán a la criatura normalmente). Los siguientes 1 a 4to ataques (+1 ataque/2 dos niveles del lanzador) que golpeen a la criatura simplemente rebotarán en ella sin efecto. El lanzar este hechizo varias veces no tiene acción acumulativa.~
-   @109 = ~De la piedra a la carne (Alteración)
-Nivel: 6
-Rango: Visión del Lanzador
-Duración: Permanente
-Tiempo de lanzamiento: 6
-Area de efecto: 1 criatura
+DESCRIPCIÓN:
+Este conjuro crea un bastón de energía en la mano del lanzador. Se considera un arma mágica, y hace 1-6 puntos de daño por golpe y puede golpear a criaturas inmunes a armas normales. Sin embargo es una bastón, así que si el lanzador no tiene ningún talento marcial en bastones, entonces la Decaestaca se usa con penalizadores. El bastón también tiene el poder para drenar 1-2 puntos de golpe del objetivo en el primer golpe. Estos puntos de golpe se añaden al lanzador, pero solo pueden curar el daño que el lanzador ha recibido; no aumentarán sus puntos de golpe máximos.~
+*/
+/* original string; see English setup.tra for needed modifications
+@109764 = ~Esta arma fue usada por el explorador humano Althax Grom.
+Althax odiaba a los gigantes que plagaban su tierra natal y fue entrenado para exterminarlos desde que era joven. Aunque Althax luchó originalmente contra sus enemigos usando la espada y el arco, decidió apresuradamente que aquellas armas eran demasiado lentas contra sus enormes enemigos. Éladan, un druida amigo suyo, le encantó este martillo. La reputación de este martillo aumentaba, a medida que aumentaban las leyendas sobre Althax.
+Aunque el martillo de guerra ha pasado por muchas manos desde el fallecimiento prematuro de Althax, el Arrullo del gigante siempre será recordado como el arma de ese poderoso guerrero.
+CARACTERÍSTICAS:
+Daño: 1D4+4
+GAC0: bonificación +4
+Tipo de daño: Contundente
+Peso: 5
+Factor de velocidad: 1
+Talento marcial: Martillo de guerra
+Tipo: A una mano~
+*/
+/* original string; see English setup.tra for needed modifications
+@112174 = ~Orbe cromático
+(Evocación)
+Nivel: 1
+Alcance: Rango visual del lanzador
+Duración: Especial
+Tiempo de lanzamiento: 1 asalto
+Área de efecto: 1 criatura
+Tirada de salvación: Negación
+DESCRIPCIÓN:
+Este conjuro crea una esfera de un decímetro de diámetro que se lanza infaliblemente a su objetivo. El efecto del orbe depende del nivel del mago:
+ Esfera de nivel 1: inflige 1-4 puntos
+ de daño y ciega al objetivo durante
+ un asalto.
+ 
+ Esfera de nivel 2: inflige 1-6 puntos
+ de daño e inflige dolor en la víctima.
+ 
+ Esfera de nivel 3: inflige 1-8 puntos
+ de daño y quema a la víctima.
+ 
+ Esfera de nivel 4: inflige 1-10 puntos
+ de daño y ciega al objetivo durante
+ cuatro asaltos.
+ 
+ Esfera de niveles 5-6: inflige 1-12
+ puntos de daño y aturde al objetivo
+ durante tres asaltos.
+ 
+ Esfera de niveles 7-9: inflige 2-16
+ puntos de daño y paraliza a la víctima
+ durante 13 asaltos.~
+*/
+/* original string; see English setup.tra for needed modifications
+@112182 = ~Escudo
+(Evocación)
+Nivel: 1
+Alcance: El lanzador
+Duración: 5 asaltos por nivel
+Tiempo de lanzamiento: 1 asalto
+Área de efecto: El lanzador
 Tirada de salvación: Ninguna
-Este hechizo hace que una criatura petrificada regrese a la normalidad.  Si uno de tus compañeros ha caído víctima de un basilisco o medusa, este hechizo le regresará la salud.~
-   @110 = ~De la carne a la piedra (Alteración)
-Nivel: 6
-Rango: Visión del Lanzador
-Duración: Permanente
-Tiempo de lanzamiento: 6
-Area de efecto: 1 criatura
-Tirada de salvación: Neg.
-Este hechizo torna a la criatura objetivo en piedra. Pueden salvar contra conjuros para evitar el efecto. Los efectos de este hechizo pueden ser revertidos con el hechizo de nivel 6 De la piedra a la carne. Este hechizo funciona contra criaturas no-muertas.~
-   @111 = ~Palabra de poder: Silencio (Evocación)
-Nivel: 6
-Rango: Visión del Lanzador
-Duración: 2 turnos
-Tiempo de lanzamiento: 1
-Area de efecto: 1 criatura
-Tirada de salvación: Ninguna
-Este hechizo permite al lanzador decir una de las palabras del poder. Cuando es pronunciada, el hechizo puede ser utilizado contra cualquier criatura que se encuentre dentro del rango de lanzamiento, evitando que puedan emitir sonidos. No existe tirada de salvación.~
+DESCRIPCIÓN:
+Cuando se lanza este conjuro, una barrera invisible cobra vida delante del mago. Esta sitúa la clase de armadura contra armas normales del lanzador en 4, en 2 contra armas de proyectil y hace inmune al mago a cualquier proyectil mágico que se le lance.~
+*/
+/* original string; see English setup.tra for needed modifications
+@114959 = ~Al igual que otros de su clase, este martillo de guerra está elaborado por completo en acero, con un martillo rompe-huesos montado sobre un mango de 46 cm. Además, también se le han otorgado algunas propiedades mágicas, lo que aumenta su efectividad en el combate.
+CARACTERÍSTICAS:
+Daño: 1D4+3
+GAC0: bonificación +2
+Tipo de daño: Contundente
+Aptitudes especiales: 
+ 10% de probabilidad de infectar Enfermedad al objetivo
+ 15% de probabilidad de hacer +1D4 de daño por frío
+Peso: 6
+Factor de velocidad: 3
+Talento marcial: Martillo de guerra
+Tipo: A una mano~
+*/
+/* original string; see English setup.tra for needed modifications
+@121478 = ~Causar enfermedad
+(Nigromancia)
+Nivel: 3
+Esfera: Curación
+Alcance: Toque
+Duración: 8 horas
+Tiempo de lanzamiento: 1 asalto
+Área de efecto: 1 criatura
+Tirada de salvación: Negación
+DESCRIPCIÓN:
+Este conjuro aflige una enfermedad a una criatura que toca el sacerdote y que consume entre 5-20 puntos de fuerza al objetivo. Una tirada de salvación contra conjuros con éxito niega el efecto. Este conjuro no afecta a muertos vivientes, constructos o criaturas extraplanares. El conjuro Causar enfermedad no lo pueden lanzar personajes de alineamiento bueno.~
+*/
+/* original string; see English setup.tra for needed modifications
+@122605 = ~Volvedme a contar lo de este nuevo *y* antiguo rey.~
+*/
+/* original string; see English setup.tra for needed modifications
+@124328 = ~Esta arma fue elaborada con vuestras propias manos, a medida que os guiaba el enano Tiernon. Forjada con el hielo recogido de los muros de Hielumbra, esta alabarda ha absorbido para sí parte del glaciar y parte de vuestra fuerza, dando como resultado un arma formidable. Aunque está hecha de hielo, el arma solo está ligeramente fría al tacto y no se derrite, aunque se exponga a las llamas más intensas.
+CARACTERÍSTICAS:
+Daño: 1D10+4
+GAC0: bonificación +4
+Tipo de daño: Cortante
+Aptitudes especiales:
+ Resistencia al fuego: +10%
+ Resistencia al frío: +10%
+ Puede lanzar Caparazón de la tormenta una vez al día.
+ 3% de probabilidad de lanzar Cono de frío en el objetivo.
+Peso: 6
+Factor de velocidad: 5
+Talento marcial: Alabarda
+Tipo: A dos manos~
+*/
+/* original string; see English setup.tra for needed modifications
+@125818 = ~Esta arma es sagrada para los guerreros al servicio de Talos, el dios de las tormentas y de la destrucción, y ha sido bastante usado por unas manos capacitadas.
 
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Cosmetic Changes Components                      \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-
-  @1000 = ~Quitar animaciones de los yelmos~
-
-  @2000 = ~Cambios en las animaciones de armas~
-
-  @3000 = ~Graficos de lanzamiento de Baldur's Gate II (Andyr)~
-
-  @4000 = ~Restablecer escenas de apertura de IWD.~
-
-  @5000 = ~Desactivar los Iconos de los Portraits que agregan los Objetos Equipados~
-
-  @6000 = ~Mejoras en los Iconos~
-
-  @7000 = ~Forzar a pausa a todos los diálogos~
-    
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Content Changes Components                       \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-
-@101000  = ~Agregar bolsas contenedoras al BG1~
-@101001  = ~Faja de municiones~
-@101002  = ~Esta faja se usa para poder guardar balas, dardos, flechas o virotes.
-
-ESTADÍSTICAS:
-
-Capacidad: 2,000 balas, dardos, flechas o balas en total
-Peso: 2~
-@101003 = ~Bolsa de contención~
-@101004 = ~Al igual que sucede con otras bolsas mágicas, ésta tiene el aspecto de un saco de tela corriente de entre 60 centímetros y 1'20 metros de alto. La bolsa de contención se abre a un espacio no dimensional, y es mayor por dentro que por fuera. El saco siempre pesará lo mismo, sin importar lo que se meta en su interior.
+El Arco de la tormenta es un arco corto que está compuesto por varias capas de madera, y se ha usado contra miríadas de enemigos de la iglesia de Talos. Ya más recientemente, el propietario del arco era un Caballero de la Tomenta llamado Kalassan Brevered, que murió después de suprimir una importante cantidad de exploradores y druidas en las Islas Moonshae.
 
 CARACTERÍSTICAS:
 
-Peso: 5~
-@101003 = ~Bolsa de contención~
-@101004 = ~Al igual que sucede con otras bolsas mágicas, ésta tiene el aspecto de un saco de tela corriente de entre 60 centímetros y 1'20 metros de alto. La bolsa de contención se abre a un espacio no dimensional, y es mayor por dentro que por fuera. El saco siempre pesará lo mismo, sin importar lo que se meta en su interior.
-
-CARACTERÍSTICAS:
-
-Peso: 5~
-
-@102000 = ~Las tiendas venden mas cantidad de objetos apilados~
-
-@103000  = ~Las gemas y pociones requieren ser identificadas~
-@103001 = ~Una gema es un mineral que al cortarse o facetarse puede ser usada en joyería.~
-
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Rule Changes Components                          \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-
-@201000 = ~Espadas bastardas de dos puños~
-
-@202000 = ~Palos universales~
-
-@202100 = ~Mejoras en las descripciones de los palos universales~
-@202101 = ~Requiere tener instalado el componente de Palos Universales~
-
-@203000 = ~Quita el tope de nivel~
-
-@204000 = ~Permitir habilidades de ladrón con armadura pesada~
-
-@205000 = ~Permitir lanzar hechizos con armadur~
-
-@206000 = ~Usar Multiples Objetos de Proteccion~
-@206001 = ~Restricciones al estilo P&P~
-
-@206100 = ~Sin Restricciones~
-
-@207000 = ~Lanzar hechizos de pergaminos (y otros objetos) al nivel del personaje~
-
-@208000 = ~Gran Maestria en armas para los multi-clase (Weimer)~
-
-@209000 = ~Gran Maestria de BG2~
-
-@210000 = ~Cambiar el peso de las armas creadas mágicamente a 0~
-
-@211000 = ~Tabla de THAC0 extendida ~
-
-@212000 = ~Alterar la tabla de progresión de hechizos de mago~
-@212001 = ~Tabla extendida (Blucher)~
-
-@212100 = ~Tabla PnP ~
-
-@213000 = ~Alterar la tabla de progresión de hechizos de bardo~
-
-@214000 = ~Alterar la tabla de progresión de hechizos de clérigo~
-
-@215000 = ~Druidas usan progresion de clérigos al subir niveles y hechizos~
-
-@216000 = ~Los druidas usan restricciones de alineamiento de 3e (NB, NL, NV, NC, NM)~
-
-@217000 = ~Relajar las restricciones de los objetos para clérigos y druidas multiclase y de clase dual~
-
-@218000 = ~Agregar penalizaciones de salvación para los hechizos lanzados por lanzadores de alto nivel~
-@218001 = ~Sólo magia arcana~
-
-@218100 = ~Sólo magia divina~
-
-@218200 = ~Magias arcana y divina~
-
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Convenience Tweaks                               \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-
-@300000 = ~Mayor número de PG al subir de nivel~
-@300001 = ~Máximo~
-
-@300100 = ~Estilo NWN~
-
-@301000 = ~HP Máximos para (the bigg)~
-
-@302000 = ~Identificar todos los objetos~
-@303000 = ~Aprender hechizos facilmente~
-@303001 = ~Siempre aprender hechizos~
-@303100 = ~Aprender hechizos al 100% y quitar el tope de hechizos aprendidos~
-
-@304000  = ~Hacer la bolsa de contencion sin fondo~
-
-@305000 = ~Descuentos en tiendas a baja reputacion (Sabre)~
-@305001 = ~Cambiar el efecto de la reputación en los precios de las tiendas~
-
-@305100 = ~La reputación no tiene efecto, precios de las tiendas fijos al 100% (Luiz)~
-
-@305200 = ~La reputación no tiene efecto, precios de las tiendas fijos al 80% (Luiz)~
-
-@305300 = ~La reputación no tiene efecto, precios de las tiendas fijos al 60% (Luiz)~
-
-@306000  = ~Apilación de municiones ilimitada~
-
-@307000  = ~Apilacion de gemas y joyas ilimitada~
-
-@308000  = ~Apilación de pociones ilimitada~
-
-@309000  = ~Apilación de Hechizos ilimitada~
-
-@310000 = ~No trampas o Cerraduras (Weimer)~
-
-@311000 = ~Descansar en cualquier sitio (Japheth)~
-
-@312000 = ~Bastones, Palos y Hondas vendibles (Icelus)~
-
-@313000 = ~Truco de estadísticas mínimas~
-@313001 = ~Selecciona un valor mínimo de estadísticas, entre 6 y 15:~
+Daño: +3
+GAC0: bonificación +2
+Aptitudes especiales:
+ Una vez equipado, puede lanzar el conjuro Caparazón de la
+ tormenta sobre el usuario una vez al día.
+Peso: 3
+Factor de velocidad: 3
+Talento marcial: Arco
+Tipo: A dos manos~
+*/

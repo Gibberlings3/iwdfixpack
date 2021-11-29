@@ -1,0 +1,17 @@
+IF
+  Range([0.0.0.0.118],25)
+  Global("%params_1%","MYAREA",0)
+THEN
+  RESPONSE #100
+    ForceSpell(Myself,1299)  
+    DisplayString(Myself,16519)
+		SetGlobal("%params_1%","MYAREA",1)
+END
+
+IF
+  !Range([0.0.0.0.118],25)
+  Global("%params_1%","MYAREA",1)
+THEN
+  RESPONSE #100
+		SetGlobal("%params_1%","MYAREA",0)
+END

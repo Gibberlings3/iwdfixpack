@@ -1,255 +1,148 @@
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Setup Messages                                   \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
 
-     @0 = ~Upravy NPC~
-     @1 = ~Tento krok muze chvilku trvat...~
-     @2 = ~Tato cast vyzaduje komponentu 'Pridat do BG1 Bezedny vak'~
-     @3 = ~Tato cast vyzaduje komponentu
-'Umozneni sesilani magovych kouzel ve zbrojich'~
-     @4 = ~Vyhodne upravy/cheaty~
-     @5 = ~Pro tuto komponentu  je vyzadovana 'Sada exotickych predmetu'~
-     @6 = ~Vyzaduje komponentu 'Umozneni pouziti zlodejskych schopnosti
-a ukryvani v tezkych zbrojich'~
-     @7 = ~Tato cast není dostupna ve tvem jazyce~
-     @8 = ~Tato cast je pouze pro BGT(Baldur's Gate Trilogy)~
-     @9 = ~Zmeny pravidel~
-    @10 = ~Tato cast neni dostupna pro BG1Tutu~
-    @11 = ~Kosmeticke upravy~
-    @12 = ~Tato cast modu vyzaduje datadisk Throne of Bhaal~
-    @13 = ~Vyhovujici upravy~
-    @14 = ~Tato cas je pouze pro BG1Tutu nebo BGT(Baldur's Gate Trilogy)~
-    @15 = ~Tato cast je pouze pro BG1Tutu~
-    @16 = ~Funkce teto casti modu uz bud tva hra obsahuje nebo
-je prekonana jinym, jiz nainstalovanym modem~
-    @17 = ~Vyzaduje cast modu Ucineni +x/+y zbrani konzistentnimi.~
-    @18 = ~Tato cast modu uz je zavrzena.~
 
    @100 = ~Rozmanite opravy~
-   @101 = ~Krom mimoÅ™Ã¡dnÃ©ho Å™emeslnÃ©ho zpracovÃ¡nÃ­ lze na tÃ©to
-zbrani pozorovat i runy moci, kterÃ© jsou rozesety po celÃ©m jejÃ­m 
-povrchu. Je jasnÃ©, Å¾e aÄ to nenÃ­ na prvnÃ­ pohled patrnÃ©, byla tato 
-Äepel vytvÃ¡Å™ena dlouho a usilovnÄ›. Symboly slabÄ› modravÄ› pableskujÃ­.
 
-VLASTNOSTI:
-
-ZranÄ›nÃ­: 2k4 +3
-THAC0. +3
-Druh zranÄ›nÃ­: seÄnÃ©
-ZvlÃ¡Å¡tnÃ­:
-  50%nÃ­ Å¡ance na 1k8 zranÄ›nÃ­ ohnÄ›m
-  10%nÃ­ Å¡ance na omrÃ¡ÄenÃ­ protivnÃ­ka
-VÃ¡ha: 10
-Rychlost: 8
-Dovednost: tÄ›Å¾kÃ© meÄe
-Typ: jednoruÄnÃ­
-NemÅ¯Å¾e uÅ¾Ã­vat:
- Klerik
- Druid
- MÃ¡g
- ZlodÄ›j~
    @102 = ~Ó, a kdybyste narazili na další vìci, které by mohly pomoci obnovit Arboretum, byla bych vám velmi vdìèná. Sbohem, pøátelé.~
    @103 = ~Sbohem.~
    @104 = ~Arboretu byla navrácena jeho bıvalá krása, pøátelé. Cítím, e tu moje práce skonèila a nastal èas k odchodu. Dìkuji vám. Sbohem.~
    @105 = ~Sbohem, Valestis.~
    @106 = ~U na to nemysli.~
-   @107 = ~Vynikající volba, veleváenı zákazníku. Pøijï za tøi dny a štít bude pøipraven.~
-   @108 = ~Kamenná kùe (promìna)
-Úroveò: 4
-Dosah: sesílatel
+
+// everything below this was automatically generated; translators please review
+
+@117 = ~Kaylessina zbroj~
+@118 = ~Shadowed Plate~
+@119 = ~There is a foul odor in the air. On occasion, you find large, black feathers that must have been discarded by some sort of an avian beast. In addition, there are droppings on the ground which indicate the presence of wyverns. Scratch marks on the walls hint that some parts of this area may also be populated by exceptionally large insects.~
+@120 = ~Ve vzduchu je cítit odpornı puch. Kadou chvíli na zemi narazíš na dlouhé cerné perí, které bude nejspíš patrit nejaké létající bestii.~
+@121 = ~Trus nazancuje, e v oblasti se nachází wyverny.~
+@122 = ~At u tady ilo cokoliv, je to bud mrtvé, nebo to u dávno odešlo. Bliší pruzkum ti však odhalil pár chomácu chlupu, které nejspíš pocházejí z nejaké kockovité šelmy.~
+@123 = ~Several doors in this area appear to have been used recently, but there are no tracks indicating that anyone has actually stepped through them. It is almost as if the doors had been manipulated by some kind of external force.~
+@124 = ~Tato oblast páchne prachem a rozkladem, nejspíš se jedná o nejakı typ pohrebního místa. Na nekterıch místech lze zahlédnout zbytky kostí a roztrhanıch hadru.~
+@125 = ~There is a strange smell of offal in the air which indicates the presence of either orogs or minotaurs, or possibly both. Scratches on some of the walls imply that umber hulks and trolls may also be nearby. In addition, you detect a very faint fungoid smell.~
+@126 = ~There is a strange smell of offal in the air which indicates the presence of either orogs or minotaurs, or possibly both. Scratches on some of the walls imply that a few umber hulks may also be nearby. Occasionally, you also see dung from some sort of wyvern-like creatures.~
+@127 = ~Your tracking skills reveal little about this location. However, you vaguely discern traces of a strange slimy substance which appears to cover the darker patches of the ceiling.~
+@128 = ~The most common tracks in this area seemingly belong to large canines. In several spots, they appear to blend into human footprints. Traces of unusually large webs and consistent waste lead you to believe that there may be unnaturally large spiders in the northeastern portions of the caves. In addition, heaps of rotting vegetation are strewn throughout northern parts of the area. There is also a faint smell of sulfur in the air.~
+@129 = ~The most common tracks in this area resemble those of large canines. In several spots, they appear to blend into human footprints. Traces of unusually large webs and consistent waste lead you to believe that there may be unnaturally large spiders in the northern portions of the caves. On occasion, you find large, black feathers that must have been discarded by some sort of an avian beast. In addition, there is a strange smell of offal in the air. It seems to be both human and animal. It might come from some sort of hybrid monster.~
+@130 = ~Armor of Penance~
+/* original string; see English setup.tra for needed modifications
+@131 = ~Jo, je to tak. Ve meste u se pohrešuje velká spousta lidí - a jedním z nich je i Šímiš, Conlanuv syn. Následující ráno po jeho zmizení ho hledalo celé mesto, ale nenašli ho. Proste zmizel. Ztratil se beze stopy. Potom zmizela matka Egenia z chrámu, vıcepní Eidan, Meagan Pottsová - a pak ješte další. Jako by se po nich zeme slehla.~
+*/
+/* original string; see English setup.tra for needed modifications
+@132 = ~Vodní hvezde se jinak ríká té achroit ci bezbarvı turmalín a zde v ríších je velmi vzácná. Tento kámen je protkanı puklinkami a s vmeskem, proto lze rezáním uzpusobit pouze malou cást.
+VLASTNOSTI:
+Váha: 0~
+*/
+@133 = ~Vysoce kvalitní halapartna~
+/* original string; see English setup.tra for needed modifications
+@106394 = ~Dekahul (vzıvání)
+Úroven: 2
+Dosah: sesilatel
+Trvání: 1 kolo/úroven
+Doba kouzlení: 2
+Rozsah: sesilatel
+Hod na záchranu: ádnı
+Toto kouzlo vytvorí v rukou carodeje silovou hul. Je povaována za magickou zbran, která pri úspešném zásahu své obeti ubere 1-6 ivotu a pusobí i na bytosti imunní vuci normálním zbraním. Je to však hul, take pokud mág nemá odbornost na hole, pouívá Dekahul s postihem. Tato hul má také moc pri prvním úderu vysát z cíle 1-2 ivoty, které se pridají k uivatelovım. Ten si jimi však mue pouze uzdravit zranení, která utrpel; pocet jeho ivotu nemue v tomto prípade prevıšit normální maximum.~
+*/
+/* original string; see English setup.tra for needed modifications
+@109764 = ~Tato zbran kdysi náleela lidskému hranicári jménem Althax Grom. Althax nenávidel obry, kterí suovali jeho vlast, a ji od mládí se trénoval v jejich vyhlazování. I kdy puvodne tyto neprátele hubil mecem a lukem, zakrátko seznal, e takové zbrane nejsou proti jeho prerostlım protivníkum dostatecne úcinné. Proto pro nej jeho druidskı prítel Eladan ocaroval tohle velké kladivo. Povest této zbrane pak rostla stejne, jako se šírily legendy o Althaxovi. I kdy kladivo po Althaxove predcasném skonu mnohokrát zmenilo majitele, Spánek obra zustane vdy v pameti lidí jako zbran mocného válecníka.
+VLASTNOSTI:
+Zranení: 1k4 +3
+THAC0: +4
+Druh zranení: drtivé
+Váha: 5
+Rychlost: 1
+Dovednost: kladiva
+Typ: jednorucní
+Nemue uívat:
+ Druid
+ Mág
+ Zlodej~
+*/
+/* original string; see English setup.tra for needed modifications
+@112174 = ~Barevnı orb (vzıvání)
+Úroven: 1
+Dosah: dohled sesilatele
 Trvání: zvláštní
 Doba kouzlení: 1
-Rozsah: sesílatel
-Hod na záchranu: ádnı
-Bezesporu jedno z nejlepších obrannıch kouzel vùbec. Kamenná kùe zpùsobí, e dotyènı je prakticky imunní vùèi jakémukoliv seku, plameni, projektilu apod. (aèkoliv magie a zranìní kouzly osobu ovlivòují normálnì). Další 1 a 4 útoky (+1 útok/2 úrovnì èarodìje), kterımi je cíl napaden, se prostì bez jakéhokoliv úèinku odrazí. Vícenásobné seslání tohoto kouzla se nesèítá.~
-   @109 = ~Odkamenìní (promìna)
-Úroveò: 6
-Dosah: dohled sesílatele
-Trvání: stálé
-Doba kouzlení: 6
-Rozsah: 1 bytost
-Hod na záchranu: ádnı
-Toto kouzlo promìní zkamenìlé bytosti zpìt na normální. Pokud se nìkterı z vašich spoleèníkù stal obìtí baziliška nebo medúzy, toto kouzlo jej opìt oiví.~
-   @110 = ~Zkamenìní (promìna)
-Úroveò: 6
-Dosah: dohled sesílatele
-Trvání: stálé
-Doba kouzlení: 6
 Rozsah: 1 bytost
 Hod na záchranu: zruší kouzlo
-Toto kouzlo zmìní jak ivého, tak i nemrtvého tvora na kámen. Protivník má monost hodit si na záchranu pøed kouzlem, chce-li se jeho úèinkùm vyhnout. Toto pùsobení lze zvrátit zaklínadlem 6. úrovnì 'odkamenìní'.~
-   @111 = ~Mocné slovo: ticho (vyvolávání)
-Úroveò: 6
-Dosah: dohled sesílatele
-Trvání: 2 kola
+Barevnı orb vytvorí kouli 10 cm v prumeru, je neomylne zasáhne cíl. Úcinek závisí na pokrocilosti carodeje: koule 1. úrovne zpusobí zranení za 1-4 ivoty a oslepí dotycného na jedno kolo. Koule 2. úrovne ubere 1-6 ivotu a privodí obeti bolest. Koule 3. úrovne pripraví neprítele o 1-8 ivotu a spálí ho. Koule 4. úrovne vezme protivníkovi 1-10 ivotu a oslepí ho na ctyri kola. Koule 5. a 6. úrovne odecte vybrané bytosti 1-12 ivotu a omrácí ji na 3 kola. Koule 7. a 9. úrovne odpocte souperi 2-16 ivotu a ochromí ho na 13 kol.~
+*/
+/* original string; see English setup.tra for needed modifications
+@112182 = ~Štít (vzıvání)
+Úroven: 1
+Dosah: sesilatel
+Trvání: 5 kol/úroven
 Doba kouzlení: 1
-Rozsah: 1 bytost
+Rozsah: sesilatel
 Hod na záchranu: ádnı
-Tímto kouzlem èarodìj pronese jedno z mocnıch slov. Kdy je vyøèeno, mùe bıt pouito na libovolnou bytost v dosahu, které zabrání ve vydávání zvukù. Hod na záchranu není v tomto pøípadì monı.~
-
-
-
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Cosmetic Changes Components                      \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-
-  @1000 = ~Odstranit animace prileb~
-
-  @2000 = ~Uprava animace zbrani~
-
-  @3000 = ~Graficke efekty kouzleni z Icewind Dale (Andyr)~
-
-  @4000 = ~Obnoveni nahravacich IWD obrazovek~
-
-  @5000 = ~Zruseni ikon na portretu od nosenych predmetu~
-
-  @6000 = ~Vylepseni ikon~
-
-  @7000 = ~Pri kazdem dialogu zapauzovat hru~
-
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Content Changes Components                       \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-
-@101000 = ~Pridat do BG1 Bezedny vak~
-@101001 = ~Pas na munici~
-@101002 = ~Tento pás je ideální pro nošení kamenù do praku, šipek nebo šípù.
+Kdy je toto kouzlo pouito, vznikne pred uivatelem neviditelná prehrada, která nastaví jeho obranné císlo na 4 proti normálním zbraním, na 2 proti strelnım zbraním a uciní carodeje imunním vuci všem magickım strelám, které jsou na nej vyslány.~
+*/
+/* original string; see English setup.tra for needed modifications
+@114959 = ~Jako jiná jemu podobná bylo i toto válecné kladivo vyrobeno kompletne z oceli, s kosti drtící hlavicí usazenou na pulmetrové tyci. Tvurci mu nadto vštípili ješte urcité magické vlastnosti, a tudí je v boji mnohem úcinnejší.
+VLASTNOSTI:
+Schopnost v boji:
+– 15% šance na 1k4 zranení chladem
+– 10% šance na nakaení cíle (3 body zranení za vterinu po 10 vterin)
+THAC0: +2
+Zranení: 1k4 +3 (drtivé)
+Rychlost: 4
+Dovednost: kladiva
+Typ: jednorucní
+Vyaduje:
+9 Síla
+Váha: 6~
+*/
+/* original string; see English setup.tra for needed modifications
+@121478 = ~Nakaení (nekromancie)
+Úroven: 3
+Sféra: uzdravení
+Dosah: dotyk
+Trvání: 8 hodin
+Doba kouzlení: 1 kolo
+Rozsah: 1 bytost
+Hod na záchranu: zruší kouzlo
+Tímto zpusobem lze nakazit dotycnou bytost nemocí, která z obeti vysaje 5-20 bodu síly. Úspešnı hod na záchranu tyto úcinky ruší. Nakaení nepusobí na bytosti nemrtvé, vyrobené nebo stvorení z jinıch dimenzí. Kouzlo nemohou sesílat postavy s dobrım presvedcením.~
+*/
+/* original string; see English setup.tra for needed modifications
+@122605 = ~Povez mi ješte jednou o tom novém *a* starém králi.~
+*/
+/* original string; see English setup.tra for needed modifications
+@124328 = ~Tuto halapartnu jsi vyrobil vlastníma rukama pod vedením trpaslíka Tiernona. Je vykována ze stejného ledu, jako byly steny Šeromrazu. Stále v sobe nese neco z ledovce a pridáš-li k tomu svou sílu, stane se z ní ohromná zbran. I pres svou ledovou podstatu je cepel na dotyk jen mírne chladná a neroztaví se, i kdyby byla vystavena tem nejpalcivejším plamenum.
+VLASTNOSTI:
+Zranení: 1k10 +4
+THAC0: +4
+Druh zranení: secné
+Zvláštní:
+  +10 k odolnosti vuci ohni
+  +10 k odolnosti vuci mrazu
+  jedenkrát denne mue seslat bournou schránku
+  3% šance 'kuel mrazu' seslanı na cíl
+Váha: 6
+Rychlost: 5
+Dovednost: halapartny
+Typ: obourucní
+Nemue uívat:
+ Druid
+ Knez
+ Mág
+ Zlodej~
+*/
+/* original string; see English setup.tra for needed modifications
+@125818 = ~Tento krátkı luk, vyrobenı z mnoha na sebe naskládanıch druhu dreva, predstavuje posvátnı artefakt válecníku ve slubách Tala, boha bourí a zkázy. Castokráte s ním bojovali proti neprátelum svého chrámu a jinım nepohodlnım osobám. Pozdeji tato zbran prešla do rukou bourného rytíre jménem Kalassan Doctenı, kterı byl zabit poté, co na Ostrovech mesícního svitu porazil mnoství hranicáru a druidu.
 
 VLASTNOSTI:
 
-Kapacita: celkovì 2000 støel do praku, vrhacích šipek, šípù nebo šipek
-Váha: 2~
-@101003 = ~Vak dr¾ení~
-@101004 = ~Podobnì jako ostatní magické vaky vypadá i tento jako bì¾nı plátìnı pytel o velikosti zhruba 60 krát 120 cm. Otvírá se v¹ak do nedimenzionálního prostoru, tak¾e jeho vnitøní rozmìry daleko pøesahují rozmìry vnìj¹í. Bez ohledu na to, co do nìj ulo¾í¹, bude tento tlumok vá¾it poøád stejnì.
-
-VLASTNOSTI:
-
-Váha: 5~
-
-@102000  = ~Obchody nabizeji vetsi mnozstvi predmetu najednou~
-
-@103000 = ~Klenoty a lektvary vyzaduji identifikaci~
-@103001 = ~Drahokam je ruda, po které je, kdy se obrousí nebo na ní vytvoøí fazety a vyleští, poptávka nebo se mùe uívat na šperky.~
-
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Rule Changes Components                          \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-
-@201000 = ~Obourucni mece bastardy~
-
-@202000 = ~Kyje pouzitelne kazdym~
-
-@202100 = ~Upravy popisu pro komponentu 'Kyje pouzitelne kazdym'~
-@202101 = ~Vyzaduje nainstalovanou komponentu 'Kyje pouzitelne kazdym'~
-
-@203000 = ~Odstranit limit zkusenosti~
-
-@204000 = ~Umozneni pouziti zlodejskych schopnosti a ukryvani v tezkych zbrojich~
-
-@205000 = ~Umozneni sesilani magovych kouzel ve zbrojich~
-
-@206000 = ~Moznost noseni vice ochrannych predmetu najednou~
-@206001 = ~Omezeni podle P&P~
-
-@206100 = ~Bez omezeni~
-
-@207000 = ~Sesilani kouzel ze svitku (a jinych predmetu) na levelu
-postavy~
-
-@208000 = ~Velmistrovstvi ve zbranovych dovednostech
-i pro multi-povolani (Weimer)~
-
-@209000 = ~Prave velmistrovstvi ve zbrani (Baldurdash)~
-
-@210000 = ~Zmena magicky vytvorenych zbrani na nulovou vahu~
-
-@211000 = ~Upravena THAC0 tabulka~
-
-@212000 = ~Uprav tabulku sesilani kouzel pro magy~
-@212001 = ~Upravena tabulka (Blucher)~
-
-@212100 = ~PnP tabulka~
-
-@213000 = ~Uprav tabulku sesilani kouzel pro bardy~
-
-@214000 = ~Uprav tabulku sesilani kouzel pro kleriky~
-
-@215000 = ~Pouzit pro druida knezovy tabulky postupu v urovnich
-a kouzlech~
-
-@216000 = ~Druidi pouzivaji omezeni presvedceni z 3e pravidel (ND, ZN, N, CN, NZ)~
-
-@217000 = ~Uvolneni predmetovych omezeni pro multi- a dualpovolani knezich a druidu~
-
-@218000 = ~Pridej penalizaci na zachranne hody pro kouzla sesilana postavami na vysokych levelech~
-@218001 = ~Pouze pro arkanni magii~
-
-@218100 = ~Pouze pro knezskou magii~
-
-@218200 = ~Arkanni & knezska magie~
-
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Convenience Tweaks                               \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-
-@300000 = ~Vice zivotu pri levelovani~
-@300001 = ~Maximum~
-
-@300100 = ~NWN styl~
-
-@301000 = ~Maximum zivotu pro NPC (the bigg)~
-
-@302000 = ~Vsechny predmety identifikovane~
-
-@303000 = ~Jednoduche uceni kouzel~
-@303001 = ~100% nauceni kouzel~
-
-@303100 = ~100% nauceni kouzel a neomezeny pocet kouzel na level~
-
-@304000 = ~Skutecne bezedne Bezedne vaky~
-
-@305000 = ~Slevy za nizkou reputaci (Sabre)~
-@305001 = ~Zmen vliv reputace na ceny v obchodech~
-
-@305100 = ~Reputace nema zadny vliv, ceny v obchodech nastaveny na 100% (Luiz)~
-
-@305200 = ~Reputace nema zadny vliv, ceny v obchodech nastaveny na 80% (Luiz)~
-
-@305300 = ~Reputace nema zadny vliv, ceny v obchodech nastaveny na 60% (Luiz)~
-
-@306000 = ~Neomezene skladani streliva do jednoho slotu~
-
-@307000 = ~Neomezene skladani drahokamu a sperku do jednoho slotu~
-
-@308000 = ~Neomezene skladani lektvaru do jednoho slotu~
-
-@309000 = ~Neomezene skladani svitku do jednoho slotu~
-
-@310000 = ~Zadne pasti a zamky (Weimer)~
-
-@311000 = ~Odpocinek je mozny kdekoliv (Japheth)~
-
-@312000 = ~Prodejne hole, kyje a praky (Icelus)~
-
-@313000 = ~Cheat minimalnich vlastnosti~
-@313001 = ~Zvol minimalni hodnotu vlastnosti, v rozmezi 6 az 15:~
+Zranení: +3
+THAC0: +2
+Zvláštní: uivatel na sebe mue jednou denne seslat 'bournou schránku'
+Váha: 3
+Rychlost: 3
+Dovednost: luky
+Typ: obourucní
+Nemue uívat:
+ Druid
+ Knez
+ Mág
+ Zlodej~
+*/

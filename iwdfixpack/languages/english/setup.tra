@@ -19,12 +19,32 @@
    @116 = ~This powerful elixir imbues the drinker with immunity to all spells up to and including 2nd level. The effect will only last for 10 rounds however, so careful timing is necessary.
 
 Not usable by:~
+   @117 = ~Kaylessa's Chainmail~
+   @118 = ~Shadowed Plate~
+   @119 = ~There is a foul odor in the air. On occasion, you find large, black feathers that must have been discarded by some sort of an avian beast. In addition, there are droppings on the ground which indicate the presence of wyverns. Scratch marks on the walls hint that some parts of this area may also be populated by exceptionally large insects.~
+   @120 = ~There is a foul odor in the air. On occasion, you find large, black feathers that must have been discarded by some sort of an avian beast.~
+   @121 = ~Droppings on the ground indicate the presence of wyverns in this area.~
+   @122 = ~Whatever creatures used to live in this area are either dead or long gone. However, you find small quantities of animal hair on the floor, possibly belonging to a feline creature of some sort.~
+   @123 = ~Several doors in this area appear to have been used recently, but there are no tracks indicating that anyone has actually stepped through them. It is almost as if the doors had been manipulated by some kind of external force.~
+   @124 = ~This area smells of dust and decay; it was likely a burial crypt of some sort. On occasion, you are able to spot a few stray bones and some torn rags on the ground.~
+   @125 = ~There is a strange smell of offal in the air which indicates the presence of either orogs or minotaurs, or possibly both. Scratches on some of the walls imply that umber hulks and trolls may also be nearby. In addition, you detect a very faint fungoid smell.~
+   @126 = ~There is a strange smell of offal in the air which indicates the presence of either orogs or minotaurs, or possibly both. Scratches on some of the walls imply that a few umber hulks may also be nearby. Occasionally, you also see dung from some sort of wyvern-like creatures.~
+   @127 = ~Your tracking skills reveal little about this location. However, you vaguely discern traces of a strange slimy substance which appears to cover the darker patches of the ceiling.~
+   @128 = ~The most common tracks in this area seemingly belong to large canines. In several spots, they appear to blend into human footprints. Traces of unusually large webs and consistent waste lead you to believe that there may be unnaturally large spiders in the northeastern portions of the caves. In addition, heaps of rotting vegetation are strewn throughout northern parts of the area. There is also a faint smell of sulfur in the air.~
+   @129 = ~The most common tracks in this area resemble those of large canines. In several spots, they appear to blend into human footprints. Traces of unusually large webs and consistent waste lead you to believe that there may be unnaturally large spiders in the northern portions of the caves. On occasion, you find large, black feathers that must have been discarded by some sort of an avian beast. In addition, there is a strange smell of offal in the air. It seems to be both human and animal. It might come from some sort of hybrid monster.~
+   @130 = ~Armor of Penance~   
+   // this is strref 12657 minus the reference to Eidan the Innkeeper
+   @131 = ~Aye, a lot of people have gone missing recently - one of them was Conlan's boy, Sheemish.  The next morning, the whole town searched for the boy but turned up nothing.  He was just gone.  Vanished without a trace.  Then Mother Egenia from the church, Maegan Potts - and others.  Not a trace of any of them.  *Nothing.*~
    
+   // a variation of 7398 - remove the part about flaws since this is the description of a "Flawless Waterstar Gem" 
+   @132 = ~Waterstar is also called achroite or colorless tourmaline and is rare in the Realms.  This beautiful stone is flawless and hence is fit for cutting.~        
+   @133 = ~High Quality Halberd~ // high quality halberd is just named "halberd" in the game
+   @134 = ~^\( *Speed [Ff]actor:? *\)[0-9]+~
+   @135 = ~^\( *Weight:? *\)[0-9]+~
+
   @1000 = ~Game Text Update~
   @1001 = ~This is not available in your language.~
   
-
-
 /////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
 /////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
 /////                                                  \\\\\
@@ -33,6 +53,28 @@ Not usable by:~
 /////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
 /////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
 
+// zz05we: doesn't actually have bonus thac0 vs lawful
+@103028 = ~Even without magical enchantment, this particular piece of weaponry could fetch a healthy price for its exquisite craftsmanship.  The shaft of the mace is a bronze cylinder reinforced with a steel bar down the center and six thin bands of polished steel, three above the haft and three below the head.  The head itself is egg-shaped and made of red-stained cherry wood reinforced by decorative arcing bronze bands.  Steel flanges stick out from the head in an asymmetrical pattern.  The two largest flanges bear extensive etching.  One is a classical image of Tymora with the word "WEAL" in Thorass.  The other is an image of Beshaba with the word "WOE."  Despite the delicate materials used in the mace's construction, it is exceptionally sturdy.  The history of the mace is largely a mystery.
+
+STATISTICS:
+
+Damage:  1D6 + 2, +3 vs. Lawful Creatures
+THAC0:  +1
+Damage type:  Crushing
+Special:  +1 to all Saving Throws, 13% of all hits cause Curse
+Weight:  7
+Speed Factor:  5
+Proficiency Type:  Mace
+Type:  1-handed
+Not Usable By:
+ Lawful Characters
+ Paladin
+ Druid
+ Mage
+ Thief
+~
+
+// DECASTAVE DRAINING
 @106394 = ~Decastave
 (Evocation)
 Level: 2
@@ -42,6 +84,62 @@ Casting Time: 2
 Area of Effect: Caster
 Saving Throw: None
 This spell creates a staff of force in the caster's hand. It is treated as a magical weapon, doing 1-6 hit points of damage per hit, and it can hit creatures immune to normal weapons. It is a staff, however, so if the caster does not have a proficiency in staff weapons, then the Decastave is used at a penalty. The staff also has the power to drain a target of 1-2 hit points on every strike. These hit points are added to the caster's, but they can only heal damage the caster has taken; they will not raise his hit points beyond his normal maximum.~
+
+// damage bonus +3 > +4 from being composite long bow
+@108712 = ~This bow belonged to Kaylessa, weapons master of the Seldarine's Hand.  Her prowess in archery only bested by her beauty, Kaylessa was devoted to hone the battle skills of any elf under her.  If there were any heroes at the Battle of Seldarine's Hand, Kaylessa was one of them.  She was a shining example of courage in the face of impending doom as she fearlessly led her people against orc and goblin hordes.  Even after the fall of the Hand, her commitment to battle and her people remained strong.  Her last wish was to die in glorious battle.
+
+STATISTICS:
+
+Damage: +4
+To Hit Bonus: +3
+Dexterity: +1 Bonus
+Weight: 3
+Speed Factor: 7
+Proficiency Type: Bow
+Type: 2-handed
+Minimum Strength of 15 required
+Not Usable By:
+ Thief
+ Cleric
+ Mage
+ Druid~
+
+// damage bonus +2 > +3 from being composite long bow
+@108663 = ~Made during the golden age between the elves of the Seldarine's Hand and the dwarves of Dorn's Deep.
+
+STATISTICS:
+Damage: +3 (missile)
+THAC0: +2
+Weight: 3
+Speed Factor: 7
+Proficiency Type: Bow
+Type: 2-Handed
+Minimum Strength of 15 required
+Not Usable By:
+ Thief
+ Cleric
+ Mage
+ Druid~
+
+// damage bonus +2 > +3 
+@108911 = ~Not much is known about the owner of this weapon, save that sages believe it is from another world, called "Eibrancha."  Plane-traveling wizards who have investigated life on "Eibrancha" report that it is dull, commonplace, and ordinary in the extreme, a place where heroes are rare and the populace is, by and large, incredibly average.  This might explain the virtually non-existent body of recorded information about the place.  The only thing known about the weapon's owner is that he was an educated man. The purple wood that the crossbow is constructed from is believed to be from a unique type of tree in Eibrancha.
+
+STATISTICS:
+
+Damage: +3
+THAC0: +5 bonus
+Weight: 7
+Speed Factor:  2
+Proficiency Type:  Crossbow
+Type:  2-handed
+Not Usable By:
+ Druid
+ Cleric
+ Mage
+ Thief
+~
+
+// gsleep: thac0/damage bonus for hammer
 @109764 = ~This weapon was used by the human ranger Althax Grom.  Althax hated the giants that plagued his homeland and was trained to exterminate them from a young age.  Although Althax originally fought his foes using the sword and bow, he quickly decided that those weapons were too slow against his huge foes.  His druid friend, Eladan, enchanted this hammer for him.  The reputation of the weapon grew as legends of Althax grew.  Even though the warhammer has passed through many hands since Althax's untimely demise, Giant's Sleep will always be remembered as the weapon of that powerful warrior.
 
 STATISTICS:
@@ -57,6 +155,8 @@ Not Usable By:
  Druid
  Mage
  Thief~
+
+// four turns > rounds for chromatic orb
 @112174 = ~Chromatic Orb (Evocation)
 Level: 1
 Range: Sight of Caster
@@ -65,3 +165,155 @@ Casting Time: 1
 Area of Effect: 1 creature
 Saving Throw: Neg. 
 This spell creates a 4-inch-diameter sphere that can be hurled unerringly to its target. The orb's effect depends on the level of the wizard: a 1st-level sphere inflicts 1-4 damage and blinds the target for one round. A 2nd-level sphere inflicts 1-6 damage and inflicts pain upon the victim. A 3rd-level sphere deals 1-8 damage and burns the victim. A 4th-level sphere deals 1-10 damage and blinds the target for four rounds. A 5th to 6th-level sphere deals 1-12 damage and stuns the target for three rounds. The 7th to 9th-level sphere deals 2-16 damage and paralyzes the victim for 13 rounds.~
+
+// vocalize only affects the caster
+@112182 = ~Vocalize (Alteration) 
+Level: 2
+Range: Touch 
+Duration: 1 turn
+Casting Time: 2 
+Area of Effect: Caster
+Saving Throw: None 
+The wizard can cast spells with a verbal component without having to make any noise, so long as the casting takes place entirely within the duration of the Vocalize spell. This spell has no effect on other noises or speech - it simply removes a spell's verbal component. This spell is a great counter for Silence 15' Radius.~
+
+// 1d6+1 > 1d6+2 for base flail damage
+@114357 = ~The flail is a sturdy wooden handle attached to an iron rod, a wooden rod with spikes, or a spiked iron ball. Between the handle and its implement is either a hinge or chain link.  The weapon was originally used as a tool for threshing grain.  
+
+STATISTICS:
+
+Damage:  1D6 +2
+THAC0: +1
+Damage type:  Crushing
+Special: 50% chance +1D4 piercing damage
+Weight: 15
+Speed Factor: 6
+Proficiency Type: Flails
+Type:  1-handed
+Not Usable By:
+ Druid
+ Mage 
+ Thief~
+
+// u2ham4b War Hammer of Phasing +2 descript, says hammer causes disease when it causes phasing
+@114959 = ~Like others of its type, this warhammer is made entirely of steel, with a bone-crushing hammer mounted upon an 18" shaft.  It has also been bestowed with a small number of magical properties, however, thus making it more effective in combat.
+
+STATISTICS:
+
+Damage:  1D4 +3
+THAC0:  +2 bonus
+Damage type:  Crushing
+Special: 
+  10% chance of target being Phased
+  15% chance +1D4 cold damage
+Weight:  6
+Speed Factor:  2
+Proficiency Type:  Hammer
+Type:  1-handed
+Not Usable By:
+ Druid
+ Mage 
+ Thief~
+
+// zzh8gk: doesn't provide any thac0 bonus vs. giants; damage vs. giants is actually +5, not +4
+@117716 = ~A halfling warrior named Kim Marchwatch used this potent weapon against the giants that frequently plagued his homeland, hitting them in the head with so many rocks that they fell over in pain or ran away.  When Kim was replaced as shire-reeve of his homeland, he became a reluctant adventurer.  He is believed to have been swallowed up by the dreaded Fen Mists of Acallo in 760 DR.
+
+STATISTICS:
+
+Damage:  +1
+THAC0:  +1, +5 vs. Giants
+Weight:  0
+Speed Factor:  1
+Proficiency Type:  Missile Weapons
+Type:  1-handed
+Not Usable By:
+~
+
+// cause disease is abjuration school but necromantic sphere--like its inverse, cure disease
+@121478 = ~Cause Disease (Abjuration)
+Level: 3
+Sphere: Necromantic
+Range: Touch
+Duration: 8 hours
+Casting Time: 1 round
+Area of Effect: 1 creature
+Saving Throw: Neg.
+This spell afflicts one creature the priest touches with a disease that saps the target of 5-20 points of strength.  A saving throw vs. spell will negate the effects.  This spell has no affect on undead, constructs, or extraplanar creatures.  Cause Disease cannot be cast by good characters.~
+
+// duplicate #22604, but remove any reference that this is a repeat (e.g. "again" was removed in English)
+@122605 = ~Tell me of this new *and* old king.~
+
+// Tongue of the Gloomfrost should do piercing, not slashing, damage
+@124328 = ~This weapon was fashioned by your hands, guided by the dwarf, Tiernon.  Forged from ice taken from the walls of the Gloomfrost, this blade has taken some of the glacier and some of your strength into it, creating a formidable weapon. Though made of ice, the weapon is only slightly cold to the touch and does not melt, even when exposed to the hottest flames.
+
+STATISTICS:
+
+Damage:  1D10 + 4
+THAC0: +4
+Damage type:  Piercing
+Special: +10% Fire Resistance, +10% Cold Resistance, Storm Shell 1/Day, 3% chance of Cone of Cold on the target
+Weight: 6
+Speed Factor:  5
+Proficiency Type:  Halberd
+Type:  2-handed
+Not Usable By:
+ Druid
+ Cleric
+ Mage
+ Thief~
+
+// storm bow is usable by thieves; remove +1 damage since it's not a long bow
+@125818 = ~This weapon is holy to warriors in the service of Talos, god of storms and destruction, and has seen decades of use in their capable hands.  A short bow made of many composite layers of wood, the Storm Bow has been used against the myriad enemies of the church of Talos.  Most recently, the bow was in the possession of a Storm Knight named Kalassan Brevered, who was killed after striking down a number of rangers and druids on the Moonshae Isles.
+
+STATISTICS:
+
+Damage:  +2
+THACO:  +2
+Special:  User can invoke a Storm Shell on himself or herself 1/Day
+Weight:  3
+Speed Factor:  4
+Proficiency Type:  Bow Weapons
+Type:  2-handed
+Not Usable By:
+ Druid
+ Cleric
+ Mage~
+
+// 1d6+4 > 1d6+5 for base flail damage
+@127373 = ~Skullflail, or "The Flail of Teeth" as it is more commonly known, was constructed in 1035 DR for the barbarian warlord Wychgar. During a battle in the northern wastes which became known as Hallowed Pass, Wychgar lost his three brothers to the orc army led by Kraag the Mighty. Wychgar was distraught and during the night he wandered the battlefield looking for their bodies to take away for proper burial. He stumbled across them and was visited by the brothers' spirits who were trapped between the land of the living and the land of the dead. Unable to help them leave he had their souls stored in the flail with the help of a shaman.
+
+The three heads of the flail are his brother's skulls, which are attached to the shaft by silver chains. The three skull-heads grin maniacally at their new life. When the flail is used in combat the three heads bite the target, tearing and rendering flesh.
+
+STATISTICS:
+
+Damage:  1D6 +5, and +1D4 piercing from the biting skulls
+THAC0:  +4
+Damage Type:  Crushing
+Special: 10% chance of an additional 1D6 piercing damage
+Weight:  4
+Speed Factor:  3
+Proficiency Type:  Flail
+Type:  1-Handed
+Not Usable By:
+ Druid
+ Mage
+ Thief~
+
+// zz36dgd: +5 > +6 damage vs. good
+@127377 = ~The story of the ascension of Bane, Bhaal, and Myrkul, the gods of strife, murder, and death, is well known among learned men across the face of Faerun. Despite this, most theologians know very little about what happened to the unfortunate dying god whom the malefic trio consumed prior to their encounter with Jergal. What is known is that a small portion of the dead god's essence found its way to the Astral Plane, where it coalesced into one of the smallest islands of slain divinity. This small hunk of rock and odd ore was captured hundreds of years later by an enchanter named Merdros. Merdros' duergar servants created this blade for the wizard's most powerful warrior ally. Owners of the blade claimed that they could feel the dead god's final memories flowing through the weapon when they held it.
+
+STATISTICS:
+
+Damage:  2D4 +4, +6 vs. Good
+THAC0:  +4, +6 vs. Good
+Special:
+  Can cast Emotion: Fear 3/day
+  Symbol of Pain 1/day
+Weight:  4
+Speed Factor:  0
+Proficiency Type:  Large Swords
+Type:  1-handed
+Not Usable By:
+ Good Creatures
+ Druid
+ Cleric
+ Mage~

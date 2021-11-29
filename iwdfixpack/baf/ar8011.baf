@@ -1,0 +1,15 @@
+IF
+  Dead("Ilmadia")
+  Global("%group_2_hostile%","MYAREA",0) // fire giant group
+THEN
+	RESPONSE #100
+		SetGlobal("%group_2_hostile%","MYAREA",1)
+END
+
+IF
+  Allegiance("Ilmadia",ENEMY)
+  Global("%group_2_hostile%","MYAREA",0) // fire giant group
+THEN
+	RESPONSE #100
+		SetGlobal("%group_2_hostile%","MYAREA",1)
+END

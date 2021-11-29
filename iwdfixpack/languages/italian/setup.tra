@@ -1,263 +1,162 @@
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Messaggi di Setup                                \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
 
-     @0 = ~Aggiustamenti ai PNG~
-     @1 = ~Questa fase potrebbe richiedere qualche momento...~
-     @2 = ~Questa componente richiede che il mod "Aggiungi Borse Conservanti a BG" sia installato.~
-     @3 = ~La componente "Consenti il lancio di incantesimi arcani in armatura" è richiesta.~
-     @4 = ~Aggiustamenti/Trucchi di convenienza~
-     @5 = ~Questa componente richiede che il pacchetto "Oggetti esotici" sia installato.~
-     @6 = ~La componente "Consenti nascondersi nelle ombre e abilità da ladro in armatura pesante" è richiesta.~
-     @7 = ~Questa componente non è disponibile nella tua lingua.~
-     @8 = ~Questa componente è solo per BGT.~
-     @9 = ~Cambiamenti alle regole~
-    @10 = ~Questa componente non è disponibile per Tutu.~
-    @11 = ~Aggiustamenti al... trucco~
-    @12 = ~Questa componente richiede Heart of Winter.~
-    @13 = ~Cambiamenti al contenuto~
-    @14 = ~Questa componente è solo per Tutu o BGT.~
-    @15 = ~Questa componente è solo per Tutu.~
-    @16 = ~La funzione di questa componente è già inclusa in - o rimpiazzata da - un'altra facente parte di uno dei mods già installati.~
-    @17 = ~La componente "Tratta le armi +x/+y coerentemente" è richiesta.~
-    @18 = ~Questa componente è stata deprecata.~
     
    @100 = ~Correzioni varie~
-   @101 = ~Oltre ad essere di superba manifattura, si possono vedere
-piccole rune di potere incise lungo tutta la superficie. E' ovvio che per la 
-sua creazione è stato dedicato molto tempo e molti sforzi. Sebbene non 
-sia evidente a prima vista, si può vedere un bagliore bluastro emanato 
-dalle rune.
-
-STATISTICHE:
-
-Danni: 2D4 +3
-THAC0: +3
-Tipo di danno: Taglio
-Speciale:
-15% di resistenza al Fuoco
-Probabilità del 50% di infiggere +1D8 danni da Fuoco
-Probabilità del 10% di Stordire il bersaglio
-Peso: 10
-Fattore-Velocità: 8
-Tipo di capacità: Spadone
-Tipo: A una mano
-Non utilizzabile da:
-Druidi
-Chierici
-Maghi
-Ladri~
    @102 = ~Ah, e se doveste trovare qualche altro oggetto che potesse essere d'aiuto a risanare l'Arboreto, ve ne sarei grato. Addio, amici miei.~
    @103 = ~Addio.~
    @104 = ~L'Arboreto risplende nuovamente in tutta la sua gloria, amici miei. Sento che il mio lavoro qui è terminato, ed è tempo di andare. Vi ringrazio. Addio.~
    @105 = ~Addio, Valestis.~
    @106 = ~Figurati.~
-   @107 = ~Una scelta eccellente, gentile signore. Tornate fra tre giorni e il vostro scudo sarà pronto.~
-   @108 = ~Pelle di Pietra (Alterazione)
-Livello: 4
-Raggio di azione: Lo stregone
+
+// everything below this was automatically generated from iwdee; translators please review
+
+@117 = ~Armatura di Kaylessa~
+@118 = ~Piastre d'Ombra~
+@119 = ~Nell'aria c'è un odore nauseante. Occasionalmente trovi grandi penne nere che devono essere state lasciate da qualche specie di bestia alata. In aggiunta, c'è dello sterco sul terreno che indica la presenza di viverne. Graffi sulle pareti suggeriscono che alcune zone di quest'area potrebbero anche essere popolate da insetti eccezionalmente grandi.~
+@120 = ~Nell'aria c'è un odore nauseante. Occasionalmente trovi grandi penne nere che devono essere state lasciate da qualche specie di bestia alata.~
+@121 = ~Lo sterco sul terreno indica la presenza di viverne in quest'area.~
+@122 = ~Quali che fossero le creature che vivevano in quest'area, sono morte oppure andate via da tempo. Comunque trovi piccole quantità di pelo di animale sul pavimento, forse appartenente a qualche genere di creatura felina.~
+@123 = ~Varie porte in quest'area sembrano essere state usate recentemente, ma non ci sono tracce che indichino se qualcuno sia effettivamente passato attraverso di esse. È come se le porte fossero state manipolate da qualche tipo di forza esterna.~
+@124 = ~Quest'area puzza di polvere e decomposizione~
+@125 = ~C'è uno strano odore di interiora nell'aria che indica la presenza di orog oppure di minotauri, o forse di entrambi. Graffi su alcune delle pareti suggeriscono che anche umber hulk e troll potrebbero essere nelle vicinanze. In aggiunta, percepisci un debole odore di funghi.~
+@126 = ~C'è uno strano odore di interiora nell'aria che indica la presenza di orog oppure di minotauri, o forse di entrambi. Graffi su alcune delle pareti suggeriscono che anche alcuni umber hulk potrebbero essere nelle vicinanze. Occasionalmente, vedi anche escrementi di qualche genere di creatura simile alle viverne.~
+@127 = ~La tua abilità di seguire le tracce rivela poco riguardo questo luogo. Comunque riesci vagamente a scorgere le tracce di una strana sostanza melmosa che sembra ricoprire le zone più scure del soffitto.~
+@128 = ~Le tracce più comuni in questa zona probabilmente appartengono a grossi canidi. In molti punti sembrano mescolarsi con impronte umane. Tracce di ragnatele insolitamente grandi e di rifiuti delle stesse proporzioni ti portano a credere che potrebbero esserci ragni innaturalmente grandi nella parte nord-est delle caverne. In aggiunta, cumuli di vegetazione marcescente sono sparsi per tutta la parte nord dell'area. C'è anche un debole odore di zolfo nell'aria.~
+@129 = ~Le tracce più comuni in questa zona assomigliano a quelle di grossi canidi. In molti punti sembrano mescolarsi con impronte umane. Tracce di ragnatele insolitamente grandi e di rifiuti delle stesse proporzioni ti portano a credere che potrebbero esserci ragni innaturalmente grandi nella parte nord delle caverne. Occasionalmente trovi grandi penne nere che devono essere state lasciate da qualche specie di bestia alata. In aggiunta, c'è uno strano odore di interiora nell'aria. Sembra essere sia umano sia animale. Potrebbe provenire da qualche genere di mostro ibrido.~
+@130 = ~Armatura del Castigo~
+/* original string; see English setup.tra for needed modifications
+@131 = ~Sì, molte persone sono scomparse di recente... una di esse è il figlio di Conlan, Sheemish. La mattina seguente, tutta la città ha cercato il ragazzo senza esito. Era scomparso. Senza lasciar traccia. Poi Madre Egenia dalla chiesa, Eidan il locandiere, Maegan Potts... e altri. Nessuna traccia di nessuno di loro. *Niente*.~
+*/
+/* original string; see English setup.tra for needed modifications
+@132 = ~La Stella d'Acqua viene anche chiamata tormalina incolore ed è rara nei Reami. Questa pietra presenta fessure e inclusioni, pertanto è utilizzabile per il taglio solo in piccole quantità.
+STATISTICHE:
+Peso: 0~
+*/
+@133 = ~Alabarda di Alta Qualità~
+/* original string; see English setup.tra for needed modifications
+@106394 = ~Bastone d'Energia
+(Apparizione)
+Livello: 2
+Raggio d'azione: 0
+Durata: 3 round + 1 round per livello
+Tempo di lancio: 2
+Area d'effetto: Il lanciatore
+Tiro-salvezza: Nessuno
+Questo incantesimo crea un bastone di energia magica nelle mani del personaggio. Viene considerato un'arma magica che infligge 1d6 punti di danno per colpo e che può ferire le creature che richiedono armi +1 per essere colpite. Resta comunque un bastone, pertanto se il lanciatore non è competente nell'uso di queste armi, allora il Bastone d'Energia viene usato con una penalità. Il bastone ha anche il potere di risucchiare 1d2 Punti Ferita al bersaglio ad ogni colpo messo a segno. Questi Punti Ferita vengono aggiunti a quelli del personaggio, ma possono solo curare il danno che ha subito; non aumenteranno i suoi Punti Ferita oltre il valore massimo.~
+*/
+/* original string; see English setup.tra for needed modifications
+@109764 = ~Quest'arma veniva utilizzata dal ranger umano Althax Grom. Althax odiava a morte i giganti che infestavano la sua terra natia ed era stato addestrato a combatterli fin da giovane. Nonostante Althax affrontasse inizialmente i suoi nemici con l'arco e la spada, presto decise che tali armi erano troppo lente contro i suoi enormi avversari. Il suo amico druido Eladan incantò questo martello per lui. La reputazione dell'arma crebbe di pari passo con quella di Althax. Anche se questo martello da guerra è passato tra le mani di molti proprietari dopo la morte di Althax, Sonno del Gigante sarà sempre ricordato come l'arma di questo potente guerriero.
+STATISTICHE:
+THAC0: +3
+Danno: 1d4+4 (contundente)
+Fattore-velocità: 1
+Tipo di Competenza: Martello da Guerra
+Tipo: A una mano
+Richiede:
+Forza 9
+Peso: 5~
+*/
+/* original string; see English setup.tra for needed modifications
+@112174 = ~Sfera Cromatica
+(Apparizione)
+Livello: 1
+Raggio d'azione: Visuale del lanciatore
 Durata: Speciale
 Tempo di lancio: 1
-Area d'effetto: Lo stregone
-Tiro-salvezza: Nessuno
-
-Probabilmente uno dei migliori incantesimi difensivi esistenti, Pelle di Pietra rende lo stregone virtualmente invulnerabile contro qualsiasi attacco con arma da taglio, da punta o contundente. Gli attacchi magici, invece, continueranno ad infliggere il normale numero di danni. I successivi 1-4 attacchi (+1 attacco ogni 2 livelli dello stregone) che colpiscono lo stregone non avranno alcun effetto. Lanciare questo incantesimo più volte sullo stregone non ha effetti cumulativi.~
-   @109 = ~Pietra in Carne (Alterazione)
-Livello: 6
-Raggio d'azione: Campo visivo dello stregone
-Durata: Permanente
-Tempo di lancio: 6
-Area d'effetto:  1 Creatura
-Tiro-salvezza: Nessuno
-
-Questo incantesimo è la forma invertita di Carne in Pietra e riporta in vita una creatura che è stata pietrificata.  Allo stesso modo tutto l'equipaggiamento della creatura torna normale. L'effetto è immediato e non è necessario effettuare tiri-salvezza o prove di shock corporeo.~
-   @110 = ~Carne in Pietra (Alterazione)
-Livello: 6
-Raggio d'azione: Campo visivo dello stregone
-Durata: Permanente
-Tempo di lancio: 6
-Area d'effetto:  1 Creatura
-Tiro-salvezza: Nega gli effetti
-
-Questo incantesimo provoca la pietrificazione di una creatura vivente con tutto quello che ha addosso.  La vittima ha diritto ad un tiro-salvezza contro incantesimi per evitarla.  Se una statua creata con questa magia subisce attacchi di qualsiasi genere essa si spezza in minuscoli frammenti, rendendo impossibile per la creatura la trasformazione inversa.  La forma invertita di questo incantesimo può essere lanciata sulla vittima per riportarla in vita, ma questo è l'unico modo.~
-   @111 = ~Parola del Potere: Silenzio (Evocazione)
-Livello: 6
-Raggio d'azione: Campo visivo dello stregone
-Durata: 2 round
+Area d'effetto: 1 creatura
+Tiro-salvezza: Neg.
+Questo incantesimo crea una sfera dal diametro di 60 centimetri che può essere scagliata contro un singolo bersaglio. Gli effetti della sfera variano a seconda del livello del personaggio:
+1° livello: 1d4 punti di danno magico e acceca il bersaglio per 1 round.
+2° livello: 1d6 punti di danno da fuoco e infligge dolore fisico alla vittima (penalità pari a -1 alla Classe Armatura e al THAC0) per 1 round.
+3° livello: 1d8 punti di danno da fuoco e brucia la vittima per 1d3 punti di danno da fuoco.
+4° livello: 1d10 punti di danno magico e acceca il bersaglio per 4 round.
+5° e 6° livello: 1d12 punti di danno magico e stordisce il bersaglio per 3 round.
+7° livello e oltre: 2d8 punti di danno magico e paralizza la vittima per 13 round.
+Un tiro-salvezza contro Incantesimi effettuato con successo nega tutti gli effetti.~
+*/
+/* original string; see English setup.tra for needed modifications
+@112182 = ~Scudo
+(Apparizione)
+Livello: 1
+Raggio d'azione: 0
+Durata: 5 round per livello
 Tempo di lancio: 1
-Area d'effetto: 1 Creatura
+Area d'effetto: Il lanciatore
 Tiro-salvezza: Nessuno
-
-Questo incantesimo permette allo stregone di pronunciare una parola del potere. Una volta pronunciata, essa impedisce a qualsiasi creatura entro il raggio d'azione di produrre suoni.  Non sono consentiti tiri-salvezza.~
-
-
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Componenti degli aggiustamenti al... trucco      \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-
-  @1000 = ~Rimuovi le animazioni degli elmi~
-
-  @2000 = ~Aggiustamenti alle animazioni delle armi~
-
-  @3000 = ~Sostituisci gli effetti degli incantesimi di Icewind Dale con quelli di Baldur's Gate II (Andyr)~
-
-  @4000 = ~Ripristina il logo di IWD nelle schermate di caricamento~
-
-  @5000 = ~Disabilita le icone aggiunte al ritratto del personaggio dagli oggetti equipaggiati~
-
-  @6000 = ~Migliora l'aspetto delle icone~
-
-  @7000 = ~Forza tutti i dialoghi a mettere automaticamente in pausa il gioco~
-    
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Componenti dei cambiamenti al contenuto          \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-
-@101000 = ~Aggiungi Borse Conservanti a BG~
-@101001 = ~Cintura delle munizioni~
-@101002 = ~Questa bandoliera è l'ideale per tenere proiettili, dardi, frecce o quadrelli.
+Quando questo incantesimo viene lanciato, una barriera invisibile appare davanti al personaggio. Scudo imposta la Classe Armatura dell'incantatore a 4 contro tutte le armi (2 contro le armi a distanza) e rende il personaggio immune a qualsiasi proiettile magico gli venga scagliato contro.~
+*/
+/* original string; see English setup.tra for needed modifications
+@114959 = ~Come altri del suo genere, questo martello da guerra è fatto interamente d'acciaio, con una testa spaccaossa montata su un manico lungo 45 centimetri. Gli sono state conferite anche alcune proprietà magiche in modo da renderlo più efficace in combattimento.
+STATISTICHE:
+Abilità in combattimento:
+- 15% di possibilità di infliggere 1d4 punti di danno da freddo 
+- 10% di possibilità che il bersaglio diventi In Fase (subisce 3 punti di danno al secondo) per 10 secondi
+- Questi effetti si escludono a vicenda
+THAC0: +2
+Danno: 1d4+3 (contundente)
+Fattore-velocità: 3
+Tipo di Competenza: Martello da Guerra
+Tipo: A una mano
+Richiede:
+Forza 9
+Peso: 6~
+*/
+/* original string; see English setup.tra for needed modifications
+@121478 = ~Causa Malattia
+(Necromanzia)
+Livello: 3
+Sfera: Guarigione
+Raggio d'azione: Tocco
+Durata: 8 ore
+Tempo di lancio: 9
+Area d'effetto: 1 creatura
+Tiro-salvezza: Neg.
+Questo incantesimo infligge ad una creatura toccata dal personaggio una malattia che sottrae al bersaglio 5d4 punti di Forza. Un tiro-salvezza contro Incantesimi effettuato con successo nega gli effetti. Questo incantesimo non ha effetto su non morti, costrutti e creature extraplanari. Non può essere lanciato dai personaggi di allineamento buono.~
+*/
+/* original string; see English setup.tra for needed modifications
+@122605 = ~Parlaci di nuovo di questo nuovo *e* antico re.~
+*/
+/* original string; see English setup.tra for needed modifications
+@124328 = ~Quest'arma è stata creata dalle tue mani guidate dal nano Tiernon. Forgiata dal ghiaccio preso dalle pareti di Mestogelo, questa alabarda ha preso un po' della forza del ghiacciaio e un po' della tua, diventando un'arma formidabile. Benché sia fatta di ghiaccio, è solo leggermente fredda al tocco e non si fonde, nemmeno quando viene esposta alle fiamme più calde.
+STATISTICHE:
+Abilità durante l'uso:
+- Resistenza al Fuoco: +10%
+- Resistenza al Freddo: +10%
+Abilità in combattimento:
+- 3% di possibilità di lanciare Cono di Freddo sul bersaglio
+  Danno: 10d4+10 da freddo (un tiro-salvezza contro Incantesimi effettuato con successo dimezza il danno)
+Abilità attivabili:
+- Scudo di Tempesta una volta al giorno
+  Resistenza al Fuoco, Freddo ed Elettricità: +50%
+  Durata: 1 turno
+  Area d'effetto: Il personaggio
+THAC0: +4
+Danno: 1d10+4 (perforante)
+Fattore-velocità: 5
+Tipo di Competenza: Alabarda
+Tipo: A due mani
+Richiede:
+Forza 14
+Peso: 10~
+*/
+/* original string; see English setup.tra for needed modifications
+@125818 = ~Quest'arma è sacra per i guerrieri al servizio di Talos, dio delle tempeste e della distruzione, ed è stata per anni usata abilmente dalle loro mani. Un arco corto fatto di molti strati di legno, l'Arco della Tempesta è stato usato contro miriadi di nemici della chiesa di Talos. Recentemente, l'arco era entrato in possesso del Cavaliere della Tempesta di nome Kalassan Brevered, ucciso dopo avere abbattuto un gran numero di ranger e di druidi nelle Isole Moonshae.
 
 STATISTICHE:
 
-Capacità: 2,000 proiettili, dardi, frecce o quadrelli in totale.
-Peso: 2~
+Abilità attivabili:
+- Guscio di Tempesta una volta al giorno
+  Resistenza al Fuoco, Freddo ed Elettricità: +50%
+  Durata: 1 turno
+  Area d'effetto: Il personaggio
 
-@101003 = ~Borsa Conservante~
-@101004 = ~Come nel caso di altre borse magiche, questa a prima vista sembra una semplice sacca di tela di 60 cm. per 120 cm. La borsa conservante si apre invece su uno spazio extradimensionale, ed il suo interno è molto più grande dell'esterno. A prescindere da cosa ci sia stato messo dentro, la borsa pesa sempre allo stesso modo.
+THAC0: +2
+Danno: +3
+Fattore-velocità: 3
+Tipo di Competenza: Arco Corto
+Tipo: A due mani
 
-STATISTICHE:
+Richiede:
+Forza 15
 
-Peso: 5~
-
-@102000 = ~I negozi possono vendere una maggiore quantità di determinati oggetti (i.e. più frecce, più proiettili, ecc...)~
-
-@103000 = ~Gemme e Pozioni devono essere identificate~
-@103001 = ~Una gemma è un minerale che, se intagliato e levigato, può essere collezionato o usato come gioiello.~
-    
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Componenti dei cambiamenti alle regole           \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-
-@201000 = ~Usa le spade bastarde a due mani~
-
-@202000 = ~Rendi le clave utilizzabili da chiunque~
-
-@202100 = ~Aggiorna le descrizioni delle clave affinché rispecchino la componente "Rendi le clave utilizzabili da chiunque"~
-@202101 = ~Questa componente richiede che "Rendi le clave utilizzabili da chiunque" sia installato.~
-
-@203000 = ~Rimuovi ogni limite ai punti esperienza~
-
-@204000 = ~Consenti nascondersi nelle ombre e abilità da ladro in armatura pesante~
-
-@205000 = ~Consenti il lancio di incantesimi arcani in armatura~
-
-@206000 = ~Indossa contemporaneamente più oggetti protettivi~
-@206001 = ~Usa le restrizioni del gioco da tavolo~
-
-@206100 = ~Non usare alcuna restrizione~
-
-@207000 = ~Lancia incantesimi dalle pergamene (e da altri oggetti) al livello del personaggio~
-
-@208000 = ~Maestria Superiore per i personaggi multiclasse (Weimer)~
-
-@209000 = ~Implementa la Maestria Superiore come in BG2~
-
-@210000 = ~Imposta a Zero il peso delle armi forgiate magicamente.~
-
-@211000 = ~Tabella originale della THAC0~
-
-@212000 = ~Modifica la tabella di progressione degli incantesimi del Mago~
-@212001 = ~Tabella originale (Blucher)~
-
-@212100 = ~Tabella come nel gioco da tavolo~
-
-@213000 = ~Modifica la tabella di progressione degli incantesimi del Bardo~
-
-@214000 = ~Modifica la tabella di progressione degli incantesimi del Chierico~
-
-@215000 = ~I druidi usano il livello e le tabelle di progressione degli intasimi dei chierici~
-
-@216000 = ~Limita gli allineamenti disponibili ai druidi a quelli consentiti dalle regole della 3a edizione (NB, LN, N, CN, NM)~
-
-@217000 = ~"Allenta" le restrizioni agli oggetti utilizzabili da druidi e chierici multiclasse o con classe duale~
-
-@218000 = ~Applica penalità ai tiri-salvezza contro incantesimi lanciati da incantatori di alto livello~
-@218001 = ~Solo per gli incantesimi arcani~
-
-@218100 = ~Solo per gli incantesimi divini~
-
-@218200 = ~Per gli incantesimi sia arcani che divini~
-    
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Aggiustamenti di convenienza                     \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-
-@300000 = ~Guadagna più punti ferita al passaggio di livello~
-@300001 = ~Guadagna sempre punti ferita massimi~
-
-@300100 = ~Guadagna punti ferita in stile Neverwinter Nights~
-
-@301000 = ~Tutti i PNG hanno punti ferita massimi (the bigg)~
-
-@302000 = ~Identifica automaticamente tutti gli oggetti~
-
-@303000 = ~Apprendimento semplificato degli incantesimi~
-@303001 = ~Imposta la possibilità di imparare gli incantesimi al 100%~
-
-@303100 = ~Imposta la possibilità di imparare gli incantesimi al 100% e rimuovi il limite al numero di incantesimi di ogni livello che è possibile imparare~
-
-@304000 = ~Borse Conservanti senza fondo~
-
-@305000 = ~Sconti nei negozi per PG con bassa reputazione (Sabre)~
-@305001 = ~Modifica l'effetto della reputazione sui prezzi degli oggetti.~
-
-@305100 = ~La reputazione è ininfluente; prezzi fissi al 100% (Luiz)~
-
-@305200 = ~La reputazione è ininfluente; prezzi fissi all'80% (Luiz)~
-
-@305300 = ~La reputazione è ininfluente; prezzi fissi al 60% (Luiz)~
-
-@306000 = ~Rimuovi il limite di 20 alla quantità di munizioni che si possono impilare contemporaneamente~
-
-@307000 = ~Consenti di impilare un numero illimitato di gemme e gioielli~
-
-@308000 = ~Rimuovi il limite di 5 alla quantità di pozioni che si possono impilare contemporaneamente~
-
-@309000 = ~Rimuovi il limite di 5 alla quantità di pergamene che si possono impilare contemporaneamente~
-
-@310000 = ~Rimuovi tutte le trappole e apri tutte le serrature chiuse (Weimer)~
-
-@311000 = ~Riposa ovunque (Japheth)~
-
-@312000 = ~Rendi bastoni, clave e fionde vendibili (Icelus)~
-
-@313000 = ~Imposta un punteggio minimo per le caratteristiche del personaggio~
-@313001 = ~Seleziona il valore minimo dei punteggi caratteristica, compreso tra 6 e 15:~
-    
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////                                                  \\\\\
-///// Aggiustamenti ai PNG                             \\\\\
-/////                                                  \\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
-/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+Peso: 3~
+*/

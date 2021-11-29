@@ -1,0 +1,77 @@
+ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_spell BEGIN
+
+  // file, animation, school, casting speed => file // name
+  
+  spin103, null,  null, 9 => spin103 // Draw Upon Holy Might
+  spin121, null, 9, null => spin121 // Protection From Evil
+  spin125, 12, null, null => spin125 // Cure Disease
+  spin126, null, 4, null => spin126 // Eye of the Mind
+  spin129, 9, 7, null => spin129 // Eye of Venom
+  spin130, null, 8, null => spin130 // Eye of the Spirit
+  spin159, null, 9, null => spin159 // Wing Buffet
+  spitm06, null, null, 0 => spitm06 // Lance of Disruption via Kinetic Spear
+  sppr101, null,  null, 9 => sppr101 // Bless
+  sppr104, null,  null, 9 => sppr104 // Detect Evil
+  sppr111, null,  null, 9 => sppr111 // Curse
+  sppr203, null,  null, 9 => sppr203 // Chant
+  sppr207, null,  null, 9 => sppr207 // Good Berry
+  sppr208, null, null, 3 => sppr208 // Hold Person
+  sppr209, null,  null, 9 => sppr209 // Know Alignment
+  sppr215, null, null, 2 => sppr215 // Draw Upon Holy Might
+  sppr301, null,  null, 9 => sppr301 // Animate Dead
+  sppr302, null,  null, 9 => sppr302 // Call Lightning
+  sppr304, null,  null, 9 => sppr304 // Glyph of Warding
+  sppr305, null, null, 5 => sppr305 // Hold Animal
+  sppr310, null, null, 5 => sppr310 // Miscast Magic
+  sppr314, 12, 1, 9 => sppr314 // Cure Disease
+  sppr315, 12, 1, 9 => sppr315 // Cause Disease
+  sppr316, null,  null, 9 => sppr316 // Exaltation
+  sppr412, null,  null, 9 => sppr412 // Static Charge
+  sppr416, null, null, 5 => sppr416 // Cause Serious Wounds
+  sppr419, null,  null, 9 => sppr419 // Unfailing Endurance
+  sppr421, null,  null, 9 => sppr421 // Smashing Wave
+  sppr504, null,  null, 9 => sppr504 // Raise Dead
+  sppr510, 14, 2, 9 => sppr510 // Insect Plague
+  sppr511, 11, null, null => sppr511 // Righteous Wrath of the Faithful
+  sppr515, null,  null, 9 => sppr515 // Slay Living
+  sppr519, null,  null, 9 => sppr519 // Magic Resistance
+  sppr605, null,  null, 9 => sppr605 // Conjure Fire Elemental
+  sppr606, null,  null, 9 => sppr606 // Fire Seeds
+  sppr607, null,  null, 9 => sppr607 // Heal
+  sppr608, null, 6, null => sppr608 // Sol's Searing Orb
+  sppr611, null,  null, 9 => sppr611 // Harm
+  sppr702, null,  null, 9 => sppr702 // Conjure Earth Elemental
+  sppr704, null,  null, 9 => sppr704 // Creeping Doom
+  sppr705, null, 6, 9 => sppr705 // Fire Storm
+  sppr709, null,  null, 9 => sppr709 // Confusion
+  sppr712, null,  null, 9 => sppr712 // Resurrection
+  sppr716, null,  null, 9 => sppr716 // Impervious Sanctity of Mind
+  sppr717, null,  null, 9 => sppr717 // Destruction
+  sppr718, null,  null, 9 => sppr718 // Greater Shield of Lathander
+  sppr719, null,  null, 9 => sppr719 // Earthquake
+  sppr720, null,  null, 9 => sppr720 // Mist of Eldath
+  sppr723, null,  null, 9 => sppr723 // Stalker
+  spwi102, null,  null, 9 => spwi102 // Armor
+  spwi202, null,  null, 9 => spwi202 // Detect Evil
+  spwi208, null,  null, 9 => spwi208 // Know Alignment
+  spwi211, null, null, 2 => spwi211 // Melf's Acid Arrow
+  spwi214, null,  null, 9 => spwi214 // Strength
+  spwi217, null, null, 3 => spwi217 // Agannazar's Scorcher
+  spwi302, null, null, 3 => spwi302 // Dispel Magic
+  spwi413, null, null, 1 => spwi413 // Otiluke's Resilient Sphere
+  spwi501, null,  null, 9 => spwi501 // Animate Dead
+  spwi514, null,  null, 9 => spwi514 // Conjure Fire Elemental
+  spwi515, null,  null, 9 => spwi515 // Conjure Earth Elemental
+  spwi516, null,  null, 9 => spwi516 // Conjure Water Elemental
+  spwi517, null,  null, 9 => spwi517 // Contact Other Plane
+  spwi599, null,  null, 9 => spwi599 // Animate Dead
+  spwi605, null, null, 6 => spwi605 // Death Spell
+  spwi606, null, null, 6 => spwi606 // Disintegrate
+  spwi608, null,  null, 9 => spwi608 // Globe of Invulnerability
+  spwi609, null,  null, 9 => spwi609 // Invisible Stalker
+  spwi617, null, 2, null => spwi617 // Power Word Silence
+  spwi704, null, 6, null => spwi704 // Mordenkainen's Sword
+  spwi804, null,  null, 9 => spwi804 // Mind Blank
+
+  
+END

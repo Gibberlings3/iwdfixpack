@@ -31,3 +31,10 @@ ALTER_TRANS DGASPAR BEGIN 15 END BEGIN 2 END // file, state, trans
 
 // one response in saablic checking for an item by an incorrect resref
 REPLACE_TRIGGER_TEXT ~dsaablic~ ~PartyHasItem("Badge1")~ ~PartyHasItem("Krilag")~
+
+// sister calliana not recognizing egenia's return - continuation of all-fixes.d
+APPEND ~dcallian~
+  IF WEIGHT #4 ~NumTimesTalkedToGT(0) Global("Egenia_Talked","GLOBAL",1)~ THEN BEGIN state7copy SAY #4428
+    COPY_TRANS dcallian 7
+  END
+END

@@ -20,6 +20,32 @@
 
 Non-utilisable par :~
 
+// @117 - @133 this was automatically generated; translators please review
+
+@117 = ~Armure de Kaylessa~
+@118 = ~Armure de plates d'ombre~
+@119 = ~L'air empeste. De temps en temps, vous trouvez une grande plume noire qui a sans doute été abandonnée par une sorte de bête ailée. En outre, des traces sur le sol indiquent la présence de wivernes. Des éraflures sur les murs font également penser que cette partie de la zone est aussi peuplée d'insecte de taille exceptionnelle.~
+@120 = ~L'air empeste. De temps en temps, vous trouvez une grande plume noire qui a sans doute été abandonnée par une sorte de bête ailée.~
+@121 = ~Des traces sur le sol indiquent la présence de wivernes.~
+@122 = ~Quelles que furent les créatures qui vivaient dans cette zone, elles sont mortes ou parties depuis longtemps. Néanmoins, vous trouvez quelques poils d'animaux sur le sol qui pourraient avoir appartenu à une créature féline.~
+@123 = ~Certaines des portes de cet endroit ont été récemment utilisées, mais aucune trace ne peut prouver que quelqu'un les a traversées. C'est presque comme si les portes ont été manipulées par une sorte de force extérieure.~
+@124 = ~Une forte odeur de poussière et de pourriture se fait sentir ici : il s'agissait sans doute d'une crypte, d'un tertre ou de quelque chose s'en approchant. De temps en temps, vous repérez quelques os dispersés ou des lambeaux de tissus sur le sol.~
+@125 = ~Une étrange odeur d'ordures flotte dans l'air, indiquant la présence d'orogs, de minotaures, ou bien des deux. Des griffures sur certains murs suggèrent la présence proche d'ombres des roches et de trolls. Vous détectez également une très faible odeur de champignon.~
+@126 = ~Une étrange odeur d'ordures flotte dans l'air, indiquant la présence d'orogs, de minotaures, ou bien des deux. Des griffures sur certains murs suggèrent la présence proche de quelques ombres des roches. De temps à autres, vous repérez également des déjections provenant de créatures ressemblant à des wivernes.~
+@127 = ~Vos compétences de pistage ne révèlent que peu de choses sur cet endroit. Néanmoins, vous discernez des traces d'une étrange substance visqueuse qui semble couvrir les zones les plus sombres du plafond.~
+@128 = ~Les traces les plus communes dans cet endroit semblent appartenir à de grandes créatures canines. À quelques endroits, elles semblent se fondre dans des empreintes de pas humaines. Des traces de toiles gigantesques et de nombreux déchets vous font penser que des araignées de très grande taille se trouvent dans la zone nord-est des cavernes. Également, des monceaux de végétation en décomposition parsèment les sols au nord de la zone. Il y a enfin une faible odeur de soufre dans l'air.~
+@129 = ~Les traces les plus communes dans cet endroit semblent appartenir à de grandes créatures canines. À quelques endroits, elles semblent se fondre dans des empreintes de pas humaines. Des traces de toiles gigantesques et de nombreux déchets vous font penser que des araignées de très grande taille se trouvent dans la zone nord des cavernes. De temps en temps, vous trouvez une grande plume noire qui a sans doute été abandonnée par une sorte de bête ailée. À cela s'ajoute une étrange odeur dans l'air, qui semble à la fois humaine et animale. Elle pourrait provenir d'une sorte d'hybride.~
+@130 = ~Armure de pénitence~
+/* original string; see English setup.tra for needed modifications
+@131 = ~Oui, beaucoup de gens ont disparu récemment - dont le fils de Coulon, Sheemish. Le lendemain, toute la ville l'a cherché mais en vain. Il n'était plus là. Disparu sans une trace. Et puis, il y a eu Mère Égénie de l'église, Eidan l'aubergiste, Maegan Potts - et d'autres. Aucune trace d'eux. *Rien.*~
+*/
+/* original string; see English setup.tra for needed modifications
+@132 = ~Également appelée tourmaline incolore, l'étoile d'eau est rare dans les royaumes. Cette pierre étant pleine d'imperfections et d'inclusions, seule une partie infime peut être utilisée pour la taille.
+Poids : 0~
+*/
+//@133 = ~Beamdog.net~
+
+
   @1000 = ~Game Text Update~
   @1001 = ~Ce composant n'est pas disponible dans votre langue.~
 
@@ -67,6 +93,91 @@ Zone d'effet : 1 créature
 Jet de sauvegarde : annule
 Ce sort fait apparaître une sphère de 10 cm de diamètre que le mage peut jeter (en étant sûr de toucher) sur la cible de son choix. L'effet dépend du niveau du personnage. Niveau 1 : la sphère inflige 1-4 points de dégâts et aveugle la victime pour 1 round. Niveau 2 : 1-6 points de dégâts plus grande douleur. Niveau 3 : 1-8 points de dégâts plus brûlure. Niveau 4 : 1-10 points de dégâts plus cécité pour 4 rounds. Niveau 5 et 6 : 1-12 points de dégâts plus étourdissement pour 3 rounds. Niveaux 7 à 9 : 2-16 points de dégâts plus paralysie pour 13 rounds.~
 
+// everything below this was automatically pulled from iwdee; translators please review
+
+/* original string; see English setup.tra for needed modifications
+@112182 = ~Bouclier
+(Invocation)
+Niveau : 1
+Portée : personnelle 
+Durée : 5 rounds par niveau
+Temps d'incantation : 1 
+Zone d'effet : le lanceur
+Jet de sauvegarde : aucun
+Ce sort fait apparaître une barrière invisible devant le magicien. Elle lui confère une CA de 4 contre les armes de corps à corps, et de 2 contre les projectiles. Bouclier immunise également contre le sort Projectile magique.~
+*/
+/* original string; see English setup.tra for needed modifications
+@114959 = ~Marteau de Guerre de Phase
+Comme tous les autres marteaux, celui-ci est intégralement en acier. Sa tête capable de broyer les os de n'importe quelle créature a été montée sur un manche de 45 cm de long. Il bénéficie d'enchantements mineurs qui accroissent encore son efficacité.
+PARAMÈTRES :
+Capacités de combat :
+- 15% de chances d'infliger +1d4 points de dégâts de froid à chaque coup au but
+- 10% de chances de mettre la cible en état de phase pendant 10 secondes (3 points de dégâts par seconde) à chaque coup au but
+- ces deux effets ne peuvent se produire sur un même coup au but
+TAC0 : +2
+Dégâts : 1d4 +3 (contondant)
+Facteur de vitesse : 3
+Type de compétence : marteau de guerre
+Type : arme à une main
+Nécessite : 9 en force
+Poids : 6~
+*/
+/* original string; see English setup.tra for needed modifications
+@121478 = ~Contagion
+(Nécromancie)
+Niveau : 3
+Sphère : Guérison
+Portée : contact
+Durée : 8 heures
+Temps d'incantation : 9
+Zone d'effet : 1 créature
+Jet de sauvegarde : annule
+La créature touchée par le prêtre contracte une maladie qui lui fait perdre 5d4 points de Force si elle rate son jet de sauvegarde contre les sorts. Contagion reste sans effet sur les morts-vivants, créatures artificielles et créatures extra-planaires. Ce sort ne peut être jeté par les personnages d'alignement bon.~
+*/
+/* original string; see English setup.tra for needed modifications
+@122605 = ~Dites-m'en plus sur ce roi jeune et vieux à la fois.~
+*/
+/* original string; see English setup.tra for needed modifications
+@124328 = ~La Langue de Morneglace
+Cette arme a été taillée par vos mains, guidées par Tiernon le nain. Sculptée dans la glace prélevée sur les parois du glacier de Morneglace, la lame a en elle une partie de votre force et une partie de celle du glacier, ce qui en fait une arme redoutable. Bien qu'intégralement constituée de glace, elle n'est que légèrement froide au toucher, et même le plus grand brasier ne peut espérer la faire fondre.
+PARAMÈTRES :
+Capacités d'équipement :
+- résistance au feu : +10%
+- résistance au froid : +10%
+Capacités de combat :
+- 3% de chances de lancer Cône de froid sur la cible à chaque coup au but (10d4 +10 dégâts de froid ; jet de sauvegarde contre les sorts pour demi-dégâts)
+Capacités de charge:
+- Protection anti-tempêtes une fois par jour (+50% de résistance au feu, au froid et à l'électricité)
+  Durée : 1 tour
+  Zone d'effet : l'utilisateur
+TAC0 : +4
+Dégâts : 1d10 +4 (perforant)
+Facteur de vitesse : 5
+Type de compétence : hallebarde
+Type : arme à deux mains
+Nécessite : 13 en force
+Poids : 6~
+*/
+/* original string; see English setup.tra for needed modifications
+@125818 = ~L'Arc des Tempêtes
+Cette arme est sacrée pour les guerriers de Talos, dieu des Tempêtes et de la Destruction, qui s'en servent depuis des décennies. Arc court composite constitué de plusieurs couches de bois, l'Arc des Tempêtes a été utilisé contre les myriades d'ennemis de l'Église de Talos. Tout récemment, il était encore en possession d'un Chevalier des Tempêtes du nom de Kalassan Brévered, qui fut abattu après avoir tué plusieurs druides et rôdeurs de l'archipel des Lunaë.
+
+PARAMÈTRES :
+
+Capacités de charge :
+- Protection anti-tempêtes une fois par jour (+50% de résistance au feu, au froid et à l'électricité)
+  Durée : 1 tour
+  Zone d'effet : le propriétaire
+
+TAC0 : +2
+Dégâts : +3
+Facteur de vitesse :  3
+Type de compétence : arc court
+Type : arme à deux mains
+Nécessite : 15 en force
+
+Poids :  3~
+*/
 
 //WeiDU prompts
 @-1000= "Le mod %TP2_FILE_NAME% contient"

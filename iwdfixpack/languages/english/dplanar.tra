@@ -1,0 +1,15 @@
+
+// totlm dialogue for contact other plane
+@100 = ~Err, uh... hullo. This thing on?~ // 40665
+@101 = ~Where am I?~ // 40666
+@102 = ~Who is Hobart?~ // 40667
+@103 = ~Who... or what... is the Luremaster?~ // 40668
+@104 = ~How do I get back?~ // 40669
+@105 = ~Who is Maluradek?~ // 40670
+@106 = ~Anauroch. Big desert in the north. Be sure to keep sand out of your undies, oh yes.~ // 40671
+@107 = ~Hobart just servant, like me.~ // 40672
+@108 = ~Doomed by a fraud and a coward. Looking for release from his curse.~ // 40673
+@109 = ~You hero right? Do hero stuff. Solve riddles, right wrongs, fight monsters.~ // 40674
+@110 = ~Old king of the castle, slayer of bards and dragons. Had a screw loose or three.~ // 40675
+@111 = ~Name is Chalimandren. You need to send an invitation? I have address too.~ // 40676
+@112 = ~Oh, OK. I go now. Bye bye!~ // 40679

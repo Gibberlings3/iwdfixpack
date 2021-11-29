@@ -144,7 +144,7 @@ Damage:  1D10 +1, +3 vs. Skeletal Undead
 THAC0: +1, +3 vs. Skeletal Undead
 Damage type:  Slashing
 Weight:  14
-Speed Factor:  9
+Speed Factor:  7
 Proficiency Type: Great Swords
 Type:  2-handed
 Not Usable By:
@@ -169,7 +169,7 @@ THAC0:  +1, +3 vs. Spectral Undead
 Damage type:  Crushing
 Special:  2% of all hits cause Morale Failure in the wielder.
 Weight:  7
-Speed Factor:  6
+Speed Factor:  4
 Proficiency Type: Maces
 Type:  1-handed
 Not Usable By:
@@ -778,7 +778,7 @@ STATISTICS:
 Damage:  1D4
 Damage type: Missile (piercing)
 Weight: 0
-Speed Factor: 2
+Speed Factor: 1
 Proficiency Type: Daggers
 Type:  1-handed
 Not Usable By:
@@ -865,7 +865,7 @@ THAC0:  +3, +4 vs. Elves
 Damage type:  Crushing
 Special:  Causes Horror on 10% of all hits, Cold Iron
 Weight: 13
-Speed Factor: 5
+Speed Factor: 3
 Proficiency Type: Flails
 Type:  1-handed
 Not Usable By:
@@ -888,7 +888,7 @@ Damage Type: Slashing
 Resistance Bonus:  +10% Fire Resistance
 Resistance Penalty:  -5% Resist Cold
 Weight: 5
-Speed Factor: 2
+Speed Factor: 0
 Proficiency Type: Large Swords
 Type: 1-handed
 Not Usable By:
@@ -1247,7 +1247,7 @@ THAC0 Bonus:  +1, +4 vs Iron Golems
 Special: Able to hit all creatures that require magical weapons to hit
 Damage type:  Crushing
 Weight: 4
-Speed Factor: 3
+Speed Factor: 0
 Proficiency Type: Hammers
 Type:  1-handed
 Not Usable By:
@@ -1267,7 +1267,7 @@ THAC0: +3
 Damage type:  Piercing
 Special: 20% chance target is infected by Disease
 Weight: 1
-Speed Factor: 2
+Speed Factor: 0
 Proficiency Type: Dagger
 Type:  1-handed
 Not Usable By:
@@ -1292,7 +1292,7 @@ Resistance Bonuses:
    +3 Save vs. Spells
    +15% Magical Resistance
 Weight: 1
-Speed Factor: 2
+Speed Factor: 0
 Proficiency Type: Dagger
 Type:  1-handed
 Only usable by:
@@ -1309,7 +1309,7 @@ Constitution: +1 bonus
 Dexterity: -1 penalty
 Damage type:  Slashing
 Weight:  10
-Speed Factor:  9
+Speed Factor:  6
 Proficiency Type:  Axe
 Type:  2-handed
 Not Usable By:
@@ -1336,7 +1336,7 @@ THAC0: +4
 Damage type:  Slashing
 Special: 15% chance target is infected with Disease
 Weight: 10
-Speed Factor: 8
+Speed Factor: 4
 Proficiency Type: Great Swords
 Type:  1-handed
 Not Usable By:
@@ -1366,7 +1366,7 @@ Special:
   50% chance +1D8 fire damage
   10% chance target is Stunned
 Weight: 10
-Speed Factor: 8
+Speed Factor: 5
 Proficiency Type: Great Swords
 Type:  1-handed
 Not Usable By:
@@ -1410,7 +1410,7 @@ THAC0:  +2
 Damage type:  Piercing
 Resistance Bonus: +10% Slashing Resistance
 Weight: 14
-Speed Factor: 8
+Speed Factor: 9
 Proficiency Type: Halberds
 Type:  2-handed
 Not Usable By:
@@ -1495,7 +1495,7 @@ Damage: 1D6 +3
 THAC0: +3
 Damage type: Piercing
 Weight: 3
-Speed Factor: 3
+Speed Factor: 0
 Proficiency Type: Small Sword
 Type: 1-handed
 Not Usable By:
@@ -1510,7 +1510,7 @@ Damage: 1D6 +3
 THAC0: +3
 Damage type: Crushing
 Weight: 4
-Speed Factor: 4
+Speed Factor: 1
 Proficiency Type: Quarter Staves
 Type: 2-handed
 Not Usable By:~ []
@@ -2076,9 +2076,9 @@ Casting Time: 1 round
 Area of Effect: 1 creature
 Saving Throw: Neg.
 When this spell is cast, the caster gains the ability to touch a target and inflict tremendous damage, reducing the target to all but 1d4 hit points.  A saving throw vs. spell negates the effect.  This spell has no effect on undead, constructs, or extraplanar creatures.  Harm can only be cast by evil characters.~@4411213 = ~A most excellent choice, honored customer.  Come back in three days and your shield will be ready.~
-@4421478 = ~Cause Disease (Necromancy)
+@4421478 = ~Cause Disease (Abjuration)
 Level: 3
-Sphere: Healing
+Sphere: Necromantic
 Range: Touch
 Duration: 8 hours
 Casting Time: 1 round

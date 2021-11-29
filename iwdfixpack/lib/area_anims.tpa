@@ -1,0 +1,119 @@
+ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_area_anims BEGIN
+
+  ar1004, hroth => ar1004
+  ar1006, hildreth, hroth => ar1006
+  ar1007, pomab => ar1007
+  ar1008, erevain => ar1008
+  ar1015, ehbeetle => ar1015
+  ar1103, sentry => ar1103
+  ar2000, goblina => ar2000
+  ar2001, goblina, goblinea, goblinad => ar2001
+  ar2006, goblinea => ar2006
+  ar2102, orrick => ar2102
+  ar2111, amelia, lysanbar, whitcomb => ar2111
+  ar2112, arundel => ar2112
+  ar3001, lysan => ar3001
+  ar3501, ktmum1 => ar3501
+  ar3502, ktwgti1 => ar3502
+  ar3503, ktmum1, ktwgti1, kress => ar3503
+  ar3601, acolyte, verbdead, acoldead, acolyted => ar3601
+  ar3602, acolyte, verbdead, acoldead, acolpois => ar3602
+  ar3603, verbdead, acoldead => ar3603
+  ar4001, lm1hwax, lm1hwms, lm1hwpo, lm2hwla, lm2hwna, lm2hwte, lizking, erevdead, lizdead, lmsham1, lmsham2, lmsham3 => ar4001
+  ar4002, talonam, talonaf, lm2hwte, lm2hwla, lm2hwna, lmshkid => ar4002
+  ar4003, presio, skelblst, wightcld, ktwgti1 => ar4003
+  ar4004, eldathh, eldathyf, yuaewbl, yuaewax, yuaewsw => ar4004
+  ar4005, histach, yuanwax, yuanwbi, yuanwsw, yuaewbl, yuaewsw, yuaewax => ar4005
+  ar5001, sevsoul => ar5001
+  ar5104, sdelfcl => ar5104
+  ar5202, sdelfcl => ar5202
+  ar5203, sdelfcl => ar5203
+  ar5401, kaylessa => ar5401
+  ar6002, orcewbow, neooroge => ar6002
+  ar6003, kalabac => ar6003
+  ar7001, vera => ar7001
+  ar8001, seth, svirfneb => ar8001
+  ar8002, kelly, lddarchr => ar8002
+  ar8003, tarnelm, svirfneb, deepgnun => ar8003
+  ar8004, beorn, dirtllew, svirfneb, deepgnun, guello => ar8004
+  ar8006, ginafae, fleezum, flozem => ar8006
+  ar8007, marketh, seth => ar8007
+  ar8008, guello, svirfneb, deepgnun => ar8008
+  ar8010, svirblnd, golemiro, malavons, malavon => ar8010
+  ar8011, ilmadia, giantfir => ar8011
+  ar8012, bperdiem, mummyg, idol => ar8012
+  
+END
+
+ACTION_IF !game_is_iwd BEGIN
+
+  ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_area_anims BEGIN
+  
+    ar1105, cornugo => ar1105
+    ar2109, hjollder => ar2109
+    ar6014, bandoth => ar6014
+    ar9100, werewlf => ar9100
+    ar9200, angaar, beornen, jorn, hjolldrh => ar9200
+    ar9300, skaldar, wightba, shamgho, drowned => ar9300
+    ar9400, mebding, vexing => ar9400
+    ar9501, remorha => ar9501
+    ar9502, seer => ar9502
+    ar9601, dlbonec => ar9601
+    ar9602, dlbonec, xactile, dlwater => ar9602
+    
+  END
+
+  ACTION_IF game_is_totlm BEGIN  
+
+    ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_area_anims BEGIN
+
+      ar9704, priestd => ar9704
+      ar9708, shelhai => ar9708
+      ar9711, ckspgrdh, hobartf, trsph1, trsph2, trsph3, trsph4, trsph5, trsph6, trsph7, trsph8, trsph9 => ar9711
+      ar9801, jkldog => ar9801
+      
+    END
+  
+  END
+
+END
+
+ACTION_PHP_EACH cd_iwdfixpack_area_anims AS params => area BEGIN  
+  
+  ACTION_IF FILE_EXISTS_IN_GAME ~%area%.are~ BEGIN
+
+    ACTION_CLEAR_ARRAY cd_iwdfixpack_area_anims_working
+    COPY_EXISTING ~%params_1%.cre~  ~override~
+                  ~%params_2%.cre~  ~override~
+                  ~%params_3%.cre~  ~override~
+                  ~%params_4%.cre~  ~override~
+                  ~%params_5%.cre~  ~override~
+                  ~%params_6%.cre~  ~override~
+                  ~%params_7%.cre~  ~override~
+                  ~%params_8%.cre~  ~override~
+                  ~%params_9%.cre~  ~override~
+                  ~%params_10%.cre~ ~override~
+                  ~%params_11%.cre~ ~override~
+                  ~%params_12%.cre~ ~override~
+                  ~%params_13%.cre~ ~override~
+      READ_LONG 0x28 anim
+      DEFINE_ASSOCIATIVE_ARRAY cd_iwdfixpack_area_anims_working BEGIN "%SOURCE_RES%" => "%anim%" END
+      BUT_ONLY IF_EXISTS
+
+    COPY_EXISTING ~%area%.are~ ~override~
+      READ_LONG  0x54 actor_off
+      READ_SHORT 0x58 actor_num
+      FOR (index = 0 ; index < actor_num ; ++index) BEGIN
+        READ_ASCII (actor_off + 0x80 + (index * 0x110)) cre_file
+        PATCH_PHP_EACH cd_iwdfixpack_area_anims_working AS cre => anim BEGIN
+          PATCH_IF ("%cre%" STRING_COMPARE_CASE "%cre_file%" = 0) BEGIN
+            WRITE_LONG (actor_off + 0x30 + (index * 0x110)) anim
+          END
+        END
+      END
+      BUT_ONLY    
+    
+  END
+  
+END  
+  
