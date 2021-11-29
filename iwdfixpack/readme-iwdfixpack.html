@@ -33,9 +33,9 @@
         <strong> On the web: </strong><a href="https://www.gibberlings3.net/mods/fixes/iwd_fixpack/">Home
         page</a> and <a href="https://www.gibberlings3.net/forum/152-icewind-dale-mod-roundup/">discussion
         forum</a></p>
-      <p><strong>Version 6<!-- - <a href="http://www.gibberlings3.net/forums/index.php?app=downloads&amp;showcat=36">Check
+      <p><strong>Version 7<!-- - <a href="http://www.gibberlings3.net/forums/index.php?app=downloads&amp;showcat=36">Check
         for the most recent version</a>--></strong><br />
-        <strong> Languages:</strong> Czech, English, French, German, Italian, Korean,      Polish, Russian, and Spanish<br />
+        <strong> Languages:</strong> Czech, English, French, German, Italian,       Polish, Russian, and Spanish<br />
         <strong>Platforms: </strong>Windows, macOS<acronym title="Operating System 10"></acronym>, and Linux<br />
         <strong>GitHub: </strong><a href="https://github.com/Gibberlings3/iwdfixpack">Gibberlings3/iwdfixpack</a></p>
     </div>
@@ -105,7 +105,7 @@
       <p><strong>Fixpack</strong></p>
       <p>This component contains the heavy lifting of the mod, fixing bugs and errors throughout the game. For       anyone familiar with the <acronym title="Baldur's Gate II">BG2</acronym> Fixpack, the ideas behind identifying       and fixing bugs is equivalent. While some bugs are clearly bugs, the mod also has a review process for      'gray area' bugs to insure that fixes do not contradict developer intent.      The result is a component which aims to address true bugs      only and in a manner consistent with Bioware's original goals. <a href="https://www.gibberlings3.net/subpages/iwd_fixpack/iwd_fixpack_docs/">Complete documentation</a> is available on the <acronym title="The Gibberlings Three">G3</acronym> web site. Additionally, the complete <a href="https://www.gibberlings3.net/forum/152-icewind-dale-mod-roundup/">Fixpack      forums</a> are open, so if you want to see the reasoning behind a bugfix      (or tell us we've got it all wrong), please join us on the forums and provide      feedback. If you find a bug that is not fixed, please report it. </p>
       <p><strong>Game Text Update</strong></p>
-      <p>This component corrects various typos, errors, and other mistakes in the game strings. (A string is any bit       of text used by then engine--it could be a line of dialogue, an item description, a creature's name, etc.)       A <em>very</em> minimalist approach has been taken, in that strings are only introduced for obvious errors and not,       for example, to make formatting consistent in item descriptions. This component fixes about 400 strings, most of       which were string fixes silently introduced by <acronym title="Heart of Winter">HoW</acronym> or <acronym title="Trials of the Luremaster">TotL</acronym> and now applied to every engine variant. The overwhelming       majority of these are to correct typos in the game though there are some notable exceptions:</p>
+      <p>This component corrects various typos, errors, and other mistakes in the game strings. (A string is any bit       of text used by then engine--it could be a line of dialogue, an item description, a creature's name, etc.)       A <em>very</em> minimalist approach has been taken, in that strings are only introduced for obvious errors and not,       for example, to make formatting consistent in item descriptions. This component fixes about 400 strings, most of       which were string fixes silently introduced by <acronym title="Heart of Winter">HoW</acronym> or <acronym title="Trials of the Luremaster">TotLM</acronym> and now applied to every engine variant. The overwhelming       majority of these are to correct typos in the game though there are some notable exceptions:</p>
       <ul>
         <li> Descriptions for the Incinerator and Frostbrand omitted their fire resistance bonuses</li>
         <li>In <acronym title="Heart of Winter">HoW</acronym>, the time required for Nym to enchant a shield for you         was reduced from ten to three days, but one line of dialogue was not updated to reflect this change</li>
@@ -144,7 +144,6 @@
         <li><strong>French</strong>: Anomaly, Elgaern the Dragon Slayer, Isaya, elminster, Sanctifer</li>
         <li><strong>German</strong>: Leonardo Watson, Caswallon, jester, Mike</li>
         <li><strong>Italian</strong>: Andrea Colombo, Antonio Favata</li>
-        <li><strong>Korean</strong>: web2air </li>
         <li><strong>Polish</strong>: yarpen, Artanis, dragionian, Evendur, Grjgori,        Neminus</li>
         <li><strong>Russian</strong>: Kulyok, Creepin, Domi, Serdrick, aerie.ru, prowler, arcanecoast.ru</li>
         <li><strong>Spanish</strong>: Immortality, Clan DLAN</li>
@@ -186,6 +185,234 @@
     <div class="ribbon_triangle_h2-l"></div>
     <div class="ribbon_triangle_h2-r"></div>
     <div class="section">
+      <p><strong>Version 7 - December 1, 2020</strong></p>
+      <ul>
+        <li>Systematic coding improvements:
+          <ul>
+            <li>Swapped custom functions to the native functions now in WeiDU itself</li>
+            <li>In the interests of speed, swapped GAME_IS checks for variable checks, and external reference tables for pre-built arrays</li>
+            <li>Other minor code modernization and optimization</li>
+          </ul>
+        </li>
+        <li>Corrections from previous versions: 
+          <ul>
+            <li>Fixpack was adding a 'Blessed' icon to the Robe of Electrical Resistance instead of the correct 'Electrical Resistance' icon. </li>
+            <li>Similarly Fixpack was not adding a 'Fire Resistance' icon to Hell's Bane due to a typo</li>
+            <li>Tongue of the Gloomfrost's damage type was piercing while its description said slashing. Fixpack erroneously changed the item to slashing to match the descript, whereas it should be the description being updated to match the correct damage type on the item</li>
+            <li>Expanded the fix for Sister Calliana not recognizing that Mother Egenia had been saved</li>
+            <li>Fixpack fixed enemy priests to not cast healing spells on the party in the Severed Hand; however, healing spells won't work for them anyway since they're classed as undead. As such, the healing blocks in their scripting are disabled outright.</li>
+            <li>A syntax error in Accalia's dialogue was fixed (an action in a trigger section) by updating the trigger, but Fixpack should be using the action in the proper field instead</li>
+            <li>There was a duplicated random drop that provided either Ogien's Scale or the Cloak of Invisibility in the first and last area of the caves in the Sea of Moving Ice. Previously Fixpack replaced the duplicate entry in the cave entrance but, after examining the charges on both placements, it now updates the duplicate entry in the final area instead. </li>
+          </ul>
+        </li>
+        <li>Fire beetles had a missing attack sound due to a typo</li>
+        <li>Fixed several bugs where a creature's animation was not matching the one set in the area where they appear</li>
+        <li>The sleeping gnomes in the gnome camp were on an alternative 'team' than the other gnomes, meaning they would not respond if other gnomes were attacked and vice versa</li>
+        <li>Several items which cast spells were not getting all of the fixes from the underlying spells applied to their casting: Shield Amulet, Wand of Corrosion, Fire Kiss, Force Bullets, Mace of Weal and Woe, Gauntlets of Infernal Damnation, Hand of the Gloomfrost, Tongue of the Gloomfrost, <span data-code-marker="+">Amaunator's Legacy</span>, Wand of Freezing Death</li>
+        <li>Fixed power issues with the Staff of Besieging, Quost's Staff of the Elements, Wand of Monster Summoning, Shield Amulet, beholder innate abilities, Wand of the Heavens</li>
+        <li>Thrym Extract was saving vs. Spell instead of vs. Death, and was not properly blocking effects on a failed save</li>
+        <li>The poison icon from the Poisonous Battle Axe +2 was expiring before the actual poison effect</li>
+        <li>The Large Shield +1 of Missile Detection was re-using the description from the Reinforced Large Shield +1</li>
+        <li>Items and spells that had an x% chance to do something were systematically off by 1%, e.g. the Dazer is supposed to stun on 5% of hits but was actually stunning on 6%. This fix also applies to enemy weapons and abilities.</li>
+        <li><span data-code-marker="+">The War Hammer of Phasing +3</span> description says it caused disease on hit, instead of the correct phasing</li>
+        <li>Elves and half-elves were not always getting their racial resistances to charm and sleep</li>
+        <li>Because of the order of effects, targets who died were not getting the cosmetic effects that are supposed to accompany death from The Snow Maiden's Reaver, Death Spell,  Disintegrate, and Power Word Kill</li>
+        <li>The War Hammer +4: Defender had a random healing effect, which is removed</li>
+        <li>The berserk effect and bonus electric damage of Foe's Fate no longer overlap</li>
+        <li><span data-code-marker="+">Blinding Darts +2</span> would blind on 25% of hits, but the complementary effects (feedback and icon) only occurred on 10% of hits</li>
+        <li>The Hold Fast long sword only held humanoids, but would play all of the related effects on all targets, was also playing its hold sound effects on the wielder and not the target. A trap version of the Hold Person spell had the same issue. </li>
+        <li>The Static Two Handed Sword +4 was supposed to do bonus electrical damage on 50% of hits and stun on 25% of hits, but was only causing these on 40% and 20% of hits, respectively</li>
+        <li><span data-code-marker="+">Pestilent Dawn</span> was not making its wielder immune to disease</li>
+        <li>Cloudburst was supposed to do additional damage to fire/cold-using creatures, but this only occurred 50% of the time</li>
+        <li>A couple of areas had ambient sound playlists with extra, blank entries; these are fixed</li>
+        <li>The general fixes for creatures, items, and spells were reviewed and expanded significantly</li>
+        <li>Clerics could talk to Kuldahar townspeople about Kresselack repeatedly for free garnet gems</li>
+        <li>You could talk to Orrick repeatedly with the Mythal theory book for XP</li>
+        <li>When rescuing Sheemish, he didn't always set the proper journal entry</li>
+        <li>Armor of Penance, Kaylessa's Chainmail, High Quality Halberd, and Shadowed Plate now get unique names instead of generic names</li>
+        <li>Kresselack's tomb shows up as trapped, however this is not a trap but  an internal script that prevents opening until you help Kresselack</li>
+        <li>Stoneskin now grants the stated 1d4 + 1 skin/level instead of the current 2 + 1 skin/level. </li>
+        <li>Much like the BG2 Fixpack, the IWD Fixpack now systematically detects immunities to effects and automatically provides the ancillary effects needed to round them out, e.g. an immunity to poison will now always block the poison icon</li>
+        <li>Targeted charm effects, such as the Ring of Animal Friendship, will no longer cause  'charmed' messages or icons on creatures they cannot charm</li>
+        <li>Spells which shouldn't stack previously would apply an effect for their duration that would prevent a second casting, meaning the second spell would simply be wasted. Fixpack now follows the EE model where it will dispel the previous casting and apply the new spell, allowing the ability to re-apply spells before they expire. </li>
+        <li>The Priestess of Shar will now start hostile, like the rest of her Lonelywood posse</li>
+        <li>The spell Shield was not blocking the concussive effects of Mordenkainen's Force Missiles or the Wand of Missiles</li>
+        <li>Per its description Feeblemind should be permanent, not last 20 rounds</li>
+        <li>Mind Blank blocked the Command spell, but not Greater Command</li>
+        <li>You were able to comment that Edion was not a fisherman on branches where he never claims to be a fisherman</li>
+        <li>One of the bard-specific replies to Hobart would cause the dialogue to exit prematurely</li>
+        <li>In the batlle with Poquelin, one of the  spawn points was too far back in a tunnel and the elementals could never join the fight</li>
+        <li>Tracking information has been added for TotLM areas</li>
+        <li>Horror was supposed to last one turn, not four rounds</li>
+        <li>Casting speeds of 10 were systematically reduced to 9 as BG2 Fixpack did--spells which take an entire round can be interrupted at the very end of casting by the next round's AI scripting, wasting the round and spell</li>
+        <li>Traps which do not affect non-party NPCs are no longer set off by non-party NPCs</li>
+        <li>Two traps in the bottom level of Dragon's Eye were not doing anything when sprung</li>
+        <li>Party orientation when entering the Tiers of the Dead was adjusted slightly</li>
+        <li>&quot;Tough Lizardmen&quot; were just &quot;Lizardmen&quot; in their tooltips</li>
+        <li>Shadows would play the string &quot;disease&quot; on themselves rather than the actual target of the attack</li>
+        <li>&quot;Dead&quot; trolls could be finished with poison or disease; this is no longer the case. Their saves are also set to 20.</li>
+        <li>Entropy Shield was not blocking several 'missile-based' attacks</li>
+        <li>The bonus damage from Sunscorch applied only to undead; now it does bonus damage to myconids as well</li>
+        <li>When learning about the location of the Barbarian Camp in HoW, the variable tracking whether or not you knew of the location was not always being set in tandem</li>
+        <li>One version of the snow troll was not going through the 'dead' sequence that requires fire/acid to finish</li>
+        <li>Added protection to prevent dead Crypt Things from teleporting</li>
+        <li>The Planar Spirit from Contact Other Plane now has dialogue for TotLM, also now properly goes away if you don't ask a question</li>
+        <li>The Bitch Queen's Envoy would cause all elementals to ignore the bearer, not just water elementals</li>
+        <li>Beholders were scripted to cast Dispel Magic on themselves for no reason whatsoever</li>
+        <li>Armor of Penance was not reducing the wearer's dexterity by one</li>
+        <li><span data-code-marker="+">Morning Star of the Gods</span> was only adding one extra level one spell instead of two</li>
+        <li>Tiernon's Sundered Shield was not providing resistance to missile weapons</li>
+        <li>The upgraded  Sundered Shield was also not providing missile resistance in its one/day ability</li>
+        <li>Damage for Burning Hands was wrong</li>
+        <li>Several spells and items which measure durations in hours were using an incorrect formula to determine their durations (generally too long) and have been corrected: Invisible Stalker, Potion of Master Thievery, Animate Dead, Goodberries, Infravision, Giant Insect, Armor, Strength, Cat's Grace, Blindness, Cause Disease, Mind Blank</li>
+        <li>The duration for the stun from Darts of Stunning was incorrect</li>
+        <li>Range and duration were incorrect for the Wand of Fear</li>
+        <li>The Helm of Shouting was not providing its listed AC bonus</li>
+        <li>The <span data-code-marker="+">Mirror of Black Ice Amulet</span> was not providing its bonus save vs. wand</li>
+        <li>Sekolah's Fire bolts had a random +10 to-hit bonus</li>
+        <li>Hell's Bane had the wrong fire resistance bonus; lacked the extra damage vs. Baatezu and Tanar'ri</li>
+        <li>In Lower Dorn's Deep, the guard tower would shoot anyone who approached even if they were invisible. These shots were also supposed to be accompanied by taunting messages from the tower. </li>
+        <li>Damage from Flame Blade was incorrect</li>
+        <li>Chaos Dagger +3 is not supposed to have a save for its disease effect</li>
+        <li>Ring of the Will-o-Wisp is given a short range to allow for better targeting</li>
+        <li>Like their Cause inverses, Cure spells and HP draining abilities no longer work on undead or extraplanar creatures</li>
+        <li>Blindness via Sunray should last 1d3 rounds, not a fixed two rounds</li>
+        <li>Once you learn of Eidan's fate, townspeople will no longer talk about his mysterious disappearance</li>
+        <li>Barbarians at the barbarian camp used all sorts of invalid racial values (e.g. SKELETON and GOBLIN) to facilitate the small civil war after Wylfdene's exposure, which caused spells to interact with them in unexpected ways. These are now fixed, and the AI handled in a better way.</li>
+        <li>Summons are systematically checked and reduced to zero XP with no drops or corpses on their death. Several summons were also missed by the previous patch. </li>
+        <li>Maiden Ilmadia was set to level 1 in her file, meaning she could perish without save to a Cloudkill</li>
+        <li>Panic from Insect Plague was supposed to affect creatures of 5 HD and below, but was only affecting 4 HD and below; the duration of the accompanying portrait icon was also wrong</li>
+        <li>Fire Storm's damage was incorrect when cast at level 15</li>
+        <li>Mebdinga now has safeguards to prevent her death until she has a chance to speak</li>
+        <li>The description of the &quot;Flawless Waterstar Gem&quot; no longer mentioned how flawed it is</li>
+        <li>Added some safeguards to Hobart's cutscenes to prevent attacks while the cutscene is still running</li>
+        <li>Arrows from the shadowed creatures at Severed Hand are not magical, but were bypassing Protection From Normal Missiles</li>
+        <li>Removed an extraneous header from the Council Letter</li>
+        <li>The charm ability of Mantle of Hell's Furnace was affecting everyone, not just fire elementals</li>
+        <li>If you were both under the effects of Grease and Entangle, you could sometimes move despite Entangle setting your movement speed to zero</li>
+        <li>Chaotic Commands and Impervious Sanctity of Mind are supposed to prevent Sleep</li>
+        <li>Cloud-based spells such as Stinking Cloud and Cloudkill no longer affect non-breathing creatures</li>
+        <li>Grisella no longer awards gold for her quest unless you asked for it</li>
+        <li>Hammer Arrows, Hammer Darts, and Berserker Darts no longer come identified</li>
+        <li>Sleep from Beholders will now dispel when the target is hit</li>
+        <li>One of the spiders (that only appears on harder difficulties) on the first-level of Dragon's Eye lacked combat scripting, as did one orc in Dorn's Deep's main hall</li>
+        <li>Several lizardmen were attacking with bare-handed animations despite having weapons</li>
+        <li>Berserk effects from Foe's Fate, Berserker Darts,  Young Rage, and myconid spores can now trigger when enemies are not present</li>
+        <li>Moonblade now causes a Miscast Magic icon on hits</li>
+        <li>Emotion, Hope and Emotion, Hopelessness now cancel one another; similarly Emotion, Courage and Emotion, Fear do as well</li>
+        <li>Vocalize let you target other creatures even though it only affected the caster</li>
+        <li>Bullets +2 no longer share the same projectile as Bullets +1</li>
+        <li>The High Quality Composite Long Bow and High Quality Long Bow icons were reversed</li>
+        <li>Evasion was not available for several area-of-effect spells: Agannazar's Scorcher, dragon breath, myconid spores, Insect Plague, Blade Barrier,  Wand of Frost, and trap versions of Glyph of Warding, Lightning Bolt, Fireball, and Color Spray</li>
+        <li>Moved two Olive Slimes in the last dungeon area of Anauroch Castle to prevent them from being stuck in walls</li>
+        <li>Despite their animations showing helmets, giants weren't actually equipped with them and were subject to critical hits</li>
+        <li>Limited the effects of Produce Fire to once per round</li>
+        <li>Monster Summoning I was trying to summon 2d4 monsters instead of the listed 2d3</li>
+        <li>Marketh's premature attempt to leave could prevent a variable being set, meaning Ginafae wouldn't recognize he had left</li>
+        <li>Fire elementals had an extraneous save on part of their natural attack</li>
+        <li>The Hunting Helm and Potion of Null Effect are assigned leftover, unique icons</li>
+        <li>The Holy Chaos! Deck now requires identification to use</li>
+        <li>Shadowed Leathers are supposed to be usable by thieves and rangers, but were being improperly restricted from cleric-thief and cleric-ranger multi and dualclasses</li>
+        <li>Deafness now protects from sound-based attacks such as Command or Mournful Wail. The Song of Kaudies now also protects from Harpy Wail.</li>
+        <li>Bard Songs will  force the bard to be visible</li>
+        <li>You can no longer acquire multiple Rings of Free Action from Purvis</li>
+        <li>Potions were sometimes being blocked by the imbiber's spell protections</li>
+        <li>Using Stone-to-Flesh on a victim of the Gorgon Ring now destroys the ring to prevent a re-petrification</li>
+        <li>Phasing damage was previously done internally through a disease effect, meaning that spells and effects that stopped disease or reduced poison damage would also affect damage from phasing. Phasing now does  magic damage directly. </li>
+        <li>Disintegrate and Flesh-to-Stone were bypassing magic resistance</li>
+        <li>Golems are now immune to a number of effects that rely on biology, e.g. cloud spells, poison, or disease</li>
+        <li>If you were quick enough, you could kill Maiden Ilmadia without triggering hostility from the nearby fire giants</li>
+        <li>Several dialogues could set journal entries about learning something before it was actually revealed in dialogue: Albion, Amelia, Angaar, Arundel, Brother Perdiem, Hjollder, Jhonyn, Kresselack, Soth, Vera, The Voice, Yxunomei</li>
+        <li>Ghereg wasn't setting quest variables in all branches of his dialogue</li>
+        <li>Several exterior areas were flagged as dungeons</li>
+        <li>One of the five random lines from the enslaved gnomes couldn't fire due to a syntax error</li>
+        <li>You can no longer ask 'who's Ilmadia' to other NPCs if you've already met Ilmadia</li>
+        <li>The pub rumors in Kuldahar included a random quest line from Arundel</li>
+        <li>In Marketh's dialogue, you should be able to make a comment about him hurting Ginafae but the variable checks were reversed</li>
+        <li>In Hjollder's initial dialogue, you can ask him to tell you about Wylfdene &quot;again&quot; even if it's the first time asking</li>
+        <li>One info point in Tiers of the Dead, two in the gnome camp, and one in Marketh's palace lacked text</li>
+        <li>One info point in the Tiers of the Dead, one in the Order of the Kraken garden, and  one in Marketh's palace used the wrong cursor</li>
+        <li>The Potion of Fire Resistance, Alamion, and Potion of Cold Resistance were using the Resist Fire/Cold icon instead of   Protection From Fire or Protection from Cold icons, as appropriate</li>
+        <li>The cursed Potion of Invulnerability was using the normal description, not the correct one with the warning about its murky contents</li>
+        <li>You can refer to Dirty Llew as &quot;Dainty Llew&quot; in some replies, despite him never mentioning this name; Dainty Llew replies are now limited to the state where he calls himself this</li>
+        <li>Closed an XP exploit in Elisia's dialogue</li>
+        <li>The bombardier beetles in the Jackal Clan caverns never used their special cloud abilities due to their scripts being misordered</li>
+        <li>The Protection from X scrolls were not bypassing magic resistance</li>
+        <li>Hammer Arrows were not providing their listed 1d10 crushing damage</li>
+        <li>Non-Detection should last seven turns/level</li>
+        <li>The save for Chaos was being made at a -2 penalty, not the listed -4</li>
+        <li>Some magical ammo in the Tiers of the Dead was identified</li>
+        <li>Bathed-in-Blood and Full Plate +1 have their avatar and paperdoll colors adjusted to better match their descriptions and icon</li>
+        <li>The four knight's tales in TotLM and the prologue caravan contract are flagged as plot-critical items so that they'll survive disintegration and other effects</li>
+        <li>Restored musical tracks to the top and bottom floor of the Tower of Labelas, the Order of the Kraken garden, and the third floor of the Temple of the Forgotten God; added music from the ground floor of Arundel's home to the second floor; all areas with music never played music at night</li>
+        <li>Hobart and Accalia had class-specific dialogue that was not being extended to multi or dualclassed caharacters</li>
+        <li>You can no longer repeatedly accept/reject Kerish's request to find Vera</li>
+        <li>Lethias' dialogue will no longer set the same journal entries repeatedly</li>
+        <li>Ghoul Touch now matches its description in that it creates a 'paw' that the user must use to attack enemies</li>
+        <li>One chest in the bottom of Dragon's Eye has its activation point adjusted slightly to prevent movement stutter when approaching it</li>
+        <li>The entrance point for the second floor of the Thurlow home is adjusted slightly to prevent the party being separated through a wall</li>
+        <li>Damage for Skull Trap is incorrect</li>
+        <li>Conlan had two separate entries for a Composite Long Bow in his store</li>
+        <li>The travel times between Kuldahar-Dorn's Deep, Dragon's Eye-Severed Hand, and Wyrm's Tooth-Severed Hand were inconsistent</li>
+        <li>Salamanders summoned from Monster Summoning VI lacked their cosmetic auras</li>
+        <li>Monster Summoning III has using the wrong icon variant</li>
+        <li>Tenser's Transformation shouldn't prohibit innate abilities</li>
+        <li>Invisibility Purge was playing sounds on the caster instead of the targets</li>
+        <li>Miscast Magic was only affecting arcane casting and not divine</li>
+        <li>Animal Rage only works on allies, but would play visuals and other effects on any target</li>
+        <li>Darts of Bone had inconsistent saves, magic resistance, and dispellability; strength drain no longer stacks</li>
+        <li>The Wand of the Heavens can now target an area, like Flame Strike</li>
+        <li>The Talonite group in Dragon's Eye had scripting to heal each other, but never used it since it was checking the wrong script names. Similarly, Jorn wouldn't heal one of his barbarian allies, and neither would one of the Jackal Shaman heal some of their allies. </li>
+        <li>If the party averaged level 13 or lower, two of the harpy fiends that accompany the Harpy Queen are supposed to de-spawn. Due to overlapping script names, all four harpy fiends could potentially de-spawn.</li>
+        <li>Inventory fixes:
+          <ul>
+            <li>Cave bears lacked a weapon and were attacking bear-handed</li>
+            <li>Armored Skeletons and Buff Shadows lacked the item that provides normal undead immunities</li>
+            <li>Angaar and Beornen had chainmail assigned but not equipped</li>
+            <li>Xactile now uses the magical mace in her inventory</li>
+          </ul>
+        </li>
+        <li>Restored choking sound that accompanies drinking the poison from the Temple of the Forgotten God</li>
+        <li>Cause Disease  is updated to reflect that it's an abjuration from the necromantic sphere</li>
+        <li>Gauntlets of Valor were blocking Haste instead of Hold Person due to a typo</li>
+        <li>Beltyn's Burning Blood was bypassing MR at certain casting levels</li>
+        <li>Blood Rage was not blocking all healing effects</li>
+        <li>Whirlwind's stun was not bypassing magic resistance</li>
+        <li>Items added from the random loot table could be undercharged</li>
+        <li>Storm Bow is usable by thieves though its description claimed otherwise; also removed the extra to-hit bonus since it's not a long bow</li>
+        <li>Free Action is not supposed to block beneficial movement speed changes on the user, and several items were updated to that effect</li>
+        <li>The Korean translation was just the name of one component and, as such, has been withdrawn</li>
+        <li>Weapon speeds had systematic errors and a few hundred corrections have been made</li>
+        <li>The Mace of Weal and Woe was not providing its bonuses vs. lawful creatures. Due to its hardcoded nature, only the damage can be fixed and the description is updated to reflect this.</li>
+        <li>Inconsequence was also not providing its listed bonuses vs. good and evil creatures but could be fixed </li>
+        <li>Giant Killer is not providing its bonus damage, and the listed to-hit bonus was incorrect; the description has been updated to reflect its actual abilities</li>
+        <li>Dead God's Dreaming provides an extra +2 vs. good, not +1</li>
+        <li>Kaylessa's bow was not providing its +1 damage bonus for being a composite long bow. Same with the Composite Long Bow of the Hand. </li>
+        <li>As a light crossbow, Bren Muller's Crossbow should have +2 to-hit over its damage bonuses, so it's damage was upped from +2 to +3 to match its +5 to-hit. </li>
+        <li>Crooked Flail and Skullflail were missing their +1 damage from being flails</li>
+        <li>The generic heavy crossbow and the Finest Heavy Crossbow had the wrong minimum strength to use</li>
+        <li>Trollslayer was doing 1d4+1 base damage, not the listed 2d4+1</li>
+        <li>A handful of items had discrepancies between their listed and actual weight</li>
+        <li>The cleric spell Find Traps would interrupt the caster every round for its duration with a casting animation. This was a bear to fix, but the revised version should detect traps without interrupting the caster. </li>
+        <li>Stuff that doesn't really have an effect in-game, but is fixed anyway:
+          <ul>
+            <li>Removed references to non-existent actor scripts in multiple areas</li>
+            <li>Druidic shapeshifting was cleaned up quite a bit. This was primarily internal. </li>
+            <li>Earthquake had multiple, extraneous sleep effects</li>
+            <li>Several melee weapons had harmless 'breakable' flags set which are nonetheless removed</li>
+            <li>The regions that cause the destruction of the lich phylactery will now disable themselves once it's destroyed</li>
+            <li>Wand of Corrosion should be limited to mages or bards</li>
+            <li>Various versions of Shambling Mounds and Ice Golems had differing elemental resistances which are now standardized</li>
+            <li>Aldwin's racial check is now done slightly better</li>
+            <li>The Huge Longbow had a listed damage type of missile instead of piercing</li>
+            <li>Several floor traps now use a lightly more reliable trigger</li>
+            <li>Spike Stones was using a random mix of dispel/resist values</li>
+            <li>Various areas were not flagged as having day/night cycles</li>
+            <li>The unused Wand of Frost crashed the game when used, and is fixed. Similarly, the unused Wand of Corrosion received several fixes.</li>
+            <li>Blank entries and unassigned inventory items were removed from multiple creatures</li>
+          </ul>
+        </li>
+      </ul>
       <p><strong>Version 6 - August 18, 2013</strong></p>
       <ul>
         <li>The paperdoll fixes should play nicely with other mods</li>
@@ -224,7 +451,7 @@
       <ul>
         <li>There was a bug thread of unreported issues over on <acronym title="Spellhold Studios">SHS</acronym> from         guest poster -Mike-. Most were already fixed in v2, but the rest are now addressed in v3:
           <ul>
-            <li>Marchon of Waterdeep has a non sequitur in his dialogue if rescued after you clear out the level</li>
+            <li>Marchon of Waterdeep has a nonsequitur in his dialogue if rescued after you clear out the level</li>
             <li>One of the Shadowed Goblin Warriors in the Severed Hand lacked scripts, so it just stood around and did nothing</li>
             <li>There were two copies of the unique Axe of Caged Souls; one has been swapped for Benorg's Truth</li>
             <li>A statue in Dorn's Deep was supposed to show text, but its clickable area was not defined</li>
