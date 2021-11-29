@@ -23,7 +23,7 @@ ALWAYS
   
 END
 
-VERSION ~v7 Development Branch~
+VERSION ~v7~
 
 README ~iwdfixpack/readme-iwdfixpack.html~
 
@@ -88,10 +88,8 @@ INCLUDE ~iwdfixpack/lib/functions.tpa~
 ///// misc file fixes                                  \\\\\
 /////                                                  \\\\\
 
-// only in english, russian for now
-ACTION_IF (("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) OR
-           ("%LANGUAGE%" STRING_COMPARE_CASE "german" = 0) OR
-           ("%LANGUAGE%" STRING_COMPARE_CASE "russian" = 0)) THEN BEGIN
+// limit to English until we get translation updates
+ACTION_IF ("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) THEN BEGIN
 
   STRING_SET  3028 @103028 // zz05we: doesn't actually have bonus thac0 vs lawful
               6394 @106394 // DECASTAVE DRAINING
