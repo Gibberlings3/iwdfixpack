@@ -3956,7 +3956,7 @@ COPY_EXISTING ~u2hax4a.itm~ ~override~
 COPY_EXISTING ~u2hax5a.itm~ ~override~ // Foe's Fate +4
               ~udart2a.itm~ ~override~ // Berserker Darts
               ~young.itm~   ~override~ // Young Rage +5
-  LPF ALTER_EFFECT INT_VAR cmatch_opcode = 3 parameter2 = 1 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 3 parameter2 = 1 END
   BUT_ONLY IF_EXISTS // young is an how item
 
 // chance of +damage completely overlaps chance of berserk
@@ -4399,10 +4399,6 @@ END ELSE BEGIN // how, totlm fixes
   
   // thac0/damage bonus not working vs. good/evil; wrong file name means it's targeting the wrong neutrals; see waukeen.sto
   COPY_EXISTING ~zz14in.itm~ ~override/zz44in.itm~ // inconsequence
-
-  COPY_EXISTING ~zzg7ts.itm~ ~override~ // trollslayer
-    LPF ALTER_ITEM_HEADER INT_VAR dicenumber = 2 END // only doing 1d4+1, not 2d4+1 base
-    BUT_ONLY
   
   ACTION_IF game_is_totlm THEN BEGIN
 
@@ -4701,7 +4697,7 @@ COPY_EXISTING ~spin170.spl~ ~override~ // flesh to stone (beholder version)
               ~spwi024.spl~ ~override~ // flesh to stone (trap)
               ~spwi607.spl~ ~override~ // disintegrate (arcane)
               ~spwi614.spl~ ~override~ // flesh to stone (wizard version)
-  LPF ALTER_EFFECT INT_VAR resist_dispel = 2 END
+  LPF ALTER_EFFECT INT_VAR resist_dispel = 1 END
   BUT_ONLY IF_EXISTS
 
 // cloud spells shouldn't affect golems
