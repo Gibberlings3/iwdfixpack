@@ -98,7 +98,7 @@ ACTION_IF ("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) THEN BEGIN
               8911 @108911 // lxbowbm: damage bonus +2 > +3 
               9764 @109764 // thac0/damage bonus for hammer
              12174 @112174 // four turns > rounds for chromatic orb
-             12182 @112182 // vocalize only affects the caster
+             12198 @112182 // vocalize only affects the caster
              14357 @114357 // uflal2a: 1d6+1 > 1d6+2 for base flail damage
              14959 @114959 // disease > phase for descript of War Hammer of Phasing +3
              17716 @117716 // zzh8gk: doesn't provide any thac0 bonus vs. giants; damage vs. giants is actually +5, not +4
