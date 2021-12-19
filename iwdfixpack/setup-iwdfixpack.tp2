@@ -980,26 +980,6 @@ BEGIN
 
 END
 
-// several exterior areas flagged as dungeons
-COPY_EXISTING ~ar1200.are~ ~override~ // easthaven (prologue) - missing caravan - exterior
-              ~ar2000.are~ ~override~ // kuldahar pass
-              ~ar2001.are~ ~override~ // kuldahar pass - goblin area
-              ~ar3000.are~ ~override~ // vale of shadows - exterior
-              ~ar3600.are~ ~override~ // temple of the forgotten god - exterior
-              ~ar4000.are~ ~override~ // dragon's eye - exterior
-              ~ar5000.are~ ~override~ // severed hand - exterior
-              ~ar6000.are~ ~override~ // dorn's deep - exterior
-              ~ar7000.are~ ~override~ // wyrm's tooth glacier - entry pass
-              ~ar7005.are~ ~override~ // wyrm's tooth glacier - aquarium exterior
-              ~ar9300.are~ ~override~ // burial isle
-              ~ar9500.are~ ~override~ // gloomfrost
-              ~ar9600.are~ ~override~ // sea of moving ice
-              ~ar9700.are~ ~override~ // anauroch castle - outer courtyard (totl start area)
-              ~ar9709.are~ ~override~ // anauroch castle - western battlements
-              ~ar9710.are~ ~override~ // anauroch castle - eastern battlements
-  WRITE_SHORT 0x48 (THIS BAND `BIT5) // remove the Dungeon flag
-  BUT_ONLY IF_EXISTS
-
 // trapped but detected containers, ar3501 fixed by HoW
 ACTION_FOR_EACH file IN ar3501 ar3502 ar4005 ar6005 ar6006 ar9400 ar9714 BEGIN
 
