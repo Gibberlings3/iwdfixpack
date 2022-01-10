@@ -121,9 +121,13 @@ DEFINE_PATCH_MACRO ~cd_immunity_free_action_arrays~ BEGIN
      46,   "-10",  "-10",    "same",       1,      0, "same"  => 1 // unstun
     162,   "-10",  "-10",    "same",       1,      0, "same"  => 1 // remove paralysis
     163,   "-10",  "-10",    "same",       1,      0, "same"  => 1 // free action
-    276,   "-10",    154,    "same",       1,      0, "same"  => 1 // remove opcode: entangle
-    276,   "-10",    157,    "same",       1,      0, "same"  => 1 // remove opcode: web
-    276,   "-10",    158,    "same",       1,      0, "same"  => 1 // remove opcode: grease
+  END
+  PATCH_IF !game_is_iwd BEGIN // 276 is a HoW opcode
+    DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN 
+      276,   "-10",    154,    "same",       1,      0, "same"  => 1 // remove opcode: entangle
+      276,   "-10",    157,    "same",       1,      0, "same"  => 1 // remove opcode: web
+      276,   "-10",    158,    "same",       1,      0, "same"  => 1 // remove opcode: grease
+    END
   END
   PATCH_IF cosmetic = 1 BEGIN
     DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN
@@ -144,8 +148,12 @@ DEFINE_PATCH_MACRO ~cd_immunity_entangle_arrays~ BEGIN
     261,  "-10", 154, "same",  "-10",  "-10", "same" => 1 // immunity to entangle
   END
   DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN
-    276, "-10",   154,    "same",      1,     0, "same" => 1 // remove opcode: entangle
     206,     0,     0, "sppr105",  "-10", "-10", "same" => 1 // protection from spell, entangle
+  END
+  PATCH_IF !game_is_iwd BEGIN // 276 is a HoW opcode
+    DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN
+      276, "-10",   154,    "same",      1,     0, "same" => 1 // remove opcode: entangle
+    END
   END
   DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_delete BEGIN END // nothing to delete
 END
@@ -158,9 +166,13 @@ DEFINE_PATCH_MACRO ~cd_immunity_grease_arrays~ BEGIN
     261,  "-10", 158, "same",  "-10",  "-10", "same" => 1 // immunity to grease
   END
   DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN 
-    276, "-10",   158,    "same",      1,     0, "same" => 1 // remove opcode: grease
     206,     0,     0, "spwi101",  "-10", "-10", "same" => 1 // protection from spell, grease
   END 
+  PATCH_IF !game_is_iwd BEGIN // 276 is a HoW opcode
+    DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN 
+      276, "-10",   158,    "same",      1,     0, "same" => 1 // remove opcode: grease
+    END 
+  END
   DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_delete BEGIN END // nothing to delete
 END
 
@@ -192,9 +204,11 @@ DEFINE_PATCH_MACRO ~cd_immunity_confusion_arrays~ BEGIN
   DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_key BEGIN
     261,  "-10", 128, "same",  "-10",  "-10", "same" => 1 // immunity to confusion
   END
-  DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN
-    267, "-10", "-10",    "same",      1,     0, "same" => 1 // cure confusion
-  END
+  PATCH_IF !game_is_iwd BEGIN // 267 is a HoW opcode
+    DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN
+      267, "-10", "-10",    "same",      1,     0, "same" => 1 // cure confusion
+    END
+  END  
   PATCH_IF cosmetic = 1 BEGIN
     DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN
       169, "-10",  3, "same", "-10", "-10", "same" => 1 // prevent confused icon
@@ -349,8 +363,12 @@ DEFINE_PATCH_MACRO ~cd_immunity_web_arrays~ BEGIN
   END
   DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN
     206,       0,      0, "spwi215",  "-10", "-10", "same" => 1 // protection from spell, web
-    276,   "-10",    157,    "same",       1,      0, "same"  => 1 // remove opcode: web
 //   261,  "-10", 109, "same",  "-10",  "-10", "last" => 1 // immunity to paralyze
+  END
+  PATCH_IF !game_is_iwd BEGIN // 276 is a HoW opcode
+    DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN
+      276,   "-10",    157,    "same",       1,      0, "same"  => 1 // remove opcode: web
+    END
   END
   PATCH_IF cosmetic = 1 BEGIN
     DEFINE_ASSOCIATIVE_ARRAY cd_immunity_batches_extras BEGIN

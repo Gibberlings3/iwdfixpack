@@ -3373,19 +3373,6 @@ COPY_EXISTING ~blood.itm~  ~override~ // Bathed-in-Blood
 COPY_EXISTING ~bolt03.itm~ ~override~
   LPF ALTER_EFFECT INT_VAR target = 2 STR_VAR match_resource = eff_m22c resource = eff_m22b END // sound doesn't exist, use different zap sound
   BUT_ONLY
-  
-// movement changes which should *not* be blocked by free action
-COPY_EXISTING ~boot01.itm~   ~override~ // boots of speed
-              ~bootdriz.itm~ ~override~ // boots of speed (unused drizzt copy)
-              ~bootfox.itm~  ~override~ // boots of the fox
-              ~ciboot.itm~   ~override~ // undroppable, used to adjust minotaur speed
-              ~move20.itm~   ~override~ // used to slow down norl to 20%
-              ~sppr203.spl~  ~override~ // chant, effect to slow down caster
-              ~sppr415.spl~  ~override~ // blood rage
-              ~sppr517.spl~  ~override~ // animal rage
-              ~sqrlspd.itm~  ~override~ // squirrel gang rise up
-  LPF ALTER_EFFECT INT_VAR match_opcode = 126 opcode = 266 END
-  BUT_ONLY IF_EXISTS // sqrlspd/sppr415/sppr517 is how; ciboot is totlm
 
 // remove haste icon for movement speed increases
 COPY_EXISTING ~bootfox.itm~ ~override~
@@ -3441,9 +3428,11 @@ COPY_EXISTING ~ring95.itm~ ~override/cdconstr.itm~ // create new immunity item f
 COPY_EXISTING ~cdconstr.itm~ ~override~ // new item for construct immunities
               ~ironman.itm~  ~override~ // iwd iron golem weapon
               ~icegolem.itm~ ~override~ // ice golem weapon
-  LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 287 target = 1 timing = 2 END // immunity to backstab
-  LPF CLONE_EFFECT INT_VAR match_opcode = 287 opcode = 261 parameter2 = 25 END // immunity to poison
-  LPF CLONE_EFFECT INT_VAR match_opcode = 287 opcode = 261 parameter2 = 78 END // immunity to disease
+  LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 261 parameter2 = 25 target = 1 timing = 2 END // immunity to poison
+  LPF CLONE_EFFECT INT_VAR match_opcode = 261 match_parameter2 = 25 parameter2 = 78 END // immunity to disease
+  PATCH_IF !game_is_iwd BEGIN 
+    LPF CLONE_EFFECT INT_VAR match_opcode = 261 match_parameter2 = 25 opcode = 287 parameter2 = 0 END // immunity to backstab
+  END  
   IF_EXISTS
 
 // additional construct immunities 
@@ -3882,8 +3871,11 @@ COPY_EXISTING ~trollde.itm~ ~override~ // effects rounded out in immnity batches
   LPF ALTER_EFFECT INT_VAR match_opcode = 89 parameter2 = 1 END // set missile resistance to 100, not increment
   LPF ADD_ITEM_EQEFFECT INT_VAR insert_point = 0 opcode = 261 target = 1 parameter2 = 25 timing = 2 END // immunity to poison
   LPF ADD_ITEM_EQEFFECT INT_VAR insert_point = 0 opcode = 261 target = 1 parameter2 = 78 timing = 2 END // immunity to disease
-  PATCH_FOR_EACH op IN 2 4 11 46 75 77 79 81 161 162 267 BEGIN // cure sleep, berserk, poison, stun, blind, feeblemind, disease, deafness, fear, paralysis, confusion
+  PATCH_FOR_EACH op IN 2 4 11 46 75 77 79 81 161 162 BEGIN // cure sleep, berserk, poison, stun, blind, feeblemind, disease, deafness, fear, paralysis
     LPF ADD_ITEM_EQEFFECT INT_VAR insert_point = 0 opcode = op target = 1 timing = 1 END // cure any poison currently in effect
+  END  
+  PATCH_IF !game_is_iwd BEGIN // 267 is a HoW opcode
+    LPF ADD_ITEM_EQEFFECT INT_VAR insert_point = 0 opcode = 267 target = 1 timing = 1 END // cure any poison currently in effect
   END  
   LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 261 opcode = 238 parameter1 = 20 parameter2 = 1 STR_VAR insert = last END // set all saves to 20
   LPF ADD_ITEM_EQEFFECT INT_VAR insert_point = 0 opcode =  58 target = 1 parameter2 =  0 timing = 1 END // dispel all ongoing effects
@@ -4134,7 +4126,9 @@ COPY_EXISTING ~zz57pj.itm~ ~override~
 // misery's herald not causing horror on hit
 COPY_EXISTING ~zzm5mh.itm~ ~override~
   WRITE_BYTE 0x19 THIS | BIT1 // add cold-iron flag
-  LPF ADD_ITEM_EFFECT INT_VAR type = 1 target = 2 probability1 = 10 opcode = 290 parameter2 = 1 STR_VAR resource = "zzm5mh" END // undead immunity
+  PATCH_IF !game_is_iwd BEGIN // 290 is a HoW opcode
+    LPF ADD_ITEM_EFFECT INT_VAR type = 1 target = 2 probability1 = 10 opcode = 290 parameter2 = 1 STR_VAR resource = "zzm5mh" END // undead immunity
+  END  
   LPF ADD_ITEM_EFFECT INT_VAR type = 1 target = 2 power = 2 resist_dispel = 1 duration = 70 probability1 = 10 savingthrow = BIT0
     opcode = 24 END // panic
   LPF ADD_ITEM_EFFECT INT_VAR type = 1 target = 2 power = 2 resist_dispel = 1 duration = 70 probability1 = 10 savingthrow = BIT0
@@ -4171,6 +4165,19 @@ END ELSE BEGIN // how, totlm fixes
   COPY_EXISTING ~bflaoil.itm~ ~override~
     LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 206 STR_VAR resource = bflaoil END
     BUT_ONLY
+  
+  // movement changes which should *not* be blocked by free action; op 266 is HoW
+  COPY_EXISTING ~boot01.itm~   ~override~ // boots of speed
+                ~bootdriz.itm~ ~override~ // boots of speed (unused drizzt copy)
+                ~bootfox.itm~  ~override~ // boots of the fox
+                ~ciboot.itm~   ~override~ // undroppable, used to adjust minotaur speed
+                ~move20.itm~   ~override~ // used to slow down norl to 20%
+                ~sppr203.spl~  ~override~ // chant, effect to slow down caster
+                ~sppr415.spl~  ~override~ // blood rage
+                ~sppr517.spl~  ~override~ // animal rage
+                ~sqrlspd.itm~  ~override~ // squirrel gang rise up
+    //LPF ALTER_EFFECT INT_VAR match_opcode = 126 opcode = 266 END
+    BUT_ONLY IF_EXISTS // sqrlspd/sppr415/sppr517 is how; ciboot is totlm
   
   // strings not bypassing MR, add round of putting on oil
   COPY_EXISTING ~chance.itm~ ~override~
@@ -4574,76 +4581,62 @@ END
 ///// clean up shapeshifting                           \\\\\
 /////                                                  \\\\\
 
-ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_shapeshifts BEGIN
-  spin107,   s1-12, druidpb, 3 => spin107 // shapeshift polar bear
-  spin110, wolfwi2, druidww, 1 => spin110 // shapeshift winter wolf
-  spin111,   s5-20, druidbb, 2 => spin111 // shapeshift boring beetle
-END
 ACTION_IF !game_is_iwd BEGIN // elemental shapeshifts added in how
+
   ACTION_DEFINE_ASSOCIATIVE_ARRAY cd_shapeshifts BEGIN
+    spin107,   s1-12, druidpb, 3 => spin107 // shapeshift polar bear
+    spin110, wolfwi2, druidww, 1 => spin110 // shapeshift winter wolf
+    spin111,   s5-20, druidbb, 2 => spin111 // shapeshift boring beetle
     spin141,   felem,   felem, 4 => spin141 // shapeshift fire elemental
     spin142,   eelem,   eelem, 4 => spin142 // shapeshift earth elemental
     spin143,   welem,   welem, 4 => spin143 // shapeshift water elemental
   END
-END
 
-ACTION_PHP_EACH cd_shapeshifts AS params => spell BEGIN
+  ACTION_PHP_EACH cd_shapeshifts AS params => spell BEGIN
 
-  COPY_EXISTING ~%params_1%.itm~ ~override/%params_2%.itm~ // create unique weapon for non-elemental shifts
-    WRITE_BYTE 0x18 THIS | BIT6 // flag as magical
-    WRITE_LONG 0x60 params_3    // enchantment
-    
-  ACTION_IF ("%params_1%" STRING_COMPARE_CASE "%params_2%") BEGIN // if not the same
-  
-    COPY_EXISTING ~%spell%.spl~ ~override~ // update spells to new items
-      LPF ALTER_EFFECT INT_VAR match_opcode = 111 STR_VAR resource = EVAL ~%params_2%~ END
-      BUT_ONLY
+    COPY_EXISTING ~%params_1%.itm~ ~override/%params_2%.itm~ // create unique weapon for non-elemental shifts
+      WRITE_BYTE 0x18 THIS | BIT6 // flag as magical
+      WRITE_LONG 0x60 params_3    // enchantment
       
-    COPY_EXISTING ~%params_2%.cre~ ~override~
-      REPLACE_CRE_ITEM ~%params_2%~ #0 #0 #0 NONE WEAPON1 EQUIP
-      BUT_ONLY IF_EXISTS
+    ACTION_IF ("%params_1%" STRING_COMPARE_CASE "%params_2%") BEGIN // if not the same
+    
+      COPY_EXISTING ~%spell%.spl~ ~override~ // update spells to new items
+        LPF ALTER_EFFECT INT_VAR match_opcode = 111 STR_VAR resource = EVAL ~%params_2%~ END
+        BUT_ONLY
+        
+      COPY_EXISTING ~%params_2%.cre~ ~override~
+        REPLACE_CRE_ITEM ~%params_2%~ #0 #0 #0 NONE WEAPON1 EQUIP
+        BUT_ONLY IF_EXISTS
 
+    END
+    
   END
-  
-END
 
-// clean up 'return to human' spells
-COPY_EXISTING ~pself0.spl~  ~override~
-              ~pself00.spl~ ~override~
-              ~spin122.spl~ ~override~
-              ~spin123.spl~ ~override~
-              ~spin124.spl~ ~override~
-  LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 112 opcode = 111 END
-  LPF DELETE_EFFECT INT_VAR match_opcode = 112 END
-  LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 111 opcode = 112 STR_VAR insert = below END
-  LPF ALTER_EFFECT  INT_VAR match_opcode = 135 opcode = 276 parameter2 = 112 timing = 1 duration = 0 END
-  PATCH_FOR_EACH spell IN spin107 spin110 spin111 BEGIN
-    LPF CLONE_EFFECT INT_VAR match_opcode = 276 opcode = 254 parameter2 = 0 STR_VAR resource = EVAL ~%spell%~ END
-  END
-  PATCH_IF !game_is_iwd BEGIN // elementals shapeshifts added in how
-    PATCH_FOR_EACH spell IN spin141 spin142 spin143 BEGIN
+  // clean up 'return to human' spells
+  COPY_EXISTING ~pself0.spl~  ~override~
+                ~pself00.spl~ ~override~
+                ~spin122.spl~ ~override~
+                ~spin123.spl~ ~override~
+                ~spin124.spl~ ~override~
+    LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 112 opcode = 111 END
+    LPF DELETE_EFFECT INT_VAR match_opcode = 112 END
+    LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 111 opcode = 112 STR_VAR insert = below END
+    LPF ALTER_EFFECT  INT_VAR match_opcode = 135 opcode = 276 parameter2 = 112 timing = 1 duration = 0 END
+    PATCH_FOR_EACH spell IN spin107 spin110 spin111 BEGIN
       LPF CLONE_EFFECT INT_VAR match_opcode = 276 opcode = 254 parameter2 = 0 STR_VAR resource = EVAL ~%spell%~ END
     END
-  END  
-  BUT_ONLY  
+    PATCH_IF !game_is_iwd BEGIN // elementals shapeshifts added in how
+      PATCH_FOR_EACH spell IN spin141 spin142 spin143 BEGIN
+        LPF CLONE_EFFECT INT_VAR match_opcode = 276 opcode = 254 parameter2 = 0 STR_VAR resource = EVAL ~%spell%~ END
+      END
+    END  
+    BUT_ONLY  
+
+END
 
 /////                                                  \\\\\
 ///// other spell fixes                                \\\\\
 /////                                                  \\\\\
-
-// cure X spells, hp drain spells shouldn't work on undead/extraplanar, like the cause X spells
-COPY_EXISTING ~spin109.spl~  ~override~ // lay on hands
-              ~sppr103.spl~  ~override~ // Cure Light Wounds
-              ~sppr214.spl~  ~override~ // Cure Moderate Wounds
-              ~sppr314.spl~  ~override~ // Cure Disease
-              ~sppr315.spl~  ~override~ // Cause Disease
-              ~sppr401.spl~  ~override~ // Cure Serious Wounds
-              ~sppr502.spl~  ~override~ // Cure Critical Wounds
-              ~sppr607.spl~  ~override~ // Heal
-              ~spwi119.spl~  ~override~ // larloch's minor drain
-              ~spwi314.spl~  ~override~ // vampiric touch
-  LPF CLONE_EFFECT INT_VAR match_opcode = 233 opcode = 290 parameter2 = 55 timing = 0 duration = 1 resist_dispel = 0 STR_VAR insert = first resource = EVAL ~%SOURCE_RES%~ END 
-  BUT_ONLY IF_EXISTS // cause disease not in iwd
 
 // no portrait icon for creatures that can't be charmed
 COPY_EXISTING ~spin119.spl~ ~override~
@@ -5007,7 +5000,7 @@ COPY_EXISTING ~sppr988.spl~ ~override~
   
 // block ancillary hold effects from creatures not held
 COPY_EXISTING ~sppr989.spl~ ~override~ // trap_hold_person
-  LPF CLONE_EFFECT INT_VAR match_opcode = 175 opcode = 290 parameter1 = 0 parameter2 = 6 timing = 0 duration = 0 STR_VAR insert = first resource = sppr989 END
+  LPF CLONE_EFFECT INT_VAR match_opcode = 175 opcode = 206 parameter1 = 0 parameter2 = 6 timing = 0 duration = 0 STR_VAR insert = first resource = sppr989 END
   LPF ALTER_EFFECT INT_VAR match_opcode = 175 parameter1 = 0 END
   LPF ALTER_EFFECT INT_VAR match_opcode = 142 power = 2 END // portrait icon has no power
   BUT_ONLY
@@ -5547,6 +5540,20 @@ END ELSE BEGIN // how, totlm fixes
   // charm animal can charm non-animals (ok on base iwd)
   COPY_EXISTING ~spin108.spl~ ~override~
     LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 206 target = 2 parameter2 = 8 resist_dispel = 2 STR_VAR resource = spin108 END
+
+  // cure X spells, hp drain spells shouldn't work on undead/extraplanar, like the cause X spells; 290 is a how opcode
+  COPY_EXISTING ~spin109.spl~  ~override~ // lay on hands
+                ~sppr103.spl~  ~override~ // Cure Light Wounds
+                ~sppr214.spl~  ~override~ // Cure Moderate Wounds
+                ~sppr314.spl~  ~override~ // Cure Disease
+                ~sppr315.spl~  ~override~ // Cause Disease
+                ~sppr401.spl~  ~override~ // Cure Serious Wounds
+                ~sppr502.spl~  ~override~ // Cure Critical Wounds
+                ~sppr607.spl~  ~override~ // Heal
+                ~spwi119.spl~  ~override~ // larloch's minor drain
+                ~spwi314.spl~  ~override~ // vampiric touch
+    LPF CLONE_EFFECT INT_VAR match_opcode = 233 opcode = 290 parameter2 = 55 timing = 0 duration = 1 resist_dispel = 0 STR_VAR insert = first resource = EVAL ~%SOURCE_RES%~ END 
+    BUT_ONLY IF_EXISTS // cause disease not in iwd
 
   // sound effect bypasses MR
   COPY_EXISTING ~spin127.spl~ ~override~
