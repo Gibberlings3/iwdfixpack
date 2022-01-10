@@ -4368,6 +4368,18 @@ END ELSE BEGIN // how, totlm fixes
     END
     BUT_ONLY
 
+  COPY_EXISTING ~waukeen.itm~ ~override~ // Waukeen's Defender shouldn't apply AC bonus to missile weapons
+    READ_LONG  0x6a fx_off 
+    READ_SHORT 0x70 fx_num
+    FOR (index  = 0 ; index < fx_num ; ++index) BEGIN
+      READ_SHORT (fx_off + 0x00 + (0x30 * index)) opcode
+      READ_LONG  (fx_off + 0x08 + (0x30 * index)) param2
+      PATCH_IF ((opcode = 0) AND (param2 = BIT1)) BEGIN   // missile AC bonus   
+        WRITE_LONG  (fx_off + 0x04 + (0x30 * index)) "-3" // -3 to cancel out overall +3 AC bonus
+      END
+    END    
+    BUT_ONLY  
+
   // Will-o-Wisp should have a range of 6 to allow for proper cone targeting
   COPY_EXISTING ~wisp.itm~ ~override~ // Ring of the Will-o-Wisp
     LPF ALTER_ITEM_HEADER INT_VAR range = 6 END
