@@ -3649,6 +3649,10 @@ COPY_EXISTING ~lxbowbm.itm~ ~override~ // bren muller's crossbow
 COPY_EXISTING ~mage06.itm~ ~override~
   LPF ALTER_EFFECT INT_VAR check_headers = 0 power = 0 resist_dispel = 0 END
   BUT_ONLY
+  
+COPY_EXISTING ~mantlehf.itm~ ~override~ // Mantle of Hell's Furnace
+  LPF ALTER_ITEM_HEADER INT_VAR drained = 0 END // stick around even when charges are gone
+  BUT_ONLY 
 
 COPY_EXISTING ~mhorn.itm~ ~override~ // the merry shorthorn
   LPF ALTER_EFFECT STR_VAR match_resource = shorn resource = s_horn END
