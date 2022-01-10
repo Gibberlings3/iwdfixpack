@@ -125,6 +125,12 @@ Not Usable By:
  Mage~ []
 @1002996 = ~This huge warhammer looks as if it would take the combined strength of two men to wield it.  Its thick, steel head is bound with studded bronze bands and is speckled with what appears to be dried blood.  The inscription upon its stand reads:  "Bonecracker.  This magnificent weapon belonged to the legendary warrior, Dumok the Fist, who died in the assault on Dragonspear Castle."~ []
 @1003018 = ~The walkways of this cemetery appear to built upon hundreds of interred.  Hastily carved open-air tombs, their final homes.~ []
+@1003024 = ~An extremely vivid piece of clothing, the Mantle of Hell's Furnace was woven from the beards of fiery Azer.  It was worn by a high priest of Kossuth named Ullabem for fifteen years before he was killed fighting a priestess of Ishitia.  When the priestess attempted to destroy it, efreet allies of Ullabem tracked her down and killed her.  One of the efreeti kept the cloak until it was requested of him by a clever thief who summoned the genie out of an enchanted block of sandalwood.  It is believed that the cloak retains its powers until they are used a certain number of times.  Once that point is reached, the cloak is summoned back to the elemental plane of fire.
+
+STATISTICS:
+
+Special: Allows the user to cast Agannazar's Scorcher, Burning Hands, or Charm Fire Elemental Kin.
+Not Usable By:~
 @1003035 = ~Often confused with another wand of the same name, the Wand of Armory is used to cast protective spells on the user.  Unfortunately for the creator of this Wand of Armory, trolls are persistent creatures.
 
 STATISTICS:
