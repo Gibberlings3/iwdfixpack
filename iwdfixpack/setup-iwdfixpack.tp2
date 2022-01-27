@@ -338,6 +338,7 @@ END
 // remove throwing daggers since they don't have a melee abil
 COPY_EXISTING ~tooltip.2da~ ~override~
   REPLACE_TEXTUALLY ~^DAGG05 +.+$~ ~moradin -1 27265 -1~
+  REPLACE_TEXTUALLY ~^\(MantleHF[ %TAB%]+[-0-9]+[ %TAB%]+[-0-9]+[ %TAB%]+\)[-0-9]+~ ~\11418~ // update tooltip from 'Charm Elemental Kin' to 'Charm Fire Elemental Kin'
 
 CLEAR_IDS_MAP
 
@@ -4741,7 +4742,7 @@ COPY_EXISTING ~spitm02.spl~ ~override~
 // mantle of hells' furnace should only charm fire elementals (elves handled in batch patches)
 COPY_EXISTING ~spitm99.spl~ ~override~
   LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 206 target = 2 parameter2 =  4 duration = 1 STR_VAR resource = spitm99 END // block non-fire-dwelling
-  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 206 target = 2 parameter2 = 10 duration = 1 STR_VAR resource = spitm99 END // block non-elementals
+  //LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 206 target = 2 parameter2 = 10 duration = 1 STR_VAR resource = spitm99 END // block non-elementals
   BUT_ONLY
 
 // string should bypass MR
