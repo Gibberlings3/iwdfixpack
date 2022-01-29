@@ -91,14 +91,14 @@ INCLUDE ~iwdfixpack/lib/functions.tpa~
 // limit to English until we get translation updates
 ACTION_IF ("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) THEN BEGIN
 
-  STRING_SET  3028 @103028 // zz05we: doesn't actually have bonus thac0 vs lawful
+  STRING_SET  3028 @103028 // zz05we: doesn't actually have bonus thac0 OR damage vs lawful in base IWD
               6394 @106394 // DECASTAVE DRAINING
               8663 @108663 // clbhand: damage bonus +2 > +3 from being composite long bow
               8712 @108712 // kaybow: damage bonus +3 > +4 from being composite long bow
               8911 @108911 // lxbowbm: damage bonus +2 > +3 
               9764 @109764 // thac0/damage bonus for hammer
              12174 @112174 // four turns > rounds for chromatic orb
-             12198 @112182 // vocalize only affects the caster
+             12198 @112198 // vocalize only affects the caster
              14357 @114357 // uflal2a: 1d6+1 > 1d6+2 for base flail damage
              14959 @114959 // disease > phase for descript of War Hammer of Phasing +3
              17716 @117716 // zzh8gk: doesn't provide any thac0 bonus vs. giants; damage vs. giants is actually +5, not +4
@@ -111,10 +111,11 @@ ACTION_IF ("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) THEN BEGIN
     
   ACTION_IF !game_is_iwd BEGIN // how, totlm
   
-    STRING_SET 21478 @121478 // cause disease is abjuration school but necromantic sphere--like its inverse, cure disease
-    STRING_SET 22605 @122605 // for asking about wylfdene for the first time
-    STRING_SET 24328 @124328 // Tongue of the Gloomfrost should do piercing, not slashing, damage
-    STRING_SET 25818 @125818 // storm bow is usable by thieves; remove +1 damage since it's not a long bow
+    STRING_SET  3028 @103029 // zz05we: doesn't actually have bonus thac0 vs lawful; at least has damage bonus in HoW+
+               21478 @121478 // cause disease is abjuration school but necromantic sphere--like its inverse, cure disease
+               22605 @122605 // for asking about wylfdene for the first time
+               24328 @124328 // Tongue of the Gloomfrost should do piercing, not slashing, damage
+               25818 @125818 // storm bow is usable by thieves; remove +1 damage since it's not a long bow
     
     ACTION_IF !game_is_how BEGIN // totlm
     
@@ -3501,7 +3502,9 @@ COPY_EXISTING ~dazer.itm~ ~override~
 // MR, power issues; prevent stacking; golems immune
 COPY_EXISTING ~decasta.itm~ ~override~ // darts of bone
   LPF ALTER_EFFECT INT_VAR match_target = 2 resist_dispel = 1 power = 2 END // drain subject to MR
-  LPF CLONE_EFFECT INT_VAR match_opcode = 233 opcode = 206 parameter2 = 55 timing = 0 resist_dispel = 0 STR_VAR resource = decasta insert = first END // golems immune
+  PATCH_IF !game_is_iwd BEGIN // 
+    LPF CLONE_EFFECT INT_VAR match_opcode = 233 opcode = 206 parameter2 = 55 timing = 0 resist_dispel = 0 STR_VAR resource = decasta insert = first END // golems immune
+  END  
   BUT_ONLY
 
 // play sound can be dispelled
@@ -4116,12 +4119,6 @@ COPY_EXISTING ~withery.itm~ ~override~
   LPF ALTER_ITEM_HEADER INT_VAR range = 0 END
   BUT_ONLY
 
-// thac0/damage bonus not working vs. lawful; can fix damage at least
-COPY_EXISTING ~zz05we.itm~ ~override~
-  LPF ADD_ITEM_EFFECT INT_VAR type = 1 insert_point = 999 opcode = 206 target = 2 parameter2 = 60 STR_VAR resource = zz05we END // block the following damage effect from non-lawfuls
-  LPF ADD_ITEM_EFFECT INT_VAR type = 1 insert_point = 999 opcode = 12 target = 2 parameter1 = 1 timing = 1 END // add 1 point of crushing damage
-  BUT_ONLY
-
 // pale justice has its own icon
 COPY_EXISTING ~zz57pj.itm~ ~override~
   WRITE_ASCII 0x3a ~izz57pj~ #8
@@ -4400,6 +4397,12 @@ END ELSE BEGIN // how, totlm fixes
     LPF ADD_ITEM_EFFECT INT_VAR type = 2 opcode = 206 target = 2 parameter2 = 52 resist_dispel = 2
       probability1 = 100 probability2 = 67 STR_VAR resource = "spin135" END
     BUT_ONLY
+
+  // thac0/damage bonus not working vs. lawful; can fix damage at least; p2 = 60 only available on HoW+
+  COPY_EXISTING ~zz05we.itm~ ~override~
+    LPF ADD_ITEM_EFFECT INT_VAR type = 1 insert_point = 999 opcode = 206 target = 2 parameter2 = 60 STR_VAR resource = zz05we END // block the following damage effect from non-lawfuls
+    LPF ADD_ITEM_EFFECT INT_VAR type = 1 insert_point = 999 opcode = 12 target = 2 parameter1 = 1 timing = 1 END // add 1 point of crushing damage
+    BUT_ONLY
   
   // thac0/damage bonus not working vs. good/evil; wrong file name means it's targeting the wrong neutrals; see waukeen.sto
   COPY_EXISTING ~zz14in.itm~ ~override/zz44in.itm~ // inconsequence
@@ -4669,17 +4672,6 @@ COPY_EXISTING ~spin121.spl~ ~override~
 COPY_EXISTING ~spin125.spl~ ~override~
   LPF ALTER_EFFECT INT_VAR power = 0 END
   BUT_ONLY
-
-// deafness should protect against spells and abilities that rely on hearing
-COPY_EXISTING ~spin134.spl~ ~override~ // Mournful Wail
-              ~spin135.spl~ ~override~ // Death Knell
-              ~spin136.spl~ ~override~ // War Cry
-              ~spin137.spl~ ~override~ // Undying Lament
-              ~spin138.spl~ ~override~ // Great Roar
-              ~sppr102.spl~ ~override~ // Command
-              ~sppr518.spl~ ~override~ // Greater Command
-  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 206 parameter2 = 66 target = 2 duration = 1 STR_VAR resource = EVAL ~%SOURCE_RES%~ END
-  BUT_ONLY IF_EXISTS
 
 // disintegrate, petrification should have MR checks
 COPY_EXISTING ~spin170.spl~ ~override~ // flesh to stone (beholder version)
@@ -5020,15 +5012,6 @@ COPY_EXISTING ~sppr989.spl~ ~override~ // trap_hold_person
   LPF CLONE_EFFECT INT_VAR match_opcode = 175 opcode = 206 parameter1 = 0 parameter2 = 6 timing = 0 duration = 0 STR_VAR insert = first resource = sppr989 END
   LPF ALTER_EFFECT INT_VAR match_opcode = 175 parameter1 = 0 END
   LPF ALTER_EFFECT INT_VAR match_opcode = 142 power = 2 END // portrait icon has no power
-  BUT_ONLY
-
-// like suffocate, cloud kill and stinking cloud shouldn't work on 'non-breathing' creatures
-// not extending this to death fog, incendiary cloud, or cloud of pestilence
-COPY_EXISTING ~spwi004.spl~ ~override~ // stinking cloud via trap
-              ~spwi018.spl~ ~override~ // cloud kill via trap
-              ~spwi213.spl~ ~override~ // stinking cloud 
-              ~spwi503.spl~ ~override~ // cloud kill
-  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 206 target = 2 parameter2 = 48 duration = 1 STR_VAR resource = EVAL ~%SOURCE_RES%~ END
   BUT_ONLY
 
 // trap arrow damage targets self; change damage types while we're here
@@ -5599,6 +5582,17 @@ END ELSE BEGIN // how, totlm fixes
     LPF ALTER_EFFECT INT_VAR match_opcode = 174 resist_dispel = 1 END
     LPF ALTER_EFFECT INT_VAR match_opcode = 233 resist_dispel = 1 END
     BUT_ONLY
+
+  // deafness should protect against spells and abilities that rely on hearing - deafness for 206 is HoW-only
+  COPY_EXISTING ~spin134.spl~ ~override~ // Mournful Wail
+                ~spin135.spl~ ~override~ // Death Knell
+                ~spin136.spl~ ~override~ // War Cry
+                ~spin137.spl~ ~override~ // Undying Lament
+                ~spin138.spl~ ~override~ // Great Roar
+                ~sppr102.spl~ ~override~ // Command
+                ~sppr518.spl~ ~override~ // Greater Command
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 206 parameter2 = 66 target = 2 duration = 1 STR_VAR resource = EVAL ~%SOURCE_RES%~ END
+    BUT_ONLY IF_EXISTS
     
   // hope should cancel hopelessness and vice versa; see sppr715, spwi411, spwi421
   COPY_EXISTING ~spin134.spl~ ~override~ // Mournful Wail; do separately since it has a 206 at top of stack
@@ -5758,6 +5752,15 @@ END ELSE BEGIN // how, totlm fixes
   // summons should always bypass spell protections
   COPY_EXISTING ~sppr723.spl~ ~override~
     LPF ALTER_EFFECT INT_VAR match_opcode = 259 power = 0 END
+    BUT_ONLY
+
+  // like suffocate, cloud kill and stinking cloud shouldn't work on 'non-breathing' creatures; non-breathing only in HoW
+  // not extending this to death fog, incendiary cloud, or cloud of pestilence
+  COPY_EXISTING ~spwi004.spl~ ~override~ // stinking cloud via trap
+                ~spwi018.spl~ ~override~ // cloud kill via trap
+                ~spwi213.spl~ ~override~ // stinking cloud 
+                ~spwi503.spl~ ~override~ // cloud kill
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 206 target = 2 parameter2 = 48 duration = 1 STR_VAR resource = EVAL ~%SOURCE_RES%~ END
     BUT_ONLY
 
   // luck fixes, 4/4 (see spwi209.spl (x2), chance.itm, and lucky.itm)
