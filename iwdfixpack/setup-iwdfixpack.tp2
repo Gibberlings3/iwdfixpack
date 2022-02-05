@@ -1,4 +1,4 @@
-BACKUP ~iwdfixpack/backup~ // location to store files for
+BACKUP ~weidu_external/iwdfixpack/backup~ // location to store files for
 SUPPORT ~https://www.gibberlings3.net/forum/152-icewind-dale-mod-roundup/~ // email address displayed if install fails\
 
 ALWAYS
@@ -4460,6 +4460,13 @@ END ELSE BEGIN // how, totlm fixes
     COPY_EXISTING ~zzc8hb.itm~ ~override~ // Hell's Bane +4
       LPF ALTER_EFFECT INT_VAR check_headers = 0 match_opcode = 30 parameter1 = 20 END
       LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 parameter1 = 4 dicenumber = 1 dicesize = 8 END
+      BUT_ONLY
+
+    // protects against arcane versions of spells, but not from the same spells via trap
+    COPY_EXISTING ~zzd5woh.itm~ ~override~ // wind of heaven
+      LPF CLONE_EFFECT INT_VAR check_headers = 0 match_opcode = 206 STR_VAR match_resource = spwi213 resource = spwi004 END // stinking cloud
+      LPF CLONE_EFFECT INT_VAR check_headers = 0 match_opcode = 206 STR_VAR match_resource = spwi503 resource = spwi018 END // cloud kill
+      LPF CLONE_EFFECT INT_VAR check_headers = 0 match_opcode = 206 STR_VAR match_resource = spwi605 resource = spwi019 END // death fog
       BUT_ONLY
       
   END
