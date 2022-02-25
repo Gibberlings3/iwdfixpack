@@ -186,7 +186,9 @@ ACTION_IF NOT MOD_IS_INSTALLED ~1pp/1pp.tp2~ ~101~ BEGIN
 
 END
 
-COPY ~iwdfixpack/wav/choke.wav~ ~override~ // missing sound for poison.itm
+COPY ~iwdfixpack/bam/ixbow04.bam~ ~override~ // fixed light crossbow icon
+     ~iwdfixpack/bam/ixbow09.bam~ ~override~ // fixed HQ light crossbow icon
+     ~iwdfixpack/wav/choke.wav~   ~override~ // missing sound for poison.itm
 
 /////                                                  \\\\\
 ///// ids fixes                                        \\\\\
