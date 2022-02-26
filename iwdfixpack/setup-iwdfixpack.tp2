@@ -120,6 +120,7 @@ ACTION_IF ("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) THEN BEGIN
     ACTION_IF !game_is_how BEGIN // totlm
     
       STRING_SET 27373 @127373 // 1d6+4 > 1d6+5 for base flail damage
+                 27375 @127375 // Wind of Heaven doesn't actually protect against from Death Fog
                  27377 @127377 // zz36dgd: +5 > +6 damage vs. good
 
     END

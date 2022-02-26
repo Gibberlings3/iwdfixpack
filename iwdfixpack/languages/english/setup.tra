@@ -319,6 +319,22 @@ Not Usable By:
  Mage
  Thief~
 
+// Wind of Heaven doesn't actually protect against from Death Fog
+@127375 = ~Shaped by a powerful djinn sorcerer on the Elemental Plane of Air, the Wind of Heaven was a gift for the Caliph of Tamjuhk. The Caliph claimed it was the finest weapon he had ever held. When Tamjuhk was sacked by efreet, githyanki, salamanders, and other malicious creatures, the efreeti Amir Talmed presented the weapon to the Grand Sultan of the city of Brass. Some time later, the Grand Sultan gave the weapon to Memnon, the efreeti who did battle with the djinni Calim over present-day Calimshan. Memnon used the weapon very little, deigning to give it to a powerful lieutenant. When Memnon and Calim fell to elven high magic, their servants fled or were driven back to their home planes. It is believed that the Wind of Heaven found its way back into the hands of the djinn after the epic war.
+
+STATISTICS:
+
+Damage:  1D8 +4, +5 vs. Elementals
+THAC0:  +4, +5 vs. Elementals
+Special: Wielder is immune to Cloudkill, Stinking Cloud, Cloud of Pestilence, and Malavon's Corrosive Fog; limited immunity to Death Fog
+Damage Type:  Slashing
+Weight:  4
+Proficiency Type:  Large Swords
+Speed Factor:  0
+Type:  1-handed
+Not Usable By:
+ Mage 
+ Cleric~
 // zz36dgd: +5 > +6 damage vs. good
 @127377 = ~The story of the ascension of Bane, Bhaal, and Myrkul, the gods of strife, murder, and death, is well known among learned men across the face of Faerun. Despite this, most theologians know very little about what happened to the unfortunate dying god whom the malefic trio consumed prior to their encounter with Jergal. What is known is that a small portion of the dead god's essence found its way to the Astral Plane, where it coalesced into one of the smallest islands of slain divinity. This small hunk of rock and odd ore was captured hundreds of years later by an enchanter named Merdros. Merdros' duergar servants created this blade for the wizard's most powerful warrior ally. Owners of the blade claimed that they could feel the dead god's final memories flowing through the weapon when they held it.
 
