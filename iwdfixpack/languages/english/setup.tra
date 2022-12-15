@@ -106,6 +106,19 @@ Area of Effect: Caster
 Saving Throw: None
 This spell creates a staff of force in the caster's hand. It is treated as a magical weapon, doing 1-6 hit points of damage per hit, and it can hit creatures immune to normal weapons. It is a staff, however, so if the caster does not have a proficiency in staff weapons, then the Decastave is used at a penalty. The staff also has the power to drain a target of 1-2 hit points on every strike. These hit points are added to the caster's, but they can only heal damage the caster has taken; they will not raise his hit points beyond his normal maximum.~
 
+// symbol of pain: AoE is 30' radius, not 60'
+@108099 = ~Symbol of Pain 
+(Conjuration/Summoning)
+Level: 7
+Sphere: Guardian
+Range: Sight of Caster
+Duration: 2-20 turns
+Casting Time: 3
+Area of Effect: 30-foot radius
+Saving Throw: Neg.
+All creatures within 30 feet of the Symbol of Pain when it's invoked must make a saving throw vs. spell. If failed, they are overwhelmed by pain, suffering a -4 to their attack rolls, a -2 to Dexterity and a -2 to their Armor Class. 
+~
+
 // damage bonus +3 > +4 from being composite long bow
 @108712 = ~This bow belonged to Kaylessa, weapons master of the Seldarine's Hand.  Her prowess in archery only bested by her beauty, Kaylessa was devoted to hone the battle skills of any elf under her.  If there were any heroes at the Battle of Seldarine's Hand, Kaylessa was one of them.  She was a shining example of courage in the face of impending doom as she fearlessly led her people against orc and goblin hordes.  Even after the fall of the Hand, her commitment to battle and her people remained strong.  Her last wish was to die in glorious battle.
 

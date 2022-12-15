@@ -93,6 +93,7 @@ ACTION_IF ("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) THEN BEGIN
 
   STRING_SET  3028 @103028 // zz05we: doesn't actually have bonus thac0 OR damage vs lawful in base IWD
               6394 @106394 // DECASTAVE DRAINING
+              8099 @108099 // AoE of Symbol, Pain
               8663 @108663 // clbhand: damage bonus +2 > +3 from being composite long bow
               8712 @108712 // kaybow: damage bonus +3 > +4 from being composite long bow
               8911 @108911 // lxbowbm: damage bonus +2 > +3 
