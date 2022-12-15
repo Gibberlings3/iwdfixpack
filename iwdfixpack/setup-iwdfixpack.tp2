@@ -4235,7 +4235,7 @@ END ELSE BEGIN // how, totlm fixes
 
   // broken tiernon shield missing missile damage reduction
   COPY_EXISTING ~dntshd1.itm~ ~override~
-    LPF CLONE_EFFECT INT_VAR match_opcode = 88 opcode = 89 parameter2 = 13 END // add missile damage reduction
+    LPF CLONE_EFFECT INT_VAR match_opcode = 88 opcode = 89 END // add missile damage reduction
     BUT_ONLY
 
   // fixed shield adds 0% missile reduction on 1/day ability; ac bonus can't be dispelled, power wrong
