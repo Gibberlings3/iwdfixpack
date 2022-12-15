@@ -5826,9 +5826,9 @@ END ELSE BEGIN // how, totlm fixes
     LPF ALTER_EFFECT INT_VAR power = 0 target = 1 END
     BUT_ONLY
 
-  // caster pause shouldn't be blocked by spell protections
+  // caster pause, sleep, damage shouldn't be blocked by spell protections
   COPY_EXISTING ~spwi806.spl~ ~override~
-    LPF ALTER_EFFECT INT_VAR match_opcode = 165 power = 0 END
+    LPF ALTER_EFFECT INT_VAR match_target = 1 power = 0 END
     BUT_ONLY
   
   // sound should be self-targeted
