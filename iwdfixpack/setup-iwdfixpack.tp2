@@ -3504,9 +3504,17 @@ COPY_EXISTING ~dart04.itm~ ~override~
   LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 142  resist_dispel = 0 END
   BUT_ONLY
 
-// slow sould have power level
-COPY_EXISTING ~days.itm~ ~override~
+// slow sould have power level, more complete slow/haste immunity
+COPY_EXISTING ~days.itm~ ~override~ // the sword of days
   LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 40 power = 3 END
+  LPF CLONE_EFFECT INT_VAR check_headers = 0 match_opcode = 206 STR_VAR match_resource = spwi312 resource = spin173 insert = below END // clone to beholder slow
+  LPF CLONE_EFFECT INT_VAR check_headers = 0 match_opcode = 206 opcode = 101 parameter2 = 40 STR_VAR match_resource = spwi312 resource = ~~ END // immune to slow
+  LPF CLONE_EFFECT INT_VAR check_headers = 0 match_opcode = 206 opcode = 101 parameter2 = 16 STR_VAR match_resource = spwi312 resource = ~~ END // immune to haste
+  LPF CLONE_EFFECT INT_VAR check_headers = 0 match_opcode = 206 opcode = 267 parameter1= 14023 parameter2 = 0 STR_VAR match_resource = spwi312 resource = ~~ END // immune to string hasted
+  LPF CLONE_EFFECT INT_VAR check_headers = 0 match_opcode = 267 match_parameter1= 14023 parameter1 = 14000 END // immune to string slow
+  LPF CLONE_EFFECT INT_VAR check_headers = 0 match_opcode = 267 match_parameter1= 14023 parameter1 = 14668 END // immune to string slowed
+  LPF CLONE_EFFECT INT_VAR check_headers = 0 match_opcode = 206 opcode = 169 parameter1= 0 parameter2 = 38 STR_VAR match_resource = spwi312 resource = ~~ END // immune to icon haste
+  LPF CLONE_EFFECT INT_VAR check_headers = 0 match_opcode = 169 match_parameter2= 38 parameter2 = 41 END // immune to icon slow
   BUT_ONLY
 
 // dazer has wrong percentage on one effect, so do manually - IF_EXISTS since xclub is a totlm copy
