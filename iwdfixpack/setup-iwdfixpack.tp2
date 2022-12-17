@@ -5343,7 +5343,7 @@ COPY_EXISTING ~spwi414.spl~ ~override~
 
 // BBB not always checking MR correctly  
 COPY_EXISTING ~spwi417.spl~ ~override~
-  LPF ALTER_EFFECT INT_VAR match_resist_dispel = 1 resist_dispel = 3 END
+  LPF ALTER_EFFECT INT_VAR silent = 1 match_resist_dispel = 3 resist_dispel = 1 END
   BUT_ONLY
 
 // summons should always bypass spell protections
