@@ -5838,6 +5838,11 @@ END ELSE BEGIN // how, totlm fixes
     LPF ALTER_EFFECT INT_VAR power = 0 target = 1 END
     BUT_ONLY
 
+  // use 176 for movement speed
+  COPY_EXISTING ~spwi711.spl~ ~override~ // suffocate
+    LPF ALTER_EFFECT INT_VAR match_opcode = 126 opcode = 176 END
+    BUT_ONLY
+
   // caster pause, sleep, damage shouldn't be blocked by spell protections
   COPY_EXISTING ~spwi806.spl~ ~override~
     LPF ALTER_EFFECT INT_VAR match_target = 1 power = 0 END
