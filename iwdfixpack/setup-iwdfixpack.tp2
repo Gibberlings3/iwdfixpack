@@ -5730,6 +5730,11 @@ END ELSE BEGIN // how, totlm fixes
       parameter2 = 44 probability1 = 30 probability2 = 6 savingthrow = BIT1 END
     LPF ADD_SPELL_EFFECT INT_VAR opcode = 142 target = 2 power = 4 resist_dispel = 1 duration = 14
       parameter2 = 14 probability1 = 5 savingthrow = BIT1 END
+    BUT_ONLYBUT_ONLY
+
+  // Wall of Moonlight should not interact with spell protections
+  COPY_EXISTING ~sppr423.spl~ ~override~ // wall of moonlight
+    LPF ALTER_EFFECT INT_VAR power = 0 resist_dispel = 0 END
     BUT_ONLY
   
   // should be restricted from neutrals, per descript
