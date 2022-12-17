@@ -33,7 +33,7 @@
         <strong> On the web: </strong><a href="https://www.gibberlings3.net/mods/fixes/iwd_fixpack/">Home
         page</a> and <a href="https://www.gibberlings3.net/forum/152-icewind-dale-mod-roundup/">discussion
         forum</a></p>
-      <p><strong>Version 9</strong><br />
+      <p><strong>Version 10</strong><br />
         <strong> Languages:</strong> Czech, English, French, German, Italian,       Polish, Russian, and Spanish<br />
         <strong>Platforms: </strong>Windows, macOS<acronym title="Operating System 10"></acronym>, and Linux<br />
         <strong>GitHub: </strong><a href="https://github.com/Gibberlings3/iwdfixpack">Gibberlings3/iwdfixpack</a></p>
@@ -159,7 +159,7 @@
         <li> <a href="http://www.contexteditor.org/">ConTEXT Text Editor</a> by Eden Kirin</li>
         <li> <a href="https://gibberlings3.github.io/iesdp/"> IESDP</a> maintained
           by igi and lynx</li>
-        <li> <a href="http://www.gibberlings3.net/tools/weidu.php">WeiDU ConTEXT
+        <li> <a href="https://www.gibberlings3.net/mods/tools/weidu/">WeiDU ConTEXT
           Highlighters </a> by Idobek, updated by cmorgan </li>
       </ul>
     </div>
@@ -184,6 +184,27 @@
     <div class="ribbon_triangle_h2-l"></div>
     <div class="ribbon_triangle_h2-r"></div>
     <div class="section">
+      <p><strong>Version 10 - December 17, 2022</strong></p>
+      <ul>
+        <li>Fixed a CTD error in Tiernon's Sundered Shield introduced by the Fixpack (thanks eyre!)</li>
+        <li>EE Fixpack identified several bugs in IWDEE that trace their way back to the original, which are now addressed:
+          <ul>
+            <li>Symbol of Pain's area-of-effect is a 30' radius, but the description listed a 60' radius</li>
+            <li>Spell protections could partially shield the caster from the negative side effects of Great Shout</li>
+            <li>If the party was split on either side of the closing door, the player could end up softlocked during the Yxunomei battle</li>
+            <li>The overlapping containers in the Hall of Heroes are now fixed by removing one of them</li>
+            <li>The range of Stone to Flesh scrolls was inconsistent</li>
+            <li>The Sword of Days was not fully protecting its wielder from Haste and Slow effects</li>
+            <li>The Elixir of Health now 'cures' intoxication rather than setting intoxication to zero</li>
+            <li>Several  innate spells were set as 'generalist' school meaning that non-specialized mages received unwarranted save bonuses against them. In a handful of cases where there was a corresponding arcane/divine spell they were assigned the same school, otherwise they were made schoolless. </li>
+            <li>The durations of effects on Retribution did not match</li>
+            <li>Spell protections should not protect from the effects of Wall of Moonlight or Grease</li>
+            <li>Depending on the level of the caster, Beltyn's Burning Blood could bypass or be blocked by the target's magic resistance. Previous versions fixed this by standardizing the spell to bypass MR, but after re-examination, it now is blocked by magic resistance. </li>
+            <li>The portrait icons for feeblemind and petrification in Prismatic Spray did not match the durations of the underlying effects</li>
+            <li>Free action should not block the movement penalty from Suffocate</li>
+          </ul>
+        </li>
+      </ul>
       <p><strong>Version 9 - February 26, 2022</strong></p>
       <ul>
         <li>Found a few more HoW-only parameters  being applied to non-HoW games, causing crashes</li>
