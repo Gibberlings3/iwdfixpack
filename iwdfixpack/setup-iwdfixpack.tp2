@@ -3824,9 +3824,11 @@ COPY_EXISTING ~s1-12.itm~ ~override/ms2lizm.itm~
   WRITE_ASCII 0x22 HB #2 // halberd animation
 
 // make un-petrify stuff destroy the gorgon ring, otherwise victim will just re-petrify on load; see spwi614.spl
+// also fix range to match scstf while we're here
 COPY_EXISTING ~scrlpet.itm~  ~override~ // stone to flesh scroll
               ~scrlpet2.itm~ ~override~ // stone to flesh scroll
   LPF CLONE_EFFECT INT_VAR match_opcode = 43 opcode = 112 timing = 1 STR_VAR resource = gorgon END
+  LPF ALTER_HEADER INT_VAR range = 40 STR_VAR match_icon = iscrl3p END // to match scstf
   BUT_ONLY IF_EXISTS
 
 // timing modes for effects, add round of putting on oil
