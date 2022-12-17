@@ -5507,9 +5507,10 @@ COPY_EXISTING ~spwi704.spl~ ~override~
   LPF ALTER_EFFECT INT_VAR match_opcode = 233 target = 1 END
   BUT_ONLY
 
-// visual should bypass MR
-COPY_EXISTING ~spwi706.spl~ ~override~
+// visual should bypass MR - feeblemind and petrification are permanent, but icons are not
+COPY_EXISTING ~spwi706.spl~ ~override~ // Prismatic Spray
   LPF ALTER_EFFECT INT_VAR match_opcode = 233 resist_dispel = 0 END
+  LPF ALTER_EFFECT INT_VAR match_opcode = 142 match_duration = 360000 timing = 1 duration = 0 END // make permanent
   BUT_ONLY
 
 // self-visual should bypass spell protections
