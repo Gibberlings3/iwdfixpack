@@ -1305,38 +1305,15 @@ COPY_EXISTING ~ar6005.are~ ~override~
   END
   BUT_ONLY
 
-// container icons, made key required
+// container icons, made key required, deleting overlapped container
 COPY_EXISTING ~ar6006.are~ ~override~
   LPF ALTER_AREA_CONTAINER INT_VAR cont_icon = 7 STR_VAR cont_name = "Container 1"  END
   LPF ALTER_AREA_CONTAINER INT_VAR cont_icon = 7 STR_VAR cont_name = "Container 9"  END
   LPF ALTER_AREA_CONTAINER INT_VAR cont_icon = 7 STR_VAR cont_name = "Container 11" END
   LPF ALTER_AREA_DOOR INT_VAR lock_diff = 100 STR_VAR door_name = "AR6006Door11" END
-  READ_LONG  0x7c vert_off // fix overlapping containers
-  READ_LONG  0x70 cont_off
-  READ_SHORT 0x74 cont_num  
-  FOR (index = 0 ; index < cont_num ; ++index) BEGIN
-    READ_ASCII (cont_off + 0x00 + (0xc0 * index)) name (32) NULL
-    PATCH_IF ("%name%" STRING_COMPARE_CASE "Container 9" = 0) BEGIN 
-      WRITE_SHORT (cont_off + 0x20 + (0xc0 * index)) 1344 // x
-      WRITE_SHORT (cont_off + 0x22 + (0xc0 * index)) 577  // y
-      WRITE_SHORT (cont_off + 0x34 + (0xc0 * index)) 1390 // launch x
-      WRITE_SHORT (cont_off + 0x36 + (0xc0 * index)) 596  // launch y
-      WRITE_SHORT (cont_off + 0x38 + (0xc0 * index)) 1359 // bounding left
-      WRITE_SHORT (cont_off + 0x3a + (0xc0 * index)) 496  // bounding top
-      WRITE_SHORT (cont_off + 0x3c + (0xc0 * index)) 1461 // bounding right
-      WRITE_SHORT (cont_off + 0x3e + (0xc0 * index)) 560  // bounding bottom
-      READ_SHORT  (cont_off + 0x50 + (0xc0 * index)) vert_idx
-      WRITE_SHORT (vert_off + 0x00 + (vert_idx * 0x04)) 1431
-      WRITE_SHORT (vert_off + 0x02 + (vert_idx * 0x04)) 496
-      WRITE_SHORT (vert_off + 0x04 + (vert_idx * 0x04)) 1461
-      WRITE_SHORT (vert_off + 0x06 + (vert_idx * 0x04)) 520
-      WRITE_SHORT (vert_off + 0x08 + (vert_idx * 0x04)) 1388
-      WRITE_SHORT (vert_off + 0x0a + (vert_idx * 0x04)) 560
-      WRITE_SHORT (vert_off + 0x0c + (vert_idx * 0x04)) 1359
-      WRITE_SHORT (vert_off + 0x0e + (vert_idx * 0x04)) 536
-      SET index = cont_num // end loop
-    END
-  END
+  LPF DELETE_AREA_ITEM STR_VAR item_to_delete = potn31 END                                  // delete item out of container being removed
+  LPF fj_are_structure INT_VAR fj_delete_mode = 3 STR_VAR fj_structure_type = container END // delete container 4
+  LPF ADD_AREA_ITEM INT_VAR container_to_add_to = 1 STR_VAR item_to_add = potn31 END        // re-add the deleted item to different container
   BUT_ONLY  
 
 // piles with bounding box
