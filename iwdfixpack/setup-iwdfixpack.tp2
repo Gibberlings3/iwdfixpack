@@ -5080,6 +5080,11 @@ COPY_EXISTING ~spwi025.spl~ ~override~
   LPF ALTER_EFFECT INT_VAR match_opcode = 206 STR_VAR resource = "spwi025" END
   BUT_ONLY
 
+// grease shouldn't be blocked by spell protections
+COPY_EXISTING ~spwi101.spl~ ~override~
+  LPF ALTER_EFFECT INT_VAR power = 0 END
+  BUT_ONLY
+
 // armor should last nine hours
 COPY_EXISTING ~spwi102.spl~ ~override~
   LPF ALTER_EFFECT INT_VAR match_duration = 3780 duration = 2700 END
