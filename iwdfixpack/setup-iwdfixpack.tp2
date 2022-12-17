@@ -5642,6 +5642,11 @@ END ELSE BEGIN // how, totlm fixes
     LPF ALTER_EFFECT INT_VAR match_opcode = 44 duration = 35 savingthrow = BIT0 savebonus = `4 END
     BUT_ONLY
 
+  // mismatching durations
+  COPY_EXISTING ~spin140.spl~  ~override~ // (spl) Retribution - causes sleep - additional effects
+    LPF ALTER_EFFECT INT_VAR match_duration = 100 duration = 10000 END
+    BUT_ONLY
+
   // bard song forces visibility
   COPY_EXISTING ~spin144.spl~ ~override~ // The Tale of Curran Strongheart
                 ~spin145.spl~ ~override~ // Tymora's Melody
