@@ -3725,6 +3725,11 @@ COPY_EXISTING ~potn13.itm~ ~override~
   LPF ADD_ITEM_EFFECT INT_VAR opcode = 12 target = 2 parameter2 = 0x00080000 timing = 1 resist_dispel = 1 dicenumber = 2 dicesize = 6 END
   LPF ADD_ITEM_EFFECT INT_VAR opcode = 12 target = 2 parameter2 = 0x00080000 timing = 1 resist_dispel = 1 dicenumber = 3 dicesize = 6 savingthrow = BIT1 END
   BUT_ONLY
+  
+// elixir of health should cure intoxication, not set it to zero
+COPY_EXISTING ~potn17.itm~ ~override~ // Elixir of Health - set drunkenness to 0, just change to 'cure drunk' instead
+  LPF ALTER_EFFECT INT_VAR match_opcode = 94 opcode = 164 parameter2 = 0 END 
+  BUT_ONLY
 
 // effect with wrong dispel, power wrong
 COPY_EXISTING ~potn20.itm~ ~override~
