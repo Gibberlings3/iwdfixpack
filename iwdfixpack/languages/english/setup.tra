@@ -261,7 +261,16 @@ Proficiency Type:  Missile Weapons
 Type:  1-handed
 Not Usable By:
 ~
+@117984 = ~Close examination reveals this liquid to be very peculiar in nature. It could be a sorcerer's dream, but that would depend on who you asked.  After ingesting the mixture,  the drinker becomes the weakest, most unwise, yet incredibly intelligent person to have ever lived, with an innate 50% magic resistance as well.  The effects remain for an entire 24 hours, so think carefully before unplugging the cork.
 
+STATISTICS:
+
+Intelligence:  set to 25
+Wisdom:  set to 3
+Strength:  set to 3
+Special:  Sets 50% resistance to all magical damage
+Duration:  24 hours
+Not usable by:~
 // cause disease is abjuration school but necromantic sphere--like its inverse, cure disease
 @121478 = ~Cause Disease (Abjuration)
 Level: 3

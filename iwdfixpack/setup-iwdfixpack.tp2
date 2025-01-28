@@ -103,6 +103,7 @@ ACTION_IF ("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) THEN BEGIN
              14357 @114357 // uflal2a: 1d6+1 > 1d6+2 for base flail damage
              14959 @114959 // disease > phase for descript of War Hammer of Phasing +3
              17716 @117716 // zzh8gk: doesn't provide any thac0 bonus vs. giants; damage vs. giants is actually +5, not +4
+             17984 @117984 // potn15: red potion changed to set MDR to 50%, not increment (working around hardcoded bug)
 
   // description not even close to accurate
   COPY_EXISTING ~potn34.itm~ ~override~
@@ -3739,6 +3740,14 @@ COPY_EXISTING ~potn13.itm~ ~override~
   LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 174 power = 0 resist_dispel = 0 timing = 1 END
   LPF ADD_ITEM_EFFECT INT_VAR opcode = 12 target = 2 parameter2 = 0x00080000 timing = 1 resist_dispel = 1 dicenumber = 2 dicesize = 6 END
   LPF ADD_ITEM_EFFECT INT_VAR opcode = 12 target = 2 parameter2 = 0x00080000 timing = 1 resist_dispel = 1 dicenumber = 3 dicesize = 6 savingthrow = BIT1 END
+  BUT_ONLY
+  
+// hardcoded bug: op31 doens't work with timing mode 0/type 0 on an item header, so
+// change it to set MDR instead of incrementing
+// https://www.gibberlings3.net/forums/topic/36309-red-potions-magic-damage-resistance-not-functioning/
+COPY_EXISTING ~potn15.itm~ ~override~ // Red Potion
+              ~potn35.itm~ ~override~ // Potion of Magic Shielding
+  LPF ALTER_EFFECT INT_VAR match_opcode = 31 parameter2 = 1 END 
   BUT_ONLY
   
 // elixir of health should cure intoxication, not set it to zero
