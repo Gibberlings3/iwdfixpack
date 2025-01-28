@@ -247,7 +247,29 @@ Not Usable By:
  Druid
  Mage 
  Thief~
+//listed scorcher damage for wand of fire is incorrect
+@117654 = ~The wand will cough forth a huge, burning ball of fire that streaks out to the desired range (to a maximum of 120') and bursts in a fiery, violent blast, just like the fireball spell.  The fireball inflicts 6d6 points of damage, but all 1s rolled are counted as 2s.  The victim(s) may make a save vs. wands in order to take only half damage.  The second ability of the wand is akin to the spell 'Agannazar's Scorcher' in that a column of flame will streak towards the victim inflicting 6D6 +6 damage, with a save vs. wands for half.
 
+STATISTICS:
+
+Ability  1:
+Effect:  shoots out a Fireball
+Damage:  6D6 (save vs. wands for half)
+Range:  90 ft
+Area 30 ft radius
+
+Ability  2:
+Effect:  Agannazar's scorcher
+Damage:  3D6 (main target, no save, every half round)
+Damage:  2D8 (targets in path, save vs. spell for half)
+Range:  90 ft
+Area:  1 creature
+
+Not usable by:
+Fighter
+Cleric 
+Druid
+Thief~
 // zzh8gk: doesn't provide any thac0 bonus vs. giants; damage vs. giants is actually +5, not +4
 @117716 = ~A halfling warrior named Kim Marchwatch used this potent weapon against the giants that frequently plagued his homeland, hitting them in the head with so many rocks that they fell over in pain or ran away.  When Kim was replaced as shire-reeve of his homeland, he became a reluctant adventurer.  He is believed to have been swallowed up by the dreaded Fen Mists of Acallo in 760 DR.
 

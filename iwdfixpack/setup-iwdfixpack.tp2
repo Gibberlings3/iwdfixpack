@@ -102,7 +102,8 @@ ACTION_IF ("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) THEN BEGIN
              12198 @112198 // vocalize only affects the caster
              14357 @114357 // uflal2a: 1d6+1 > 1d6+2 for base flail damage
              14959 @114959 // disease > phase for descript of War Hammer of Phasing +3
-             17716 @117716 // zzh8gk: doesn't provide any thac0 bonus vs. giants; damage vs. giants is actually +5, not +4
+             17654 @117654 // wand of fire's listed damage for Agannazar's scorcher is incorrect
+             17716 @117716 // wand05: doesn't provide any thac0 bonus vs. giants; damage vs. giants is actually +5, not +4
              17984 @117984 // potn15: red potion changed to set MDR to 50%, not increment (working around hardcoded bug)
 
   // description not even close to accurate
@@ -4116,7 +4117,7 @@ COPY_EXISTING ~utswd5a.itm~  ~override~ // static two handed sword +4: 50% elect
 COPY_EXISTING ~wand02.itm~ ~override~
   LPF ALTER_ITEM_HEADER INT_VAR check_check_globals = 0 range = 100 END
   LPF ALTER_EFFECT INT_VAR match_duration = 100 duration = 105 END
-  LPF ALTER_EFFECT INT_VAR check_globals = 0 power = 4 savingthrow = BIT0 savebonus = 2 END // ops 233, 141
+  LPF ALTER_EFFECT INT_VAR check_globals = 0 power = 4 savingthrow = BIT0 savebonus = 0 END // ops 233, 141
   BUT_ONLY
 
 // inconsistent saves, power; wrong icon
@@ -6359,8 +6360,8 @@ LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 0          
 LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1 set_icon = 1                                 STR_VAR item = wandcor spell = spwi605 END // death fog
 LAF cd_items_casting_spells INT_VAR cast_at_level = 15 item_header = 2 set_icon = 1                                 STR_VAR item = wandcor spell = spwi708 END // acid storm
 LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1 set_icon = 1                                 STR_VAR item = wandfre spell = spwi318 END // icelance, 21 duration
-LAF cd_items_casting_spells INT_VAR cast_at_level =  4 item_header = 2 set_icon = 1                                 STR_VAR item = wandfre spell = spwi318 END // snowball swarm, 21 duration
-LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 3 set_icon = 1                                 STR_VAR item = wandfre spell = spwi318 END // ice storm, 21 duration
+LAF cd_items_casting_spells INT_VAR cast_at_level =  4 item_header = 2 set_icon = 1                                 STR_VAR item = wandfre spell = spwi220 END // snowball swarm, 21 duration
+LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 3 set_icon = 1                                 STR_VAR item = wandfre spell = spwi404 END // ice storm, 21 duration
 LAF cd_items_casting_spells INT_VAR cast_at_level =  1 item_header = 1              probability = 12                STR_VAR item = zz05we  spell = sppr111 END 
 
 COPY_EXISTING ~gauntid.itm~ ~override~
