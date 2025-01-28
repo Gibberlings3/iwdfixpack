@@ -1665,6 +1665,27 @@ Casting Time: 3
 Area of Effect: Special
 Saving Throw: 1/2
 Upon casting this spell, a skull is thrown by the caster at the target area. The skull floats in the area until a creature comes within 5 feet of it. When this happens the skull is triggered and explodes, damaging everyone within a 10-foot radius. The damage inflicted is equal to 1-6 hit points per level of the caster. When casting this spell it is wise to set it far away from the party, lest they set it off accidentally.  Resting or leaving the area the Skull Trap is in will make it disappear harmlessly.~
+@1017654 = ~The wand will cough forth a huge, burning ball of fire that streaks out to the desired range (to a maximum of 90') and bursts in a fiery, violent blast, just like the fireball spell.  The fireball inflicts 6d6 points of damage, but all 1s rolled are counted as 2s.  The victim(s) may make a save vs. wands in order to take only half damage.  The second ability of the wand is akin to the spell 'Agannazar's Scorcher' in that a column of flame will streak towards the victim inflicting 6D6 +6 damage, with a save vs. wands for half.
+
+STATISTICS:
+
+Ability  1:
+Effect:  shoots out a Fireball
+Damage:  6D6 (save vs. wands for half)
+Range:  90 ft
+Area 30 ft radius
+
+Ability  2:
+Effect:  Agannazar's scorcher
+Damage:  6D6 +6 (save vs. wands for half)
+Range:  90 ft
+Area:  1 creature
+
+Not usable by:
+Fighter
+Cleric 
+Druid
+Thief~
 @1017671 = ~[Wounded, dying]At last... I feared I could not hold any longer... th-the last of my life has almost left my body, and... soon I shall be restored to the balance.~ [ARUN_82]
 @1017674 = ~Nature itself seemed to recoil from him - even with the strength of the Great Oak bolstering me, I was unable to stop him.  He touched me once... his hands as blood, and I felt... my life begin to drain away.~ [ARUN_84]
 @1017690 = ~It is to the south - nature will guide you... [a little quieter, a little weaker]enough of my power remains that I may do that.  Now... I must go.  [One final burst of strength, enough to keep his voice steady, but not commanding]Serve the balance.  Protect Kuldahar from this evil.~ [ARUN_87]
