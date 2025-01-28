@@ -5811,8 +5811,10 @@ END ELSE BEGIN // how, totlm fixes
     BUT_ONLY
   
   // min levels set for rage and hp bonus; stop visuals and other stuff on non-allies
+  // give +2 movement speed instead of set to 120%
   COPY_EXISTING ~sppr517.spl~ ~override~
     LPF ALTER_EFFECT INT_VAR dicesize = 0 END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 126 parameter1 = 2 parameter2 = 0 END
     LPF CLONE_EFFECT INT_VAR multi_match = 1 match_opcode = 279 opcode = 206 parameter2 = 50 timing = 0 duration = 0 savingthrow = 0 STR_VAR insert = first resource = EVAL ~%SOURCE_RES%~ END
     BUT_ONLY
 
