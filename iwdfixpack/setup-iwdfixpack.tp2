@@ -123,6 +123,7 @@ ACTION_IF ("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) THEN BEGIN
       STRING_SET 27373 @127373 // 1d6+4 > 1d6+5 for base flail damage
                  27375 @127375 // Wind of Heaven doesn't actually protect against from Death Fog
                  27377 @127377 // zz36dgd: +5 > +6 damage vs. good
+                 27036 @127036 // hell's bane: usable by thieves
 
     END
 
@@ -3145,6 +3146,15 @@ ACTION_IF !game_is_iwd THEN BEGIN // how, totlm fixes
   COPY_EXISTING ~sppr415x.itm~ ~override~ // blood rage
     WRITE_BYTE 0x1e THIS | BIT4
     BUT_ONLY
+    
+  ACTION_IF game_is_totlm THEN BEGIN  
+  
+    // make usable by thieves
+    COPY_EXISTING ~zzc8hb.itm~ ~override~ // Hell's Bane +4
+      WRITE_LONG 0x1e THIS & `BIT22
+      BUT_ONLY
+      
+  END    
 
 END
 

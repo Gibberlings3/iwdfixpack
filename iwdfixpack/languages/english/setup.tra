@@ -311,7 +311,26 @@ Not Usable By:
  Druid
  Cleric
  Mage~
+// hell's bane should be usbale by thieves
+@127036  = ~This fine broad sword is of unusual construction. The blade is crafted from an unknown dull black metal, but the edge appears to be of the finest silver. Fiery, red runes have been etched the entire length of the blade. When examined closely, the runes writhe with a life of their own. The hilt and guard of the sword have been carved from solid ruby.
 
+This weapon is the bane of certain lower planes creatures. Against Baatezu and Tanar'ri the sword inflicts double damage and the user gains a +4 to both hit and damage. While held, the sword also grants some protection against fire.
+
+STATISTICS:
+
+Damage:  1D8 (2D8 +4 vs. Baatezu and Tanar'ri)
+THAC0:  0 (+4 vs. Baatezu and Tanar'ri)
+Damage Type: Slashing
+Resistance Bonus:
+ +20% Fire Resistance
+Weight: 5
+Speed Factor: 1
+Proficiency Type: Large Swords
+Type: 1-handed
+Not Usable By:
+ Druid
+ Cleric
+ Mage~
 // 1d6+4 > 1d6+5 for base flail damage
 @127373 = ~Skullflail, or "The Flail of Teeth" as it is more commonly known, was constructed in 1035 DR for the barbarian warlord Wychgar. During a battle in the northern wastes which became known as Hallowed Pass, Wychgar lost his three brothers to the orc army led by Kraag the Mighty. Wychgar was distraught and during the night he wandered the battlefield looking for their bodies to take away for proper burial. He stumbled across them and was visited by the brothers' spirits who were trapped between the land of the living and the land of the dead. Unable to help them leave he had their souls stored in the flail with the help of a shaman.
 
