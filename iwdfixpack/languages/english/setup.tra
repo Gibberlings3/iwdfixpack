@@ -106,6 +106,24 @@ Area of Effect: Caster
 Saving Throw: None
 This spell creates a staff of force in the caster's hand. It is treated as a magical weapon, doing 1-6 hit points of damage per hit, and it can hit creatures immune to normal weapons. It is a staff, however, so if the caster does not have a proficiency in staff weapons, then the Decastave is used at a penalty. The staff also has the power to drain a target of 1-2 hit points on every strike. These hit points are added to the caster's, but they can only heal damage the caster has taken; they will not raise his hit points beyond his normal maximum.~
 
+// axe+2 doesn't mention thac0 bonus
+@106696 = ~Battle Axe +2: 'Echoes of Dorn's Deep'
+Among the many weapons forged in the shadow of the Spine of World, several bear the mark of dwarven smiths.  This magnificent battle axe is no exception.  Its steel and balance are testament to the work of a caring weaponsmith, and the axe's edge is woven with enchantments that allow it to wound even supernatural creatures. Like many weapons of dwarven manufacture, the blade is light, allowing the user to swing the blade more quickly, and the never-dulling edge ensures that the cut is always a clean one.  The dwarven runes along the haft spell out the word "Dorn's," no doubt a smith's mark indicating where the weapon was made.
+
+STATISTICS:
+
+Damage:  1D8 +2
+THAC0:  +2
+Damage type:  Slashing
+Weight: 5
+Speed Factor: 5
+Proficiency Type: Axe
+Type:  1-handed
+Not Usable By:
+ Druid
+ Cleric
+ Mage 
+ Thief~
 // symbol of pain: AoE is 30' radius, not 60'
 @108099 = ~Symbol of Pain 
 (Conjuration/Summoning)
@@ -303,6 +321,24 @@ Casting Time: 1 round
 Area of Effect: 1 creature
 Saving Throw: Neg.
 This spell afflicts one creature the priest touches with a disease that saps the target of 5-20 points of strength.  A saving throw vs. spell will negate the effects.  This spell has no affect on undead, constructs, or extraplanar creatures.  Cause Disease cannot be cast by good characters.~
+
+// axe+1 missing thac0 bonus
+@119049 = ~The most common version of the battle axe is a stout pole about four feet in length with a single-edged, trumpet-shaped blade mounted on one end.  Battle axes are also called broad axes. 
+
+STATISTICS:
+
+Damage:  1D8 + 1
+THAC0:  +1
+Damage type:  Slashing
+Weight: 7
+Speed Factor: 6
+Proficiency Type: Axe
+Type:  1-handed
+Not Usable By:
+ Druid
+ Cleric
+ Mage 
+ Thief~
 
 // duplicate #22604, but remove any reference that this is a repeat (e.g. "again" was removed in English)
 @122605 = ~Tell me of this new *and* old king.~

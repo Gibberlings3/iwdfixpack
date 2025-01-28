@@ -93,6 +93,7 @@ ACTION_IF ("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) THEN BEGIN
 
   STRING_SET  3028 @103028 // zz05we: doesn't actually have bonus thac0 OR damage vs lawful in base IWD
               6394 @106394 // DECASTAVE DRAINING
+              6696 @106696 // axe+2: desc missing thac0 bonus
               8099 @108099 // AoE of Symbol, Pain
               8663 @108663 // clbhand: damage bonus +2 > +3 from being composite long bow
               8712 @108712 // kaybow: damage bonus +3 > +4 from being composite long bow
@@ -105,6 +106,7 @@ ACTION_IF ("%LANGUAGE%" STRING_COMPARE_CASE "english" = 0) THEN BEGIN
              17654 @117654 // wand of fire's listed damage for Agannazar's scorcher is incorrect
              17716 @117716 // wand05: doesn't provide any thac0 bonus vs. giants; damage vs. giants is actually +5, not +4
              17984 @117984 // potn15: red potion changed to set MDR to 50%, not increment (working around hardcoded bug)
+             19049 @119049 // axe+1: desc missing thac0 bonus
 
   // description not even close to accurate
   COPY_EXISTING ~potn34.itm~ ~override~
@@ -1716,6 +1718,26 @@ ACTION_PHP_EACH cd_anim_fixes AS file => anim BEGIN
     WRITE_LONG 0x28 anim
     BUT_ONLY IF_EXISTS
     
+END
+
+// working around logic error for op284 (e.g. three white doves)
+// https://www.gibberlings3.net/forums/topic/36305-three-white-doves-not-functioning/#findComment-319638
+ACTION_IF !game_is_iwd BEGIN 
+
+  ACTION_FOR_EACH cre IN 
+    ghast ktgst1 kttga2 ktzomj lghast mgha ms4ghst rshorca rshorcb 
+    sdgobax1 sdgobbw1 sdorcbw1 shadow shadowb sumshad udghast
+  BEGIN
+
+    COPY_EXISTING ~%cre%.cre~ ~override~
+      READ_BYTE 0x234 level
+      PATCH_IF level = 4 BEGIN
+        WRITE_BYTE 0x234 3 // change level from 4 > 3
+      END  
+      BUT_ONLY IF_EXISTS
+
+  END
+  
 END
 
 /////                                                  \\\\\
@@ -6579,6 +6601,7 @@ INCLUDE  ~iwdfixpack/languages/%LANGUAGE%/gtu.tpa~
 
 BEGIN ~cam test~ DESIGNATED 1000
 
+/*
 COPY_EXISTING_REGEXP GLOB ~^.+\.are$~ ~override~
   READ_LONG  0x54 actor_off
   READ_SHORT 0x58 actor_num
@@ -6593,7 +6616,6 @@ COPY_EXISTING_REGEXP GLOB ~^.+\.are$~ ~override~
   END
   BUT_ONLY  
   
-/*
  == AR1000: check name of actor 19: Goblin Bow Elite (Quest)
  == AR2006: check name of actor 3: Goblin Archer Marshal 1
  == AR2006: check name of actor 4: Goblin Archer Marshal 2
