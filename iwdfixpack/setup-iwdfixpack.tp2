@@ -4282,6 +4282,11 @@ END ELSE BEGIN // how, totlm fixes
     LPF CLONE_EFFECT INT_VAR match_opcode = 254 opcode = 206 parameter2 = 55 savingthrow = 0 resist_dispel = 0 END // golems immune to str drain
     BUT_ONLY
 
+  // manually adding slay effect vs. rakshasha since op 284 doesn't work on them
+  COPY_EXISTING ~doves.itm~ ~override~ // three white doves
+    LPF CLONE_EFFECT INT_VAR match_opcode = 284 opcode = 55 parameter1 = 178 parameter2 = 4 probability1 = 19 END // prevent stacking
+    BUT_ONLY
+
   // broken tiernon shield missing missile damage reduction
   COPY_EXISTING ~dntshd1.itm~ ~override~
     LPF CLONE_EFFECT INT_VAR match_opcode = 88 opcode = 89 END // add missile damage reduction
