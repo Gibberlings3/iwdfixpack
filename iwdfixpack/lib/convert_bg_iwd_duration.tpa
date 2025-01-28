@@ -1,0 +1,47 @@
+/////                                                  \\\\\
+///// convert_bg_iwd_duration                          \\\\\
+/////                                                  \\\\\
+
+/*
+
+Really simple function for the IWD Fixpack that converts between IWD (7)
+and BG/BG2 (6) base round durations. 
+
+used:
+  iwdfixpack, as iwdfixpack/lib/convert_bg_iwd_duration.tpa [symbolic link]
+
+platform:
+  should work on everything, but only tested on oiwd & bg2-based engines
+ 
+version history: 
+  unknown
+
+*/
+
+DEFINE_PATCH_FUNCTION convert_bg_iwd_duration
+  STR_VAR changeto = "iwd" // iwd changes effects to use round = 7; otherwise use round = 6
+  BEGIN
+
+  READ_LONG  0x6a fx_off
+  READ_LONG  0x64 abil_off
+  READ_SHORT 0x68 abil_num
+  PATCH_IF ("%SOURCE_FILE%" STRING_COMPARE_REGEXP "^.+\.itm" = 0) BEGIN SET abil_length = 0x38 END ELSE BEGIN SET abil_length = 0x28 END
+  PATCH_IF (abil_num > 0) BEGIN // if there are headers, figure out the final effect
+    READ_SHORT (abil_off + 0x1e + ((abil_num - 1) * abil_length)) abil_fx_num
+    READ_SHORT (abil_off + 0x20 + ((abil_num - 1) * abil_length)) abil_fx_idx
+    SET fx_num = abil_fx_num + abil_fx_idx
+  END ELSE BEGIN // else read the last global
+    READ_SHORT 0x70 fx_num
+  END
+  FOR (index = 0 ; index < fx_num ; ++index) BEGIN
+    READ_LONG (fx_off + 0x0e + (index * 0x30)) duration
+    PATCH_IF (duration > 5) BEGIN // skip 0 duration or short lived cosmetic/auditory
+      PATCH_IF ("iwd" STRING_COMPARE_CASE "%changeto%" = 0) BEGIN
+        WRITE_LONG (fx_off + 0x0e + (index * 0x30)) ((duration * 7) / 6)
+      END ELSE BEGIN
+        WRITE_LONG (fx_off + 0x0e + (index * 0x30)) ((duration * 6) / 7)
+      END
+    END
+  END
+
+END
