@@ -6124,6 +6124,14 @@ ACTION_IF !game_is_iwd THEN BEGIN
 
   ACTION_IF game_is_totlm THEN BEGIN
 
+    // fix contents of bag of holding
+    COPY_EXISTING ~bagh02.sto~ ~override~
+      LPF alter_store_item INT_VAR charge2 = 0 charge3 = 0 STR_VAR match_item = wand12 END 
+      LPF alter_store_item INT_VAR charge1 = 1 stock = 4 STR_VAR match_item = adisease END 
+      LPF alter_store_item INT_VAR charge1 = 1 stock = 2 STR_VAR match_item = philter END 
+      LPF alter_store_item INT_VAR charge1 = 1 stock = 4 STR_VAR match_item = flamoil END 
+      BUT_ONLY
+
     // now has no mummy tea in this store
     COPY_EXISTING ~kugerth.sto~ ~override~
       ADD_STORE_ITEM + ~adisease~ #1 #0 #0 ~IDENTIFIED~ #1 ~UNLIMITED~

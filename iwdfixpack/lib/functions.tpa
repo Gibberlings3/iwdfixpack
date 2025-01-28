@@ -371,3 +371,9 @@ END
 /////                                                  \\\\\
 
 INCLUDE ~iwdfixpack/lib/alter_header.tpa~
+
+/////                                                  \\\\\
+///// ALTER_STORE_ITEM                                 \\\\\
+/////                                                  \\\\\
+
+INCLUDE ~iwdfixpack/lib/alter_store_item.tpa~
