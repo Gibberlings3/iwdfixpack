@@ -1422,6 +1422,11 @@ COPY_EXISTING ~ar8010.are~ ~override~
   END
   BUT_ONLY
 
+// remove team 5 from Ilmadia's scripting (she's already team 2)
+COPY_EXISTING ~ar8011.are~ ~override~
+  LPF ALTER_AREA_ACTOR STR_VAR script_default = "" actor_name = "Maiden Ilmadia" END
+  BUT_ONLY
+
 // remove brother harken's left over voice floatmessage script
 COPY_EXISTING ~ar8012.are~ ~override~
   LPF ALTER_AREA_ACTOR STR_VAR script_general = "" actor_name = "Brother Harken" END
