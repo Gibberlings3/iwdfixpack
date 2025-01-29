@@ -204,6 +204,11 @@ COPY ~iwdfixpack/bam/ixbow04.bam~ ~override~ // fixed light crossbow icon
 // bitch queen's envoy blocks *all* elementals, not just water 1/2; see also shldbch.itm and general bulk creature changes
 // tribe and barbarian entries so that barbs can be properly raced as human, but scripting will still work
 // find_traps is for find trap spell shenanigans
+
+
+COPY_EXISTING ~action.ids~  ~override~
+  REPLACE_TEXTUALLY EXACT_MATCH ~159 ChangeAlignment(O:Object*,I:Value*Alignment)~ ~159 ChangeAlignment(O:Object*,I:Value*Align)~
+                                
 APPEND ~specific.ids~ ~114 WATER_ELEMENTAL
 115 TRIBE_ELK
 116 TRIBE_WYRM
@@ -6610,116 +6615,17 @@ LABEL ~cd_iwd_fixpack_gtu~
 
 LOAD_TRA ~iwdfixpack/languages/%LANGUAGE%/gtu.tra~
 INCLUDE  ~iwdfixpack/languages/%LANGUAGE%/gtu.tpa~
+ 
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// internal test component                          \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
 
+BEGIN ~internal test component~ DESIGNATED 1000
+REQUIRE_PREDICATE FILE_EXISTS ~iwdfixpack/lib/test.tpa~ ~skipping internal test component~
 
-
-
-BEGIN ~cam test~ DESIGNATED 1000
-
-/*
-COPY_EXISTING_REGEXP GLOB ~^.+\.are$~ ~override~
-  READ_LONG  0x54 actor_off
-  READ_SHORT 0x58 actor_num
-  FOR (index = 0 ; index < actor_num ; ++index) BEGIN
-    READ_ASCII (actor_off + 0x00 + (index * 0x110)) name (32) NULL
-    INNER_PATCH_SAVE name2 ~%name%~ BEGIN
-      REPLACE_TEXTUALLY ~ +~ ~~
-    END  
-    PATCH_IF ("%name2%" STRING_COMPARE_REGEXP "..................." = 0) BEGIN
-      PATCH_PRINT ~ == %SOURCE_RES%: check name of actor %index%: %name%~
-    END
-  END
-  BUT_ONLY  
-  
- == AR1000: check name of actor 19: Goblin Bow Elite (Quest)
- == AR2006: check name of actor 3: Goblin Archer Marshal 1
- == AR2006: check name of actor 4: Goblin Archer Marshal 2
- == AR3502: check name of actor 31: Tattered Skeleton 1 Trap
- == AR3502: check name of actor 32: Tattered Skeleton 2 Trap
- == AR3502: check name of actor 33: Tattered Skeleton 3 Trap
- == AR3502: check name of actor 34: Tattered Skeleton 4 Trap
- == AR3502: check name of actor 35: Tattered Skeleton 5 Trap
- == AR3502: check name of actor 36: Tattered Skeleton 6 Trap
- == AR4001: check name of actor 46: Captive Villager 9 (SPECIAL)
- == AR4001: check name of actor 87: NEW Tough Lizard Man 10
- == AR4001: check name of actor 88: NEW Lizard Man Shaman 1
- == AR4001: check name of actor 89: NEW Lizard Man Shaman 2
- == AR4001: check name of actor 90: NEW Lizard Man Shaman 3
- == AR4001: check name of actor 91: NEW Lizard Man Shaman 4
- == AR4001: check name of actor 92: NEW Lizard Man Shaman 5
- == AR4001: check name of actor 93: NEW Lizard Man Shaman 6
- == AR4002: check name of actor 62: Lizard Man Shaman KID 2
- == AR4002: check name of actor 63: Lizard Man Shaman KID 3
- == AR4005: check name of actor 60: Yuan-ti Elite Archer 1
- == AR4005: check name of actor 61: Yuan-ti Elite Archer 2
- == AR4005: check name of actor 62: Yuan-ti Elite Archer 3
- == AR4005: check name of actor 63: Yuan-ti Elite Archer 4
- == AR4005: check name of actor 64: Yuan-ti Elite Archer 5
- == AR4005: check name of actor 65: Yuan-ti Elite Archer 6
- == AR4005: check name of actor 66: Yuan-ti Elite Archer 8
- == AR4005: check name of actor 67: Yuan-ti Elite Archer 9
- == AR4005: check name of actor 68: Yuan-ti Elite Archer 10
- == AR4005: check name of actor 69: Yuan-ti Elite Archer 11
- == AR4005: check name of actor 70: Yuan-ti Elite Archer 12
- == AR4005: check name of actor 71: Yuan-ti Elite Archer 13
- == AR4005: check name of actor 72: Yuan-ti Elite Archer 14
- == AR4005: check name of actor 73: Yuan-ti Elite Archer 15
- == AR4005: check name of actor 74: Yuan-ti Elite Archer 16
- == AR4005: check name of actor 75: Yuan-ti Elite Archer 17
- == AR4005: check name of actor 76: Yuan-ti Elite Archer 18
- == AR4005: check name of actor 77: Yuan-ti Elite Archer 19
- == AR4005: check name of actor 78: Yuan-ti Elite Archer 20
- == AR4005: check name of actor 79: Yuan-ti Elite Archer 21
- == AR4005: check name of actor 80: Yuan-ti Elite Archer 22
- == AR4005: check name of actor 81: Yuan-ti Elite Archer 23
- == AR4005: check name of actor 88: Yuan-ti Elite Archer Guard 1
- == AR4005: check name of actor 89: Yuan-ti Elite Archer Guard 2
- == AR4005: check name of actor 90: Yuan-ti Elite Archer Guard 3
- == AR4005: check name of actor 91: Yuan-ti Elite Archer Guard 4
- == AR8004: check name of actor 16: Sleeping Svirfneblin 1
- == AR8004: check name of actor 17: Sleeping Svirfneblin 2
- == AR8004: check name of actor 18: Sleeping Svirfneblin 3
- == AR8004: check name of actor 19: Sleeping Svirfneblin 4
- == AR8004: check name of actor 20: Sleeping Svirfneblin 5
- == AR8010: check name of actor 27: Malavon's Simulacrum
- == AR8011: check name of actor 27: Priest-Mage of Vhaer 1
- == AR8011: check name of actor 28: Priest-Mage of Vhaer 2
- == AR8012: check name of actor 25: Boneguard Skeleton 10
- == AR8012: check name of actor 26: Boneguard Skeleton 11
- == AR8012: check name of actor 27: Boneguard Skeleton 12
- == AR8012: check name of actor 28: Boneguard Skeleton 13
- == AR8012: check name of actor 29: Boneguard Skeleton 14
- == AR8012: check name of actor 30: Boneguard Skeleton 15
- == AR8012: check name of actor 31: Boneguard Skeleton 16
- == AR8012: check name of actor 32: Boneguard Skeleton 17
- == AR8012: check name of actor 33: Boneguard Skeleton 18
- == AR8012: check name of actor 34: Boneguard Skeleton 19
- == AR8012: check name of actor 35: Boneguard Skeleton 20
- == AR8012: check name of actor 36: Boneguard Skeleton 21
- == AR8012: check name of actor 37: Boneguard Skeleton 22
- == AR8012: check name of actor 38: Boneguard Skeleton 23
- == AR8012: check name of actor 39: Boneguard Skeleton 24
- == AR8013: check name of actor 0: Revered Brother Poquelin
- == AR9300: check name of actor 47: Neutral Ghost Shaman 1
- == AR9300: check name of actor 48: Neutral Ghost Shaman 2
- == AR9300: check name of actor 49: Neutral Ghost Shaman 3
- == AR9300: check name of actor 50: Neutral Ghost Shaman 4
- == AR9300: check name of actor 51: Neutral Ghost Shaman 5
- == AR9711: check name of actor 47: Spectral Hero (Hobart)
- == AR9711: check name of actor 48: Spectral Hero (Harald)
- == AR9711: check name of actor 49: Spectral Hero (Criek)
- == AR9711: check name of actor 50: Spectral Hero (Adran)
- == AR9711: check name of actor 51: Spectral Hero (Shelhai)
- == AR9714: check name of actor 50: Boneguard Skeleton 10
- == AR9714: check name of actor 51: Boneguard Skeleton 11
- == AR9714: check name of actor 52: Boneguard Skeleton 12
- == AR9714: check name of actor 53: Boneguard Skeleton 13
- == AR9714: check name of actor 54: Boneguard Skeleton 14
- == AR9714: check name of actor 55: Boneguard Skeleton 15
- == AR9714: check name of actor 56: Boneguard Skeleton 16
- == AR9714: check name of actor 57: Boneguard Skeleton 17
- == AR9714: check name of actor 58: Boneguard Skeleton 18
- == AR9714: check name of actor 59: Boneguard Skeleton 19
- == AR9714: check name of actor 60: Boneguard Skeleton 20
- == AR9714: check name of actor 61: Boneguard Skeleton 21
-*/
+// this should be deleted before release, but in case I forget this should be auto skipped
+INCLUDE ~iwdfixpack/lib/test.tpa~

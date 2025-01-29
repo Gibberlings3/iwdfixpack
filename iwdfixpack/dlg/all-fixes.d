@@ -244,6 +244,17 @@ ALTER_TRANS dvoiceda BEGIN 8 END BEGIN END BEGIN ~JOURNAL~ ~#34245~ END // and a
 ALTER_TRANS DWHITCOM BEGIN 8 END BEGIN END
   BEGIN ~JOURNAL~ ~#34499~ END
 
+// fixing hex entries in the fairy godmother's dialogue
+REPLACE_ACTION_TEXT ~dwinona~ ~ChangeAlignment(Protagonist, 0x11)~ ~ChangeAlignment(Protagonist,LAWFUL_GOOD)~
+REPLACE_ACTION_TEXT ~dwinona~ ~ChangeAlignment(Protagonist, 0x12)~ ~ChangeAlignment(Protagonist,LAWFUL_NEUTRAL)~
+REPLACE_ACTION_TEXT ~dwinona~ ~ChangeAlignment(Protagonist, 0x13)~ ~ChangeAlignment(Protagonist,LAWFUL_EVIL)~
+REPLACE_ACTION_TEXT ~dwinona~ ~ChangeAlignment(Protagonist, 0x21)~ ~ChangeAlignment(Protagonist,NEUTRAL_GOOD)~
+REPLACE_ACTION_TEXT ~dwinona~ ~ChangeAlignment(Protagonist, 0x22)~ ~ChangeAlignment(Protagonist,NEUTRAL)~
+REPLACE_ACTION_TEXT ~dwinona~ ~ChangeAlignment(Protagonist, 0x23)~ ~ChangeAlignment(Protagonist,NEUTRAL_EVIL)~
+REPLACE_ACTION_TEXT ~dwinona~ ~ChangeAlignment(Protagonist, 0x31)~ ~ChangeAlignment(Protagonist,CHAOTIC_GOOD)~
+REPLACE_ACTION_TEXT ~dwinona~ ~ChangeAlignment(Protagonist, 0x32)~ ~ChangeAlignment(Protagonist,CHAOTIC_NEUTRAL)~
+REPLACE_ACTION_TEXT ~dwinona~ ~ChangeAlignment(Protagonist, 0x33)~ ~ChangeAlignment(Protagonist,CHAOTIC_EVIL)~
+
 // yxunomei adds journal entry before you ask the question
 ALTER_TRANS dyxun BEGIN 0 END BEGIN 4 END BEGIN ~JOURNAL~ ~~ END // remove here
 ALTER_TRANS dyxun BEGIN 7 END BEGIN END BEGIN ~JOURNAL~ ~#4358~ END // and add it back
