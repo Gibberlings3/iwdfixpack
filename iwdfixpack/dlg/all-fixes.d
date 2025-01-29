@@ -109,17 +109,17 @@ REPLACE_ACTION_TEXT  DDIRTYLL ~StartStore("LD_DL\([123]\)",Protagonist)~ ~StartS
 
 // llew can now offer umber hulk armor
 REPLACE DDIRTYLL
-  IF ~GlobalLT("Umber_Hulk_Armor","GLOBAL",15)
+  IF ~GlobalLT("Umber_Hulk_Armor","GLOBAL",3)
       PartyHasItem("HideUmb")
       !NumTimesTalkedTo(0)~  THEN BEGIN 22 SAY #18333
-    IF ~~ THEN REPLY #18334 DO ~TakePartyItemAll("HideUmb")
-                                SetGlobal("Umber_Hulk_Armor","GLOBAL",15)
-                                GiveItemCreate("UmHulk",Protagonist,1,1,1)~ GOTO 23
+    IF ~~ THEN REPLY #18334 DO ~SetGlobal("Umber_Hulk_Armor","GLOBAL",10)~ GOTO 23
     IF ~~ THEN REPLY #18335 DO ~IncrementGlobal("Umber_Hulk_Armor","GLOBAL",1)~ GOTO 24
   END
 END
 
 SET_WEIGHT DDIRTYLL 22 #-1 // replace ignores weight for some reason
+
+ADD_TRANS_TRIGGER DDIRTYLL 23 ~False()~ DO 0 1 2 // disable non-cutscene replies
 
 // grisella should only give cash if party asked for it
 REPLACE_ACTION_TEXT DGRISELL ~GivePartyGold(5)~ ~~ // remove all

@@ -631,6 +631,7 @@ COPY_EXISTING ~ldllew.bcs~ ~override~
     REPLACE_TEXTUALLY ~CDITEM~ ~HideUmb~
     APPEND_FILE ~iwdfixpack/baf/ldllew.baf~
     REPLACE_TEXTUALLY ~CDITEM~ ~HideBee~
+    APPEND_FILE ~iwdfixpack/baf/ldllew_cut.baf~
   END
 
 // marketh now uses invisibility potion

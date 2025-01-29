@@ -1,0 +1,20 @@
+IF
+	Global("Umber_Hulk_Armor","GLOBAL",10)
+THEN
+	RESPONSE #100
+		CutSceneId(Myself)
+		StartCutSceneMode()
+    SetGlobal("Umber_Hulk_Armor","GLOBAL",15)
+		MultiPlayerSync()
+		ClearActions(Player1)
+		ClearActions(Player2)
+		ClearActions(Player3)
+		ClearActions(Player4)
+		ClearActions(Player5)
+		ClearActions(Player6)
+    TakePartyItemAll("HideUmb")
+    GiveItemCreate("UmHulk",Protagonist,1,1,1)
+    Wait(3)
+		EndCutSceneMode()
+END
+
