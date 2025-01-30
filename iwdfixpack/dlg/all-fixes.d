@@ -242,6 +242,9 @@ ADD_TRANS_TRIGGER dtarnelm 4 ~!Global("cd_met_ilmadia","GLOBAL",1) !Dead("Ilmadi
 // tarnelm looking for wrong item here
 REPLACE_TRIGGER_TEXT ~dtarnelm~ ~!PartyHasItem("Food")~ ~!PartyHasItem("potatoes")~
 
+// valesti not setting quest/journal entries on one path
+ALTER_TRANS dvalesti BEGIN 7 END BEGIN 1 END BEGIN ~JOURNAL~ ~#34235~ ACTION ~SetGlobal("ArborQuestGiveN","GLOBAL",1)~ END
+
 // vera sets journal entry too early
 ALTER_TRANS dvera BEGIN 7 END BEGIN 1 END BEGIN ~JOURNAL~ ~~ END // remove here
 ALTER_TRANS dvera BEGIN 15 END BEGIN END BEGIN ~JOURNAL~ ~#34300~ END // and add it back
