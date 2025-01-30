@@ -100,11 +100,14 @@ REPLACE_TRIGGER_TEXT ~dcapvil2~ ~Global("Talonites_Dead","GLOBAL",10)~ ~GlobalGT
 REPLACE_TRIGGER_TEXT ~dckquest~ ~RandomNum(5,0)~ ~RandomNum(5,5)~
 
 // don't use 'dainty llew' reply outside of the 'dainty llew' state
-ALTER_TRANS ddirtyll BEGIN 14 END BEGIN 2 END BEGIN ~REPLY~ ~#9945~ END
+ALTER_TRANS ddenaini BEGIN 12 END BEGIN 2 END BEGIN ~EPILOGUE~ ~GOTO 19~ END
 
 // remove xp exploit, let elisia vanish in peace
 ADD_STATE_TRIGGER DELISIA 18 ~!Global("Elisia_Vanish","GLOBAL",1)~
 ADD_TRANS_ACTION DELISIA BEGIN 20 END BEGIN END ~SetInterrupt(FALSE)~
+
+// don't use 'dainty llew' reply outside of the 'dainty llew' state
+ALTER_TRANS ddirtyll BEGIN 14 END BEGIN 2 END BEGIN ~REPLY~ ~#9945~ END
 
 // some of Llew's startstore calls using wrong resref
 REPLACE_ACTION_TEXT  DDIRTYLL ~StartStore("LD_DL\([123]\)",Protagonist)~ ~StartStore("LDD_DL\1",Protagonist)~
@@ -137,6 +140,9 @@ REPLACE_ACTION_TEXT DILMADIA ~Enemy()~ ~SetGlobal("%group_2_hostile%","MYAREA",1
 // jhonen sets journal entry too early
 ALTER_TRANS djhonen BEGIN 10 END BEGIN 1 END BEGIN ~JOURNAL~ ~~ END // remove here
 ALTER_TRANS djhonen BEGIN 13 END BEGIN END BEGIN ~JOURNAL~ ~#11408~ END // and add it back
+
+// kaylessa setting wrong journal entries
+ALTER_TRANS dkayless BEGIN 0 END BEGIN 0 1 END BEGIN ~JOURNAL~ ~~ END // remove here
 
 // block pathway to kerish asking you to kill vera if you've already been down it and accepted/declined
 ADD_TRANS_TRIGGER dkerish 6 ~Global("Kill_Vera","GLOBAL",0)~ DO 3
