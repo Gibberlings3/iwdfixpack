@@ -1,5 +1,4 @@
 // syntax errors
-REPLACE_ACTION_TEXT  ~dbandoth~ ~ForceAttack(protagonist, myself)~ ~~
 REPLACE_ACTION_TEXT  ~dcusthan~ ~GiveItemCreatre(~ ~GiveItemCreate(~
 REPLACE_TRIGGER_TEXT ~dcusthan~ ~NumTimesTalkedGT(~ ~NumTimesTalkedToGT(~
 REPLACE_TRIGGER_TEXT ~ddenaini~ ~NumTimesTalkedGT(~ ~NumTimesTalkedToGT(~
