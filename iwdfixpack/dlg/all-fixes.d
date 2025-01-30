@@ -150,6 +150,11 @@ REPLACE_TRIGGER_TEXT  dkurum ~RandomNum(16,~ ~RandomNum(15,~ // refactor into ra
   
 // close infinite garnet exploit for clerics
 ADD_TRANS_TRIGGER DKUTOWNG 40 ~Global("Priest_Gem","GLOBAL",0)~ DO 0
+  
+// using wrong var for weenog story
+ALTER_TRANS DKUTOWNG BEGIN 0 END BEGIN 13 END BEGIN 
+  ~TRIGGER~ ~Global("Kuldahar_Rumor","GLOBAL",7)~        // swap trigger
+  ~ACTION~  ~SetGlobal("Kuldahar_Rumor","GLOBAL",0)~ END // swap action
 
 // once you know eidan's fate, villagers will no longer his mysterious disappearance
 // essentially, re-route anything going to state 20 to identical (new) state that doesn't mention eidan
