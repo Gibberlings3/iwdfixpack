@@ -88,6 +88,8 @@ ADD_STATE_TRIGGER dcallian 8 ~!Global("Egenia_Talked","GLOBAL",1)~
 // because of OR(), check how- or base-fixes
 //REPLACE_STATE_TRIGGER dcallian 7 ~NumTimesTalkedToGT(0) OR(2) Global("Know_Egenia","GLOBAL",0) Global("Egenia_Talked","GLOBAL",1)~	
 
+SET_WEIGHT dcapvil 20 #999 // two lines blocked because of weighting
+
 // prisoners not realizing they're free due to bad DV checks
 REPLACE_TRIGGER_TEXT ~dcapkid2~ ~GlobalLT("Talonites_Dead","GLOBAL"~ ~GlobalLT("Talonite_Dead","GLOBAL"~
 REPLACE_TRIGGER_TEXT ~dcapkid2~ ~Global("Talonites_Dead","GLOBAL",10)~ ~GlobalGT("Talonite_Dead","GLOBAL",9)~
