@@ -114,10 +114,6 @@ ALTER_TRANS ddavin BEGIN 19 END BEGIN 1 END BEGIN ~ACTION~ ~~ END // var is set 
 // don't use 'dainty llew' reply outside of the 'dainty llew' state
 ALTER_TRANS ddenaini BEGIN 12 END BEGIN 2 END BEGIN ~EPILOGUE~ ~GOTO 19~ END
 
-// remove xp exploit, let elisia vanish in peace
-ADD_STATE_TRIGGER DELISIA 18 ~!Global("Elisia_Vanish","GLOBAL",1)~
-ADD_TRANS_ACTION DELISIA BEGIN 20 END BEGIN END ~SetInterrupt(FALSE)~
-
 // don't use 'dainty llew' reply outside of the 'dainty llew' state
 ALTER_TRANS ddirtyll BEGIN 14 END BEGIN 2 END BEGIN ~REPLY~ ~#9945~ END
 
@@ -138,6 +134,10 @@ SET_WEIGHT DDIRTYLL 22 #-1 // replace ignores weight for some reason
 
 ADD_TRANS_TRIGGER DDIRTYLL 23 ~False()~ DO 0 1 2 // disable non-cutscene replies
 
+// remove xp exploit, let elisia vanish in peace
+ADD_STATE_TRIGGER DELISIA 18 ~!Global("Elisia_Vanish","GLOBAL",1)~
+ADD_TRANS_ACTION DELISIA BEGIN 20 END BEGIN END ~SetInterrupt(FALSE)~
+
 // grisella should only give cash if party asked for it
 REPLACE_ACTION_TEXT DGRISELL ~GivePartyGold(5)~ ~~ // remove all
 ADD_TRANS_TRIGGER DGRISELL 12 ~Global("Grisella_Cash","GLOBAL",1)~ DO 4
@@ -152,6 +152,9 @@ REPLACE_ACTION_TEXT DILMADIA ~Enemy()~ ~SetGlobal("%group_2_hostile%","MYAREA",1
 // jhonen sets journal entry too early
 ALTER_TRANS djhonen BEGIN 10 END BEGIN 1 END BEGIN ~JOURNAL~ ~~ END // remove here
 ALTER_TRANS djhonen BEGIN 13 END BEGIN END BEGIN ~JOURNAL~ ~#11408~ END // and add it back
+
+// joril setting journal, var on 2/3 paths;  17.0 should match 9.0 and 8.1
+ALTER_TRANS djoril BEGIN 17 END BEGIN 0 END BEGIN ~JOURNAL~ ~#34382~ ~ACTION~ ~SetGlobal("Know_Sacrifices","GLOBAL",1)~ END // and add it back
 
 // kaylessa setting wrong journal entries
 ALTER_TRANS dkayless BEGIN 0 END BEGIN 0 1 END BEGIN ~JOURNAL~ ~~ END // remove here
