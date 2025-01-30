@@ -80,6 +80,7 @@ Roster: 1 score lizardmen, 1 score trolls. 3 score cold wights, 5 undead lieuten
 @1001747 = ~Wh - are you *serious?* Lysan may be as cold as a witch's breast, but a priestess of the Frostmaiden? Come now, don't jest with Whit--~ []
 @1001987 = ~You do not know what you are talking about.  Your attempts to comprehend the events unfolding around you are comical at best.~ [YXUN_08]
 @1002006 = ~People on this world are hesitant to attack beings in this form.  It causes some sort of emotional pain to do so.  That's why I have chosen it.~ [YXUN_35]
+@1002052 = ~We penetrated the inner sanctum of the Temple of the Forgotten God only to find that someone had gotten there before us.  The pedestal that, presumably, had once held the artifact was empty.  Bodies lay strewn about the chamber, indicating that the acolytes and their verbeeg guardians had put up fight in the defense of the gem.  Among the bodies was the corpse of man garbed in the vestments of a priest of Talona.  It is difficult to say what part he might have played in the battle or the resulting theft.  Perhaps we should return to Arundel and see what sense he can make of all this.~
 @1002325 = ~Likenesses of dwarven and elven men, carved from the side of the cavern to create a massive stone monument.  A plaque below the carvings reads "Dedicated to Larrel and..." The inscription trails off.  ~ []
 @1002333 = ~Welcome.  I've been expecting you for some time now.~ [ARUN_01]
 @1002358 = ~I understand, but the circumstances leave you little choice *but* to get involved.  I needn't remind you that the avalanche that wiped out your expedition, the one that you were fortunate to survive, has blocked the way back to the Ten-Towns.  As I mentioned before, the pass south has been entirely snowed-in.  There is no other way out of this valley.  Your fate and the fate of Kuldahar are intertwined.  You *must* discover the source of the disturbances and restore the balance... or we shall all perish together.~
@@ -713,6 +714,7 @@ Weight: 3
 Not usable by:
  Cleric
  Mage~ []
+@1008856 = ~In contrast to the other statues in this hall, this one represents a warrior of elven descent.  A plaque below reads "In Memory of Evayne, whose understanding and selflessness will be remembered forever."~
 @1008947 = ~This magical symbol of the demipower, Solonor Thelandira was given to those who would do battle for the Hand in the dead of night.  The wearer would be given infravision stronger than normal elven eyes.
 
 STATISTICS:
@@ -1303,6 +1305,15 @@ Proficiency Type: Dagger
 Type:  1-handed
 Only usable by:
    Mage (single, dual, & multi-class)~ []
+@1014252 = ~Fire Seeds (Conjuration) 
+Level: 6
+Sphere: Elemental
+Range: Touch 
+Duration: 1 turn/level
+Casting Time: 1 round 
+Area of Effect: Special
+Saving Throw: 1/2
+This spell creates four grenade-like missiles in the priest's inventory that can be hurled at any target up to 40 yards away.  (These missiles last only for the spells duration, so don't hoard them.)  When they land, the seed explode, doing 2-16 points of damage to everything within a five-foot radius.  A creature struck directly by the seeds receives no saving throw, but creatures hit by the splash damage are allowed to make a saving throw vs. spell for half-damage.~
 @1014257 = ~This mighty weapon consists of a five to six-foot haft with a heavy blade.  The axe is double-bitted, with blades on both sides of the haft.  It is an unwieldy weapon, but a skilled warrior can strike blows of tremendous strength with it.
 
 Joril Frostbeard, the frost giant leader, wielded this axe. The weapon has been enchanted with several beneficial magics.
