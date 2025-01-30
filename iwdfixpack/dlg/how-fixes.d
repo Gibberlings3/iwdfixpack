@@ -56,7 +56,19 @@ ADD_TRANS_ACTION DMEBD BEGIN 0 END BEGIN END ~DestroyItem("MIN1HP")~
 
 // loosen variables for murdaugh's quest
 REPLACE_TRIGGER_TEXT ~dmurdaug~ ~Global("Know_Murdaugh", *"GLOBAL", *0)~ ~Global("Murdaugh_Quest","GLOBAL",0)~
-  
+
+// premature cutscene call
+ALTER_TRANS DPLANAR BEGIN 21 31 32 END BEGIN 0 END BEGIN ACTION ~~ END 
+
+// larrel questions checking wrong var
+REPLACE_TRIGGER_TEXT DPLANAR ~Global("AR5405_Visited","GLOBAL",1)~ ~Global("AR5103_Visited","GLOBAL",1)~
+
+// jamoth tomb question wrong var
+ALTER_TRANS DPLANAR BEGIN 45 END BEGIN 4 END BEGIN TRIGGER ~Global("AR6006_Visited","GLOBAL",1) !Global("Forge_On","GLOBAL",0)~ END 
+
+// pomab answer should wait until you're in easthaven at least
+ADD_TRANS_TRIGGER DPLANAR 57 ~Global("AR1100_Visited","GLOBAL",1)~ DO 7
+
 REPLACE_STATE_TRIGGER dplanar 69 
 ~GlobalGT("Hjollder_Quest","GLOBAL",2)
 !Global("Exp_Pause","GLOBAL",1)
