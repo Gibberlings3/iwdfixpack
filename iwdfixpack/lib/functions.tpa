@@ -1,8 +1,33 @@
 // deleted effects which are now in WeiDU itself
 
 /////                                                  \\\\\
-///// item/spell functions                             \\\\\
+///// area functions                                   \\\\\
 /////                                                  \\\\\
+
+DEFINE_ACTION_FUNCTION cd_swap_actor_name
+  STR_VAR old_name = ""
+          new_name = ""
+          area     = ""
+BEGIN
+    
+  ACTION_IF (("%old_name%" STRING_COMPARE_CASE "") AND (FILE_EXISTS_IN_GAME ~%area%.are~)) BEGIN
+  
+    COPY_EXISTING ~%area%.are~ ~override~
+      READ_LONG  0x54 act_off
+      READ_SHORT 0x54 act_num
+      FOR (index = 0 ; index < act_num ; ++index) BEGIN
+        READ_ASCII (act_off + 0x00 + (index * 0x110)) name (32) NULL
+        PATCH_IF ("%old_name%" STRING_COMPARE_CASE "%name%" = 0) BEGIN
+          WRITE_ASCIIE (act_off + 0x00 + (index * 0x110)) ~%new_name%~ #32
+          SET index = act_num // kill loop
+        END
+      END
+      BUT_ONLY
+      
+  END
+
+END   
+      
 
 DEFINE_PATCH_FUNCTION ALTER_AREA_AMBIENT
   INT_VAR coord_x = "-10" 
