@@ -57,6 +57,9 @@ EXTEND_BOTTOM DARUNDEL 46                                                // add 
   IF ~Global("AddEntry16556","LOCALS",1)~ THEN JOURNAL #16556 EXIT
 END
 
+// remove attack calls for bandoth so he might do spellcasting instead
+REPLACE_ACTION_TEXT DBANDOTH ~\(Force\)?Attack([Pp]rotagonist\(, myself\)?)~ ~~ // Attack(Protagonist) in HoW, ForceAttack(protagonist, myself) in base
+
 // fixes bandoth's random hostility
 ALTER_TRANS DBANDOTH BEGIN 26 END BEGIN 0 END
   BEGIN ACTION ~EscapeArea()~ END
