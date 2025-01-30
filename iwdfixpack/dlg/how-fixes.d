@@ -57,6 +57,10 @@ ADD_TRANS_ACTION DMEBD BEGIN 0 END BEGIN END ~DestroyItem("MIN1HP")~
 // loosen variables for murdaugh's quest
 REPLACE_TRIGGER_TEXT ~dmurdaug~ ~Global("Know_Murdaugh", *"GLOBAL", *0)~ ~Global("Murdaugh_Quest","GLOBAL",0)~
 
+// paladin reply in 7 being blocked by ranger-only check before it
+ALTER_TRANS dogre BEGIN 1 END BEGIN 4 END BEGIN ~TRIGGER~ ~OR(2) ClassEx(Protagonist,RANGER) ClassEx(Protagonist,PALADIN)~ END // ranger > ranger|paladin
+ALTER_TRANS dogre BEGIN 2 END BEGIN 2 END BEGIN ~TRIGGER~ ~OR(2) ClassEx(Protagonist,RANGER) ClassEx(Protagonist,PALADIN)~ END // ranger > ranger|paladin
+
 // premature cutscene call
 ALTER_TRANS DPLANAR BEGIN 21 31 32 END BEGIN 0 END BEGIN ACTION ~~ END 
 

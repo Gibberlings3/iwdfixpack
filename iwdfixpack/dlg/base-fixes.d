@@ -28,6 +28,14 @@ REPLACE_TRIGGER_TEXT ~dvalesti~ ~SetGlobal(~ ~Global(~
 // fixes gaspar's non-sequitir (duplicated in how-fixes.d)
 ALTER_TRANS DGASPAR BEGIN 15 END BEGIN 2 END // file, state, trans
   BEGIN EPILOGUE ~GOTO 5~ END // go to proper response
+  
+// paladin reply in 7 being blocked by ranger-only check before it
+EXTEND_TOP DOGRE 1 #4
+  IF ~ClassEx(Protagonist,PALADIN)~ THEN REPLY #1035 GOTO 7
+END  
+EXTEND_TOP DOGRE 2 #2 
+  IF ~ClassEx(Protagonist,PALADIN)~ THEN REPLY #1042 GOTO 7
+END  
 
 // one response in saablic checking for an item by an incorrect resref
 REPLACE_TRIGGER_TEXT ~dsaablic~ ~PartyHasItem("Badge1")~ ~PartyHasItem("Krilag")~
