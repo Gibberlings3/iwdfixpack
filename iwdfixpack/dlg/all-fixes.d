@@ -102,6 +102,15 @@ REPLACE_TRIGGER_TEXT ~dcapvil2~ ~Global("Talonites_Dead","GLOBAL",10)~ ~GlobalGT
 // bad random spread could cause no valid links error
 REPLACE_TRIGGER_TEXT ~dckquest~ ~RandomNum(5,0)~ ~RandomNum(5,5)~
 
+// davin adding journal entry on wrong reply
+ALTER_TRANS ddavin BEGIN 1 END BEGIN 0 END BEGIN ~JOURNAL~ ~~ END // remove here
+ALTER_TRANS ddavin BEGIN 1 END BEGIN 1 END BEGIN ~JOURNAL~ ~#34294~ END // and add it back
+// three different paths to inform davin you killed frostbite - one lacks journal entry, one has wrong reward (22.0 is fine)
+ALTER_TRANS ddavin BEGIN 7 END BEGIN 0 END BEGIN ~ACTION~ ~AddXPVar("Level_12_Hard", 9793)SetGlobal("Kill_Frost", "GLOBAL", 4)~ END // was giving Level_10_Hard
+ALTER_TRANS ddavin BEGIN 21 END BEGIN 0 END BEGIN ~JOURNAL~ ~#34281~ END // no journal entry
+// dupe var sets
+ALTER_TRANS ddavin BEGIN 19 END BEGIN 1 END BEGIN ~ACTION~ ~~ END // var is set in destination state 14
+
 // don't use 'dainty llew' reply outside of the 'dainty llew' state
 ALTER_TRANS ddenaini BEGIN 12 END BEGIN 2 END BEGIN ~EPILOGUE~ ~GOTO 19~ END
 
