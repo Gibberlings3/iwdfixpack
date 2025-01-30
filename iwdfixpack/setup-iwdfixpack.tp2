@@ -355,6 +355,14 @@ COPY_EXISTING ~tooltip.2da~ ~override~
   REPLACE_TEXTUALLY ~^DAGG05 +.+$~ ~moradin -1 27265 -1~
   REPLACE_TEXTUALLY ~^\(MantleHF[ %TAB%]+[-0-9]+[ %TAB%]+[-0-9]+[ %TAB%]+\)[-0-9]+~ ~\11418~ // update tooltip from 'Charm Elemental Kin' to 'Charm Fire Elemental Kin'
 
+ACTION_IF !game_is_iwd THEN BEGIN // fixes for how & totlm
+
+  COPY_EXISTING ~tracking.2da~ ~override~ // ar7004 has two entries; one is meant for ar7005
+    REPLACE_TEXTUALLY ~AR7004[ %TAB%]+24861[ %TAB%]+50~ ~AR7005    24861    50~ 
+    BUT_ONLY
+
+END
+    
 CLEAR_IDS_MAP
 
 /////                                                  \\\\\
