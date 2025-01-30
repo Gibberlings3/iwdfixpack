@@ -144,6 +144,9 @@ ADD_TRANS_ACTION DELISIA BEGIN 20 END BEGIN END ~SetInterrupt(FALSE)~
 // should only be able to ask about Marketh if you know him
 ADD_TRANS_TRIGGER DFLOZEM 2 ~Global("Know_Marketh","GLOBAL",1)~ DO 0
 
+// broken reply trigger
+ALTER_TRANS DGOBLINC BEGIN 4 END BEGIN 0 END BEGIN ~TRIGGER~ ~Alignment(Protagonist,MASK_EVIL)~ END // hex not being evaluated
+
 // grisella should only give cash if party asked for it
 REPLACE_ACTION_TEXT DGRISELL ~GivePartyGold(5)~ ~~ // remove all
 ADD_TRANS_TRIGGER DGRISELL 12 ~Global("Grisella_Cash","GLOBAL",1)~ DO 4
