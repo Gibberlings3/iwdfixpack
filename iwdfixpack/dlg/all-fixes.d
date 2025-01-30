@@ -84,6 +84,9 @@ EXTEND_BOTTOM DBANDOTH 4
   IF ~Global("PUZZLE_STAIRS_OPEN","GLOBAL",0) PartyHasItem("Kalabac")~ THEN REPLY #19609 GOTO 23
 END
 
+// beorn should set journal entry on both paths
+ALTER_TRANS dbeorn BEGIN 0 END BEGIN 1 END BEGIN ~JOURNAL~ ~#34420~ END
+
 // sister calliana not recognizing egenia's return
 REPLACE_TRIGGER_TEXT ~dcallian~ ~Global("Talonite_Dead","GLOBAL",4)~ ~GlobalGT("Talonite_Dead","GLOBAL",9)~
 ADD_TRANS_TRIGGER dcallian 2 ~!Global("Egenia_Talked","GLOBAL",1)~ DO 0 2
@@ -162,7 +165,7 @@ ALTER_TRANS dkayless BEGIN 0 END BEGIN 0 1 END BEGIN ~JOURNAL~ ~~ END // remove 
 // block pathway to kerish asking you to kill vera if you've already been down it and accepted/declined
 ADD_TRANS_TRIGGER dkerish 6 ~Global("Kill_Vera","GLOBAL",0)~ DO 3
 // kerish only setting journal entry on 1/3 paths
-ALTER_TRANS dkerish BEGIN 2 3 END BEGIN 1 END BEGIN ~JOURNAL~ ~#9081~ END // and add it back
+ALTER_TRANS dkerish BEGIN 2 3 END BEGIN 1 END BEGIN ~JOURNAL~ ~#9081~ END 
 
 // kresselack sets journal entry too early
 ALTER_TRANS dkressel BEGIN 28 END BEGIN 0 END BEGIN ~JOURNAL~ ~~ END // remove here
