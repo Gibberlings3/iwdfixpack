@@ -14,7 +14,7 @@ BEGIN
   
     COPY_EXISTING ~%area%.are~ ~override~
       READ_LONG  0x54 act_off
-      READ_SHORT 0x54 act_num
+      READ_SHORT 0x58 act_num
       FOR (index = 0 ; index < act_num ; ++index) BEGIN
         READ_ASCII (act_off + 0x00 + (index * 0x110)) name (32) NULL
         PATCH_IF ("%old_name%" STRING_COMPARE_CASE "%name%" = 0) BEGIN
