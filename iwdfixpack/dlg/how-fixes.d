@@ -60,6 +60,9 @@ ALTER_TRANS dhjollde BEGIN 48 END BEGIN END BEGIN ~JOURNAL~ ~#26299~ END // and 
 // hjollder's broken transition
 ALTER_TRANS DHJOLLDE BEGIN 65 END BEGIN 3 END // file, state, trans
   BEGIN EPILOGUE ~GOTO 68~ END // go to proper response
+  
+// map revealed in state 60, remove from random 'go away' exit states
+ALTER_TRANS dhjollde BEGIN 53 END BEGIN 2 3 END BEGIN ACTION ~~ END
 
 // checking for wrong item resref
 REPLACE_TRIGGER_TEXT ~dicasa~   ~PartyHasItem("jhosiwd2")~ ~PartyHasItem("jhoswd2")~
