@@ -2079,6 +2079,7 @@ This spell turns a petrified creature back to normal.  If one of your companions
 /////                                                  \\\\\
 /////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
 /////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
 @4407533 = ~Cause Moderate Wounds (Necromancy)
 Level: 2
 Sphere: Healing 
@@ -2163,3 +2164,52 @@ Not Usable By:
  Druid 
  Mage 
  Thief~
+
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////                                                  \\\\\
+///// strings for all totlm games                      \\\\\
+/////                                                  \\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\/////\\\\\
+
+// "dangling from it's knotty limbs" > "dangling from its knotty limbs"
+@5527369 = ~This grim staff, of a most despicable repute, was originally carved from the wood of Dead Man's Tree: an ancient black willow that stood on the outskirts of a forgotten hamlet of the Moonshae's, from which criminals were hung. All manner of bandits, murderers, rapists, and other worthies were left dangling from its knotty limbs; and all to the delight of the grave-digger Mordigan. For Mordigan, a secret practitioner of the necromantic arts, saw ample opportunity in which to ply his trade. Interring the remains of the evil men within close proximity of the tree, Mordigan called upon the dark powers of the negative material to perform a baleful act upon the black willow. It was given a sort of semi-sentience, and the ability to feed upon the remains of those who had so recently swung from its branches. Black roots descended into rotting flesh; and alarmingly enough, the tortured visages of the slain began to appear in the twisted knots of the black willow's bole before its burning. But, to the surprise of the villagers, the potently ensorcelled staff carved by the hands of the evil Mordigan did indeed prove to be their undoing. And thus did the hanged men of Dead Man's Tree have their revenge.
+
+STATISTICS:
+
+Damage:  1D6 +1
+THAC0:  +1
+Damage Type: Crushing
+Special:  Casts the spell Animate Dead 3/day
+Charisma:  -2
+Speed Factor:  4
+Proficiency Type: Quarter Staves
+Type:  2-handed
+Only Usable By:
+ Evil Mages (Multi, Single, Dual)~
+ 
+@5527463 = ~This yellowed page, although faded and frayed at the edges, is surprising resilient, having the texture of leather.  Despite the fact it is written in an unknown script, the words on the page twist and shift as you read over them, translating into the Common tongue in your mind.
+
+...the battle against Aehirglass grew long, 
+and the sky turned bloody in the twilight as 
+the Watchknights fought on.  Perhaps one 
+extra blade would have saved their lives,
+but Lord Maluradek was not to be seen.  
+
+Watchknight Zierkki was quick to dash in, 
+strike a blow with his spear, then retreat, 
+forcing the dragon to turn and attack, 
+exposing his flank for the other knights.  Even
+near exhaustion, Zierkki fought on, fighting
+against time itself.
+
+Yet even against such a foe, he persevered.
+No strength was wasted, not a drop of blood
+shed without purpose, as the knight fought
+on, from high sun to lingering twilight,
+wearing out the dragon's strength, 
+exhausting it while hoarding his own for 
+one final strike against the beast... 
+
+[Fragment ends]~

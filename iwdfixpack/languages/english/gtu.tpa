@@ -416,5 +416,10 @@ END ELSE BEGIN // how, totlm
   STRING_SET 25137 @4425137 // grammar error
   STRING_SET 25920 @4425920 // 'has no affect' > 'has no effect'
   STRING_SET 26722 @4426722 // vexed2: vexed3 mentions sacrifice of innocent, should be vexed2
+  
+  ACTION_IF game_is_totlm BEGIN 
+    STRING_SET 27369 @5527369 // "dangling from it's knotty limbs" > "dangling from its knotty limbs"
+    STRING_SET 27463 @5527463 // next to last line, "hording" > "hoarding" 
+  END   
 
 END
