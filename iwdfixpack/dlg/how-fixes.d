@@ -33,6 +33,8 @@ ADD_TRANS_ACTION dbaldemr BEGIN 9 END BEGIN END ~SetGlobal("cd_asked_baldemar_ca
 // sister calliana not recognizing egenia's return - continuation of all-fixes.d
 REPLACE_STATE_TRIGGER dcallian 7 ~NumTimesTalkedToGT(0) OR(2) Global("Know_Egenia","GLOBAL",0) Global("Egenia_Talked","GLOBAL",1)~	
 
+// can't ask edion about hjollder due to a bad var check
+REPLACE_TRIGGER_TEXT dedion ~GlobalLT("Hjollder_Quest", "GLOBAL", 4)~ ~GlobalLT("Hjollder_Quest", "GLOBAL", 5)~
 // shouldn't make 'not a fisherman' comment if edion never claimed to be a fisherman
 ADD_TRANS_TRIGGER DEDION 3 ~Global("EdionFisherman","LOCALS",1)~ DO 1
 ADD_TRANS_ACTION DEDION BEGIN 0 END BEGIN 1 3 END ~SetGlobal("EdionFisherman","LOCALS",1)~
