@@ -154,3 +154,6 @@ EXTEND_TOP DROALD 2 #0
         Global("ar9200_revealed","GLOBAL",1)
         Global("ar9200_visited","GLOBAL",1)~ THEN REPLY #22909 GOTO 3
 END
+
+// vexing thoughts asks you to kill *an* innocent, not three (see also strref #24285)
+REPLACE_TRIGGER_TEXT dvexing ~GlobalGT("Kill_Innocent","GLOBAL",2)~ ~GlobalGT("Kill_Innocent","GLOBAL",0)~ 

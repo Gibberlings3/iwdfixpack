@@ -343,6 +343,9 @@ Not Usable By:
 // duplicate #22604, but remove any reference that this is a repeat (e.g. "again" was removed in English)
 @122605 = ~Tell me of this new *and* old king.~
 
+// change reference from innocents (plural) to innocent (singular)
+@124285 = ~I have done as you asked, Vexing Thoughts.  The innocent is slain.~
+
 // Tongue of the Gloomfrost should do piercing, not slashing, damage
 @124328 = ~This weapon was fashioned by your hands, guided by the dwarf, Tiernon.  Forged from ice taken from the walls of the Gloomfrost, this blade has taken some of the glacier and some of your strength into it, creating a formidable weapon. Though made of ice, the weapon is only slightly cold to the touch and does not melt, even when exposed to the hottest flames.
 
