@@ -103,7 +103,7 @@ ADD_TRANS_ACTION DPLANAR BEGIN    57 END BEGIN  9 END ~StartCutScene("gnDstSlf")
 ADD_TRANS_ACTION DPLANAR BEGIN    26 END BEGIN 10 END ~StartCutScene("gnDstSlf")~
 
 // check if party knows wylfdene before asking who's leading the barbarians
-REPLACE_TRIGGER_TEXT dplanar ~GlobalLT("Hjollder_Quest", "GLOBAL",4)~ ~Global("Know_Wylf","GLOBAL",0)~
+REPLACE_TRIGGER_TEXT dplanar ~GlobalLT("Hjollder_Quest", "GLOBAL",4)~ ~GlobalLT("Hjollder_Quest", "GLOBAL",5)~
 
 // contact other plane waits until after exposure to drop hints about albion
 REPLACE_TRIGGER_TEXT ~dplanar~ ~GlobalGT("Yuanti_Inferno","GLOBAL",0)~ ~Global("Yuanti_Inferno","GLOBAL",0) Global("CDTalkedAlbion","GLOBAL",1)~
