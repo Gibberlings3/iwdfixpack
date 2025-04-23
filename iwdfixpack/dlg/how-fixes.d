@@ -19,6 +19,17 @@ ALTER_TRANS dangaar BEGIN 19 END BEGIN END BEGIN ~JOURNAL~ ~#23549~ END // and a
 ALTER_TRANS dangaar BEGIN 11 END BEGIN 1 END BEGIN ~JOURNAL~ ~~ END // remove here
 ALTER_TRANS dangaar BEGIN 17 END BEGIN 0 END BEGIN ~JOURNAL~ ~#23550~ END // and add it back
 
+// checking non-existent car for knowledge of barb camp; swap to existing var for checks
+REPLACE_TRIGGER_TEXT dbaldemr ~"Know_Barb_Camp"~ ~"ar9200_revealed"~ 
+// know_threat set properly, but should go to 2 when you ask the followup in 8 (set on 8.0 but not 8.1)
+ADD_TRANS_ACTION dbaldemr BEGIN 8 END BEGIN 1 END ~SetGlobal("Know_Threat","GLOBAL",2)~
+// use new var instead of know_threat for followup about the camp
+ADD_TRANS_ACTION dbaldemr BEGIN 4 END BEGIN END ~SetGlobal("cd_asked_baldemar_camp","GLOBAL",1)~ // state where you've asked sets var
+ALTER_TRANS dbaldemr BEGIN 7 END BEGIN 1 END BEGIN TRIGGER ~Global("cd_asked_baldemar_camp","GLOBAL",1)~ END // gate the followup in 9
+ALTER_TRANS dbaldemr BEGIN 8 END BEGIN 0 END BEGIN TRIGGER ~Global("cd_asked_baldemar_camp","GLOBAL",1)~ END // gate the followup in 9
+// know_threat set properly, but should go to 2 when you ask the followup in 8 (set on 8.0 but not 8.1)
+ADD_TRANS_ACTION dbaldemr BEGIN 9 END BEGIN END ~SetGlobal("cd_asked_baldemar_camp","GLOBAL",2)~
+
 // sister calliana not recognizing egenia's return - continuation of all-fixes.d
 REPLACE_STATE_TRIGGER dcallian 7 ~NumTimesTalkedToGT(0) OR(2) Global("Know_Egenia","GLOBAL",0) Global("Egenia_Talked","GLOBAL",1)~	
 
